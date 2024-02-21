@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class toolWeapon : MonoBehaviour
+public class toolWeapon : toolTimed
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //range of toolWeapon consists of two float nums. each index represents minimum range and maximum range. most toolWeapon's min range is 0.
+    protected readonly float[] rangeOriginal;
+    protected readonly int damageOriginal;
+    public float[] rangeCur { get; set; }
+    public int damageCur { get; set; }
 }
