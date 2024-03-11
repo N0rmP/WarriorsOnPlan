@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class toolTimed : toolAbst, caseTimed
+public abstract class toolTimed : toolAbst, ICaseTimed
 {
     protected float timerMax;
     protected float timerCur;
@@ -10,11 +10,11 @@ public abstract class toolTimed : toolAbst, caseTimed
     public void timerUpdate(float parDeltaTime) {
         timerCur -= parDeltaTime;
         if (timerCur <= 0) {
-            onTimerAlarmed();
+            onAlarmed();
             timerCur = timerMax;
         }
     }
 
     //return true when process is finished without problem, return false when process is delayed due to stun / other skill use and etc.
-    public virtual void onTimerAlarmed() { return; }
+    public void onAlarmed() { return; }
 }

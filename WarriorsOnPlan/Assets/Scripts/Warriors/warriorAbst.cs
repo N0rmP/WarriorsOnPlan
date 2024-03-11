@@ -7,34 +7,22 @@ using System.Linq;
 
 public enum stateWarrior { attack, controlled, focussing, move, skill }
 
-public abstract class warriorAbst : MonoBehaviour
+public abstract class warriorAbst : Thing
 {
-    private bool isPlrSide;
+    protected bool isPlrSide;
 
-    private int maxHp_;
-    private int curHp_;
-    private int damageTotalGiven_;
-    private float moveSpeed_;
-    public int maxHp { get; }
-    public int curHp { get; }
+    protected int damageTotalDealt_;
+    //protected int damageTotalTaken_;
+    
     #region properties
-    public int damageTotalGiven {
+    public int damageTotalDealt {
         get {
-            return damageTotalGiven_;
+            return damageTotalDealt_;
         }
         set {
             if (value > 0) {
-                damageTotalGiven_ += value;
+                damageTotalDealt_ += value;
             }
-        }
-    }
-    public float moveSpeed {
-        get {
-            return moveSpeed;
-        }
-        set {
-            moveSpeed_ = value;
-            this.gameObject.GetComponent<NavMeshAgent>().speed = value;
         }
     }
     #endregion properties
@@ -42,14 +30,17 @@ public abstract class warriorAbst : MonoBehaviour
     private toolAbst toolSkill;
     private List<toolAbst> listToolAll;
     private List<effectAbst> listEffect;
-    private List<toolTimed> listToolTimed;
-    private List<cableAbst> listCable;
+    private List<ICaseTimed> listToolTimed;
+    private List<ICaseAll> listCable;
     public List<toolAbst> copyToolAll { get { return listToolAll.ToList<toolAbst>(); } }
     public List<effectAbst> copyEffects { get { return listEffect.ToList<effectAbst>(); } }
-    public List<toolTimed> copyToolTimed { get { return listToolTimed.ToList<toolTimed>(); } }
-    public List<cableAbst> copyCable { get { return listCable.ToList<cableAbst>(); } }
+    public List<ICaseTimed> copyToolTimed { get { return listToolTimed.ToList<ICaseTimed>(); } }
+    public List<ICaseAll> copyCable { get { return listCable.ToList<ICaseAll>(); } }
 
-    public settingMoveAbst howToMove { get; set; }
+    public moverAbst howToMove { get; set; }
+    public selecterAbst whatToAttack { get; set; }
+    public selecterAbst whatToUseSkill { get; set; }
+
     public stateWarrior stateCur { get; set; }
 
     //private List<Thread> curProcessings;
@@ -58,8 +49,8 @@ public abstract class warriorAbst : MonoBehaviour
     public warriorAbst() {
         listToolAll = new List<toolAbst>();
         listEffect = new List<effectAbst>();
-        listToolTimed = new List<toolTimed>();
-        listCable = new List<cableAbst>();
+        listToolTimed = new List<ICaseTimed>();
+        listCable = new List<ICaseAll>();
     }
 
     #region callback
@@ -69,66 +60,50 @@ public abstract class warriorAbst : MonoBehaviour
             tempToolTimed.timerUpdate(tempDeltaTime);
         }
 
+        /*
+        ★이거 combatManager로 옮기고 1초에 1번씩 호출되도록 만드세용
         switch (stateCur) {
             case (stateWarrior.move):
-                howToMove.Move(this);
+                howToMove.move();
                 break;
             case (stateWarrior.skill): break;
             case (stateWarrior.attack): break;
             case (stateWarrior.focussing): break;
             case (stateWarrior.controlled): break;
         }
+        */
     }
     #endregion callback
 
     #region utility
-    public void addCase(caseAbst paramCase, bool isSkill = false) {
-        if (isSkill && paramCase is toolAbst) {
-            toolSkill = (toolAbst)paramCase;
-        } else if (paramCase is controller) {
-            listController.Add((controller)paramCase);
-        } else if (paramCase is effectAbst) {
-            listEffects.Add((effectAbst)paramCase);
-        } else if (paramCase is toolAbst) {
-            listToolAll.Add((toolAbst)paramCase);
+    public void addCase(ICaseAll parCase, bool isSkill = false) {
+        if (isSkill && parCase is toolAbst) {
+            toolSkill = (toolAbst)parCase;
+        } else if (parCase is controller) {
+            listController.Add((controller)parCase);
+        } else if (parCase is effectAbst) {
+            listEffects.Add((effectAbst)parCase);
+        } else if (parCase is toolAbst) {
+            listToolAll.Add((toolAbst)parCase);
         }
 
-        if (paramCase is toolTimed) {
-            listToolTimed.Add((toolTimed)paramCase);
+        if (parCase is toolTimed) {
+            listToolTimed.Add((toolTimed)parCase);
         }
     }
 
-    public void removeCase(caseAbst paramCase) {
-        if (paramCase is controller) {
-            listController.Remove((controller)paramCase);
-        } else if (paramCase is effectAbst) {
-            listEffects.Remove((effectAbst)paramCase);
-        } else if (paramCase is toolAbst) {
-            listToolAll.Remove((toolAbst)paramCase);
+    public void removeCase(ICaseAll parCase) {
+        if (parCase is controller) {
+            listController.Remove((controller)parCase);
+        } else if (parCase is effectAbst) {
+            listEffects.Remove((effectAbst)parCase);
+        } else if (parCase is toolAbst) {
+            listToolAll.Remove((toolAbst)parCase);
         }
 
-        if (paramCase is toolTimed) {
-            listToolTimed.Remove((toolTimed)paramCase);
+        if (parCase is toolTimed) {
+            listToolTimed.Remove((toolTimed)parCase);
         }
-    }
-
-    public int setCurHp(int paramValue, bool isPlus = false) {
-        int tempResult = 0;
-        if (isPlus) {
-            if (curHp_ + paramValue < 0) {
-                tempResult = -curHp_;
-                curHp_ = 0;
-            } else if (curHp_ + paramValue > maxHp_) {
-                tempResult = maxHp_ - curHp_;
-                curHp_ = maxHp_;
-            } else {
-                tempResult = paramValue;
-                curHp_ += paramValue;
-            }
-        } else {
-            curHp_ = paramValue;
-        }
-        return tempResult;
     }
     #endregion utility
 
