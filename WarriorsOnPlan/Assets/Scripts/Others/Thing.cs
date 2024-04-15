@@ -6,8 +6,11 @@ public class Thing : MonoBehaviour
 {
     protected int maxHp_;
     protected int curHp_;
+    protected node curPosition_;
     public int maxHp { get; }
     public int curHp { get; }
+    public node curPosition { get; set; }
+
 
     public int setCurHp(int parValue, bool isPlus = false) {
         int tempResultChange = 0;

@@ -15,7 +15,7 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 -logFile
 Logs/AssetImportWorker2.log
 -srvPort
-49209
+56525
 Successfully changed project path to: C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,12 +49,12 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [25308] Host "[IP] 192.168.219.194 [Port] 0 [Flags] 2 [Guid] 2464019712 [EditorId] 2464019712 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [18368] Host "[IP] 192.168.219.194 [Port] 0 [Flags] 2 [Guid] 2793244298 [EditorId] 2793244298 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [25308] Host "[IP] 192.168.219.194 [Port] 0 [Flags] 2 [Guid] 2464019712 [EditorId] 2464019712 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [18368] Host "[IP] 192.168.219.194 [Port] 0 [Flags] 2 [Guid] 2793244298 [EditorId] 2793244298 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
 [Physics::Module] Initialized MultithreadedJobDispatcher with 11 workers.
-Refreshing native plugins compatible for Editor in 55.00 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 11.20 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.20f1 (61c2feb0970d)
 [Subsystems] Discovering subsystems at path D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Resources/UnitySubsystems
@@ -70,51 +70,51 @@ Initialize mono
 Mono path[0] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Managed'
 Mono path[1] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56028
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56988
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.005260 seconds.
-- Loaded All Assemblies, in  0.288 seconds
+Registered in 0.004776 seconds.
+- Loaded All Assemblies, in  0.237 seconds
 Native extension for WindowsStandalone target not found
 [usbmuxd] Start listen thread
 [usbmuxd] Listen thread started
 Native extension for iOS target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 215 ms
+Android Extension - Scanning For ADB Devices 176 ms
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.484 seconds
-Domain Reload Profiling: 772ms
-	BeginReloadAssembly (96ms)
+- Finished resetting the current domain, in  0.413 seconds
+Domain Reload Profiling: 650ms
+	BeginReloadAssembly (72ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (26ms)
-	RebuildNativeTypeToScriptingClass (8ms)
-	initialDomainReloadingComplete (42ms)
-	LoadAllAssembliesAndSetupDomain (116ms)
-		LoadAssemblies (96ms)
+	RebuildCommonClasses (24ms)
+	RebuildNativeTypeToScriptingClass (7ms)
+	initialDomainReloadingComplete (38ms)
+	LoadAllAssembliesAndSetupDomain (95ms)
+		LoadAssemblies (72ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (114ms)
-			TypeCache.Refresh (113ms)
-				TypeCache.ScanAssembly (102ms)
+		AnalyzeDomain (93ms)
+			TypeCache.Refresh (92ms)
+				TypeCache.ScanAssembly (83ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (0ms)
-	FinalizeReload (484ms)
+	FinalizeReload (414ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (440ms)
+		SetupLoadedEditorAssemblies (374ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (305ms)
+			InitializePlatformSupportModulesInManaged (254ms)
 			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
 			BeforeProcessingInitializeOnLoad (2ms)
-			ProcessInitializeOnLoadAttributes (94ms)
-			ProcessInitializeOnLoadMethodAttributes (36ms)
+			ProcessInitializeOnLoadAttributes (84ms)
+			ProcessInitializeOnLoadMethodAttributes (32ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -122,8 +122,8 @@ Domain Reload Profiling: 772ms
 ========================================================================
 Worker process is ready to serve import requests
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.544 seconds
-Refreshing native plugins compatible for Editor in 10.40 ms, found 3 plugins.
+- Loaded All Assemblies, in  0.411 seconds
+Refreshing native plugins compatible for Editor in 6.14 ms, found 3 plugins.
 Native extension for WindowsStandalone target not found
 Native extension for iOS target not found
 Native extension for Android target not found
@@ -138,55 +138,57 @@ Mono: successfully reloaded assembly
 [Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
 [Package Manager] Cannot connect to Unity Package Manager local server
-- Finished resetting the current domain, in  0.506 seconds
-Domain Reload Profiling: 1049ms
-	BeginReloadAssembly (141ms)
+- Finished resetting the current domain, in  0.410 seconds
+Domain Reload Profiling: 819ms
+	BeginReloadAssembly (100ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (5ms)
+		DisableScriptedObjects (4ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (25ms)
-	RebuildCommonClasses (30ms)
-	RebuildNativeTypeToScriptingClass (10ms)
-	initialDomainReloadingComplete (37ms)
-	LoadAllAssembliesAndSetupDomain (324ms)
-		LoadAssemblies (267ms)
+		CreateAndSetChildDomain (17ms)
+	RebuildCommonClasses (22ms)
+	RebuildNativeTypeToScriptingClass (7ms)
+	initialDomainReloadingComplete (27ms)
+	LoadAllAssembliesAndSetupDomain (253ms)
+		LoadAssemblies (213ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (135ms)
-			TypeCache.Refresh (114ms)
-				TypeCache.ScanAssembly (99ms)
-			ScanForSourceGeneratedMonoScriptInfo (15ms)
-			ResolveRequiredComponents (5ms)
-	FinalizeReload (507ms)
+		AnalyzeDomain (97ms)
+			TypeCache.Refresh (82ms)
+				TypeCache.ScanAssembly (71ms)
+			ScanForSourceGeneratedMonoScriptInfo (11ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (410ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (360ms)
+		SetupLoadedEditorAssemblies (301ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (29ms)
-			SetLoadedEditorAssemblies (5ms)
+			InitializePlatformSupportModulesInManaged (22ms)
+			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (58ms)
-			ProcessInitializeOnLoadAttributes (250ms)
-			ProcessInitializeOnLoadMethodAttributes (16ms)
+			BeforeProcessingInitializeOnLoad (48ms)
+			ProcessInitializeOnLoadAttributes (211ms)
+			ProcessInitializeOnLoadMethodAttributes (15ms)
 			AfterProcessingInitializeOnLoad (2ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (5ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
-Refreshing native plugins compatible for Editor in 9.59 ms, found 3 plugins.
+		AwakeInstancesAfterBackupRestoration (4ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
+Refreshing native plugins compatible for Editor in 6.22 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3255 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 43 unused Assets / (62.9 KB). Loaded Objects now: 3711.
-Memory consumption went from 130.8 MB to 130.8 MB.
-Total: 3.428200 ms (FindLiveObjects: 0.246000 ms CreateObjectMapping: 0.163300 ms MarkObjects: 2.902700 ms  DeleteObjects: 0.115300 ms)
+Unloading 3257 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 43 unused Assets / (62.8 KB). Loaded Objects now: 3713.
+Memory consumption went from 130.9 MB to 130.9 MB.
+Total: 2.425300 ms (FindLiveObjects: 0.203300 ms CreateObjectMapping: 0.083500 ms MarkObjects: 2.039100 ms  DeleteObjects: 0.098600 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
   custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
   custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
   custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
   custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
   custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
   custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
@@ -195,538 +197,1057 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 815577.764419 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Swordman.prefab
-  artifactKey: Guid(bcc60fdbd3a37b44cbc0cb99db483477) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Swordman.prefab using Guid(bcc60fdbd3a37b44cbc0cb99db483477) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ee0e471e12ddc97411a4737aedd5d9b0') in 0.100704 seconds
+  Time since last request: 2246247.224260 seconds.
+  path: Assets/Animation/Animation Controllers/AC tester.controller
+  artifactKey: Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/Animation Controllers/AC tester.controller using Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5f7dbe024b7fec1f099cb60bed078ff') in 0.009651 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 14
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.347 seconds
+Refreshing native plugins compatible for Editor in 6.14 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.939 seconds
+Domain Reload Profiling: 1285ms
+	BeginReloadAssembly (118ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (24ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (24ms)
+	LoadAllAssembliesAndSetupDomain (172ms)
+		LoadAssemblies (224ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (10ms)
+			TypeCache.Refresh (6ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (939ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (363ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (28ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (63ms)
+			ProcessInitializeOnLoadAttributes (245ms)
+			ProcessInitializeOnLoadMethodAttributes (21ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 7.39 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3249 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (37.8 KB). Loaded Objects now: 3717.
+Memory consumption went from 131.1 MB to 131.0 MB.
+Total: 2.540300 ms (FindLiveObjects: 0.213300 ms CreateObjectMapping: 0.120700 ms MarkObjects: 2.154000 ms  DeleteObjects: 0.051400 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.328 seconds
+Refreshing native plugins compatible for Editor in 6.15 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.881 seconds
+Domain Reload Profiling: 1207ms
+	BeginReloadAssembly (117ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (26ms)
+	RebuildCommonClasses (23ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (20ms)
+	LoadAllAssembliesAndSetupDomain (158ms)
+		LoadAssemblies (210ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (9ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (881ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (339ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (28ms)
+			SetLoadedEditorAssemblies (2ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (58ms)
+			ProcessInitializeOnLoadAttributes (229ms)
+			ProcessInitializeOnLoadMethodAttributes (19ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 9.51 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3250 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.7 KB). Loaded Objects now: 3720.
+Memory consumption went from 133.2 MB to 133.2 MB.
+Total: 3.227200 ms (FindLiveObjects: 0.429900 ms CreateObjectMapping: 0.096300 ms MarkObjects: 2.633100 ms  DeleteObjects: 0.066900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.325 seconds
+Refreshing native plugins compatible for Editor in 6.25 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.888 seconds
+Domain Reload Profiling: 1211ms
+	BeginReloadAssembly (117ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (23ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (20ms)
+	LoadAllAssembliesAndSetupDomain (156ms)
+		LoadAssemblies (208ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (9ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (888ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (339ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (28ms)
+			SetLoadedEditorAssemblies (3ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (57ms)
+			ProcessInitializeOnLoadAttributes (229ms)
+			ProcessInitializeOnLoadMethodAttributes (18ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 7.32 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3250 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.8 KB). Loaded Objects now: 3723.
+Memory consumption went from 135.2 MB to 135.1 MB.
+Total: 2.499200 ms (FindLiveObjects: 0.213100 ms CreateObjectMapping: 0.112600 ms MarkObjects: 2.125300 ms  DeleteObjects: 0.047300 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 188.784919 seconds.
+  path: Assets/Prefabs/TT_Archer.prefab
+  artifactKey: Guid(e233a86cfb0ee1a44981afa69d560e9d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/TT_Archer.prefab using Guid(e233a86cfb0ee1a44981afa69d560e9d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a1939ecba365cc5f2500896c0e8c6ccc') in 0.081565 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 1036
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Archer.prefab
-  artifactKey: Guid(04c79b5f6e9ebab48af48fdcf7b6d570) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Archer.prefab using Guid(04c79b5f6e9ebab48af48fdcf7b6d570) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cc1413e8bc9c1877fd626863fadd3a39') in 0.040727 seconds
+  Time since last request: 16.774734 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96dafda31071d4ec9785971c4d7d13de') in 0.035573 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 1036
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Peasant.prefab
-  artifactKey: Guid(53eb1e18130e9be4387a785b482187e1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Peasant.prefab using Guid(53eb1e18130e9be4387a785b482187e1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '573d5159c17e95b91f573bf2f649bc86') in 0.038677 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1073
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Mage.prefab
-  artifactKey: Guid(1854a3b64b66724429ff0b04e0891fc1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Mage.prefab using Guid(1854a3b64b66724429ff0b04e0891fc1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '894db1382229520cb061ec430a5d66e7') in 0.036176 seconds
+  Time since last request: 0.541872 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7d2b98fdf2cfb7947c80f85d3b85cda0') in 0.023714 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 1036
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Heavy_Cavalry.prefab
-  artifactKey: Guid(892bd1c95e4ec2f43a7e0a49c68f27f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Heavy_Cavalry.prefab using Guid(892bd1c95e4ec2f43a7e0a49c68f27f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '38d9095b90c99aec2db62cc98658da85') in 0.041096 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1154
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_King.prefab
-  artifactKey: Guid(3c54df43aea316143beec51be2902cac) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_King.prefab using Guid(3c54df43aea316143beec51be2902cac) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a2d53c428387d73e89cee663ba2a0f8f') in 0.035902 seconds
+  Time since last request: 8.439111 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '496b4141d9601942608dd664584b6c6d') in 0.028157 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 1036
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Priest.prefab
-  artifactKey: Guid(7b4e51ccca67b514d883b197e0f59efd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Priest.prefab using Guid(7b4e51ccca67b514d883b197e0f59efd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '85813ccd7b36e5d9e2cace5bb966cd1d') in 0.038766 seconds
+  Time since last request: 10.044398 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ad8b2158586c6707ff3ca2d0cb0b5360') in 0.028998 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 1036
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Settler.prefab
-  artifactKey: Guid(cc1d9ae112f9093468713bfc446711b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Settler.prefab using Guid(cc1d9ae112f9093468713bfc446711b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a70c7f04b01088ba4a1b676513a6c6c3') in 0.040204 seconds
+  Time since last request: 2.182364 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2ab7d0e22527f6d779d6ac59cd6bae50') in 0.027108 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 370
+Number of asset objects unloaded after import = 1036
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000029 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Mounted_Priest.prefab
-  artifactKey: Guid(9948d4669f9006844a963afb88d60afa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Mounted_Priest.prefab using Guid(9948d4669f9006844a963afb88d60afa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9a094acd819a408ad60a04ffc921445b') in 0.038838 seconds
+  Time since last request: 5.210954 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '08e8a24dfa5685c40b92ef0a719b51e5') in 0.025728 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1154
+Number of asset objects unloaded after import = 1036
 ========================================================================
 Received Import Request.
-  Time since last request: 11.656018 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry
-  artifactKey: Guid(6b18d2e7ae3d3804b99383584ed30114) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry using Guid(6b18d2e7ae3d3804b99383584ed30114) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '548d838cfd4de1b9c82f0ffd6c2b4c59') in 0.001781 seconds
+  Time since last request: 1.780680 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1feca47c51c0432719c8f4748bfd30d1') in 0.024576 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 19.916054 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '004560e153df6ba38affb9722756afef') in 0.026377 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 3.202828 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '049b71bf507a4676a34670a8876bedfa') in 0.028724 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 2.986562 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1acbafe343c1568af4a052d9b7a64ccb') in 0.031663 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 1.979446 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '241f08c4eb8ebc40ff7d3dfe561530f9') in 0.037359 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.338 seconds
+Refreshing native plugins compatible for Editor in 6.95 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.888 seconds
+Domain Reload Profiling: 1224ms
+	BeginReloadAssembly (122ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (32ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (20ms)
+	LoadAllAssembliesAndSetupDomain (155ms)
+		LoadAssemblies (211ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (10ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (889ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (335ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (26ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (59ms)
+			ProcessInitializeOnLoadAttributes (225ms)
+			ProcessInitializeOnLoadMethodAttributes (19ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 7.66 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3249 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.8 KB). Loaded Objects now: 3733.
+Memory consumption went from 138.8 MB to 138.8 MB.
+Total: 2.681400 ms (FindLiveObjects: 0.265600 ms CreateObjectMapping: 0.141600 ms MarkObjects: 2.225500 ms  DeleteObjects: 0.048000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.338 seconds
+Refreshing native plugins compatible for Editor in 7.14 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.894 seconds
+Domain Reload Profiling: 1230ms
+	BeginReloadAssembly (117ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (24ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (21ms)
+	LoadAllAssembliesAndSetupDomain (166ms)
+		LoadAssemblies (217ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (10ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (895ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (338ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (26ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (56ms)
+			ProcessInitializeOnLoadAttributes (232ms)
+			ProcessInitializeOnLoadMethodAttributes (19ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (5ms)
+Refreshing native plugins compatible for Editor in 7.76 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3250 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.7 KB). Loaded Objects now: 3736.
+Memory consumption went from 141.0 MB to 141.0 MB.
+Total: 2.647800 ms (FindLiveObjects: 0.237100 ms CreateObjectMapping: 0.120200 ms MarkObjects: 2.235000 ms  DeleteObjects: 0.054600 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 28.147325 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield
+  artifactKey: Guid(d8c9fc3afc1c16f48a218dfdef632b0a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield using Guid(d8c9fc3afc1c16f48a218dfdef632b0a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '111db44ff37dcddf56c7bd663f259ff1') in 0.008020 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 1.120562 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines
-  artifactKey: Guid(d950cf89f581a664aaf7e42b7b5e011b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines using Guid(d950cf89f581a664aaf7e42b7b5e011b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '44d241600a7468bf9dd8364d90e82f99') in 0.000581 seconds
+  Time since last request: 0.042137 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_01_idle.FBX
+  artifactKey: Guid(d2fa6cc158d1d8e4da35dba21ab4395d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_01_idle.FBX using Guid(d2fa6cc158d1d8e4da35dba21ab4395d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1a1379c2f21861d1b128feb074733b59') in 0.020109 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
+Number of asset objects unloaded after import = 49
 ========================================================================
 Received Import Request.
-  Time since last request: 0.564487 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry
-  artifactKey: Guid(781c8c99dbb227b4e8cc116b1778e864) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry using Guid(781c8c99dbb227b4e8cc116b1778e864) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '567c09fc7f16cfa00a7f8d60365f0563') in 0.000838 seconds
+  Time since last request: 0.003626 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_03_run_rm.FBX
+  artifactKey: Guid(7ba947b6dedf28d4f9fb9d2ba3e90cc3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_03_run_rm.FBX using Guid(7ba947b6dedf28d4f9fb9d2ba3e90cc3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '26647211f3d4836cf3e0bb492deafd09') in 0.004188 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 1.925355 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer
-  artifactKey: Guid(e0d3857135bb1b449a5ed8c57f812986) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer using Guid(e0d3857135bb1b449a5ed8c57f812986) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5746da630fa1d33ae1638822afbf81d1') in 0.000675 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 0.817060 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry
-  artifactKey: Guid(b03d03525c441654a8a452071dfd1a76) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry using Guid(b03d03525c441654a8a452071dfd1a76) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a22d4e3d6a25d1d98a62bd681e622ecc') in 0.000692 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 0.414583 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_01_idle.FBX
-  artifactKey: Guid(91c0b7cee7717f44e8592a8ae0b83446) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_01_idle.FBX using Guid(91c0b7cee7717f44e8592a8ae0b83446) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8837d7d6db51d69adc2539a0c99e5d7a') in 0.008161 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 101
-========================================================================
-Received Import Request.
-  Time since last request: 0.001605 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_02_walk.FBX
-  artifactKey: Guid(8de80c8d26374dd419598d17cde72f23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_02_walk.FBX using Guid(8de80c8d26374dd419598d17cde72f23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '137f25a796a567f2567ef136f2744178') in 0.003009 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 101
-========================================================================
-Received Import Request.
-  Time since last request: 0.000563 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_02_walk_rm.FBX
-  artifactKey: Guid(35c3577e6971969448b2814d4445cc8d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_02_walk_rm.FBX using Guid(35c3577e6971969448b2814d4445cc8d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '24eb9ca97a9fba3339932a0cd570072d') in 0.003096 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 101
-========================================================================
-Received Import Request.
-  Time since last request: 0.000057 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_03_run.FBX
-  artifactKey: Guid(5e14f4222e0ff064b8a6a7e77779eafe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_03_run.FBX using Guid(5e14f4222e0ff064b8a6a7e77779eafe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7a862d3aae184b5a1c640a236314161e') in 0.002699 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 101
-========================================================================
-Received Import Request.
-  Time since last request: 0.000146 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_03_run_rm.FBX
-  artifactKey: Guid(e92a397f3a1eb924caf08667f579e087) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_03_run_rm.FBX using Guid(e92a397f3a1eb924caf08667f579e087) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd939eb4fce5e15a0d3225a463c1888e4') in 0.002753 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 101
-========================================================================
-Received Import Request.
-  Time since last request: 0.004700 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_05_damage.FBX
-  artifactKey: Guid(7593afb374cb3184d85d032cfacf6978) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_05_damage.FBX using Guid(7593afb374cb3184d85d032cfacf6978) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1a20246d09ae3c900876867f9acaca91') in 0.003425 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 101
-========================================================================
-Received Import Request.
-  Time since last request: 0.004217 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_06_death_B.FBX
-  artifactKey: Guid(214140386512e0248a3e6d376a3a86c2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_cavalry/cavalry_archer/cav_archer_06_death_B.FBX using Guid(214140386512e0248a3e6d376a3a86c2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83f0deab9e6221f8a495b83eb00df2b3') in 0.004324 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 101
-========================================================================
-Received Import Request.
-  Time since last request: 33.999744 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/sample_scene/TT_RTS_sample_sceneSettings.lighting
-  artifactKey: Guid(90c3238559b9d21428f0bc232de1d984) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/sample_scene/TT_RTS_sample_sceneSettings.lighting using Guid(90c3238559b9d21428f0bc232de1d984) Importer(815301076,1909f56bfc062723c751e8b465ee728b) LightingSettings: switching bake backend from 1 to 0.
- -> (artifact id: '848a0f7887f3218ef62bb3627db93e7b') in 0.001432 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
-========================================================================
-Received Import Request.
-  Time since last request: 1.318351 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/sample_scene/animation_samples
-  artifactKey: Guid(c9c7fe233ec57e047bd951475c00eb84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/sample_scene/animation_samples using Guid(c9c7fe233ec57e047bd951475c00eb84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '151d82736bfa32648d7e2059a269f424') in 0.000608 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 1.414039 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/sample_scene/animation_samples/sample_crossbow.controller
-  artifactKey: Guid(76a2602d9d10f3d41bfdecbe0d04b2da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/sample_scene/animation_samples/sample_crossbow.controller using Guid(76a2602d9d10f3d41bfdecbe0d04b2da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c888297bce4d99ceaa6b690e0c382536') in 0.001916 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 4
-========================================================================
-Received Import Request.
-  Time since last request: 6.575595 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/units/machines/TT_RTS_Catapult.FBX
-  artifactKey: Guid(a568148748050d646b5be25edaa7d066) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/units/machines/TT_RTS_Catapult.FBX using Guid(a568148748050d646b5be25edaa7d066) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a2cee834ba595f863a92fee0f7ef6155') in 0.114314 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 54
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_idle_open.FBX
-  artifactKey: Guid(6e49acaff05d52648a79e9c4ca914945) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_idle_open.FBX using Guid(6e49acaff05d52648a79e9c4ca914945) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e4660fd7c2d623cad4e703a3f778b646') in 0.003159 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 13
-========================================================================
-Received Import Request.
-  Time since last request: 0.000015 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/Wall_A_gate.FBX
-  artifactKey: Guid(7ae56a8428b94f24b854dac395c7c925) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/Wall_A_gate.FBX using Guid(7ae56a8428b94f24b854dac395c7c925) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ce33e354052ef2f649c9948e359a01b0') in 0.032973 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 26
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/units/machines/TT_RTS_Ram.FBX
-  artifactKey: Guid(f12ccf2dde6cbfc4286328da366c9c8d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/units/machines/TT_RTS_Ram.FBX using Guid(f12ccf2dde6cbfc4286328da366c9c8d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bba3ab96d98c5f8450e35a345571643f') in 0.035801 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 40
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_open.FBX
-  artifactKey: Guid(6c1fb72d9afb1a941a4ffe6182bfa652) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_open.FBX using Guid(6c1fb72d9afb1a941a4ffe6182bfa652) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '72004db84a8cb5735faa5ae2b1a11819') in 0.003257 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 13
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_gate_close.FBX
-  artifactKey: Guid(1f4af3f8042a7d3418aa9e0d57c7a936) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_gate_close.FBX using Guid(1f4af3f8042a7d3418aa9e0d57c7a936) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e959235930a37a5cbd2f16b3dae63589') in 0.002317 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 13
+Number of asset objects unloaded after import = 49
 ========================================================================
 Received Import Request.
   Time since last request: 0.000011 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_idle_closed.FBX
-  artifactKey: Guid(d9d8ffb718d118f45bbde16a6e9308e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_A_gate/wall_A_idle_closed.FBX using Guid(d9d8ffb718d118f45bbde16a6e9308e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9f836c93ad3c69deb0b29412a9e1bac0') in 0.002504 seconds
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_02_walk_rm.FBX
+  artifactKey: Guid(01822c917cbe238408976a109c48a8c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_02_walk_rm.FBX using Guid(01822c917cbe238408976a109c48a8c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ee8a8448bb8a7c68f58aed569da33d07') in 0.003033 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000009 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_04_attack_A.FBX
+  artifactKey: Guid(e8b6ae497645a274e98d76a6e407ce8b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_04_attack_A.FBX using Guid(e8b6ae497645a274e98d76a6e407ce8b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f10cb747abec3e303045cc17dbe37a65') in 0.002905 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000548 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_04_attack_B.FBX
+  artifactKey: Guid(5a7200e1c2b48164d856cdab807a71bb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_04_attack_B.FBX using Guid(5a7200e1c2b48164d856cdab807a71bb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '320704508f303140af426749dcd88312') in 0.002952 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001591 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_05_damage.FBX
+  artifactKey: Guid(dd91f49bb1870a843b0ce0e064e87045) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_05_damage.FBX using Guid(dd91f49bb1870a843b0ce0e064e87045) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2e195f151e8fbc338238a24c85e41f19') in 0.002965 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001031 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_06_death_A.FBX
+  artifactKey: Guid(46cd827701fed424c817fee08823358d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_06_death_A.FBX using Guid(46cd827701fed424c817fee08823358d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'affa8ef701a51779c51add088ba56d0e') in 0.003239 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001388 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_06_death_B.FBX
+  artifactKey: Guid(2cd4c7fa9ab8728449da2d7730b71ac2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Shield/shield_06_death_B.FBX using Guid(2cd4c7fa9ab8728449da2d7730b71ac2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ab278302889236a067a7d2d5899a444c') in 0.003730 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.346 seconds
+Refreshing native plugins compatible for Editor in 6.77 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.882 seconds
+Domain Reload Profiling: 1226ms
+	BeginReloadAssembly (125ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (32ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (20ms)
+	LoadAllAssembliesAndSetupDomain (167ms)
+		LoadAssemblies (221ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (10ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (883ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (350ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (28ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (59ms)
+			ProcessInitializeOnLoadAttributes (236ms)
+			ProcessInitializeOnLoadMethodAttributes (20ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 13.19 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3249 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.8 KB). Loaded Objects now: 3739.
+Memory consumption went from 143.0 MB to 142.9 MB.
+Total: 3.015600 ms (FindLiveObjects: 0.393900 ms CreateObjectMapping: 0.175000 ms MarkObjects: 2.389100 ms  DeleteObjects: 0.056800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.341 seconds
+Refreshing native plugins compatible for Editor in 6.72 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.927 seconds
+Domain Reload Profiling: 1267ms
+	BeginReloadAssembly (119ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (23ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (26ms)
+	LoadAllAssembliesAndSetupDomain (163ms)
+		LoadAssemblies (216ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (10ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (928ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (348ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (29ms)
+			SetLoadedEditorAssemblies (3ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (57ms)
+			ProcessInitializeOnLoadAttributes (235ms)
+			ProcessInitializeOnLoadMethodAttributes (21ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 7.83 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3250 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.7 KB). Loaded Objects now: 3742.
+Memory consumption went from 145.2 MB to 145.1 MB.
+Total: 2.960000 ms (FindLiveObjects: 0.233100 ms CreateObjectMapping: 0.076700 ms MarkObjects: 2.597800 ms  DeleteObjects: 0.051900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 77.126027 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e9505dc97ca198c9f237ab5ddf927c8a') in 0.075652 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 2.389128 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6617738ab2397ed2570251a7ee3cbfc3') in 0.021691 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 10.033944 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '94df14d83a65cce77a78d540a75a72f2') in 0.027510 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 84.449841 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2864c9ca434e89c8669396c29c284d8e') in 0.035414 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 8.823016 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b30d2c136c31bd3f344d94a11e886f2a') in 0.035857 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 3.380102 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd637adf660146cfeefbb40b397a32665') in 0.024424 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Import Request.
+  Time since last request: 7.228063 seconds.
+  path: Assets/Prefabs/tester.prefab
+  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bd70e4230cfdd86bcf09d8d3b1588c34') in 0.036304 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1036
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.329 seconds
+Refreshing native plugins compatible for Editor in 5.99 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.902 seconds
+Domain Reload Profiling: 1230ms
+	BeginReloadAssembly (113ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (23ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (19ms)
+	LoadAllAssembliesAndSetupDomain (164ms)
+		LoadAssemblies (214ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (8ms)
+			TypeCache.Refresh (4ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (903ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (352ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (28ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (60ms)
+			ProcessInitializeOnLoadAttributes (238ms)
+			ProcessInitializeOnLoadMethodAttributes (19ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 8.07 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3249 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (37.8 KB). Loaded Objects now: 3745.
+Memory consumption went from 147.0 MB to 146.9 MB.
+Total: 2.729400 ms (FindLiveObjects: 0.264000 ms CreateObjectMapping: 0.104300 ms MarkObjects: 2.287300 ms  DeleteObjects: 0.073100 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 39.332461 seconds.
+  path: Assets/Animation/AC tester.controller
+  artifactKey: Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/AC tester.controller using Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ba58b11fdbb2c15f7054cddbcea885d5') in 0.010023 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 14
+========================================================================
+Received Import Request.
+  Time since last request: 59.707018 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Archer/archer_04_attack_B.FBX
+  artifactKey: Guid(5142e855d0214a64fa6432eafc50a2d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Archer/archer_04_attack_B.FBX using Guid(5142e855d0214a64fa6432eafc50a2d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f8583df698e2d51727d22014b1bc251e') in 0.015499 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.324 seconds
+Refreshing native plugins compatible for Editor in 6.72 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.884 seconds
+Domain Reload Profiling: 1206ms
+	BeginReloadAssembly (112ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (26ms)
+	RebuildCommonClasses (23ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (19ms)
+	LoadAllAssembliesAndSetupDomain (159ms)
+		LoadAssemblies (207ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (10ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (885ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (341ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (27ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (59ms)
+			ProcessInitializeOnLoadAttributes (230ms)
+			ProcessInitializeOnLoadMethodAttributes (18ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 7.42 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3249 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.8 KB). Loaded Objects now: 3748.
+Memory consumption went from 148.9 MB to 148.8 MB.
+Total: 2.568900 ms (FindLiveObjects: 0.241100 ms CreateObjectMapping: 0.074000 ms MarkObjects: 2.203200 ms  DeleteObjects: 0.049700 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:scripting/monoscript/fileName/Readme.cs: 5aedf578fb2663036982fb7b05aaf325 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:scripting/monoscript/fileName/ReadmeEditor.cs: ff7ced1e41c1b99ddf5dfefc88f6bd50 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 59.776201 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Archer/archer_04_attack_B.FBX
+  artifactKey: Guid(5142e855d0214a64fa6432eafc50a2d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Archer/archer_04_attack_B.FBX using Guid(5142e855d0214a64fa6432eafc50a2d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9fa46dc57ab5bb1dc611f11c645e0111') in 0.021087 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 7.236653 seconds.
+  path: Assets/Animation/AC tester.controller
+  artifactKey: Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/AC tester.controller using Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '80dc64d7131e398c5f9a69c439c38097') in 0.002464 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 14
+========================================================================
+Received Import Request.
+  Time since last request: 32.871733 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry
+  artifactKey: Guid(7549cb7e2fb92324eafd9294d2843545) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry using Guid(7549cb7e2fb92324eafd9294d2843545) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6b817ac954e3129d7a70f4b8d82b4251') in 0.000819 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 0.051361 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_01_idle.FBX
+  artifactKey: Guid(ed5efca8bebba864d9f5d5b20196c94b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_01_idle.FBX using Guid(ed5efca8bebba864d9f5d5b20196c94b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1323b5094f1c704a2d98f8c0ec372c62') in 0.003593 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000454 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_02_walk.FBX
+  artifactKey: Guid(b789181d013573945825c7b5c6e51e7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_02_walk.FBX using Guid(b789181d013573945825c7b5c6e51e7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '127b2d6718c9d52bd9b9fab0d6758773') in 0.002612 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001230 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_02_walk_rm.FBX
+  artifactKey: Guid(1998e068a71868a449c7617fd0090568) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_02_walk_rm.FBX using Guid(1998e068a71868a449c7617fd0090568) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '692c5d15e9e7a4452187684987bca05a') in 0.002795 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000936 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_03_run.FBX
+  artifactKey: Guid(39c5a1e19d6559345aa3c57adb589874) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_03_run.FBX using Guid(39c5a1e19d6559345aa3c57adb589874) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '395f35c8e70c2627b8f90fa3cd6d3954') in 0.002814 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000999 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_03_run_rm.FBX
+  artifactKey: Guid(0e27e26992920374e895c5c2b1c41383) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_03_run_rm.FBX using Guid(0e27e26992920374e895c5c2b1c41383) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a9182ae76b2b6aeda5eb200fad8739a7') in 0.002759 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000846 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_04_attack_A.FBX
+  artifactKey: Guid(f4554a6188f8a9147954e4d6c388d287) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_04_attack_A.FBX using Guid(f4554a6188f8a9147954e4d6c388d287) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b9333e155807ad5b90d771deee7471ad') in 0.002622 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001444 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_04_attack_B.FBX
+  artifactKey: Guid(2eff314cde206bb4eb0a5715561aa6fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_04_attack_B.FBX using Guid(2eff314cde206bb4eb0a5715561aa6fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8c790ae2756d47766d584f44e5267b84') in 0.002825 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000903 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_05_damage.FBX
+  artifactKey: Guid(59ea70e74b23bed4683e8312494014aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_05_damage.FBX using Guid(59ea70e74b23bed4683e8312494014aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fb9bb81d73c8848e8865641c2b406881') in 0.002644 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001360 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_06_death_A.FBX
+  artifactKey: Guid(d21976f6430d38b4d89737bfbf9c936f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_06_death_A.FBX using Guid(d21976f6430d38b4d89737bfbf9c936f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd5d6b2b09e8da70a99ddb6eee86507b7') in 0.002792 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001091 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_06_death_B.FBX
+  artifactKey: Guid(b0d9487d80334c74198b26915b369dc8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_06_death_B.FBX using Guid(b0d9487d80334c74198b26915b369dc8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a724e8af5027586fb0b338cc594605da') in 0.002879 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001006 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_07_punch_A.FBX
+  artifactKey: Guid(a07a42f1d569ff941929028916b1cb06) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_07_punch_A.FBX using Guid(a07a42f1d569ff941929028916b1cb06) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9efaf7e5434e15e39ed8a80989d039db') in 0.002897 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.001336 seconds.
+  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_07_punch_B.FBX
+  artifactKey: Guid(70957480eb7b9f2409830bda7a8e3af5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_infantry/Infantry/infantry_07_punch_B.FBX using Guid(70957480eb7b9f2409830bda7a8e3af5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f0a5f8c57037572a21dc35e7f7c07f2') in 0.002869 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 683.422587 seconds.
+  path: Assets/Animation/AC tester.controller
+  artifactKey: Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/AC tester.controller using Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '97c3795b46ce8ba81c794001c588ba98') in 0.002422 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 14
+========================================================================
+Received Import Request.
+  Time since last request: 1092.416358 seconds.
+  path: Assets/Animation/AC tester.controller
+  artifactKey: Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/AC tester.controller using Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1a49a917ef06874c183fa902c3113947') in 0.002355 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 13
 ========================================================================
 Received Import Request.
-  Time since last request: 2.403626 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_B_gate/wall_B_gate_close.FBX
-  artifactKey: Guid(052267f2c9cd8f94e85d9a35003aa164) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_B_gate/wall_B_gate_close.FBX using Guid(052267f2c9cd8f94e85d9a35003aa164) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4af841c5b5f776f33e9a470daeef0c59') in 0.003195 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 11
-========================================================================
-Received Import Request.
-  Time since last request: 0.005158 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_B_gate/wall_B_idle_open.FBX
-  artifactKey: Guid(a61bb45e6daeba44e88d758484e5993f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/buildings/animation/wall_B_gate/wall_B_idle_open.FBX using Guid(a61bb45e6daeba44e88d758484e5993f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '23ee31a78833e32b1231d07c3fc54809') in 0.003144 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 11
-========================================================================
-Received Import Request.
-  Time since last request: 0.045417 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/TT_RTS_Banner_plain.FBX
-  artifactKey: Guid(8c8abb7879133384f9051e5c360bd68d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/TT_RTS_Banner_plain.FBX using Guid(8c8abb7879133384f9051e5c360bd68d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7143cf0fa9cc277e0809a96a463e66df') in 0.052649 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 44
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_05_death.FBX
-  artifactKey: Guid(5158c7cb8e7dabc4daf1ef1946b471e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_05_death.FBX using Guid(5158c7cb8e7dabc4daf1ef1946b471e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'eba23e5b970ddc49181e6d0ac34e46bc') in 0.003279 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 29
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ram/ram_02_move.FBX
-  artifactKey: Guid(baa7490040f732842a1563add4d7dc63) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ram/ram_02_move.FBX using Guid(baa7490040f732842a1563add4d7dc63) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '105e5b887f925ff4865605a5f2f8e14d') in 0.003153 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 27
-========================================================================
-Received Import Request.
-  Time since last request: 0.000012 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ram/ram_03_attack.FBX
-  artifactKey: Guid(8d599a1d36bf80b4495953ef62dbb050) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ram/ram_03_attack.FBX using Guid(8d599a1d36bf80b4495953ef62dbb050) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ee4fb08449ebddd16411a9e09304851e') in 0.002141 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 27
-========================================================================
-Received Import Request.
-  Time since last request: 0.000014 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/units/machines/TT_RTS_Ballista.FBX
-  artifactKey: Guid(2dfc7e76293c2fe4393a1903174931ea) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/units/machines/TT_RTS_Ballista.FBX using Guid(2dfc7e76293c2fe4393a1903174931ea) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9c260464aa905bb2b95a426232975427') in 0.047077 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 60
-========================================================================
-Received Import Request.
-  Time since last request: 0.019664 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_01_idle.FBX
-  artifactKey: Guid(73ca10bcbdbc30d468d0a3bb7fe2bc34) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_01_idle.FBX using Guid(73ca10bcbdbc30d468d0a3bb7fe2bc34) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e0021671a4119ec5544f4665d0216760') in 0.002861 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 29
-========================================================================
-Received Import Request.
-  Time since last request: 0.000411 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_02_move.FBX
-  artifactKey: Guid(2e9886c9fa545b6459be3ea5ee57520d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_02_move.FBX using Guid(2e9886c9fa545b6459be3ea5ee57520d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '495fc664096b255b1938485898ba8ffb') in 0.002227 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 29
-========================================================================
-Received Import Request.
-  Time since last request: 0.000911 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_03_attack.FBX
-  artifactKey: Guid(4cf83e04cc7696f4e87f7b5ec05a7d4d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_03_attack.FBX using Guid(4cf83e04cc7696f4e87f7b5ec05a7d4d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4cc73358a28a210a94a95afec7f276ae') in 0.002412 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 29
-========================================================================
-Received Import Request.
-  Time since last request: 0.000569 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_04_damage.FBX
-  artifactKey: Guid(0681544ade2174545ab8d69d6c977994) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Catapult/catapult_04_damage.FBX using Guid(0681544ade2174545ab8d69d6c977994) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd588c96a22b756e17d686e5be12d98dd') in 0.002224 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 29
-========================================================================
-Received Import Request.
-  Time since last request: 0.407371 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_idle_B.FBX
-  artifactKey: Guid(f4525da4be91bb24982ded601f52afa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_idle_B.FBX using Guid(f4525da4be91bb24982ded601f52afa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '84a369e801d4ec9c0590b72ade18f670') in 0.002333 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 15
-========================================================================
-Received Import Request.
-  Time since last request: 0.000553 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_idle_static.FBX
-  artifactKey: Guid(4fae56cd6e9582f4899d577542609a61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_idle_static.FBX using Guid(4fae56cd6e9582f4899d577542609a61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '53e912ab301ac77a1dd3eaf8a34b8da7') in 0.001730 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 15
-========================================================================
-Received Import Request.
-  Time since last request: 0.002591 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Cart/cart_02_move.FBX
-  artifactKey: Guid(472466d6f8ca37c4e9ddc56b09fa2beb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Cart/cart_02_move.FBX using Guid(472466d6f8ca37c4e9ddc56b09fa2beb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '528392b2ef8563afb40610ae14d4bbf3') in 0.004193 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 133
-========================================================================
-Received Import Request.
-  Time since last request: 0.206007 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_01_idle.FBX
-  artifactKey: Guid(fd562e307074c904fa72d08e1593294d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_01_idle.FBX using Guid(fd562e307074c904fa72d08e1593294d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '648f5960bc43c21e58568a8d409efa20') in 0.002507 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 35
-========================================================================
-Received Import Request.
-  Time since last request: 0.000445 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_02_move.FBX
-  artifactKey: Guid(fb60e017e1d2e7c4e809bb61cf2d175f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_02_move.FBX using Guid(fb60e017e1d2e7c4e809bb61cf2d175f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '79f27579036eda1c1a853eb1424b5645') in 0.002164 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 35
-========================================================================
-Received Import Request.
-  Time since last request: 0.000621 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_03_attack.FBX
-  artifactKey: Guid(6a1a8063f7921bf468bd5da00bfe7e5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_03_attack.FBX using Guid(6a1a8063f7921bf468bd5da00bfe7e5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c6eaebc331ec1118aaa0c1f261bf87e2') in 0.002086 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 35
-========================================================================
-Received Import Request.
-  Time since last request: 0.000668 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_04_damage.FBX
-  artifactKey: Guid(a51dacdb18ccedf439e13c115d0a8eb6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_04_damage.FBX using Guid(a51dacdb18ccedf439e13c115d0a8eb6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '944ff090aa1ab12295da04303d68049d') in 0.002153 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 35
-========================================================================
-Received Import Request.
-  Time since last request: 0.000592 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_05_death.FBX
-  artifactKey: Guid(e86e6170c5032b54ab2d3cd73dd4d00a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/animation/animation_machines/Ballista/ballista_05_death.FBX using Guid(e86e6170c5032b54ab2d3cd73dd4d00a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ba5db5ceaf23e108c0c3c757ef707071') in 0.002082 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 35
-========================================================================
-Received Import Request.
-  Time since last request: 0.000485 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_deploy.FBX
-  artifactKey: Guid(e6bbd5ab23f75844481592ee8eb56ec9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_deploy.FBX using Guid(e6bbd5ab23f75844481592ee8eb56ec9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2861c19e0cc2b2822cca080983e82150') in 0.001782 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 15
-========================================================================
-Received Import Request.
-  Time since last request: 0.001010 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_fall.FBX
-  artifactKey: Guid(bb72e88c1bba4c14c817d55cb1a0da5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_fall.FBX using Guid(bb72e88c1bba4c14c817d55cb1a0da5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7eb078efc60cf822373b86ea5be7e98a') in 0.001897 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 15
-========================================================================
-Received Import Request.
-  Time since last request: 0.000729 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_idle_A.FBX
-  artifactKey: Guid(a1292a486ece3904f9ab94c5b2d3b1dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/extras/banners/animation/banner_idle_A.FBX using Guid(a1292a486ece3904f9ab94c5b2d3b1dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '158a7a65018d0372c4ad35e9e9452ed4') in 0.001811 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 15
-========================================================================
-Received Import Request.
-  Time since last request: 678.106704 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Commander.prefab
-  artifactKey: Guid(a9733678a87478b4689672067b7718fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Commander.prefab using Guid(a9733678a87478b4689672067b7718fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f787f5d8eb74cad6deec229cad743dd0') in 0.030961 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1036
-========================================================================
-Received Import Request.
-  Time since last request: 7.163153 seconds.
-  path: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Commander.prefab
-  artifactKey: Guid(a9733678a87478b4689672067b7718fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/prefabs/TT_Commander.prefab using Guid(a9733678a87478b4689672067b7718fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '71e4a3c389accc2199d57b06cf4fb9ff') in 0.042164 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1036
-========================================================================
-Received Import Request.
-  Time since last request: 18.609780 seconds.
-  path: Assets/Prefabs/TT_Archer.prefab
-  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/TT_Archer.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'de7f4df09694a7a67347e619bf46e03f') in 0.028685 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1036
-========================================================================
-Received Import Request.
-  Time since last request: 4.624076 seconds.
-  path: Assets/Scripts
-  artifactKey: Guid(94bcf8240783b104c8497d611ce14581) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts using Guid(94bcf8240783b104c8497d611ce14581) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cb83174988f2ed0e350d9b5aab7ae003') in 0.001322 seconds
+  Time since last request: 7198.497221 seconds.
+  path: Assets/Scripts/Others/graphComponent.cs
+  artifactKey: Guid(9fb6440bb526c684c891a1b53a47f24e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Others/graphComponent.cs using Guid(9fb6440bb526c684c891a1b53a47f24e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6b400fc2f08c8907952a27503ed702ba') in 0.000908 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 8.484404 seconds.
-  path: Assets/Scenes/test.unity
-  artifactKey: Guid(bee47cbc980973a4da692cdb835a3093) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scenes/test.unity using Guid(bee47cbc980973a4da692cdb835a3093) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cb4a43cb07acd953c73767031361279d') in 0.000585 seconds
+  Time since last request: 11739.052937 seconds.
+  path: Assets/Animation/AC tester.controller
+  artifactKey: Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/AC tester.controller using Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7008441797a59d0e0e50bb047b988da3') in 0.006964 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
+Number of asset objects unloaded after import = 14
 ========================================================================
 Received Import Request.
-  Time since last request: 12.089700 seconds.
-  path: Assets/Prefabs/tester.prefab
-  artifactKey: Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/tester.prefab using Guid(06c19c92c60311f4681884f684a1239b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4c289d8da3a5598f3fe852760dc6153c') in 0.023497 seconds
+  Time since last request: 4.900731 seconds.
+  path: Assets/Animation/AC tester.controller
+  artifactKey: Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/AC tester.controller using Guid(b2d98e43682dd7148b7e35b86a2b2a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4787629b0d13cd7e10cefcc864573187') in 0.003647 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1036
-========================================================================
-Received Import Request.
-  Time since last request: 809.647518 seconds.
-  path: Assets/Scripts/Warriors
-  artifactKey: Guid(7060f7b83a999ad4e9941cae9ecce9b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors using Guid(7060f7b83a999ad4e9941cae9ecce9b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '92f2740042516aad1dfcd7f7fd9a7f68') in 0.001649 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 6.378334 seconds.
-  path: Assets/Scripts/Warriors/tester.cs
-  artifactKey: Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors/tester.cs using Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd4f8939290bfd51e980237227a5d6502') in 0.000578 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 869.707016 seconds.
-  path: Assets/Scripts/Warriors/tester.cs
-  artifactKey: Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors/tester.cs using Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '426d99887a7a0085b2d3132159b547ad') in 0.000881 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 184.617701 seconds.
-  path: Assets/Scripts/Warriors/tester.cs
-  artifactKey: Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors/tester.cs using Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '27f9c429e5064f97bc05274dfa3da9f8') in 0.000702 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 10.620407 seconds.
-  path: Assets/Scripts/Warriors/tester.cs
-  artifactKey: Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors/tester.cs using Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '825d9c20dce4d518d9810993932b403c') in 0.000593 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 19.309520 seconds.
-  path: Assets/Scripts/Warriors/tester.cs
-  artifactKey: Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors/tester.cs using Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '56b7b9ce0adaa96746f9cde51ff015e5') in 0.000735 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 0.625065 seconds.
-  path: Assets/Scripts/Warriors/tester.cs
-  artifactKey: Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors/tester.cs using Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2b9b666ff3d638a7ed66ce1b6aa3cad6') in 0.000585 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 5.049007 seconds.
-  path: Assets/Scripts/Warriors/tester.cs
-  artifactKey: Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Warriors/tester.cs using Guid(5261c2bd31695674d83a20c4a00d74ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2861ca4ce92d0fc7573edfa176e2a22d') in 0.000589 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
+Number of asset objects unloaded after import = 14

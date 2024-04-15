@@ -12,8 +12,23 @@ public abstract class warriorAbst : Thing
     protected bool isPlrSide;
 
     protected int damageTotalDealt_;
-    //protected int damageTotalTaken_;
-    
+    //protected int damageTotalTaken_;  
+
+    private toolAbst toolSkill;
+    private List<toolAbst> listToolAll;
+    private List<toolWeapon> listWeapon;
+    private List<effectAbst> listEffect;
+    private List<ICaseTimed> listToolTimed;
+    private List<caseAll> listCable;
+        
+    private Thing whatToAttack_;
+    private Thing whatToUseSkill_;
+
+    public stateWarrior stateCur { get; set; }
+
+    //private List<Thread> curProcessings;
+    //private List<Coroutine> curProcessings;
+
     #region properties
     public int damageTotalDealt {
         get {
@@ -25,36 +40,39 @@ public abstract class warriorAbst : Thing
             }
         }
     }
-    #endregion properties
-
-    private toolAbst toolSkill;
-    private List<toolAbst> listToolAll;
-    private List<effectAbst> listEffect;
-    private List<ICaseTimed> listToolTimed;
-    private List<ICaseAll> listCable;
     public List<toolAbst> copyToolAll { get { return listToolAll.ToList<toolAbst>(); } }
+    public List<toolWeapon> copyWeapon { get { return listWeapon.ToList<toolWeapon>(); } }
     public List<effectAbst> copyEffects { get { return listEffect.ToList<effectAbst>(); } }
     public List<ICaseTimed> copyToolTimed { get { return listToolTimed.ToList<ICaseTimed>(); } }
-    public List<ICaseAll> copyCable { get { return listCable.ToList<ICaseAll>(); } }
-
-    public moverAbst howToMove { get; set; }
-    public selecterAbst whatToAttack { get; set; }
-    public selecterAbst whatToUseSkill { get; set; }
-
-    public stateWarrior stateCur { get; set; }
-
-    //private List<Thread> curProcessings;
-    //private List<Coroutine> curProcessings;
+    public List<caseAll> copyCable { get { return listCable.ToList<caseAll>(); } }
+    public navigatorAbst navigator { 
+        get; 
+        set; 
+    }
+    public selecterAbst selecterForAttack { get; set; }
+    public selecterAbst selecterForSkill { get; set; }
+    public Thing whatToAttack {
+        get {
+            return whatToAttack_;
+        }
+    }
+    public Thing whatToUseSkill {
+        get {
+            return whatToUseSkill_;
+        }
+    }
+    #endregion properties
 
     public warriorAbst() {
         listToolAll = new List<toolAbst>();
+        listWeapon = new List<toolWeapon>();
         listEffect = new List<effectAbst>();
         listToolTimed = new List<ICaseTimed>();
-        listCable = new List<ICaseAll>();
+        listCable = new List<caseAll>();
     }
 
     #region callback
-    public void FixedUpdate() {
+    public void Update() {
         float tempDeltaTime = Time.deltaTime;
         foreach (toolTimed tempToolTimed in listToolTimed.ToArray()) {
             tempToolTimed.timerUpdate(tempDeltaTime);
@@ -76,13 +94,16 @@ public abstract class warriorAbst : Thing
     #endregion callback
 
     #region utility
-    public void addCase(ICaseAll parCase, bool isSkill = false) {
+    public void addCase(caseAll parCase, bool isSkill = false) {
         if (isSkill && parCase is toolAbst) {
             toolSkill = (toolAbst)parCase;
-        } else if (parCase is controller) {
-            listController.Add((controller)parCase);
+            if (parCase is toolWeapon) {
+                listWeapon.Add((toolWeapon)parCase);
+            }
+        //} else if (parCase is Controller) {
+        //    listCable.Add((Controller)parCase);
         } else if (parCase is effectAbst) {
-            listEffects.Add((effectAbst)parCase);
+            listEffect.Add((effectAbst)parCase);
         } else if (parCase is toolAbst) {
             listToolAll.Add((toolAbst)parCase);
         }
@@ -90,15 +111,20 @@ public abstract class warriorAbst : Thing
         if (parCase is toolTimed) {
             listToolTimed.Add((toolTimed)parCase);
         }
+
+        parCase.owner = this;
     }
 
-    public void removeCase(ICaseAll parCase) {
-        if (parCase is controller) {
-            listController.Remove((controller)parCase);
-        } else if (parCase is effectAbst) {
-            listEffects.Remove((effectAbst)parCase);
+    public void removeCase(caseAll parCase) {
+        /*if (parCase is controller) {
+            listCable.Remove((controller)parCase);
+        } else*/ if (parCase is effectAbst) {
+            listEffect.Remove((effectAbst)parCase);
         } else if (parCase is toolAbst) {
             listToolAll.Remove((toolAbst)parCase);
+            if (parCase is toolWeapon) {
+                listWeapon.Remove((toolWeapon)parCase);
+            }
         }
 
         if (parCase is toolTimed) {

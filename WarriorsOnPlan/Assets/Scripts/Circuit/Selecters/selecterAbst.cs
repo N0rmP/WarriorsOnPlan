@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class selecterAbst
 {
-    public virtual Thing select() { return null; }
+    public warriorAbst owner { get; set; }
+    public virtual Thing select(bool isPlrSide) { return null; }
 }

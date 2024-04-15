@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public abstract class moverAbst
+public abstract class navigatorAbst : caseAll
 {
     protected node destination_;
+    // route will be recalculated just before every movement, but can remain only when whole nodes in route have nothing on them
+    protected Stack<EDirection> route;
+
     public node destination {
         set { destination_ = value; }
     }
@@ -16,7 +20,10 @@ public abstract class moverAbst
         (moverAbst와 ICaseTimed를 모두 상속받게 한 뒤, 원본 mover를 정해진 타이머만큼 보관해두었다가 다시 둘을 교환해서 원상복구)
      */
 
-    public virtual void move() { 
-        // destination으로 이동 1칸, 만약 destination이 기존과 동일하다면 route를 유지해도 되지 않을까?
+    public navigatorAbst() {
+        destination_ = null;
+        route = new Stack<EDirection>();
     }
+
+    public abstract EDirection getNextEDirection();
 }

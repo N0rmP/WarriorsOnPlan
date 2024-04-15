@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class toolAbst : caseAbst
+public class toolAbst : caseAll
 {
-    public warriorAbst owner {
-        get;set;
-    }
+
 }
