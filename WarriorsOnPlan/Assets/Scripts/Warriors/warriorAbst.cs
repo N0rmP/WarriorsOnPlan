@@ -14,11 +14,10 @@ public abstract class warriorAbst : Thing
     protected int damageTotalDealt_;
     //protected int damageTotalTaken_;  
 
-    private toolAbst toolSkill;
-    private List<toolAbst> listToolAll;
+    private caseAll toolSkill;
+    private List<caseAll> listToolAll;
     private List<toolWeapon> listWeapon;
-    private List<effectAbst> listEffect;
-    private List<ICaseTimed> listToolTimed;
+    private List<caseAll> listEffect;
     private List<caseAll> listCable;
         
     private Thing whatToAttack_;
@@ -40,15 +39,11 @@ public abstract class warriorAbst : Thing
             }
         }
     }
-    public List<toolAbst> copyToolAll { get { return listToolAll.ToList<toolAbst>(); } }
+    public List<caseAll> copyToolAll { get { return listToolAll.ToList<caseAll>(); } }
     public List<toolWeapon> copyWeapon { get { return listWeapon.ToList<toolWeapon>(); } }
-    public List<effectAbst> copyEffects { get { return listEffect.ToList<effectAbst>(); } }
-    public List<ICaseTimed> copyToolTimed { get { return listToolTimed.ToList<ICaseTimed>(); } }
+    public List<caseAll> copyEffects { get { return listEffect.ToList<caseAll>(); } }
     public List<caseAll> copyCable { get { return listCable.ToList<caseAll>(); } }
-    public navigatorAbst navigator { 
-        get; 
-        set; 
-    }
+    public navigatorAbst navigator { get; set; }
     public selecterAbst selecterForAttack { get; set; }
     public selecterAbst selecterForSkill { get; set; }
     public Thing whatToAttack {
@@ -64,71 +59,62 @@ public abstract class warriorAbst : Thing
     #endregion properties
 
     public warriorAbst() {
-        listToolAll = new List<toolAbst>();
+        listToolAll = new List<caseAll>();
         listWeapon = new List<toolWeapon>();
-        listEffect = new List<effectAbst>();
-        listToolTimed = new List<ICaseTimed>();
+        listEffect = new List<caseAll>();
         listCable = new List<caseAll>();
     }
 
     #region callback
     public void Update() {
-        float tempDeltaTime = Time.deltaTime;
-        foreach (toolTimed tempToolTimed in listToolTimed.ToArray()) {
-            tempToolTimed.timerUpdate(tempDeltaTime);
-        }
 
-        /*
-        ★이거 combatManager로 옮기고 1초에 1번씩 호출되도록 만드세용
-        switch (stateCur) {
-            case (stateWarrior.move):
-                howToMove.move();
-                break;
-            case (stateWarrior.skill): break;
-            case (stateWarrior.attack): break;
-            case (stateWarrior.focussing): break;
-            case (stateWarrior.controlled): break;
-        }
-        */
     }
     #endregion callback
 
     #region utility
     public void addCase(caseAll parCase, bool isSkill = false) {
-        if (isSkill && parCase is toolAbst) {
-            toolSkill = (toolAbst)parCase;
-            if (parCase is toolWeapon) {
-                listWeapon.Add((toolWeapon)parCase);
-            }
-        //} else if (parCase is Controller) {
-        //    listCable.Add((Controller)parCase);
-        } else if (parCase is effectAbst) {
-            listEffect.Add((effectAbst)parCase);
-        } else if (parCase is toolAbst) {
-            listToolAll.Add((toolAbst)parCase);
-        }
-
-        if (parCase is toolTimed) {
-            listToolTimed.Add((toolTimed)parCase);
+        switch (parCase.caseType) { 
+            case enumCaseType.skill:
+                toolSkill = parCase;
+                break;
+            case enumCaseType.tool:
+                if (parCase is toolWeapon) {
+                    listWeapon.Add((toolWeapon)parCase);
+                }
+                listToolAll.Add(parCase);
+                break;
+            case enumCaseType.circuit:
+                listCable.Add(parCase);
+                break;
+            case enumCaseType.effect:
+                listEffect.Add(parCase);
+                break;
+            default:
+                break;
         }
 
         parCase.owner = this;
     }
 
     public void removeCase(caseAll parCase) {
-        /*if (parCase is controller) {
-            listCable.Remove((controller)parCase);
-        } else*/ if (parCase is effectAbst) {
-            listEffect.Remove((effectAbst)parCase);
-        } else if (parCase is toolAbst) {
-            listToolAll.Remove((toolAbst)parCase);
-            if (parCase is toolWeapon) {
-                listWeapon.Remove((toolWeapon)parCase);
-            }
-        }
-
-        if (parCase is toolTimed) {
-            listToolTimed.Remove((toolTimed)parCase);
+        switch (parCase.caseType) {
+            case enumCaseType.skill:
+                toolSkill = null;
+                break;
+            case enumCaseType.tool:
+                if (parCase is toolWeapon) {
+                    listWeapon.Remove((toolWeapon)parCase);
+                }
+                listToolAll.Remove(parCase);
+                break;
+            case enumCaseType.circuit:
+                listCable.Remove(parCase);
+                break;
+            case enumCaseType.effect:
+                listEffect.Remove(parCase);
+                break;
+            default:
+                break;
         }
     }
     #endregion utility

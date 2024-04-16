@@ -2,7 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum enumCaseType { 
+    none = -1,
+    circuit = 0,
+    skill = 1,
+    tool = 2,
+    effect = 3,
+    others = 99
+}
+
 public abstract class caseAll {
+    public readonly enumCaseType caseType;
     protected warriorAbst owner_;
 
     public warriorAbst owner {
@@ -15,10 +25,18 @@ public abstract class caseAll {
         owner_.removeCase(this);
     }
 
+    //be aware of that source / target can be different from owner
+
     //onEngage includes onCombatStart / onEngageDuringCombat
     public virtual void onEngage(Thing source) { }
     public virtual void onAdded(Thing source) { }
-    // be aware of that source / target can be different from owner
+
+    public virtual void onTurnStart(Thing source) { }
+    public virtual void onTurnEnd(Thing source) { }
+
+    public virtual void onBeforeAction(Thing source) { }
+    public virtual void onAfterAction(Thing source) { }
+
     //source of onAttack is owner, target is the to-be-attacked warrior
     public virtual void onBeforeAttack(Thing source, Thing target, ref int value) { }
     public virtual void onAfterAttack(Thing source, Thing target, int value) { }
