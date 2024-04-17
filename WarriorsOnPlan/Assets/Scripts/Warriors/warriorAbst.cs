@@ -9,7 +9,7 @@ public enum stateWarrior { attack, controlled, focussing, move, skill }
 
 public abstract class warriorAbst : Thing
 {
-    protected bool isPlrSide;
+    protected bool isPlrSide_;
 
     protected int damageTotalDealt_;
     //protected int damageTotalTaken_;  
@@ -29,6 +29,7 @@ public abstract class warriorAbst : Thing
     //private List<Coroutine> curProcessings;
 
     #region properties
+    public bool isPlrSide { get; }
     public int damageTotalDealt {
         get {
             return damageTotalDealt_;
@@ -58,13 +59,6 @@ public abstract class warriorAbst : Thing
     }
     #endregion properties
 
-    public warriorAbst() {
-        listToolAll = new List<caseAll>();
-        listWeapon = new List<toolWeapon>();
-        listEffect = new List<caseAll>();
-        listCable = new List<caseAll>();
-    }
-
     #region callback
     public void Update() {
 
@@ -72,22 +66,45 @@ public abstract class warriorAbst : Thing
     #endregion callback
 
     #region utility
-    public void addCase(caseAll parCase, bool isSkill = false) {
+    public virtual void init(bool parisPlrSide, int parCoor0, int parCoor1, int parMaxHp = 1) {
+        isPlrSide_ = parisPlrSide;
+        base.init(parMaxHp);
+        combatManager.CM.processPlace(this, parCoor0, parCoor1);
+
+        listToolAll = new List<caseAll>();
+        listWeapon = new List<toolWeapon>();
+        listEffect = new List<caseAll>();
+        listCable = new List<caseAll>();
+    }
+
+    //insertPosition parameter can be 3 num : below zero = index 0 , zero = index (List.Count / 2) , above zero = the last index
+    public void addCase(caseAll parCase, int insertPosition = 0) {
+        switch (insertPosition) {
+            case < 0:
+                insertPosition = -1;
+                break;
+            case > 0:
+                insertPosition = 1;
+                break;
+            default:
+                break;
+        }
+
         switch (parCase.caseType) { 
             case enumCaseType.skill:
                 toolSkill = parCase;
                 break;
             case enumCaseType.tool:
                 if (parCase is toolWeapon) {
-                    listWeapon.Add((toolWeapon)parCase);
+                    listWeapon.Insert(insertPosition, (toolWeapon)parCase);
                 }
-                listToolAll.Add(parCase);
+                listToolAll.Insert(insertPosition, parCase);
                 break;
             case enumCaseType.circuit:
-                listCable.Add(parCase);
+                listCable.Insert(insertPosition, parCase);
                 break;
             case enumCaseType.effect:
-                listEffect.Add(parCase);
+                listEffect.Insert(insertPosition, parCase);
                 break;
             default:
                 break;

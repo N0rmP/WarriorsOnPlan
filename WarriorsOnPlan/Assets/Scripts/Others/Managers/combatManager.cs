@@ -10,6 +10,7 @@ public class combatManager : MonoBehaviour
     public graphComponent graphCur;
 
     // interval time between each action
+    //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
     private int intervalTime;
 
     //warriors array's indices represent different team, 0 = player's / 1 = computer's
@@ -66,9 +67,35 @@ public class combatManager : MonoBehaviour
         comparerHpInstance = new comparerHp();
         comparerDamageDealtInstance = new comparerDamageDealt();
         tupMove_ = (null, new Vector3(0f, 0f, 0f), -2f);
-        // ★ 생성자 혹은 Awake에서 warriros List들을 초기화하고 정렬할 것
 
+        //graph initiate
+        graphCur = new graphComponent(7, 7);
 
+        //list initiate
+        warriorsHpSorted_ = new List<warriorAbst>[2]{
+            new List<warriorAbst>(),
+            new List<warriorAbst>()
+        };
+        warriorsDamageDealtSorted_ = new List<warriorAbst>[2] {
+            new List<warriorAbst>(),
+            new List<warriorAbst>()
+        };
+        warriorsActionOrder_ = new List<warriorAbst>[2] {
+            new List<warriorAbst>(),
+            new List<warriorAbst>()
+        };
+
+        //★ test
+        GameObject w1 = Instantiate<GameObject>(
+                Resources.Load<GameObject>("Prefabs/tester")
+            );
+        w1.GetComponent<warriorAbst>().init(true, 6, 6, 100);
+        GameObject w2 = Instantiate<GameObject>(
+                Resources.Load<GameObject>("Prefabs/tester")
+            );
+        w2.GetComponent<warriorAbst>().init(false, 0, 0, 100);
+        Thread tempThread = new Thread(new ThreadStart(combatLoop));
+        tempThread.Start();
     }
 
     public void Update() {
@@ -85,7 +112,7 @@ public class combatManager : MonoBehaviour
     }
     #endregion callbacks
 
-    public bool combatLoop(bool isInstant = false) {
+    public void combatLoop() {
         bool overCheck() {
             return (warriorsHpSorted_[0].Count <= 0 || warriorsHpSorted_[1].Count <= 0);
         }
@@ -122,7 +149,8 @@ public class combatManager : MonoBehaviour
 
                 //check if this combat is over after each action
                 if (overCheck()) {
-                    return (warriorsHpSorted_[1].Count <= 0);
+                    //★게임 종료 처리
+                    //return (warriorsHpSorted_[1].Count <= 0);
                 }
             }
             //★ 턴 종료 시 효과 발동
@@ -166,6 +194,13 @@ public class combatManager : MonoBehaviour
         }
 
         graphCur[parCoor0, parCoor1].placeThing(source);
+        if (source is warriorAbst) {
+            warriorAbst tempWarrior = (warriorAbst)source;
+            int tempPlrSideNum = tempWarrior.isPlrSide ? 0 : 1;
+            warriorsHpSorted_[tempPlrSideNum].Add(tempWarrior);
+            warriorsDamageDealtSorted_[tempPlrSideNum].Add(tempWarrior);
+            warriorsActionOrder_[tempPlrSideNum].Add(tempWarrior);
+        }
     }
     #endregion
 

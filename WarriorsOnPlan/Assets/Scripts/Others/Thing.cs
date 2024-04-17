@@ -11,6 +11,9 @@ public class Thing : MonoBehaviour
     public int curHp { get; }
     public node curPosition { get; set; }
 
+    public void init(int parMaxHp) {
+        maxHp_ = parMaxHp;
+    }
 
     public int setCurHp(int parValue, bool isPlus = false) {
         int tempResultChange = 0;
