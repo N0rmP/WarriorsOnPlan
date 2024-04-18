@@ -10,6 +10,8 @@ public class navigatorAttackOneWeapon : navigatorAbst
     // indice represents each range-scope per two-indice
     private List<(int min, int max)> rangeRange;
 
+    public navigatorAttackOneWeapon(warriorAbst parOwner) : base(parOwner) { }
+
     public override void onEngage(Thing source) {
         int tempRangeMinCur;
         int tempRangeMaxCur;

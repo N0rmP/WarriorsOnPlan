@@ -127,18 +127,28 @@ public class combatManager : MonoBehaviour
 
             //★ 턴 시작 시 효과 발동
             foreach (warriorAbst wa in tempListActors) {
+                //process before action
+                warriorsHpSorted_[0].Sort(comparerHpInstance);
+                warriorsHpSorted_[1].Sort(comparerHpInstance);
+                warriorsDamageDealtSorted_[0].Sort(comparerDamageDealtInstance);
+                warriorsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
+                wa.updateTargets();
+                foreach (caseAll ca in wa.copyCaseAllAll) {
+                    ca.onBeforeAction(wa);
+                }
+
                 // decide what action this warrior does this time, priority is (Being Controlled) > UseSkill > Attack > Move
                 switch (wa.stateCur) {
                     // ★ 각각의 warrior 행동 시작 시 효과 발동
-                    case stateWarrior.controlled:
+                    case enumStateWarrior.controlled:
                         break;
-                    case stateWarrior.focussing:
+                    case enumStateWarrior.focussing:
                         break;
-                    case stateWarrior.skill:
+                    case enumStateWarrior.skill:
                         break;
-                    case stateWarrior.attack:
+                    case enumStateWarrior.attack:
                         break;
-                    case stateWarrior.move:
+                    case enumStateWarrior.move:
                         processMove(wa, wa.navigator.getNextEDirection());
                         break;
                     default:

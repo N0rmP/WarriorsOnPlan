@@ -2,8 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class selecterAbst
+public abstract class selecterAbst
 {
-    public warriorAbst owner { get; set; }
-    public virtual Thing select(bool isPlrSide) { return null; }
+    public warriorAbst owner { get;}
+
+    public selecterAbst(warriorAbst parOwner) {
+        owner = parOwner;
+    }
+
+    public abstract Thing select(bool parIsPlrSide);
 }

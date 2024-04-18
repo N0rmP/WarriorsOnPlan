@@ -4,8 +4,11 @@ using UnityEditor.SceneTemplate;
 using UnityEngine;
 
 public class selecterClosest : selecterAbst {
-    public override Thing select(bool isPlrSide) {
-        List<warriorAbst> tempPotentialTargetList = combatManager.CM.warriorsHpSorted[(isPlrSide ? 1 : 0)];
+
+    public selecterClosest(warriorAbst parOwner) : base(parOwner) { }
+
+    public override Thing select(bool parIsPlrSide) {
+        List<warriorAbst> tempPotentialTargetList = combatManager.CM.warriorsHpSorted[(parIsPlrSide ? 1 : 0)];
         int minDistance = int.MaxValue;
         int tempDistance;
         node ownerPosition = owner.curPosition;

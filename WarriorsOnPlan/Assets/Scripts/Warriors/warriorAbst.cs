@@ -5,7 +5,15 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
 
-public enum stateWarrior { attack, controlled, focussing, move, skill }
+//move state is same as idle state
+public enum enumStateWarrior {
+    controlled = 0,
+    focussing = 1,
+    skill = 2,
+    movePrioritized = 3,
+    attack = 4,
+    move = 5
+    }
 
 public abstract class warriorAbst : Thing
 {
@@ -15,18 +23,15 @@ public abstract class warriorAbst : Thing
     //protected int damageTotalTaken_;  
 
     private caseAll toolSkill;
+    private List<caseAll> listCaseAllAll;
     private List<caseAll> listToolAll;
     private List<toolWeapon> listWeapon;
-    private List<caseAll> listEffect;
     private List<caseAll> listCable;
         
     private Thing whatToAttack_;
     private Thing whatToUseSkill_;
 
-    public stateWarrior stateCur { get; set; }
-
-    //private List<Thread> curProcessings;
-    //private List<Coroutine> curProcessings;
+    public enumStateWarrior stateCur { get; set; }
 
     #region properties
     public bool isPlrSide { get; }
@@ -40,9 +45,9 @@ public abstract class warriorAbst : Thing
             }
         }
     }
+    public List<caseAll> copyCaseAllAll { get { return listCaseAllAll.ToList<caseAll>(); } }
     public List<caseAll> copyToolAll { get { return listToolAll.ToList<caseAll>(); } }
     public List<toolWeapon> copyWeapon { get { return listWeapon.ToList<toolWeapon>(); } }
-    public List<caseAll> copyEffects { get { return listEffect.ToList<caseAll>(); } }
     public List<caseAll> copyCable { get { return listCable.ToList<caseAll>(); } }
     public navigatorAbst navigator { get; set; }
     public selecterAbst selecterForAttack { get; set; }
@@ -66,20 +71,29 @@ public abstract class warriorAbst : Thing
     #endregion callback
 
     #region utility
+    public void updateTargets() {
+        whatToAttack_ = selecterForAttack.select(isPlrSide_);
+        whatToUseSkill_ = selecterForSkill.select(isPlrSide_);
+    }
+
     public virtual void init(bool parisPlrSide, int parCoor0, int parCoor1, int parMaxHp = 1) {
         isPlrSide_ = parisPlrSide;
+        damageTotalDealt_ = 0;
+        this.setInitialMaxHp(parMaxHp);
+        stateCur = enumStateWarrior.move;
         base.init(parMaxHp);
         combatManager.CM.processPlace(this, parCoor0, parCoor1);
 
+        listCaseAllAll = new List<caseAll>();
         listToolAll = new List<caseAll>();
         listWeapon = new List<toolWeapon>();
-        listEffect = new List<caseAll>();
         listCable = new List<caseAll>();
     }
 
     //insertPosition parameter can be 3 num : below zero = index 0 , zero = index (List.Count / 2) , above zero = the last index
     public void addCase(caseAll parCase, int insertPosition = 0) {
-        switch (insertPosition) {
+        Math.Clamp(insertPosition, -1, 1);
+        /*switch (insertPosition) {
             case < 0:
                 insertPosition = -1;
                 break;
@@ -88,8 +102,9 @@ public abstract class warriorAbst : Thing
                 break;
             default:
                 break;
-        }
+        }*/
 
+        listCaseAllAll.Insert(insertPosition, parCase);
         switch (parCase.caseType) { 
             case enumCaseType.skill:
                 toolSkill = parCase;
@@ -103,9 +118,9 @@ public abstract class warriorAbst : Thing
             case enumCaseType.circuit:
                 listCable.Insert(insertPosition, parCase);
                 break;
-            case enumCaseType.effect:
+            /*case enumCaseType.effect:
                 listEffect.Insert(insertPosition, parCase);
-                break;
+                break;*/
             default:
                 break;
         }
@@ -114,6 +129,7 @@ public abstract class warriorAbst : Thing
     }
 
     public void removeCase(caseAll parCase) {
+        listCaseAllAll.Remove(parCase);
         switch (parCase.caseType) {
             case enumCaseType.skill:
                 toolSkill = null;
@@ -127,9 +143,9 @@ public abstract class warriorAbst : Thing
             case enumCaseType.circuit:
                 listCable.Remove(parCase);
                 break;
-            case enumCaseType.effect:
+            /*case enumCaseType.effect:
                 listEffect.Remove(parCase);
-                break;
+                break;*/
             default:
                 break;
         }
