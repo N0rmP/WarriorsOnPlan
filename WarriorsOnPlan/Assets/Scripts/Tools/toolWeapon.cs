@@ -19,7 +19,10 @@ public abstract class toolWeapon : caseAll
     public int timerMax { get { return timerMax_; } }
     public int timerCur { get { return timerCur_; } }
 
-    public toolWeapon(int parRangeMin, int parRangeMax, int parDamageOriginal, int parTimerMax) {
+    public toolWeapon(warriorAbst parOwner, int parRangeMin, int parRangeMax, int parDamageOriginal, int parTimerMax) : base(parOwner, enumCaseType.tool) {
+        rangeMin_ = parRangeMin;
+        rangeMax_ = parRangeMax;
+        damageOriginal = parDamageOriginal;
         timerCur_ = 0;
         timerMax_ = parTimerMax;
     }

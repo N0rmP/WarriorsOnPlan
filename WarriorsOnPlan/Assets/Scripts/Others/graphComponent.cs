@@ -64,28 +64,32 @@ public class graphComponent
         //reset variables for search
         resetNodeSearchVariables();
 
+
+        parDeparture.swissArmyVisited = true;
+        //parDeparture.swissArmyEDirection = EDirection.none;
         while (tempSearchQueue.Count > 0){
-            tempCurSearch = tempSearchQueue.Dequeue();
+            tempCurSearch = tempSearchQueue.Dequeue();            
             tempNode = tempCurSearch.curNode;
-            tempNode.swissArmyVisited = true;
-            tempNode.swissArmyEDirection = tempCurSearch.EDirFromDeparture;
 
             // if tempCurSearch includes Goal Node and Lower distFromDeparture, update tempMinDistanceGoal
+            Debug.Log(tempCurSearch.curNode.coor0 + "," + tempCurSearch.curNode.coor1 + " : " + delGoalCheck(tempNode));
             if (delGoalCheck(tempNode) && (tempCurSearch.distFromDeparture < tempMinDistanceGoal.distFromDeparture)) {
                 tempMinDistanceGoal = tempCurSearch;
             }
 
             // enqueue non-visited nodes around
             for (int i=0; i<8; i++) {
-                
-                if (tempNode.swissArmyVisited || tempNode.thingHere != null) { 
+                if (tempNode.link[i] == null || tempNode.link[i].swissArmyVisited || tempNode.link[i].thingHere != null) { 
                     continue; 
                 }
-                tempSearchQueue.Enqueue((tempCurSearch.curNode, (EDirection)i, tempCurSearch.distFromDeparture + 1));
+                tempNode.link[i].swissArmyVisited = true;
+                tempNode.swissArmyEDirection = (EDirection)i;
+                tempSearchQueue.Enqueue((tempNode.link[i], (EDirection)i, tempCurSearch.distFromDeparture + 1));
             }
         }
 
         // after BFS search, make route from tempMinDistanceGoal.curNode to departure using swissArmyEDirection
+        Debug.Log(tempMinDistanceGoal.curNode.coor0 + "," + tempMinDistanceGoal.curNode.coor1 + " : " + tempMinDistanceGoal.EDirFromDeparture + " / " + tempMinDistanceGoal.distFromDeparture);
         tempNode = tempMinDistanceGoal.curNode;
         while (tempNode != parDeparture) {
             parRoute.Push(tempNode.swissArmyEDirection);

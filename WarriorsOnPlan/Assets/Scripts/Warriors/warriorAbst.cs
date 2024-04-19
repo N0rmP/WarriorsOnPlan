@@ -26,7 +26,7 @@ public abstract class warriorAbst : Thing
     private List<caseAll> listCaseAllAll;
     private List<caseAll> listToolAll;
     private List<toolWeapon> listWeapon;
-    private List<caseAll> listCable;
+    private List<caseAll> listCircuit;
         
     private Thing whatToAttack_;
     private Thing whatToUseSkill_;
@@ -34,7 +34,7 @@ public abstract class warriorAbst : Thing
     public enumStateWarrior stateCur { get; set; }
 
     #region properties
-    public bool isPlrSide { get; }
+    public bool isPlrSide { get { return isPlrSide_; } }
     public int damageTotalDealt {
         get {
             return damageTotalDealt_;
@@ -48,8 +48,9 @@ public abstract class warriorAbst : Thing
     public List<caseAll> copyCaseAllAll { get { return listCaseAllAll.ToList<caseAll>(); } }
     public List<caseAll> copyToolAll { get { return listToolAll.ToList<caseAll>(); } }
     public List<toolWeapon> copyWeapon { get { return listWeapon.ToList<toolWeapon>(); } }
-    public List<caseAll> copyCable { get { return listCable.ToList<caseAll>(); } }
+    public List<caseAll> copyCircuit { get { return listCircuit.ToList<caseAll>(); } }
     public navigatorAbst navigator { get; set; }
+    public wigwaggerAbst wigwagger { get; set; }
     public selecterAbst selecterForAttack { get; set; }
     public selecterAbst selecterForSkill { get; set; }
     public Thing whatToAttack {
@@ -87,24 +88,26 @@ public abstract class warriorAbst : Thing
         listCaseAllAll = new List<caseAll>();
         listToolAll = new List<caseAll>();
         listWeapon = new List<toolWeapon>();
-        listCable = new List<caseAll>();
+        listCircuit = new List<caseAll>();
     }
 
     //insertPosition parameter can be 3 num : below zero = index 0 , zero = index (List.Count / 2) , above zero = the last index
     public void addCase(caseAll parCase, int insertPosition = 0) {
-        Math.Clamp(insertPosition, -1, 1);
-        /*switch (insertPosition) {
+        switch (insertPosition) {
             case < 0:
-                insertPosition = -1;
+                insertPosition = 0;
                 break;
             case > 0:
-                insertPosition = 1;
+                insertPosition = listCaseAllAll.Count;
                 break;
             default:
+                insertPosition = listCaseAllAll.Count / 2;
                 break;
-        }*/
+        }
 
         listCaseAllAll.Insert(insertPosition, parCase);
+        //★ 생각해보면 어차피 on~ 메서드 실행하는 순서만 중요한데 inserPosition 이거 listCaseAllAll한테만 중요한 거 아니냐?, 나중에 아랫줄 지우고 Add로 모두 바꿔라;;
+        insertPosition = 0;
         switch (parCase.caseType) { 
             case enumCaseType.skill:
                 toolSkill = parCase;
@@ -116,7 +119,7 @@ public abstract class warriorAbst : Thing
                 listToolAll.Insert(insertPosition, parCase);
                 break;
             case enumCaseType.circuit:
-                listCable.Insert(insertPosition, parCase);
+                listCircuit.Insert(insertPosition, parCase);
                 break;
             /*case enumCaseType.effect:
                 listEffect.Insert(insertPosition, parCase);
@@ -141,7 +144,7 @@ public abstract class warriorAbst : Thing
                 listToolAll.Remove(parCase);
                 break;
             case enumCaseType.circuit:
-                listCable.Remove(parCase);
+                listCircuit.Remove(parCase);
                 break;
             /*case enumCaseType.effect:
                 listEffect.Remove(parCase);

@@ -120,6 +120,15 @@ public class combatManager : MonoBehaviour
         bool isPlrTurn = true;
         List<warriorAbst> tempListActors;
 
+        //before combat starts, activate all onEngage from warriors
+        foreach (List<warriorAbst> lis in warriorsActionOrder_) {
+            foreach (warriorAbst wa in lis) {
+                foreach (caseAll ca in wa.copyCaseAllAll) {
+                    ca.onEngage(wa);
+                }
+            }
+        }
+
         while (true) {
             //★ 플레이어의 warrior는 사전에 지정한 순서대로, 상대방은 따로 지정되지 않았다면 남은 체력 내림차순으로
             //★ 상대방 warriorsActionsOrder_[1]을 warriorsHpSorted[1]에 참조시키면 위 기능을 간단히 해결할 수 있다.

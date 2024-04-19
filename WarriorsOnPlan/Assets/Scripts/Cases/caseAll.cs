@@ -13,16 +13,16 @@ public enum enumCaseType {
 
 public abstract class caseAll {
     public readonly enumCaseType caseType;
-    protected warriorAbst owner_;
 
-    public warriorAbst owner {
-        set {
-            owner_ = value;
-        }
+    public warriorAbst owner { get; set; }
+
+    public caseAll(warriorAbst parOwner, enumCaseType parCaseType = enumCaseType.effect) {
+        owner = parOwner;
+        caseType = parCaseType;
     }
 
     public void selfRemove() {
-        owner_.removeCase(this);
+        owner.removeCase(this);
     }
 
     //be aware of that source / target can be different from owner

@@ -20,8 +20,8 @@ public abstract class navigatorAbst : caseAll
         (moverAbst와 ICaseTimed를 모두 상속받게 한 뒤, 원본 mover를 정해진 타이머만큼 보관해두었다가 다시 둘을 교환해서 원상복구)
      */
 
-    public navigatorAbst(warriorAbst parOwner) {
-        owner_ = parOwner;
+    public navigatorAbst(warriorAbst parOwner) : base(parOwner, enumCaseType.circuit) {
+        parOwner.addCase(this);
         destination_ = null;
         route = new Stack<EDirection>();
     }

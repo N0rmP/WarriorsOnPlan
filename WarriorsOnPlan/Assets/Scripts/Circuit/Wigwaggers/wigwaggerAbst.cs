@@ -10,7 +10,7 @@ public class wigwaggerAbst : caseAll
     // wigwaggerAbst only exist for distinguish circuit class from other cases, and expansion
 
     // wigwagger of 'Always' does'nt exist, just the navigator is set in the warrior
-    public wigwaggerAbst(warriorAbst parOwner) {
-        owner_ = parOwner;
+    public wigwaggerAbst(warriorAbst parOwner) : base(parOwner, enumCaseType.circuit) {
+        owner = parOwner;
     }
 }

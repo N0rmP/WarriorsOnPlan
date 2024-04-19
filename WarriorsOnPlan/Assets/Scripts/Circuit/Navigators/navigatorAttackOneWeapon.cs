@@ -10,12 +10,14 @@ public class navigatorAttackOneWeapon : navigatorAbst
     // indice represents each range-scope per two-indice
     private List<(int min, int max)> rangeRange;
 
-    public navigatorAttackOneWeapon(warriorAbst parOwner) : base(parOwner) { }
+    public navigatorAttackOneWeapon(warriorAbst parOwner) : base(parOwner) {
+        rangeRange = new List<(int min, int max)>();
+    }
 
     public override void onEngage(Thing source) {
         int tempRangeMinCur;
         int tempRangeMaxCur;
-        foreach (toolWeapon tw in owner_.copyWeapon) {
+        foreach (toolWeapon tw in owner.copyWeapon) {
             if (rangeRange.Count == 0) {
                 rangeRange.Add((tw.rangeMin, tw.rangeMax));
                 continue;
@@ -41,11 +43,13 @@ public class navigatorAttackOneWeapon : navigatorAbst
         // ★ route.Count == 0 이면 BFS 실행
         //check is route valid
         bool tempIsRouteValid = (route.Count > 0);
-        node tempNode = owner_.curPosition;
+        node tempOwnerPos = owner.curPosition;
+        node tempTargetPos = owner.whatToAttack.curPosition;
+        int tempDistanceForRange;
         Func<node, bool> delGoalCheck =
             ((n) => {
-                node tempNode = owner_.whatToAttack.curPosition;
-                int tempDistanceForRange = (Mathf.Abs(tempNode.coor0 - n.coor0) > Mathf.Abs(tempNode.coor1 - n.coor1)) ? Mathf.Abs(tempNode.coor0 - n.coor0) : Mathf.Abs(tempNode.coor1 - n.coor1);
+                tempDistanceForRange = (Mathf.Abs(tempTargetPos.coor0 - n.coor0) > Mathf.Abs(tempTargetPos.coor1 - n.coor1)) ? Mathf.Abs(tempTargetPos.coor0 - n.coor0) : Mathf.Abs(tempTargetPos.coor1 - n.coor1);
+                Debug.Log(tempDistanceForRange);
                 foreach ((int min, int max) iterTup in rangeRange) {
                     if (tempDistanceForRange >= iterTup.min && tempDistanceForRange <= iterTup.max) {
                         return true;
@@ -55,8 +59,8 @@ public class navigatorAttackOneWeapon : navigatorAbst
             });
 
         foreach (EDirection iterEDir in route) {
-            tempNode = tempNode.link[(int)iterEDir];
-            if (tempNode.thingHere != null) {
+            tempOwnerPos = tempOwnerPos.link[(int)iterEDir];
+            if (tempOwnerPos.thingHere != null) {
                 tempIsRouteValid = false;
                 break;
             }
@@ -64,7 +68,7 @@ public class navigatorAttackOneWeapon : navigatorAbst
 
         //if route is invalid, recalculate route
         if (!tempIsRouteValid) {
-            combatManager.CM.graphCur.BFS(owner_.curPosition, delGoalCheck, ref route);
+            combatManager.CM.graphCur.BFS(owner.curPosition, delGoalCheck, ref route);
         }       
 
         return route.Pop();
