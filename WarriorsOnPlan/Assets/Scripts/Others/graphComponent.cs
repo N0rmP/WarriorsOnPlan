@@ -72,7 +72,7 @@ public class graphComponent
             tempNode = tempCurSearch.curNode;
 
             // if tempCurSearch includes Goal Node and Lower distFromDeparture, update tempMinDistanceGoal
-            Debug.Log(tempCurSearch.curNode.coor0 + "," + tempCurSearch.curNode.coor1 + " : " + delGoalCheck(tempNode));
+            //Debug.Log(tempCurSearch.curNode.coor0 + "," + tempCurSearch.curNode.coor1 + " : " + delGoalCheck(tempNode));
             if (delGoalCheck(tempNode) && (tempCurSearch.distFromDeparture < tempMinDistanceGoal.distFromDeparture)) {
                 tempMinDistanceGoal = tempCurSearch;
             }
@@ -83,13 +83,12 @@ public class graphComponent
                     continue; 
                 }
                 tempNode.link[i].swissArmyVisited = true;
-                tempNode.swissArmyEDirection = (EDirection)i;
+                tempNode.link[i].swissArmyEDirection = (EDirection)i;
                 tempSearchQueue.Enqueue((tempNode.link[i], (EDirection)i, tempCurSearch.distFromDeparture + 1));
             }
         }
 
         // after BFS search, make route from tempMinDistanceGoal.curNode to departure using swissArmyEDirection
-        Debug.Log(tempMinDistanceGoal.curNode.coor0 + "," + tempMinDistanceGoal.curNode.coor1 + " : " + tempMinDistanceGoal.EDirFromDeparture + " / " + tempMinDistanceGoal.distFromDeparture);
         tempNode = tempMinDistanceGoal.curNode;
         while (tempNode != parDeparture) {
             parRoute.Push(tempNode.swissArmyEDirection);

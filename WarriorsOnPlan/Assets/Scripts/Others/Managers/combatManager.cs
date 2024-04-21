@@ -11,7 +11,7 @@ public class combatManager : MonoBehaviour
 
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
-    private int intervalTime;
+    private float intervalTime = 1f;
 
     //warriors array's indices represent different team, 0 = player's / 1 = computer's
     private List<warriorAbst>[] warriorsHpSorted_;
@@ -43,11 +43,11 @@ public class combatManager : MonoBehaviour
     // when setting tupMove you should input the destination's coordinates vector3 in movementPerFrame, property will calculate it on itself
     public (GameObject mover, Vector3 movementPerFrame, float timer) tupMove {
         get {
-            return tupMove;
+            return tupMove_;
         }
         set {
             value.mover.transform.rotation = Quaternion.Euler(value.movementPerFrame - value.mover.transform.position);
-            tupMove = (value.mover, (value.movementPerFrame - value.mover.transform.position) * Time.deltaTime, 1.0f);
+            tupMove_ = (value.mover, (value.movementPerFrame - value.mover.transform.position) * Time.deltaTime, 1.0f);
         }
     }
     #endregion properties
@@ -94,8 +94,7 @@ public class combatManager : MonoBehaviour
                 Resources.Load<GameObject>("Prefabs/tester")
             );
         w2.GetComponent<warriorAbst>().init(false, 0, 0, 100);
-        Thread tempThread = new Thread(new ThreadStart(combatLoop));
-        tempThread.Start();
+        Coroutine c = StartCoroutine(combatLoop());
     }
 
     public void Update() {
@@ -112,7 +111,7 @@ public class combatManager : MonoBehaviour
     }
     #endregion callbacks
 
-    public void combatLoop() {
+    public IEnumerator combatLoop() {
         bool overCheck() {
             return (warriorsHpSorted_[0].Count <= 0 || warriorsHpSorted_[1].Count <= 0);
         }
@@ -164,7 +163,7 @@ public class combatManager : MonoBehaviour
                         break;
                 }
                 // ★ 각각의 warrior 행동 종료 시 효과 발동
-                Thread.Sleep(intervalTime);
+                yield return new WaitForSeconds(intervalTime);
 
                 //check if this combat is over after each action
                 if (overCheck()) {

@@ -49,7 +49,6 @@ public class navigatorAttackOneWeapon : navigatorAbst
         Func<node, bool> delGoalCheck =
             ((n) => {
                 tempDistanceForRange = (Mathf.Abs(tempTargetPos.coor0 - n.coor0) > Mathf.Abs(tempTargetPos.coor1 - n.coor1)) ? Mathf.Abs(tempTargetPos.coor0 - n.coor0) : Mathf.Abs(tempTargetPos.coor1 - n.coor1);
-                Debug.Log(tempDistanceForRange);
                 foreach ((int min, int max) iterTup in rangeRange) {
                     if (tempDistanceForRange >= iterTup.min && tempDistanceForRange <= iterTup.max) {
                         return true;
