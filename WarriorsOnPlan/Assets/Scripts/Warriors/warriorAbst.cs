@@ -7,12 +7,11 @@ using System.Linq;
 
 //move state is same as idle state
 public enum enumStateWarrior {
-    controlled = 0,
-    focussing = 1,
-    skill = 2,
-    movePrioritized = 3,
-    attack = 4,
-    move = 5
+    controlled = 10,
+    focussing = 20,
+    skill = 30,
+    move = 40,
+    idleAttack = 50
     }
 
 public abstract class warriorAbst : Thing
@@ -20,18 +19,19 @@ public abstract class warriorAbst : Thing
     protected bool isPlrSide_;
 
     protected int damageTotalDealt_;
-    //protected int damageTotalTaken_;  
 
     private caseAll toolSkill;
     private List<caseAll> listCaseAllAll;
     private List<caseAll> listToolAll;
     private List<toolWeapon> listWeapon;
+    //private List<> listEffect;
     private List<caseAll> listCircuit;
         
     private Thing whatToAttack_;
     private Thing whatToUseSkill_;
 
     public enumStateWarrior stateCur { get; set; }
+    private caseAll semaphoreState;
 
     #region properties
     public bool isPlrSide { get { return isPlrSide_; } }
@@ -81,14 +81,34 @@ public abstract class warriorAbst : Thing
         isPlrSide_ = parisPlrSide;
         damageTotalDealt_ = 0;
         this.setInitialMaxHp(parMaxHp);
-        stateCur = enumStateWarrior.move;
+        stateCur = enumStateWarrior.idleAttack;
         base.init(parMaxHp);
         combatManager.CM.processPlace(this, parCoor0, parCoor1);
 
         listCaseAllAll = new List<caseAll>();
         listToolAll = new List<caseAll>();
         listWeapon = new List<toolWeapon>();
+        //listEffect = new List<caseAll>();
         listCircuit = new List<caseAll>();
+    }
+
+    public void updateState() {
+        /*★
+        stateCur 변경 우선 순위
+        1. 현재보다 더 낮은 값의 stateCur로 변경 : 곧장 변경해도 큰 문제없음, 변경을 적용함과 동시에 semaphore 갱신
+        2. semaphore를 가진 updater가 현재보다 더 높은 값의 stateCur로 변경 : 
+            이번 행동은 이렇게 변경된 stateCur을 따라갈 수도 있으나, 만약 3번과 같은 상황이 2번 상황보다 먼저 지나가버렸다면 오류가 발생할 수 있음
+            2번 상황이 발생할 때 만약 idleAttack으로 변경했다면 semaphore를 해제해야 함
+            3번 상황이 발생할 때마다 변경 예정인 stateCur 조합으로 갱신을 반복하고, iteration이 끝났을 때 현재 stateCur보다 낮은 값을 가지면 적용할 것
+        3. semaphore를 가지지 않은 updater가 현재보다 더 높은 값의 stateCur로 변경
+        */
+
+        caseAll tempUpdater = null;
+        enumStateWarrior tempESW = enumStateWarrior.idleAttack;
+        foreach (caseAll ca in copyCaseAllAll) { 
+            
+        }
+        
     }
 
     //insertPosition parameter can be 3 num : below zero = index 0 , zero = index (List.Count / 2) , above zero = the last index

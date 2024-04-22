@@ -46,7 +46,7 @@ public class combatManager : MonoBehaviour
             return tupMove_;
         }
         set {
-            value.mover.transform.rotation = Quaternion.Euler(value.movementPerFrame - value.mover.transform.position);
+            value.mover.transform.rotation = Quaternion.LookRotation(value.movementPerFrame - value.mover.transform.position);
             tupMove_ = (value.mover, (value.movementPerFrame - value.mover.transform.position) * Time.deltaTime, 1.0f);
         }
     }
@@ -154,10 +154,10 @@ public class combatManager : MonoBehaviour
                         break;
                     case enumStateWarrior.skill:
                         break;
-                    case enumStateWarrior.attack:
-                        break;
                     case enumStateWarrior.move:
                         processMove(wa, wa.navigator.getNextEDirection());
+                        break;
+                    case enumStateWarrior.attack:
                         break;
                     default:
                         break;
