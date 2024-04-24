@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using System.Threading;
+using UnityEditor.SceneTemplate;
 
 //move state is same as idle state
 public enum enumStateWarrior {
@@ -11,7 +13,8 @@ public enum enumStateWarrior {
     focussing = 20,
     skill = 30,
     move = 40,
-    idleAttack = 50
+    idleAttack = 50,
+    none = 9999
     }
 
 public abstract class warriorAbst : Thing
@@ -31,20 +34,11 @@ public abstract class warriorAbst : Thing
     private Thing whatToUseSkill_;
 
     public enumStateWarrior stateCur { get; set; }
-    private caseAll semaphoreState;
+    private ICaseUpdateState semaphoreState;
 
     #region properties
     public bool isPlrSide { get { return isPlrSide_; } }
-    public int damageTotalDealt {
-        get {
-            return damageTotalDealt_;
-        }
-        set {
-            if (value > 0) {
-                damageTotalDealt_ += value;
-            }
-        }
-    }
+    public int damageTotalDealt { get { return damageTotalDealt_; } }
     public List<caseAll> copyCaseAllAll { get { return listCaseAllAll.ToList<caseAll>(); } }
     public List<caseAll> copyToolAll { get { return listToolAll.ToList<caseAll>(); } }
     public List<toolWeapon> copyWeapon { get { return listWeapon.ToList<toolWeapon>(); } }
@@ -93,22 +87,47 @@ public abstract class warriorAbst : Thing
     }
 
     public void updateState() {
-        /*★
-        stateCur 변경 우선 순위
-        1. 현재보다 더 낮은 값의 stateCur로 변경 : 곧장 변경해도 큰 문제없음, 변경을 적용함과 동시에 semaphore 갱신
-        2. semaphore를 가진 updater가 현재보다 더 높은 값의 stateCur로 변경 : 
-            이번 행동은 이렇게 변경된 stateCur을 따라갈 수도 있으나, 만약 3번과 같은 상황이 2번 상황보다 먼저 지나가버렸다면 오류가 발생할 수 있음
-            2번 상황이 발생할 때 만약 idleAttack으로 변경했다면 semaphore를 해제해야 함
-            3번 상황이 발생할 때마다 변경 예정인 stateCur 조합으로 갱신을 반복하고, iteration이 끝났을 때 현재 stateCur보다 낮은 값을 가지면 적용할 것
-        3. semaphore를 가지지 않은 updater가 현재보다 더 높은 값의 stateCur로 변경
+        /*
+        although technically updateState could be processed with onBeforeAction, it's separated due to algorithm below
+        
+        change of stateCur require to check all ICaseUpdateState, so it can't be done in only one method
+        1. change to lower-value-state by any updater : change instantly, update semaphoreState
+        2. change to higher-value-state by semaphoreState : change instantly
+        3. change to higher-value-state by none-semaphoreState : save it temporarily and use it when proper
+        
+        main problem is when case 2 and 3 fold, case 3 should be applied although case 2 holds the semaphore and blocks it
+        so the saved data of case 3 could be applied if it has lower-value-state than stateCur after all onUpdateState is called
         */
 
-        caseAll tempUpdater = null;
-        enumStateWarrior tempESW = enumStateWarrior.idleAttack;
-        foreach (caseAll ca in copyCaseAllAll) { 
-            
+        (ICaseUpdateState updater, enumStateWarrior ESW) tempMemory = (null, enumStateWarrior.none);
+        (ICaseUpdateState updater, enumStateWarrior ESW) tempBuffer;
+        foreach (caseAll ca in copyCaseAllAll) {
+            if (!(ca is ICaseUpdateState)) {
+                continue;
+            }
+
+            tempBuffer = ((ICaseUpdateState)ca).onUpdateState(this);
+            if (tempBuffer.ESW < stateCur) {
+                semaphoreState.onIntefered(this);
+                stateCur = tempBuffer.ESW;
+                semaphoreState = tempBuffer.updater;
+            } else if (semaphoreState == tempBuffer.updater) {
+                stateCur = tempBuffer.ESW;
+            } else if(tempBuffer.ESW < tempMemory.ESW) {
+                tempMemory = tempBuffer;
+            }
         }
-        
+
+        if (tempMemory.ESW < stateCur) {
+            stateCur = tempMemory.ESW;
+            semaphoreState = tempMemory.updater;
+        }        
+    }
+
+    public void addDamageTotalDealt(int par) {
+        if (par > 0) {
+            damageTotalDealt_ += par;
+        }
     }
 
     //insertPosition parameter can be 3 num : below zero = index 0 , zero = index (List.Count / 2) , above zero = the last index

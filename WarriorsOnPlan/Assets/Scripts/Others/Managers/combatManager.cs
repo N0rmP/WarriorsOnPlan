@@ -157,7 +157,7 @@ public class combatManager : MonoBehaviour
                     case enumStateWarrior.move:
                         processMove(wa, wa.navigator.getNextEDirection());
                         break;
-                    case enumStateWarrior.attack:
+                    case enumStateWarrior.idleAttack:
                         break;
                     default:
                         break;
@@ -178,8 +178,28 @@ public class combatManager : MonoBehaviour
     }
 
     #region processors
-    public void processAttack() {
-
+    public void processAttack(warriorAbst source, Thing target) {
+        //★ loop source.copyWeapon
+        //★     tempDamage / tempDamageType에 현재 toolWeapon의 정보 저장
+        //★     onBeforeAttack 실행, 해당 함수의 매개변수로 tempDamage / tempDamageType 전달 및 수정 가능
+        //★     처리 완료된 tempDamage / tempDamageType을 사용해 target 체력 피해 주기, 반환값 저장
+        //★     onAfterAttack 실행, 해당 함수의 매개변수로 위에서 저장된 반환값 사용
+        int tempDamage = 0;
+        enumDamageType tempDamageType = enumDamageType.basic;
+        int tempActualDamage = 0;
+        foreach (toolWeapon tw in source.copyWeapon) {
+            tempDamage = tw.damageCur;
+            tempDamageType = tw.damageType;
+            foreach (caseAll ca in source.copyCaseAllAll) {
+                ca.onBeforeAttack(source, target, ref tempDamage, ref tempDamageType);
+            }
+            //★     처리 완료된 tempDamage / tempDamageType을 사용해 target 체력 피해 주기, 반환값 저장
+            //tempActualDamage = ???
+            source.addDamageTotalDealt(tempActualDamage);
+            foreach (caseAll ca in source.copyCaseAllAll) {
+                ca.onAfterAttack(source, target, tempActualDamage);
+            }
+        }
     }
 
     //processMove with EDirection parameter makes a warrior walk a node to the parameter-direction

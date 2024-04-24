@@ -26,6 +26,7 @@ public abstract class caseAll {
     }
 
     //be aware of that source / target can be different from owner
+    //on~ method with none-void-return is separated to interfaces
 
     //onEngage includes onCombatStart / onEngageDuringCombat
     public virtual void onEngage(Thing source) { }
@@ -38,7 +39,7 @@ public abstract class caseAll {
     public virtual void onAfterAction(Thing source) { }
 
     //source of onAttack is owner, target is the to-be-attacked warrior
-    public virtual void onBeforeAttack(Thing source, Thing target, ref int value) { }
+    public virtual void onBeforeAttack(Thing source, Thing target, ref int value, ref enumDamageType DType) { }
     public virtual void onAfterAttack(Thing source, Thing target, int value) { }
     //source of onDamaged is the attacker warrior, target is owner
     public virtual void onBeforeDamaged(Thing source, Thing target, ref int value) { }

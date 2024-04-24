@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum enumDamageType { 
+    magic = 0,
+    basic = 1
+}
+
 public abstract class toolWeapon : caseAll
 {
     //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
@@ -9,6 +14,7 @@ public abstract class toolWeapon : caseAll
     protected readonly int rangeMin_;
     protected readonly int rangeMax_;
     protected readonly int damageOriginal;
+    protected readonly enumDamageType damageType_;
     //timerMax_ / timerCur_ represent cooltime of this weapon
     protected readonly int timerMax_;
     protected int timerCur_;
@@ -16,6 +22,7 @@ public abstract class toolWeapon : caseAll
     public int rangeMin { get { return rangeMin_; } }
     public int rangeMax { get { return rangeMax_; } }
     public int damageCur { get; set; }
+    public enumDamageType damageType { get { return damageType_; } }
     public int timerMax { get { return timerMax_; } }
     public int timerCur { get { return timerCur_; } }
 
