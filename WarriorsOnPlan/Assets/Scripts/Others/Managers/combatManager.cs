@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class combatManager : MonoBehaviour
 {
@@ -153,11 +154,17 @@ public class combatManager : MonoBehaviour
                     case enumStateWarrior.focussing:
                         break;
                     case enumStateWarrior.skill:
+                        //★ processUseSkill 호출
                         break;
                     case enumStateWarrior.move:
                         processMove(wa, wa.navigator.getNextEDirection());
                         break;
                     case enumStateWarrior.idleAttack:
+                        foreach (toolWeapon tw in wa.copyWeapon) {
+                            if (tw.timerCur <= 0) {
+                                processAttack(wa, wa.whatToAttack, tw.getDamageInfo());
+                            }
+                        }
                         break;
                     default:
                         break;
@@ -178,28 +185,32 @@ public class combatManager : MonoBehaviour
     }
 
     #region processors
-    public void processAttack(warriorAbst source, Thing target) {
-        //★ loop source.copyWeapon
-        //★     tempDamage / tempDamageType에 현재 toolWeapon의 정보 저장
-        //★     onBeforeAttack 실행, 해당 함수의 매개변수로 tempDamage / tempDamageType 전달 및 수정 가능
-        //★     처리 완료된 tempDamage / tempDamageType을 사용해 target 체력 피해 주기, 반환값 저장
-        //★     onAfterAttack 실행, 해당 함수의 매개변수로 위에서 저장된 반환값 사용
-        int tempDamage = 0;
-        enumDamageType tempDamageType = enumDamageType.basic;
-        int tempActualDamage = 0;
-        foreach (toolWeapon tw in source.copyWeapon) {
-            tempDamage = tw.damageCur;
-            tempDamageType = tw.damageType;
-            foreach (caseAll ca in source.copyCaseAllAll) {
-                ca.onBeforeAttack(source, target, ref tempDamage, ref tempDamageType);
-            }
-            //★     처리 완료된 tempDamage / tempDamageType을 사용해 target 체력 피해 주기, 반환값 저장
-            //tempActualDamage = ???
-            source.addDamageTotalDealt(tempActualDamage);
-            foreach (caseAll ca in source.copyCaseAllAll) {
-                ca.onAfterAttack(source, target, tempActualDamage);
+    public void processAttack(warriorAbst source, Thing target, damageInfo DInfo) {
+        //before attack
+        foreach (caseAll ca in source.copyCaseAllAll) {
+            ca.onBeforeAttack(source, target, DInfo);
+        }
+        //before damaged
+        if (target is warriorAbst) {
+            foreach (caseAll ac in ((warriorAbst)target).copyCaseAllAll) {
+                ac.onBeforeDamaged(source, target, DInfo);
             }
         }
+        //attck now
+        DInfo.ATTACK(target);
+        source.addDamageTotalDealt(DInfo.damage);
+        //after damaged
+        if (target is warriorAbst) {
+            foreach (caseAll ac in ((warriorAbst)target).copyCaseAllAll) {
+                ac.onAfterDamaged(source, target, DInfo);
+            }
+        }
+        //after attack
+        foreach (caseAll ca in source.copyCaseAllAll) {
+            ca.onAfterAttack(source, target, DInfo);
+        }
+        //after the caseAll attack
+        DInfo.sourceCaseAll.onAfterThisAttack(source, target, DInfo);
     }
 
     //processMove with EDirection parameter makes a warrior walk a node to the parameter-direction

@@ -6,5 +6,5 @@ public interface ICaseUpdateState
 {
     public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source);
 
-    public void onIntefered(Thing source);
+    public virtual void onIntefered(Thing source) { }
 }

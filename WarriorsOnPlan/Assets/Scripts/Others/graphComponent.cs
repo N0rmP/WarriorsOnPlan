@@ -51,9 +51,6 @@ public class graphComponent
     }
 
     public void BFS(node parDeparture, Func<node, bool> delGoalCheck, ref Stack<EDirection> parRoute) {
-        // ★ 탐색하면서 delGoalCheck을 통해 목표 지점인지 확인
-        // ★ 최단거리 찾기
-        // ★ 방향 저장하기
         // in this method we call tuple (node cur, EDirection EDirFromdeparture, int distFromDeparture) 'search'
         Queue<(node curNode, EDirection EDirFromDeparture, int distFromdeparture)> tempSearchQueue = new Queue<(node cur, EDirection EDirFromDeparture, int distFromDeparture)>();
         tempSearchQueue.Enqueue((parDeparture, EDirection.none, 0));

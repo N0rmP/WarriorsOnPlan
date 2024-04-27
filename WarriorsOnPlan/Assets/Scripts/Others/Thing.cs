@@ -13,6 +13,7 @@ public class Thing : MonoBehaviour
 
     public void init(int parMaxHp) {
         maxHp_ = parMaxHp;
+        curHp_ = maxHp_;
     }
 
     public int setCurHp(int parValue, bool isPlus = false) {
@@ -33,10 +34,5 @@ public class Thing : MonoBehaviour
             curHp_ = parValue;
         }
         return tempResultChange;
-    }
-
-    protected void setInitialMaxHp(int parValue) {
-        maxHp_ = parValue;
-        curHp_ = parValue;
     }
 }

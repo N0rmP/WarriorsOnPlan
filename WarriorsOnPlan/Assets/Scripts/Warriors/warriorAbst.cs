@@ -72,11 +72,10 @@ public abstract class warriorAbst : Thing
     }
 
     public virtual void init(bool parisPlrSide, int parCoor0, int parCoor1, int parMaxHp = 1) {
+        base.init(parMaxHp);
         isPlrSide_ = parisPlrSide;
         damageTotalDealt_ = 0;
-        this.setInitialMaxHp(parMaxHp);
         stateCur = enumStateWarrior.idleAttack;
-        base.init(parMaxHp);
         combatManager.CM.processPlace(this, parCoor0, parCoor1);
 
         listCaseAllAll = new List<caseAll>();
@@ -99,7 +98,7 @@ public abstract class warriorAbst : Thing
         so the saved data of case 3 could be applied if it has lower-value-state than stateCur after all onUpdateState is called
         */
 
-        (ICaseUpdateState updater, enumStateWarrior ESW) tempMemory = (null, enumStateWarrior.none);
+        (ICaseUpdateState updater, enumStateWarrior ESW) tempMemory = (null, enumStateWarrior.idleAttack);
         (ICaseUpdateState updater, enumStateWarrior ESW) tempBuffer;
         foreach (caseAll ca in copyCaseAllAll) {
             if (!(ca is ICaseUpdateState)) {

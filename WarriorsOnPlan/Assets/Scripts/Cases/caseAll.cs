@@ -39,11 +39,13 @@ public abstract class caseAll {
     public virtual void onAfterAction(Thing source) { }
 
     //source of onAttack is owner, target is the to-be-attacked warrior
-    public virtual void onBeforeAttack(Thing source, Thing target, ref int value, ref enumDamageType DType) { }
-    public virtual void onAfterAttack(Thing source, Thing target, int value) { }
+    public virtual void onBeforeAttack(Thing source, Thing target, damageInfo DInfo) { }
+    public virtual void onAfterAttack(Thing source, Thing target, damageInfo DInfo) { }
+    //onAfterThisAttack is similar to onAfterAttack, but 
+    public virtual void onAfterThisAttack(Thing source, Thing target, damageInfo DInfo) { }
     //source of onDamaged is the attacker warrior, target is owner
-    public virtual void onBeforeDamaged(Thing source, Thing target, ref int value) { }
-    public virtual void onAfterDamaged(Thing source, Thing target, int value) { }
+    public virtual void onBeforeDamaged(Thing source, Thing target, damageInfo DInfo) { }
+    public virtual void onAfterDamaged(Thing source, Thing target, damageInfo Dinfo) { }
     public virtual void onHpIncrease(Thing source, int value) { }
     public virtual void onHpDecrease(Thing source, int value) { }
     public virtual void onSkillReady(Thing source) { }

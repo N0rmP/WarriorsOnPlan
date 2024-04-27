@@ -1,10 +1,11 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SceneTemplate;
 using UnityEngine;
 
-public class navigatorAttackOneWeapon : navigatorAbst
+public class navigatorAttackOneWeapon : navigatorAbst, ICaseUpdateState
 {
     // rangeMinMax represents the total attackable ranges of owner's weapons
     // indice represents each range-scope per two-indice
@@ -43,23 +44,10 @@ public class navigatorAttackOneWeapon : navigatorAbst
         // ★ route.Count == 0 이면 BFS 실행
         //check is route valid
         bool tempIsRouteValid = (route.Count > 0);
-        node tempOwnerPos = owner.curPosition;
-        node tempTargetPos = owner.whatToAttack.curPosition;
-        int tempDistanceForRange;
-        Func<node, bool> delGoalCheck =
-            ((n) => {
-                tempDistanceForRange = (Mathf.Abs(tempTargetPos.coor0 - n.coor0) > Mathf.Abs(tempTargetPos.coor1 - n.coor1)) ? Mathf.Abs(tempTargetPos.coor0 - n.coor0) : Mathf.Abs(tempTargetPos.coor1 - n.coor1);
-                foreach ((int min, int max) iterTup in rangeRange) {
-                    if (tempDistanceForRange >= iterTup.min && tempDistanceForRange <= iterTup.max) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-
+        node tempPos = owner.curPosition;
         foreach (EDirection iterEDir in route) {
-            tempOwnerPos = tempOwnerPos.link[(int)iterEDir];
-            if (tempOwnerPos.thingHere != null) {
+            tempPos = tempPos.link[(int)iterEDir];
+            if (tempPos.thingHere != null) {
                 tempIsRouteValid = false;
                 break;
             }
@@ -67,9 +55,31 @@ public class navigatorAttackOneWeapon : navigatorAbst
 
         //if route is invalid, recalculate route
         if (!tempIsRouteValid) {
+            int tempDistanceForRange;
+            node tempTargetPos = owner.whatToAttack.curPosition;
+            Func<node, bool> delGoalCheck =
+            ((n) => {
+                tempDistanceForRange = node.getDistance(tempTargetPos, n);
+                foreach ((int min, int max) iterTup in rangeRange) {
+                    if (tempDistanceForRange >= iterTup.min && tempDistanceForRange <= iterTup.max) {
+                        return true;
+                    }
+                }
+                return false;
+            });
             combatManager.CM.graphCur.BFS(owner.curPosition, delGoalCheck, ref route);
         }       
 
         return route.Pop();
+    }
+
+    public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source) {
+        //set state to idleAttack if target is in range, otherwise move
+        int tempDistance = node.getDistance(owner.curPosition, owner.whatToAttack.curPosition);
+        foreach ((int min, int max) tup in rangeRange) {
+            if ((tempDistance < tup.min) || (tempDistance > tup.max)) { continue; }
+            return (this, enumStateWarrior.idleAttack);
+        }
+        return (null, enumStateWarrior.move);
     }
 }

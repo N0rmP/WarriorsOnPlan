@@ -54,6 +54,10 @@ public class node
         );
     }
 
+    public static int getDistance(node n1, node n2) {
+        return (Mathf.Abs(n1.coor0 - n2.coor0) > Mathf.Abs(n1.coor1 - n2.coor1)) ? Mathf.Abs(n1.coor0 - n2.coor0) : Mathf.Abs(n1.coor1 - n2.coor1);
+    }
+
     // setLink set not only this node's link_ but also the target node's link_
     public void setLink(node parNode, EDirection parDir) {
         link_[(int)parDir] = parNode;

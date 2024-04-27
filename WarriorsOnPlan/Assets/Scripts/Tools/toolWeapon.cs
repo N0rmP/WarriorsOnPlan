@@ -34,13 +34,17 @@ public abstract class toolWeapon : caseAll
         timerMax_ = parTimerMax;
     }
 
+    public damageInfo getDamageInfo() {
+        return new damageInfo(this, damageCur, damageType_);
+    }
+
+    public override void onAfterThisAttack(Thing source, Thing target, damageInfo DInfo) {
+        timerCur_ = timerMax_;
+    }
+
     public override void onTurnEnd(Thing source) {
         if (timerCur_ > 0) {
             timerCur_--;
         }
-    }
-
-    public override void onAfterAttack(Thing source, Thing target, int value) {
-        timerCur_ = timerMax_;
     }
 }
