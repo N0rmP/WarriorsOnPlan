@@ -80,6 +80,6 @@ public class navigatorAttackOneWeapon : navigatorAbst, ICaseUpdateState
             if ((tempDistance < tup.min) || (tempDistance > tup.max)) { continue; }
             return (this, enumStateWarrior.idleAttack);
         }
-        return (null, enumStateWarrior.move);
+        return (this, enumStateWarrior.move);
     }
 }

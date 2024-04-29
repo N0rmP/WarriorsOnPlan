@@ -22,7 +22,7 @@ public class combatManager : MonoBehaviour
     // if tupMove.timer > 0f, it means move animation is being played
     // if tupMove.timer <= 0f, it's set -2f
     // if tupMove.timer < -1f, it means no move animation is being played
-    private (GameObject mover, Vector3 movementPerFrame, float timer) tupMove_;
+    private (GameObject mover, Vector3 destination, Vector3 movementPerFrame, float timer) tupMove_;
 
     #region properties
     //warriors in combatManager can't be copies because they consist of list & array
@@ -42,13 +42,14 @@ public class combatManager : MonoBehaviour
         }
     }
     // when setting tupMove you should input the destination's coordinates vector3 in movementPerFrame, property will calculate it on itself
-    public (GameObject mover, Vector3 movementPerFrame, float timer) tupMove {
+    public (GameObject mover, Vector3 destination, Vector3 movementPerFrame, float timer) tupMove {
         get {
             return tupMove_;
         }
         set {
-            value.mover.transform.rotation = Quaternion.LookRotation(value.movementPerFrame - value.mover.transform.position);
-            tupMove_ = (value.mover, (value.movementPerFrame - value.mover.transform.position) * Time.deltaTime, 1.0f);
+            value.mover.transform.rotation = Quaternion.LookRotation(value.destination - value.mover.transform.position);
+            //★ Debug.Log(value.destination + " / " + value.mover.transform.position + " / " + Time.deltaTime + " / " + ((value.movementPerFrame - value.mover.transform.position) * Time.deltaTime));
+            tupMove_ = (value.mover, value.destination, (value.destination - value.mover.transform.position) * Time.deltaTime, 1.0f);
         }
     }
     #endregion properties
@@ -67,7 +68,7 @@ public class combatManager : MonoBehaviour
 
         comparerHpInstance = new comparerHp();
         comparerDamageDealtInstance = new comparerDamageDealt();
-        tupMove_ = (null, new Vector3(0f, 0f, 0f), -2f);
+        tupMove_ = (null, Vector3.zero, Vector3.zero, -2f);
 
         //graph initiate
         graphCur = new graphComponent(7, 7);
@@ -105,6 +106,7 @@ public class combatManager : MonoBehaviour
                 tupMove_.mover.transform.position += tupMove_.movementPerFrame;
                 tupMove_.timer -= Time.deltaTime;
             } else {
+                tupMove_.mover.transform.position = tupMove_.destination;
                 tupMove_.timer = -2f;
                 //★ 이동 애니메이션 정지
             }
@@ -129,6 +131,8 @@ public class combatManager : MonoBehaviour
             }
         }
 
+        //★ 왜인지는 모르겠는데 게임 시작하고 2프레임 정도는 Time.deltaTime이 0.2로 고정된다.
+        yield return new WaitForSeconds(1f);
         while (true) {
             //★ 플레이어의 warrior는 사전에 지정한 순서대로, 상대방은 따로 지정되지 않았다면 남은 체력 내림차순으로
             //★ 상대방 warriorsActionsOrder_[1]을 warriorsHpSorted[1]에 참조시키면 위 기능을 간단히 해결할 수 있다.
@@ -142,6 +146,7 @@ public class combatManager : MonoBehaviour
                 warriorsDamageDealtSorted_[0].Sort(comparerDamageDealtInstance);
                 warriorsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
                 wa.updateTargets();
+                wa.updateState();
                 foreach (caseAll ca in wa.copyCaseAllAll) {
                     ca.onBeforeAction(wa);
                 }
@@ -219,8 +224,7 @@ public class combatManager : MonoBehaviour
         source.curPosition.sendThing(parEDir);
         (int c0, int c1) tempPosition = source.curPosition.getPosition();
         //★ 이동 애니메이션 시작
-        tupMove = (source.gameObject, new Vector3(tempPosition.c0, 0f, tempPosition.c1), 0f);
-        
+        tupMove = (source.gameObject, new Vector3(tempPosition.c0, 0f, tempPosition.c1), Vector3.zero, 0f);
     }
 
     //processMove with two int parameters makes a warrior teleport to the destination

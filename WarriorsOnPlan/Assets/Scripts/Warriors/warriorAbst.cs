@@ -94,7 +94,7 @@ public abstract class warriorAbst : Thing
         2. change to higher-value-state by semaphoreState : change instantly
         3. change to higher-value-state by none-semaphoreState : save it temporarily and use it when proper
         
-        main problem is when case 2 and 3 fold, case 3 should be applied although case 2 holds the semaphore and blocks it
+        main problem is when case 2 and 3 occur at the same time, case 3 should be applied although case 2 holds the semaphore and blocks it
         so the saved data of case 3 could be applied if it has lower-value-state than stateCur after all onUpdateState is called
         */
 
@@ -107,7 +107,7 @@ public abstract class warriorAbst : Thing
 
             tempBuffer = ((ICaseUpdateState)ca).onUpdateState(this);
             if (tempBuffer.ESW < stateCur) {
-                semaphoreState.onIntefered(this);
+                semaphoreState?.onIntefered(this);
                 stateCur = tempBuffer.ESW;
                 semaphoreState = tempBuffer.updater;
             } else if (semaphoreState == tempBuffer.updater) {
