@@ -85,6 +85,22 @@ public abstract class warriorAbst : Thing
         listCircuit = new List<caseAll>();
     }
 
+    public override void destroied(warriorAbst source) {
+        //onDestroy of source
+        source.destroy(this);
+        //onDestroied
+        foreach (caseAll ca in copyCaseAllAll) {
+            ca.onDestroied(this, source);
+        }
+        //★ 제거 처리
+    }
+
+    public void destroy(warriorAbst target) {
+        foreach (caseAll ca in copyCaseAllAll) {
+            ca.onDestroy(this, target);
+        }
+    }
+
     public void updateState() {
         /*
         although technically updateState could be processed with onBeforeAction, it's separated due to algorithm below

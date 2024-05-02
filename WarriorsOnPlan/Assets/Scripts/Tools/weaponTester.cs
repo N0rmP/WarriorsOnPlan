@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class weaponTester : toolWeapon
 {
-    public weaponTester(warriorAbst parOwner) : base(parOwner, 0, 3, 0, 3) { }
+    public weaponTester(warriorAbst parOwner) : base(parOwner, 0, 3, 1, 3) { }
 }

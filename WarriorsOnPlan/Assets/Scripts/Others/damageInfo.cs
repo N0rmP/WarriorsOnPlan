@@ -65,6 +65,6 @@ public class damageInfo
 
     public void ATTACK(Thing target) {
         calculateFinalDamage();
-        target.setCurHp(-damage_, true);
+        target.setCurHp(-damage_, sourceCaseAll.owner, true);
     }
 }

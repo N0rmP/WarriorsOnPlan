@@ -91,11 +91,11 @@ public class combatManager : MonoBehaviour
         GameObject w1 = Instantiate<GameObject>(
                 Resources.Load<GameObject>("Prefabs/tester")
             );
-        w1.GetComponent<warriorAbst>().init(true, 6, 6, 100);
+        w1.GetComponent<warriorAbst>().init(true, 6, 6, 2);
         GameObject w2 = Instantiate<GameObject>(
                 Resources.Load<GameObject>("Prefabs/tester")
             );
-        w2.GetComponent<warriorAbst>().init(false, 0, 0, 100);
+        w2.GetComponent<warriorAbst>().init(false, 0, 0, 2);
         Coroutine c = StartCoroutine(combatLoop());
     }
 
@@ -151,6 +151,7 @@ public class combatManager : MonoBehaviour
                     ca.onBeforeAction(wa);
                 }
 
+                Debug.Log(wa.curHp);
                 // decide what action this warrior does this time, priority is (Being Controlled) > UseSkill > Attack > Move
                 switch (wa.stateCur) {
                     // ★ 각각의 warrior 행동 시작 시 효과 발동
@@ -183,7 +184,17 @@ public class combatManager : MonoBehaviour
                     //return (warriorsHpSorted_[1].Count <= 0);
                 }
             }
-            //★ 턴 종료 시 효과 발동
+            //turn end processes
+            foreach (warriorAbst wa in tempListActors) {
+                //update weapon timer
+                foreach (toolWeapon tw in wa.copyWeapon) {
+                    tw.updateTimer();
+                }
+                //onTurnEnd
+                foreach (caseAll ca in wa.copyCaseAllAll) {
+                    ca.onTurnEnd(wa);
+                }
+            }
 
             isPlrTurn = !isPlrTurn;
         }

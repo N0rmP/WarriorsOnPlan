@@ -30,21 +30,23 @@ public abstract class toolWeapon : caseAll
         rangeMin_ = parRangeMin;
         rangeMax_ = parRangeMax;
         damageOriginal = parDamageOriginal;
+        damageCur = damageOriginal;
         timerCur_ = 0;
         timerMax_ = parTimerMax;
     }
 
     public damageInfo getDamageInfo() {
+        Debug.Log(damageCur);
         return new damageInfo(this, damageCur, damageType_);
+    }
+
+    public void updateTimer() {
+        if (timerCur_ > 0) {
+            timerCur_--;
+        }
     }
 
     public override void onAfterThisAttack(Thing source, Thing target, damageInfo DInfo) {
         timerCur_ = timerMax_;
-    }
-
-    public override void onTurnEnd(Thing source) {
-        if (timerCur_ > 0) {
-            timerCur_--;
-        }
     }
 }
