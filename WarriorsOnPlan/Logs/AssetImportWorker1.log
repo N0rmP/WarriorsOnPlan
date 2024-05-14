@@ -15,7 +15,7 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-62242
+54709
 Successfully changed project path to: C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,12 +49,12 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [13496] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 3383702084 [EditorId] 3383702084 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [13224] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 699372428 [EditorId] 699372428 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [13496] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 3383702084 [EditorId] 3383702084 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [13224] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 699372428 [EditorId] 699372428 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
 [Physics::Module] Initialized MultithreadedJobDispatcher with 11 workers.
-Refreshing native plugins compatible for Editor in 9.63 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 11.34 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.20f1 (61c2feb0970d)
 [Subsystems] Discovering subsystems at path D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Resources/UnitySubsystems
@@ -70,51 +70,51 @@ Initialize mono
 Mono path[0] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Managed'
 Mono path[1] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56988
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56536
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.004946 seconds.
-- Loaded All Assemblies, in  0.253 seconds
+Registered in 0.005434 seconds.
+- Loaded All Assemblies, in  0.301 seconds
 Native extension for WindowsStandalone target not found
 [usbmuxd] Start listen thread
 [usbmuxd] Listen thread started
 Native extension for iOS target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 164 ms
+Android Extension - Scanning For ADB Devices 259 ms
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.419 seconds
-Domain Reload Profiling: 672ms
-	BeginReloadAssembly (77ms)
+- Finished resetting the current domain, in  0.552 seconds
+Domain Reload Profiling: 853ms
+	BeginReloadAssembly (93ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (24ms)
-	RebuildNativeTypeToScriptingClass (7ms)
-	initialDomainReloadingComplete (42ms)
-	LoadAllAssembliesAndSetupDomain (103ms)
-		LoadAssemblies (77ms)
+	RebuildCommonClasses (32ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (46ms)
+	LoadAllAssembliesAndSetupDomain (121ms)
+		LoadAssemblies (92ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (101ms)
-			TypeCache.Refresh (100ms)
-				TypeCache.ScanAssembly (90ms)
+		AnalyzeDomain (119ms)
+			TypeCache.Refresh (118ms)
+				TypeCache.ScanAssembly (103ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
-			ResolveRequiredComponents (0ms)
-	FinalizeReload (419ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (552ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (378ms)
+		SetupLoadedEditorAssemblies (503ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (247ms)
+			InitializePlatformSupportModulesInManaged (357ms)
 			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
 			BeforeProcessingInitializeOnLoad (2ms)
-			ProcessInitializeOnLoadAttributes (93ms)
-			ProcessInitializeOnLoadMethodAttributes (33ms)
+			ProcessInitializeOnLoadAttributes (102ms)
+			ProcessInitializeOnLoadMethodAttributes (39ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -122,8 +122,8 @@ Domain Reload Profiling: 672ms
 ========================================================================
 Worker process is ready to serve import requests
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.421 seconds
-Refreshing native plugins compatible for Editor in 5.03 ms, found 3 plugins.
+- Loaded All Assemblies, in  0.494 seconds
+Refreshing native plugins compatible for Editor in 5.44 ms, found 3 plugins.
 Native extension for WindowsStandalone target not found
 Native extension for iOS target not found
 Native extension for Android target not found
@@ -138,47 +138,47 @@ Mono: successfully reloaded assembly
 [Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
 [Package Manager] Cannot connect to Unity Package Manager local server
-- Finished resetting the current domain, in  0.428 seconds
-Domain Reload Profiling: 848ms
-	BeginReloadAssembly (109ms)
+- Finished resetting the current domain, in  0.539 seconds
+Domain Reload Profiling: 1032ms
+	BeginReloadAssembly (128ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (4ms)
+		DisableScriptedObjects (5ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (20ms)
-	RebuildCommonClasses (27ms)
-	RebuildNativeTypeToScriptingClass (10ms)
-	initialDomainReloadingComplete (28ms)
-	LoadAllAssembliesAndSetupDomain (246ms)
-		LoadAssemblies (205ms)
+		CreateAndSetChildDomain (23ms)
+	RebuildCommonClasses (28ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (35ms)
+	LoadAllAssembliesAndSetupDomain (293ms)
+		LoadAssemblies (247ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (102ms)
-			TypeCache.Refresh (85ms)
-				TypeCache.ScanAssembly (73ms)
-			ScanForSourceGeneratedMonoScriptInfo (13ms)
+		AnalyzeDomain (119ms)
+			TypeCache.Refresh (101ms)
+				TypeCache.ScanAssembly (86ms)
+			ScanForSourceGeneratedMonoScriptInfo (14ms)
 			ResolveRequiredComponents (3ms)
-	FinalizeReload (428ms)
+	FinalizeReload (540ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (314ms)
+		SetupLoadedEditorAssemblies (398ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (30ms)
-			SetLoadedEditorAssemblies (3ms)
+			InitializePlatformSupportModulesInManaged (29ms)
+			SetLoadedEditorAssemblies (4ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (48ms)
-			ProcessInitializeOnLoadAttributes (216ms)
-			ProcessInitializeOnLoadMethodAttributes (15ms)
+			BeforeProcessingInitializeOnLoad (58ms)
+			ProcessInitializeOnLoadAttributes (285ms)
+			ProcessInitializeOnLoadMethodAttributes (18ms)
 			AfterProcessingInitializeOnLoad (2ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (5ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
-Refreshing native plugins compatible for Editor in 5.45 ms, found 3 plugins.
+		AwakeInstancesAfterBackupRestoration (7ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.07 seconds
+Refreshing native plugins compatible for Editor in 7.01 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3257 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 43 unused Assets / (63.0 KB). Loaded Objects now: 3713.
-Memory consumption went from 131.0 MB to 131.0 MB.
-Total: 2.503300 ms (FindLiveObjects: 0.197000 ms CreateObjectMapping: 0.085900 ms MarkObjects: 2.118600 ms  DeleteObjects: 0.100900 ms)
+Unloading 3260 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 43 unused Assets / (63.3 KB). Loaded Objects now: 3719.
+Memory consumption went from 203.6 MB to 203.5 MB.
+Total: 3.197100 ms (FindLiveObjects: 0.269500 ms CreateObjectMapping: 0.163700 ms MarkObjects: 2.601200 ms  DeleteObjects: 0.161900 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
@@ -194,79 +194,142 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
-Received Import Request.
-  Time since last request: 572543.383317 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Blaster.prefab
-  artifactKey: Guid(1eb564194d0f74bfc88511d499fe6936) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Blaster.prefab using Guid(1eb564194d0f74bfc88511d499fe6936) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cf90c38f1c64b879d5c84d6976371a87') in 0.079953 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 12
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.380 seconds
+Refreshing native plugins compatible for Editor in 6.12 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.960 seconds
+Domain Reload Profiling: 1337ms
+	BeginReloadAssembly (135ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (32ms)
+	RebuildCommonClasses (27ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (21ms)
+	LoadAllAssembliesAndSetupDomain (186ms)
+		LoadAssemblies (248ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (10ms)
+			TypeCache.Refresh (5ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (960ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (414ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (34ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (68ms)
+			ProcessInitializeOnLoadAttributes (280ms)
+			ProcessInitializeOnLoadMethodAttributes (25ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Refreshing native plugins compatible for Editor in 6.97 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3253 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (37.7 KB). Loaded Objects now: 3722.
+Memory consumption went from 204.0 MB to 203.9 MB.
+Total: 3.113800 ms (FindLiveObjects: 0.346500 ms CreateObjectMapping: 0.114600 ms MarkObjects: 2.596500 ms  DeleteObjects: 0.055400 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Plasma.prefab
-  artifactKey: Guid(df8a6151b50394a4f812e2257507f6dd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Plasma.prefab using Guid(df8a6151b50394a4f812e2257507f6dd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c1d2da625b901c2668349b6b3b8b0723') in 0.017907 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 12
-========================================================================
-Received Import Request.
-  Time since last request: 0.000014 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Scifi Shotgun.prefab
-  artifactKey: Guid(4b0b9bd55d78a435184e839b718c8686) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Scifi Shotgun.prefab using Guid(4b0b9bd55d78a435184e839b718c8686) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9d8da5cc2c55e71d09c053c44cc92edb') in 0.010318 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 22
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Sub Machine Gun.prefab
-  artifactKey: Guid(cf1ad2d89902941fd9d1024b8de16b0a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Sub Machine Gun.prefab using Guid(cf1ad2d89902941fd9d1024b8de16b0a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ba7533d80ff1134452560319b441d4a7') in 0.010999 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 11
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Rail Beam.prefab
-  artifactKey: Guid(1112f3cf55b11416484af4f31d215098) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Rail Beam.prefab using Guid(1112f3cf55b11416484af4f31d215098) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00745fa9c618007890f035644d3bd332') in 0.024525 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 103
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Toxic Blob.prefab
-  artifactKey: Guid(791336de561a9458591eba939998dfa3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Toxic Blob.prefab using Guid(791336de561a9458591eba939998dfa3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0cf52d473553d1b2621bd3cfad2a5bf5') in 0.011807 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 15
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Laser Lance Beam.prefab
-  artifactKey: Guid(541ea364ee9d84fe79d83c425f4ced9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Laser Lance Beam.prefab using Guid(541ea364ee9d84fe79d83c425f4ced9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8a3847bc6f20bff5c145d68f8b531552') in 0.013822 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 54
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Lightning Beam.prefab
-  artifactKey: Guid(7bb197693a24a46a68f5d123c5e10887) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Lightning Beam.prefab using Guid(7bb197693a24a46a68f5d123c5e10887) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3e7a93fdbaec7c91de4c45eca8c5ca41') in 0.001178 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Double Electric Ball.prefab
-  artifactKey: Guid(93aac59fdaee14d5ebbc55247de405c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/InfinityPBR - Magic Pig Games/Projectile Factory/Asset Store Integrations/Knife - PRO Effects - Sci-Fi FX/Projectiles/PRO Effects Sci-Fi - Double Electric Ball.prefab using Guid(93aac59fdaee14d5ebbc55247de405c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '414a9e862502256bb2fb67e60111bc70') in 0.014599 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 107
-Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
-TcpMessagingSession - receive error: operation aborted. errorcode: 995, details: 스레드 종료 또는 응용 프로그램 요청 때문에 I/O 작업이 취소되었습니다.
-AssetImportWorker is now disconnected from the server
-Process exiting
-Exiting without the bug reporter. Application will terminate with return code 0
+Received Prepare
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.372 seconds
+Refreshing native plugins compatible for Editor in 6.72 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Mono: successfully reloaded assembly
+[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+- Finished resetting the current domain, in  0.766 seconds
+Domain Reload Profiling: 1136ms
+	BeginReloadAssembly (135ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (31ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (24ms)
+	LoadAllAssembliesAndSetupDomain (178ms)
+		LoadAssemblies (232ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (20ms)
+			TypeCache.Refresh (8ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (6ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (766ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (290ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (27ms)
+			SetLoadedEditorAssemblies (2ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (49ms)
+			ProcessInitializeOnLoadAttributes (194ms)
+			ProcessInitializeOnLoadMethodAttributes (16ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (5ms)
+Refreshing native plugins compatible for Editor in 5.93 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3253 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 34 unused Assets / (36.8 KB). Loaded Objects now: 3725.
+Memory consumption went from 205.9 MB to 205.9 MB.
+Total: 2.441000 ms (FindLiveObjects: 0.221400 ms CreateObjectMapping: 0.072700 ms MarkObjects: 2.086900 ms  DeleteObjects: 0.059000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 6d391050e5a25f67b0a2c618074f2cd9 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 

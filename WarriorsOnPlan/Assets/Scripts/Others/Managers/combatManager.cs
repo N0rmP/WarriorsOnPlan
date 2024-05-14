@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +17,9 @@ public class combatManager : MonoBehaviour
     private List<warriorAbst>[] warriorsHpSorted_;
     private List<warriorAbst>[] warriorsDamageDealtSorted_;
     private List<warriorAbst>[] warriorsActionOrder_;
+    private List<warriorAbst>[] warriorsDead_;
 
-    // if tupMove.timer > 0f, it means move animation is being played
-    // if tupMove.timer <= 0f, it's set -2f
-    // if tupMove.timer < -1f, it means no move animation is being played
-    private (GameObject mover, Vector3 destination, Vector3 movementPerFrame, float timer) tupMove_;
+    private Dictionary<GameObject, (Vector3 destination, float multiplier)> dictMovers;
 
     #region properties
     //warriors in combatManager can't be copies because they consist of list & array
@@ -41,15 +38,9 @@ public class combatManager : MonoBehaviour
             return warriorsActionOrder_;
         }
     }
-    // when setting tupMove you should input the destination's coordinates vector3 in movementPerFrame, property will calculate it on itself
-    public (GameObject mover, Vector3 destination, Vector3 movementPerFrame, float timer) tupMove {
+    public List<warriorAbst>[] warriorsDead {
         get {
-            return tupMove_;
-        }
-        set {
-            value.mover.transform.rotation = Quaternion.LookRotation(value.destination - value.mover.transform.position);
-            //★ Debug.Log(value.destination + " / " + value.mover.transform.position + " / " + Time.deltaTime + " / " + ((value.movementPerFrame - value.mover.transform.position) * Time.deltaTime));
-            tupMove_ = (value.mover, value.destination, (value.destination - value.mover.transform.position) * Time.deltaTime, 1.0f);
+            return warriorsDead_;
         }
     }
     #endregion properties
@@ -68,7 +59,6 @@ public class combatManager : MonoBehaviour
 
         comparerHpInstance = new comparerHp();
         comparerDamageDealtInstance = new comparerDamageDealt();
-        tupMove_ = (null, Vector3.zero, Vector3.zero, -2f);
 
         //graph initiate
         graphCur = new graphComponent(7, 7);
@@ -86,31 +76,23 @@ public class combatManager : MonoBehaviour
             new List<warriorAbst>(),
             new List<warriorAbst>()
         };
+        warriorsDead_ = new List<warriorAbst>[2]{
+            new List<warriorAbst>(),
+            new List<warriorAbst>()
+        };
 
         //★ test
-        GameObject w1 = Instantiate<GameObject>(
-                Resources.Load<GameObject>("Prefabs/tester")
-            );
+        GameObject w1 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/tester"));
         w1.GetComponent<warriorAbst>().init(true, 6, 6, 2);
-        GameObject w2 = Instantiate<GameObject>(
-                Resources.Load<GameObject>("Prefabs/tester")
-            );
+        GameObject w2 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/tester"));
         w2.GetComponent<warriorAbst>().init(false, 0, 0, 2);
+
         Coroutine c = StartCoroutine(combatLoop());
     }
 
     public void Update() {
-        //warriorAbst Move, only one warrior will move at a time
-        if (tupMove_.timer > -1.0f) {
-            if (tupMove_.timer > 0f) {
-                tupMove_.mover.transform.position += tupMove_.movementPerFrame;
-                tupMove_.timer -= Time.deltaTime;
-            } else {
-                tupMove_.mover.transform.position = tupMove_.destination;
-                tupMove_.timer = -2f;
-                //★ 이동 애니메이션 정지
-            }
-        }
+        float tempDeltaTime = Time.deltaTime;
+        makeMove(tempDeltaTime);
     }
     #endregion callbacks
 
@@ -286,6 +268,39 @@ public class combatManager : MonoBehaviour
         warriorsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
     }
     #endregion utility
+
+    #region similari_observers
+    public void makeMove(float parDeltaTime) {
+        Vector3 tempVector = Vector3.zero;
+        foreach (GameObject obj in dictMovers.Keys.ToArray()) {
+            tempVector = dictMovers[obj].destination - obj.transform.position;
+            obj.transform.position += tempVector.normalized * dictMovers[obj].multiplier;
+            if (tempVector.magnitude <= 0.05f) {
+                obj.transform.position = dictMovers[obj].destination;
+                removeMover(obj);
+            }
+        }
+    }
+
+    #region add_remove
+    public void addMover(GameObject parObj, Vector3 parDestination, float parTime) {
+        float tempCalcMult() {
+            return ((parDestination - parObj.transform.position).magnitude / parTime);
+        }
+
+        //if parObj already exists as key, update the destination
+        if (dictMovers.ContainsKey(parObj)) {
+            dictMovers[parObj] = (parDestination, tempCalcMult());
+        } else {
+            dictMovers.Add(parObj, (parDestination, tempCalcMult()));
+        }
+    }
+
+    public void removeMover(GameObject parObj) {
+        dictMovers.Remove(parObj);
+    }
+    #endregion add_remove
+    #endregion similari_observers
 
     #region internalClasses
     private class comparerHp : IComparer<warriorAbst> {
