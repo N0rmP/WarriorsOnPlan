@@ -5,13 +5,13 @@ using UnityEngine;
 public enum EDirection {
     //direction     = index //required calculation for direction-to-coordinates conversion (directionConverter)
     //you can find that z calculation is two indice latter than x calculation
-    forward         = 0,    //-1    0
-    forward_right   = 1,    //-1    -1
-    right           = 2,    //0     -1
+    forward         = 0,    //0     1
+    forward_right   = 1,    //1     1
+    right           = 2,    //1     0
     backward_right  = 3,    //1     -1
-    backward        = 4,    //1     0
-    backward_left   = 5,    //1     1
-    left            = 6,    //0     1
+    backward        = 4,    //0     -1
+    backward_left   = 5,    //-1    -1
+    left            = 6,    //-1    0
     forward_left    = 7,    //-1    1
     none            = 8     // this EDirection represents no direction, used for initiation of EDirectionToDeparture when graph search
 }
@@ -20,7 +20,7 @@ public class node
 {
     public readonly int coor0;
     public readonly int coor1;
-    private static readonly int[] directionConverter = new int[8]{ -1, -1, 0, 1, 1, 1, 0, -1};
+    private static readonly int[] directionConverter = new int[8]{ 0, 1, 1, 1, 0, -1, -1, -1};
 
     private node[] link_;
     private Thing thingHere_;
@@ -43,16 +43,22 @@ public class node
         link_ = new node[8];
     }
 
-    public (int c0, int c1) getPosition() {
-        return (coor0 * 2, coor1 * 2);
+    public Vector3 getVector3() {
+        return new Vector3(coor0 * 2, 0f, coor1 * 2);
     }
 
+    /*
+    public (int c0, int c1) getPosition() {
+        return (coor0 * 2, coor1 * 2);
+    }*/
+
+    /*
     public (int c0, int c1) getlink_Coordinates(EDirection parEDir) {
         return (
             coor0 + directionConverter[(int)parEDir],
             coor1 + directionConverter[((int)parEDir + 6) % 8]
         );
-    }
+    }*/
 
     public static int getDistance(node n1, node n2) {
         return (Mathf.Abs(n1.coor0 - n2.coor0) > Mathf.Abs(n1.coor1 - n2.coor1)) ? Mathf.Abs(n1.coor0 - n2.coor0) : Mathf.Abs(n1.coor1 - n2.coor1);

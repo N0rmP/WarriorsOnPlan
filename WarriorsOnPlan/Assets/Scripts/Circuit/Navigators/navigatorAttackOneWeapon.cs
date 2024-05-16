@@ -67,7 +67,7 @@ public class navigatorAttackOneWeapon : navigatorAbst, ICaseUpdateState
                 }
                 return false;
             });
-            combatManager.CM.graphCur.BFS(owner.curPosition, delGoalCheck, ref route);
+            combatManager.CM.GC.BFS(owner.curPosition, delGoalCheck, ref route);
         }       
 
         return route.Pop();

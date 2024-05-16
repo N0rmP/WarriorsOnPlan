@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using UnityEngine.Rendering;
 public class combatManager : MonoBehaviour
 {
     public static combatManager CM;
-    public graphComponent graphCur;
+    public graphComponent GC;
+    public moveComponent MC;
 
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
@@ -18,8 +20,6 @@ public class combatManager : MonoBehaviour
     private List<warriorAbst>[] warriorsDamageDealtSorted_;
     private List<warriorAbst>[] warriorsActionOrder_;
     private List<warriorAbst>[] warriorsDead_;
-
-    private Dictionary<GameObject, (Vector3 destination, float multiplier)> dictMovers;
 
     #region properties
     //warriors in combatManager can't be copies because they consist of list & array
@@ -61,7 +61,7 @@ public class combatManager : MonoBehaviour
         comparerDamageDealtInstance = new comparerDamageDealt();
 
         //graph initiate
-        graphCur = new graphComponent(7, 7);
+        GC = new graphComponent(7, 7);
 
         //list initiate
         warriorsHpSorted_ = new List<warriorAbst>[2]{
@@ -92,7 +92,7 @@ public class combatManager : MonoBehaviour
 
     public void Update() {
         float tempDeltaTime = Time.deltaTime;
-        makeMove(tempDeltaTime);
+        MC.makeMove(tempDeltaTime);
     }
     #endregion callbacks
 
@@ -215,9 +215,10 @@ public class combatManager : MonoBehaviour
     public void processMove(warriorAbst source, EDirection parEDir) {
         //sendThing method will check if it's valid movement
         source.curPosition.sendThing(parEDir);
-        (int c0, int c1) tempPosition = source.curPosition.getPosition();
+        Vector3 tempDestination = source.curPosition.getVector3();
         //★ 이동 애니메이션 시작
-        tupMove = (source.gameObject, new Vector3(tempPosition.c0, 0f, tempPosition.c1), Vector3.zero, 0f);
+        source.transform.rotation = Quaternion.LookRotation(tempDestination - source.transform.position);
+        MC.addMover(source.gameObject, tempDestination);
     }
 
     //processMove with two int parameters makes a warrior teleport to the destination
@@ -233,13 +234,13 @@ public class combatManager : MonoBehaviour
     //processPlace 
     public void processPlace(Thing source, int parCoor0, int parCoor1) {
         //check if the position is out of boundary, or already containing another thing
-        if (parCoor0 < 0 || parCoor0 > graphCur.size0 ||
-           parCoor1 < 0 || parCoor1 > graphCur.size1 ||
-           graphCur[parCoor0, parCoor1].thingHere != null) {
+        if (parCoor0 < 0 || parCoor0 > GC.size0 ||
+           parCoor1 < 0 || parCoor1 > GC.size1 ||
+           GC[parCoor0, parCoor1].thingHere != null) {
             return;
         }
 
-        graphCur[parCoor0, parCoor1].placeThing(source);
+        GC[parCoor0, parCoor1].placeThing(source);
         if (source is warriorAbst) {
             warriorAbst tempWarrior = (warriorAbst)source;
             int tempPlrSideNum = tempWarrior.isPlrSide ? 0 : 1;
@@ -268,39 +269,6 @@ public class combatManager : MonoBehaviour
         warriorsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
     }
     #endregion utility
-
-    #region similari_observers
-    public void makeMove(float parDeltaTime) {
-        Vector3 tempVector = Vector3.zero;
-        foreach (GameObject obj in dictMovers.Keys.ToArray()) {
-            tempVector = dictMovers[obj].destination - obj.transform.position;
-            obj.transform.position += tempVector.normalized * dictMovers[obj].multiplier;
-            if (tempVector.magnitude <= 0.05f) {
-                obj.transform.position = dictMovers[obj].destination;
-                removeMover(obj);
-            }
-        }
-    }
-
-    #region add_remove
-    public void addMover(GameObject parObj, Vector3 parDestination, float parTime) {
-        float tempCalcMult() {
-            return ((parDestination - parObj.transform.position).magnitude / parTime);
-        }
-
-        //if parObj already exists as key, update the destination
-        if (dictMovers.ContainsKey(parObj)) {
-            dictMovers[parObj] = (parDestination, tempCalcMult());
-        } else {
-            dictMovers.Add(parObj, (parDestination, tempCalcMult()));
-        }
-    }
-
-    public void removeMover(GameObject parObj) {
-        dictMovers.Remove(parObj);
-    }
-    #endregion add_remove
-    #endregion similari_observers
 
     #region internalClasses
     private class comparerHp : IComparer<warriorAbst> {
