@@ -10,6 +10,7 @@ public class combatManager : MonoBehaviour
     public static combatManager CM;
     public graphComponent GC;
     public moveComponent MC;
+    public fxComponent FC;
 
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
@@ -57,11 +58,15 @@ public class combatManager : MonoBehaviour
             Destroy(this);
         }
 
-        comparerHpInstance = new comparerHp();
-        comparerDamageDealtInstance = new comparerDamageDealt();
-
-        //graph initiate
+        //components
+        //★ MC에서 monobehaviour를 제거하고
         GC = new graphComponent(7, 7);
+        MC = new moveComponent();
+        FC = new fxComponent();
+
+        //comparers
+        comparerHpInstance = new comparerHp();
+        comparerDamageDealtInstance = new comparerDamageDealt();        
 
         //list initiate
         warriorsHpSorted_ = new List<warriorAbst>[2]{
@@ -93,6 +98,7 @@ public class combatManager : MonoBehaviour
     public void Update() {
         float tempDeltaTime = Time.deltaTime;
         MC.makeMove(tempDeltaTime);
+        MC.makeParabola(tempDeltaTime);
     }
     #endregion callbacks
 
@@ -113,8 +119,6 @@ public class combatManager : MonoBehaviour
             }
         }
 
-        //★ 왜인지는 모르겠는데 게임 시작하고 2프레임 정도는 Time.deltaTime이 0.2로 고정된다.
-        yield return new WaitForSeconds(1f);
         while (true) {
             //★ 플레이어의 warrior는 사전에 지정한 순서대로, 상대방은 따로 지정되지 않았다면 남은 체력 내림차순으로
             //★ 상대방 warriorsActionsOrder_[1]을 warriorsHpSorted[1]에 참조시키면 위 기능을 간단히 해결할 수 있다.
@@ -133,7 +137,6 @@ public class combatManager : MonoBehaviour
                     ca.onBeforeAction(wa);
                 }
 
-                Debug.Log(wa.curHp);
                 // decide what action this warrior does this time, priority is (Being Controlled) > UseSkill > Attack > Move
                 switch (wa.stateCur) {
                     // ★ 각각의 warrior 행동 시작 시 효과 발동
@@ -218,7 +221,7 @@ public class combatManager : MonoBehaviour
         Vector3 tempDestination = source.curPosition.getVector3();
         //★ 이동 애니메이션 시작
         source.transform.rotation = Quaternion.LookRotation(tempDestination - source.transform.position);
-        MC.addMover(source.gameObject, tempDestination);
+        source.startLinearMove(tempDestination);
     }
 
     //processMove with two int parameters makes a warrior teleport to the destination

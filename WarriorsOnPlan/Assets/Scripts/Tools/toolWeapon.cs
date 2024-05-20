@@ -7,8 +7,7 @@ public enum enumDamageType {
     basic = 1
 }
 
-public abstract class toolWeapon : caseAll
-{
+public abstract class toolWeapon : caseAll {
     //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
     //most toolWeapon's min range is 0.
     protected readonly int rangeMin_;
@@ -37,7 +36,7 @@ public abstract class toolWeapon : caseAll
 
     public damageInfo getDamageInfo() {
         Debug.Log(damageCur);
-        return new damageInfo(this, damageCur, damageType_);
+        return new damageInfo(this, damageCur, damageType_, this.showEffect);
     }
 
     public void updateTimer() {
@@ -49,4 +48,6 @@ public abstract class toolWeapon : caseAll
     public override void onAfterThisAttack(Thing source, Thing target, damageInfo DInfo) {
         timerCur_ = timerMax_;
     }
+
+    public abstract void showEffect(Thing parTarget);
 }

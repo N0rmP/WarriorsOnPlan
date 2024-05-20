@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Thing : MonoBehaviour
+public class Thing : movableObject
 {
     protected int maxHp_;
     protected int curHp_;

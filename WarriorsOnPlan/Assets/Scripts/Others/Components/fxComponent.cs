@@ -9,7 +9,7 @@ public class fxComponent
     private GameObject prefabTest;
 
     public fxComponent() {
-        prefabTest = Resources.Load<GameObject>("/Prefabs/VFX/vfxSimple");
+        prefabTest = Resources.Load<GameObject>("Prefabs/VFX/vfxSimple");
 
         stackParticleTest = new Stack<GameObject>();
 
@@ -19,8 +19,16 @@ public class fxComponent
     }
 
     #region vfx
-    public void callTest() { 
-        
+    public void callTest(Vector3 parDeparture, Vector3 parDestination, float parTime = 1f) {
+        GameObject tempObj = (stackParticleTest.Count == 0) ? Object.Instantiate(prefabTest) : stackParticleTest.Pop();
+
+        tempObj.transform.position = parDeparture;
+        combatManager.CM.MC.addParabolaer(tempObj, parDestination, parTime);
+        tempObj.GetComponent<vfxMovable>().delReturn = this.retrieveTest;
+    }
+
+    public void retrieveTest(GameObject parObj) {
+        stackParticleTest.Push(parObj);
     }
     #endregion vfx
 }

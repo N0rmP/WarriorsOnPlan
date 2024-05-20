@@ -59,12 +59,6 @@ public abstract class warriorAbst : Thing
     }
     #endregion properties
 
-    #region callback
-    public void Update() {
-
-    }
-    #endregion callback
-
     #region utility
     public void updateTargets() {
         whatToAttack_ = selecterForAttack.select(isPlrSide_);

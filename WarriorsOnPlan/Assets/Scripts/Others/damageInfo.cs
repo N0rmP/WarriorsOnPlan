@@ -15,16 +15,19 @@ public class damageInfo
     private float totalMultiply;
     private int fixedDamage;
 
+    private Action<Thing> delEffect;
+
     public int damage { get { return damage_; } }
     public enumDamageType damageType { get; set; }
 
-    public damageInfo(caseAll parSourceCaseAll, int parDamage, enumDamageType parDType) {
+    public damageInfo(caseAll parSourceCaseAll, int parDamage, enumDamageType parDType, Action<Thing> parDelegate) {
         sourceCaseAll = parSourceCaseAll;
         damage_ = parDamage;
         damageType = parDType;
         totalAdd = 0;
         totalMultiply = 1.0f;
         fixedDamage = -1;
+        delEffect = parDelegate;
     }
 
     public void addDamage(int parValue) {
@@ -34,6 +37,7 @@ public class damageInfo
         }
 
         totalAdd += parValue;
+        if (totalAdd < 0) { totalAdd = 0; }
     }
 
     //parameter of multiplyDamage represents the increased ratio by float, not percentage
@@ -41,14 +45,15 @@ public class damageInfo
     public void mulitplyDamage(float parValue) {
         //magic damage can't decrease
         //multiplier can't be below zero
-        if (((damageType == enumDamageType.magic) && (parValue < 1)) || (parValue < 0)) {
+        if ((damageType == enumDamageType.magic) && (parValue < 1)) {
             return;
         }
 
         totalMultiply += parValue;
+        if (totalMultiply < 0f) { totalMultiply = 0f; }
     }
 
-    //fixedDamage has the top priority than
+    //fixedDamage has the top priority, the only one that can change the fixed damage is fixing damage later
     public void fixDamage(int parValue) {
         fixedDamage = parValue;
     }
@@ -66,5 +71,6 @@ public class damageInfo
     public void ATTACK(Thing target) {
         calculateFinalDamage();
         target.setCurHp(-damage_, sourceCaseAll.owner, true);
+        delEffect(target);
     }
 }
