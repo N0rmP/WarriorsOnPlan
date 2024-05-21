@@ -9,7 +9,6 @@ public class combatManager : MonoBehaviour
 {
     public static combatManager CM;
     public graphComponent GC;
-    public moveComponent MC;
     public fxComponent FC;
 
     // interval time between each action
@@ -61,7 +60,6 @@ public class combatManager : MonoBehaviour
         //components
         //★ MC에서 monobehaviour를 제거하고
         GC = new graphComponent(7, 7);
-        MC = new moveComponent();
         FC = new fxComponent();
 
         //comparers
@@ -93,12 +91,6 @@ public class combatManager : MonoBehaviour
         w2.GetComponent<warriorAbst>().init(false, 0, 0, 2);
 
         Coroutine c = StartCoroutine(combatLoop());
-    }
-
-    public void Update() {
-        float tempDeltaTime = Time.deltaTime;
-        MC.makeMove(tempDeltaTime);
-        MC.makeParabola(tempDeltaTime);
     }
     #endregion callbacks
 

@@ -4,12 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class vfxMovable : movableObject, IMovableSupplement {
-    public Action<GameObject> delReturn { private get; set; }
+    public enumVFXType thisVFXType;
+    private ParticleSystem thisPS;
 
-    public void whenStartMove() { }
+    public new void Awake() {
+        base.Awake();
+        thisPS = gameObject.GetComponent<ParticleSystem>();
+        thisPS.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+    }
+
+
+    public void whenStartMove() {
+        thisPS.Play();
+    }
 
     public void whenEndMove() {
-        delReturn(gameObject);
+        thisPS.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        combatManager.CM.FC.retrieve(this);
     }
 
     

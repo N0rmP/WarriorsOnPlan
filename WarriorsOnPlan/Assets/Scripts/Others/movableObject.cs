@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum enumMove {
+public enum enumMoveType {
     stationary,
     linear,
     parabola
@@ -14,26 +14,26 @@ public class movableObject : MonoBehaviour {
     private float multiplier;
     private float ratio_;
     private float height;
-    private enumMove stateMove;
+    private enumMoveType stateMove;
 
-    private float ratio { 
-        get { return ratio_; } 
-        set { ratio_ = Mathf.Clamp(value, 0f, 1f); } 
+    private float ratio {
+        get { return ratio_; }
+        set { ratio_ = Mathf.Clamp(value, 0f, 1f); }
     }
 
     public void Awake() {
-        
+        resetMovableObject();
     }
 
     public void Update() {
         float tempDeltaTime = Time.deltaTime;
         switch (stateMove) {
-            case enumMove.stationary:
+            case enumMoveType.stationary:
                 break;
-            case enumMove.linear:
+            case enumMoveType.linear:
                 moveLinear(tempDeltaTime);
                 break;
-            case enumMove.parabola:
+            case enumMoveType.parabola:
                 moveParabola(tempDeltaTime);
                 break;
             default:
@@ -41,14 +41,22 @@ public class movableObject : MonoBehaviour {
         }
     }
 
+    private void resetMovableObject() {
+        departure = Vector3.zero;
+        destination = Vector3.zero;
+        multiplier = 1f;
+        ratio_ = 0f;
+        height = 4f;
+        stateMove = enumMoveType.stationary;
+    }
+
     #region similari_observers
     public void moveLinear(float parDeltaTime) {
-        Vector3 tempVector = Vector3.zero;
-        tempVector = destination - transform.position;
+        Vector3 tempVector = destination - transform.position;
         transform.position += tempVector.normalized * multiplier * parDeltaTime;
 
         if (tempVector.magnitude <= 0.05f) {
-            transform.position = destination;
+            endMove();
         }
     }
 
@@ -58,7 +66,7 @@ public class movableObject : MonoBehaviour {
         transform.position = new Vector3(tempVector.x, tempVector.y + 4 * height * (-ratio * ratio + ratio), tempVector.z);
 
         if ((destination - transform.position).magnitude <= 0.05f) {
-            transform.position = destination;
+            endMove();
         }
     }
 
@@ -68,30 +76,34 @@ public class movableObject : MonoBehaviour {
     }
 
     public void endMove(bool isArrival = true) {
-        stateMove = enumMove.stationary;
         if (isArrival) { transform.position = destination; }
+        resetMovableObject();        
 
         if (this is IMovableSupplement) { ((IMovableSupplement)this).whenEndMove(); }
     }
 
     public void startLinearMove(Vector3 parDestination, float parTime = 1f) {
+        departure = transform.position;
         destination = parDestination;
         multiplier = getMultiplier(parDestination, transform.position, parTime);
-        stateMove = enumMove.linear;
+        stateMove = enumMoveType.linear;
 
         if (this is IMovableSupplement) { ((IMovableSupplement)this).whenStartMove(); }
     }
 
-    
-
-    public void startParabolaMove(Vector3 parDestination, float parTime = 1, float parHeight = 4) {
+    public void startParabolaMove(Vector3 parDestination, float parTime = 1) {
+        departure = transform.position;
         destination = parDestination;
         multiplier = getMultiplier(parDestination, transform.position, parTime);
-        height = parHeight;
         ratio = 0f;
-        stateMove = enumMove.parabola;
+        stateMove = enumMoveType.parabola;
 
         if (this is IMovableSupplement) { ((IMovableSupplement)this).whenStartMove(); }
+    }
+
+    public void startParabolaMove(Vector3 parDestination, float parTime = 1, float parHeight = 4) {
+        height = parHeight;
+        startParabolaMove(parDestination, parTime);
     }
     #endregion add_remove
     #endregion similari_observers

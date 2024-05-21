@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
-
+/*
 public class moveComponent
 {
     class parabolaInfo {
@@ -107,3 +107,4 @@ public class moveComponent
     #endregion add_remove
     #endregion similari_observers
 }
+*/
