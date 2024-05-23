@@ -25,25 +25,15 @@ public class fxComponent
 
     #region vfx
     public void callVFX(enumVFXType parEnumVFXType, enumMoveType parEnumMoveType, Vector3 parDeparture, Vector3 parDestination, float parTime = 1f) {
-        vfxMovable tempVFXMovable = null;
-        Action<Vector3, float> tempDelegateMove = null;
-        switch (parEnumVFXType) {
-            case enumVFXType.simple:
-                tempVFXMovable = getVFXSimple().GetComponent<vfxMovable>();
-                break;
-            default:
-                break;
-        }
-        switch (parEnumMoveType) {
-            case enumMoveType.linear:
-                tempDelegateMove = tempVFXMovable.startLinearMove;
-                break;
-            case enumMoveType.parabola:
-                tempDelegateMove = tempVFXMovable.startParabolaMove;
-                break;
-            default:
-                break;
-        }
+        vfxMovable tempVFXMovable = parEnumVFXType switch {
+            enumVFXType.simple => getVFXSimple().GetComponent<vfxMovable>(),
+            _ => null
+        };
+        Action<Vector3, float> tempDelegateMove = parEnumMoveType switch {
+            enumMoveType.linear => tempVFXMovable.startLinearMove,
+            enumMoveType.parabola => tempVFXMovable.startParabolaMove,
+            _ => null
+        };
 
         tempVFXMovable.transform.position = parDeparture;
         tempDelegateMove(parDestination, parTime);

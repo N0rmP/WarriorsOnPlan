@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using System.Linq;
 using System.Threading;
 using UnityEditor.SceneTemplate;
+using UnityEditor.Animations;
 
 //move state is same as idle state
 public enum enumStateWarrior {
@@ -19,6 +20,7 @@ public enum enumStateWarrior {
 
 public abstract class warriorAbst : Thing
 {
+    #region variables
     protected bool isPlrSide_;
 
     protected int damageTotalDealt_;
@@ -29,9 +31,12 @@ public abstract class warriorAbst : Thing
     private List<toolWeapon> listWeapon;
     //private List<> listEffect;
     private List<caseAll> listCircuit;
+
+    private List<string> listAttackTriggerName;
         
     private Thing whatToAttack_;
     private Thing whatToUseSkill_;
+    private Animator thisAnimController;
 
     public enumStateWarrior stateCur { get; set; }
     private ICaseUpdateState semaphoreState;
@@ -58,12 +63,7 @@ public abstract class warriorAbst : Thing
         }
     }
     #endregion properties
-
-    #region utility
-    public void updateTargets() {
-        whatToAttack_ = selecterForAttack.select(isPlrSide_);
-        whatToUseSkill_ = selecterForSkill.select(isPlrSide_);
-    }
+    #endregion variables
 
     public virtual void init(bool parisPlrSide, int parCoor0, int parCoor1, int parMaxHp = 1) {
         base.init(parMaxHp);
@@ -71,12 +71,19 @@ public abstract class warriorAbst : Thing
         damageTotalDealt_ = 0;
         stateCur = enumStateWarrior.idleAttack;
         combatManager.CM.processPlace(this, parCoor0, parCoor1);
+        thisAnimController = gameObject.GetComponent<Animator>();
 
         listCaseAllAll = new List<caseAll>();
         listToolAll = new List<caseAll>();
         listWeapon = new List<toolWeapon>();
         //listEffect = new List<caseAll>();
         listCircuit = new List<caseAll>();
+    }
+
+    #region mainProcesses
+    public void updateTargets() {
+        whatToAttack_ = selecterForAttack.select(isPlrSide_);
+        whatToUseSkill_ = selecterForSkill.select(isPlrSide_);
     }
 
     public override void destroied(warriorAbst source) {
@@ -111,7 +118,7 @@ public abstract class warriorAbst : Thing
         (ICaseUpdateState updater, enumStateWarrior ESW) tempMemory = (null, enumStateWarrior.idleAttack);
         (ICaseUpdateState updater, enumStateWarrior ESW) tempBuffer;
         foreach (caseAll ca in copyCaseAllAll) {
-            if (!(ca is ICaseUpdateState)) {
+            if (ca is not ICaseUpdateState) {
                 continue;
             }
 
@@ -122,7 +129,7 @@ public abstract class warriorAbst : Thing
                 semaphoreState = tempBuffer.updater;
             } else if (semaphoreState == tempBuffer.updater) {
                 stateCur = tempBuffer.ESW;
-            } else if(tempBuffer.ESW < tempMemory.ESW) {
+            } else if (tempBuffer.ESW < tempMemory.ESW) {
                 tempMemory = tempBuffer;
             }
         }
@@ -130,9 +137,11 @@ public abstract class warriorAbst : Thing
         if (tempMemory.ESW < stateCur) {
             stateCur = tempMemory.ESW;
             semaphoreState = tempMemory.updater;
-        }        
+        }
     }
+    #endregion mainProcesses
 
+    #region utility
     public void addDamageTotalDealt(int par) {
         if (par > 0) {
             damageTotalDealt_ += par;
@@ -163,6 +172,7 @@ public abstract class warriorAbst : Thing
             case enumCaseType.tool:
                 if (parCase is toolWeapon) {
                     listWeapon.Insert(insertPosition, (toolWeapon)parCase);
+                    //★ toolWeapon마다 애니메이션 이름 지정, 이 코드에서는 지정된 애니메이션 이름을 가져와 listAttackTriggerName에 저장
                 }
                 listToolAll.Insert(insertPosition, parCase);
                 break;
@@ -201,7 +211,19 @@ public abstract class warriorAbst : Thing
                 break;
         }
     }
+
+    public void animate() {
+        //★ toolWeapon 추가/삭제마다 실행할 공격 애니메이션 갱신 및 속도 조절
+        switch (stateCur) {
+            case enumStateWarrior.move:
+                thisAnimController.SetBool("isRun", true);
+                break;
+            case enumStateWarrior.idleAttack:
+                thisAnimController.SetTrigger("trigAttackStart");
+                break;
+            default:
+                break;
+        }
+    }
     #endregion utility
-
-
 }
