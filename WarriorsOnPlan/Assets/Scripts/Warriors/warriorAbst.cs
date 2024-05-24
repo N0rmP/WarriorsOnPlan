@@ -78,6 +78,8 @@ public abstract class warriorAbst : Thing
         listWeapon = new List<toolWeapon>();
         //listEffect = new List<caseAll>();
         listCircuit = new List<caseAll>();
+
+        listAttackTriggerName = new List<string>();
     }
 
     #region mainProcesses
@@ -170,14 +172,15 @@ public abstract class warriorAbst : Thing
                 toolSkill = parCase;
                 break;
             case enumCaseType.tool:
-                if (parCase is toolWeapon) {
-                    listWeapon.Insert(insertPosition, (toolWeapon)parCase);
-                    //★ toolWeapon마다 애니메이션 이름 지정, 이 코드에서는 지정된 애니메이션 이름을 가져와 listAttackTriggerName에 저장
+                if (parCase is toolWeapon tempToolWeapon) {
+                    listWeapon.Add(tempToolWeapon);
+                    listAttackTriggerName.Add(tempToolWeapon.animationType.ToString());
+                    thisAnimController.SetFloat("multiplierAttack", listAttackTriggerName.Count);
                 }
-                listToolAll.Insert(insertPosition, parCase);
+                listToolAll.Add(parCase);
                 break;
             case enumCaseType.circuit:
-                listCircuit.Insert(insertPosition, parCase);
+                listCircuit.Add(parCase);
                 break;
             /*case enumCaseType.effect:
                 listEffect.Insert(insertPosition, parCase);
@@ -196,8 +199,10 @@ public abstract class warriorAbst : Thing
                 toolSkill = null;
                 break;
             case enumCaseType.tool:
-                if (parCase is toolWeapon) {
-                    listWeapon.Remove((toolWeapon)parCase);
+                if (parCase is toolWeapon tempToolWeapon) {
+                    listWeapon.Remove(tempToolWeapon);
+                    listAttackTriggerName.Remove(tempToolWeapon.animationType.ToString());
+                    thisAnimController.SetFloat("multiplierAttack", Mathf.Max(listAttackTriggerName.Count, 1f));
                 }
                 listToolAll.Remove(parCase);
                 break;
@@ -213,13 +218,15 @@ public abstract class warriorAbst : Thing
     }
 
     public void animate() {
-        //★ toolWeapon 추가/삭제마다 실행할 공격 애니메이션 갱신 및 속도 조절
         switch (stateCur) {
             case enumStateWarrior.move:
-                thisAnimController.SetBool("isRun", true);
+                thisAnimController.SetTrigger("trigRun");
                 break;
             case enumStateWarrior.idleAttack:
                 thisAnimController.SetTrigger("trigAttackStart");
+                foreach (string trigName in listAttackTriggerName) {
+                    thisAnimController.SetTrigger(trigName);
+                }
                 break;
             default:
                 break;

@@ -152,6 +152,8 @@ public class combatManager : MonoBehaviour
                     default:
                         break;
                 }
+                wa.animate();
+
                 // ★ 각각의 warrior 행동 종료 시 효과 발동
                 yield return new WaitForSeconds(intervalTime);
 
