@@ -10,6 +10,7 @@ public class combatManager : MonoBehaviour
     public static combatManager CM;
     public graphComponent GC;
     public fxComponent FC;
+    public timerComponent TC;
 
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
@@ -61,6 +62,7 @@ public class combatManager : MonoBehaviour
         //★ MC에서 monobehaviour를 제거하고
         GC = new graphComponent(7, 7);
         FC = new fxComponent();
+        TC = gameObject.AddComponent<timerComponent>();
 
         //comparers
         comparerHpInstance = new comparerHp();
@@ -86,9 +88,9 @@ public class combatManager : MonoBehaviour
 
         //★ test
         GameObject w1 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/tester"));
-        w1.GetComponent<warriorAbst>().init(true, 6, 6, 2);
+        w1.GetComponent<warriorAbst>().init(true, 6, 6, 5);
         GameObject w2 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/tester"));
-        w2.GetComponent<warriorAbst>().init(false, 0, 0, 2);
+        w2.GetComponent<warriorAbst>().init(false, 0, 0, 5);
 
         Coroutine c = StartCoroutine(combatLoop());
     }
@@ -143,8 +145,10 @@ public class combatManager : MonoBehaviour
                         processMove(wa, wa.navigator.getNextEDirection());
                         break;
                     case enumStateWarrior.idleAttack:
+                        wa.clearAttackAnimation();
                         foreach (toolWeapon tw in wa.copyWeapon) {
                             if (tw.timerCur <= 0) {
+                                wa.addAttackAnimation(tw.animationType.ToString());
                                 processAttack(wa, wa.whatToAttack, tw.getDamageInfo());
                             }
                         }
@@ -157,8 +161,19 @@ public class combatManager : MonoBehaviour
                 // ★ 각각의 warrior 행동 종료 시 효과 발동
                 yield return new WaitForSeconds(intervalTime);
 
+                //dead warriors
+                foreach (List<warriorAbst> lis in warriorsDead_) {
+                    foreach (warriorAbst dwa in lis) {
+                        if (dwa.stateCur == enumStateWarrior.deadRecently) {
+                            dwa.animate();
+                            dwa.stateCur = enumStateWarrior.dead;
+                        }
+                    }
+                }
+
                 //check if this combat is over after each action
                 if (overCheck()) {
+                    //★ 1초 정지 (사망 애니메이션을 보여서 가독성 강화)
                     //★게임 종료 처리
                     //return (warriorsHpSorted_[1].Count <= 0);
                 }
@@ -213,7 +228,6 @@ public class combatManager : MonoBehaviour
         //sendThing method will check if it's valid movement
         source.curPosition.sendThing(parEDir);
         Vector3 tempDestination = source.curPosition.getVector3();
-        //★ 이동 애니메이션 시작
         source.transform.rotation = Quaternion.LookRotation(tempDestination - source.transform.position);
         source.startLinearMove(tempDestination);
     }
@@ -249,13 +263,25 @@ public class combatManager : MonoBehaviour
     #endregion
 
     #region utility
-    public void addWarrior(warriorAbst warrior, int warriorTeam, bool isSortAfterAdd = false) {
-        warriorsHpSorted_[warriorTeam].Add(warrior);
-        warriorsDamageDealtSorted_[warriorTeam].Add(warrior);
+    public void addWarrior(warriorAbst parWarrior, bool isSortAfterAdd = false) {
+        int tempSide = parWarrior.isPlrSide ? 0 : 1;
+        warriorsHpSorted_[tempSide].Add(parWarrior);
+        warriorsDamageDealtSorted_[tempSide].Add(parWarrior);
 
         if (isSortAfterAdd) {
             updateWarriors();
         }
+    }
+
+    public void removeWarrior(warriorAbst parWarrior) {
+        int tempSide = parWarrior.isPlrSide ? 0 : 1;
+        warriorsHpSorted_[tempSide].Remove(parWarrior);
+        warriorsDamageDealtSorted_[tempSide].Remove(parWarrior);
+    }
+
+    public void addDeadWarrior(warriorAbst parWarrior) {
+        int tempSide = parWarrior.isPlrSide ? 0 : 1;
+        warriorsDead_[tempSide].Add(parWarrior);
     }
 
     //sort warriors Lists, careful not to call it frequently due to overhead of sorting 4 times (★might call it every certain period)

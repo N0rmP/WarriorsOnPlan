@@ -10,6 +10,8 @@ using UnityEditor.Animations;
 
 //move state is same as idle state
 public enum enumStateWarrior {
+    dead = 0,
+    deadRecently = 1,
     controlled = 10,
     focussing = 20,
     skill = 30,
@@ -18,7 +20,7 @@ public enum enumStateWarrior {
     none = 9999
     }
 
-public abstract class warriorAbst : Thing
+public abstract class warriorAbst : Thing, IMovableSupplement
 {
     #region variables
     protected bool isPlrSide_;
@@ -32,7 +34,7 @@ public abstract class warriorAbst : Thing
     //private List<> listEffect;
     private List<caseAll> listCircuit;
 
-    private List<string> listAttackTriggerName;
+    private SortedSet<string> setAttackTriggerName;
         
     private Thing whatToAttack_;
     private Thing whatToUseSkill_;
@@ -65,6 +67,7 @@ public abstract class warriorAbst : Thing
     #endregion properties
     #endregion variables
 
+    #region override
     public virtual void init(bool parisPlrSide, int parCoor0, int parCoor1, int parMaxHp = 1) {
         base.init(parMaxHp);
         isPlrSide_ = parisPlrSide;
@@ -79,23 +82,35 @@ public abstract class warriorAbst : Thing
         //listEffect = new List<caseAll>();
         listCircuit = new List<caseAll>();
 
-        listAttackTriggerName = new List<string>();
-    }
-
-    #region mainProcesses
-    public void updateTargets() {
-        whatToAttack_ = selecterForAttack.select(isPlrSide_);
-        whatToUseSkill_ = selecterForSkill.select(isPlrSide_);
+        setAttackTriggerName = new SortedSet<string>();
     }
 
     public override void destroied(warriorAbst source) {
         //onDestroy of source
         source.destroy(this);
+
         //onDestroied
         foreach (caseAll ca in copyCaseAllAll) {
             ca.onDestroied(this, source);
         }
-        //★ 제거 처리
+
+        stateCur = enumStateWarrior.deadRecently;
+        combatManager.CM.addDeadWarrior(this);
+        combatManager.CM.removeWarrior(this);
+    }
+
+    public void whenStartMove() { }
+
+    public void whenEndMove() {
+        thisAnimController.SetBool("isRun", false);
+    }
+    #endregion
+
+
+    #region mainProcesses
+    public void updateTargets() {
+        whatToAttack_ = selecterForAttack.select(isPlrSide_);
+        whatToUseSkill_ = selecterForSkill.select(isPlrSide_);
     }
 
     public void destroy(warriorAbst target) {
@@ -105,6 +120,7 @@ public abstract class warriorAbst : Thing
     }
 
     public void updateState() {
+        if (stateCur <= enumStateWarrior.deadRecently) { return; }
         /*
         although technically updateState could be processed with onBeforeAction, it's separated due to algorithm below
         
@@ -174,8 +190,8 @@ public abstract class warriorAbst : Thing
             case enumCaseType.tool:
                 if (parCase is toolWeapon tempToolWeapon) {
                     listWeapon.Add(tempToolWeapon);
-                    listAttackTriggerName.Add(tempToolWeapon.animationType.ToString());
-                    thisAnimController.SetFloat("multiplierAttack", listAttackTriggerName.Count);
+                    setAttackTriggerName.Add(tempToolWeapon.animationType.ToString());
+                    thisAnimController.SetFloat("multiplierAttack", setAttackTriggerName.Count);
                 }
                 listToolAll.Add(parCase);
                 break;
@@ -201,8 +217,8 @@ public abstract class warriorAbst : Thing
             case enumCaseType.tool:
                 if (parCase is toolWeapon tempToolWeapon) {
                     listWeapon.Remove(tempToolWeapon);
-                    listAttackTriggerName.Remove(tempToolWeapon.animationType.ToString());
-                    thisAnimController.SetFloat("multiplierAttack", Mathf.Max(listAttackTriggerName.Count, 1f));
+                    setAttackTriggerName.Remove(tempToolWeapon.animationType.ToString());
+                    thisAnimController.SetFloat("multiplierAttack", Mathf.Max(setAttackTriggerName.Count, 1f));
                 }
                 listToolAll.Remove(parCase);
                 break;
@@ -217,16 +233,28 @@ public abstract class warriorAbst : Thing
         }
     }
 
+    public void clearAttackAnimation() {
+        setAttackTriggerName.Clear();
+    }
+
+    public void addAttackAnimation(string parString) {
+        setAttackTriggerName.Add(parString);
+    }
+
     public void animate() {
         switch (stateCur) {
             case enumStateWarrior.move:
-                thisAnimController.SetTrigger("trigRun");
+                thisAnimController.SetBool("isRun", true);
                 break;
             case enumStateWarrior.idleAttack:
                 thisAnimController.SetTrigger("trigAttackStart");
-                foreach (string trigName in listAttackTriggerName) {
+                foreach (string trigName in setAttackTriggerName) {
                     thisAnimController.SetTrigger(trigName);
                 }
+                break;
+            case enumStateWarrior.deadRecently:
+                thisAnimController.SetTrigger("trigDead");
+                //★ 페이드 아웃
                 break;
             default:
                 break;
