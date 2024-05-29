@@ -12,7 +12,8 @@ public enum enumAnimationType {
     trigAttackStab,
     trigAttackBow,
     trigAttackCrossbow,
-    trigAttackCast
+    trigAttackCast,
+    trigAttackPunch
 }
 
 public abstract class toolWeapon : caseAll {
