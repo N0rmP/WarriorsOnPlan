@@ -16,8 +16,7 @@ public abstract class caseAll {
 
     public warriorAbst owner { get; set; }
 
-    public caseAll(warriorAbst parOwner, enumCaseType parCaseType = enumCaseType.effect) {
-        owner = parOwner;
+    public caseAll(enumCaseType parCaseType = enumCaseType.effect) {
         caseType = parCaseType;
     }
 

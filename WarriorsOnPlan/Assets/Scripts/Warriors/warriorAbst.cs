@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -181,7 +182,6 @@ public abstract class warriorAbst : Thing, IMovableSupplement
         }
 
         listCaseAllAll.Insert(insertPosition, parCase);
-        //★ 생각해보면 어차피 on~ 메서드 실행하는 순서만 중요한데 inserPosition 이거 listCaseAllAll한테만 중요한 거 아니냐?, 나중에 아랫줄 지우고 Add로 모두 바꿔라;;
         insertPosition = 0;
         switch (parCase.caseType) { 
             case enumCaseType.skill:
@@ -197,6 +197,13 @@ public abstract class warriorAbst : Thing, IMovableSupplement
                 break;
             case enumCaseType.circuit:
                 listCircuit.Add(parCase);
+                switch (parCase) {
+                    case navigatorAbst tempN:
+                        this.navigator = tempN;
+                        break;
+                    default:
+                        break;
+                }
                 break;
             /*case enumCaseType.effect:
                 listEffect.Insert(insertPosition, parCase);

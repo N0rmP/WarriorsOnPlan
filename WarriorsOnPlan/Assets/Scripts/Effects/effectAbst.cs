@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class effectAbst : caseAll
 {
-    public effectAbst(warriorAbst parOwner) : base(parOwner, enumCaseType.effect) { }
+    public effectAbst() : base(enumCaseType.effect) { }
 }

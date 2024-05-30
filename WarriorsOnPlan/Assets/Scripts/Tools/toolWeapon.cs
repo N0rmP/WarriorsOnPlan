@@ -19,47 +19,41 @@ public enum enumAnimationType {
 public abstract class toolWeapon : caseAll {
     //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
     //most toolWeapon's min range is 0.
-    protected readonly int rangeMin_;
-    protected readonly int rangeMax_;
     protected readonly int damageOriginal;
-    protected readonly enumDamageType damageType_;
-    protected readonly enumAnimationType animationType_;
-    //timerMax_ / timerCur_ represent cooltime of this weapon
-    protected readonly int timerMax_;
-    protected int timerCur_;
 
-    public int rangeMin { get { return rangeMin_; } }
-    public int rangeMax { get { return rangeMax_; } }
+    public int rangeMin { get; private set; }
+    public int rangeMax { get; private set; }
     public int damageCur { get; set; }
     public enumDamageType damageType { get; private set; }
     public enumAnimationType animationType { get; private set; }
-    public int timerMax { get { return timerMax_; } }
-    public int timerCur { get { return timerCur_; } }
+    public int timerMax { get; private set; }
+    public int timerCur { get; private set; }
 
-    public toolWeapon(warriorAbst parOwner, int parRangeMin, int parRangeMax, int parDamageOriginal, int parTimerMax, enumDamageType parDamageType, enumAnimationType parAnimationType) : base(parOwner, enumCaseType.tool) {
-        //★ 추후 여유가 있으면 외부 파일을 통해 정보를 생성하도록 변경
-        rangeMin_ = parRangeMin;
-        rangeMax_ = parRangeMax;
-        damageOriginal = parDamageOriginal;
-        damageCur = damageOriginal;
-        timerCur_ = 0;
-        timerMax_ = parTimerMax;
-        damageType_ = parDamageType;
-        animationType = parAnimationType;
+    public toolWeapon(string parWeaponName, int parDamageOriginal) : base(enumCaseType.tool) {
+        dataWeaponEntity tempDWE = gameManager.GM.EC.getWeaponEntiy(parWeaponName);
+
+        rangeMin = tempDWE.RangeMin;
+        rangeMax = tempDWE.RangeMax;
+        timerMax = tempDWE.TimerMax;
+        damageType = tempDWE.DamageType;
+        animationType = tempDWE.AnimationType;
+
+        damageCur = damageOriginal = parDamageOriginal;
+        timerCur = 0;
     }
 
     public damageInfo getDamageInfo() {
-        return new damageInfo(this, damageCur, damageType_, this.showEffect);
+        return new damageInfo(this, damageCur, damageType, this.showEffect);
     }
 
     public void updateTimer() {
-        if (timerCur_ > 0) {
-            timerCur_--;
+        if (timerCur > 0) {
+            timerCur--;
         }
     }
 
     public override void onAfterThisAttack(Thing source, Thing target, damageInfo DInfo) {
-        timerCur_ = timerMax_;
+        timerCur = timerMax;
     }
 
     public abstract void showEffect(Thing parTarget);

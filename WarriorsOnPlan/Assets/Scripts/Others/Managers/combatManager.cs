@@ -8,9 +8,8 @@ using UnityEngine.Rendering;
 public class combatManager : MonoBehaviour
 {
     public static combatManager CM;
-    public graphComponent GC;
-    public fxComponent FC;
-    public timerComponent TC;
+    public graphComponent GC { get; private set; }
+    public fxComponent FC { get; private set; }
 
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
@@ -58,11 +57,8 @@ public class combatManager : MonoBehaviour
             Destroy(this);
         }
 
-        //components
-        //★ MC에서 monobehaviour를 제거하고
         GC = new graphComponent(7, 7);
         FC = new fxComponent();
-        TC = gameObject.AddComponent<timerComponent>();
 
         //comparers
         comparerHpInstance = new comparerHp();
@@ -85,7 +81,9 @@ public class combatManager : MonoBehaviour
             new List<warriorAbst>(),
             new List<warriorAbst>()
         };
+    }
 
+    public void Start() {
         //★ test
         GameObject w1 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/tester"));
         w1.GetComponent<warriorAbst>().init(true, 6, 6, 5);

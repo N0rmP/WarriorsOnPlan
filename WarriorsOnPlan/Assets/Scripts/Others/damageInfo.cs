@@ -71,6 +71,6 @@ public class damageInfo
     public void ATTACK(Thing target) {
         calculateFinalDamage();
         target.setCurHp(-damage_, sourceCaseAll.owner, true);
-        combatManager.CM.TC.addDelegate(() => delEffect(target), 0.5f);
+        gameManager.GM.TC.addDelegate(() => delEffect(target), 0.5f);
     }
 }
