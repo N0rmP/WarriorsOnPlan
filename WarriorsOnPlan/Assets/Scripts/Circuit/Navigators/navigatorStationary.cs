@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class navigatorStationary : navigatorAbst
 {
+    public navigatorStationary(warriorAbst parOwner) : base(parOwner) { }
+
     public override EDirection getNextEDirection() {
         return EDirection.none;
     }

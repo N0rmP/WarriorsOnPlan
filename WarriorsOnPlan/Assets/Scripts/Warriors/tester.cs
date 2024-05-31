@@ -10,6 +10,6 @@ public class tester : warriorAbst
         this.addCase(new weaponTester());
         this.selecterForAttack = new selecterClosest(this);
         this.selecterForSkill = new selecterClosest(this);
-        addCase(new navigatorAttackOneWeapon());
+        this.navigator = new navigatorAttackOneWeapon(this);
     }
 }

@@ -12,7 +12,7 @@ public class navigatorAttackOneWeapon : navigatorAbst
     // indice represents each range-scope per two-indice
     private List<(int min, int max)> rangeRange;
 
-    public navigatorAttackOneWeapon() : base() {
+    public navigatorAttackOneWeapon(warriorAbst parOwner) : base(parOwner) {
         rangeRange = new List<(int min, int max)>();
     }
 

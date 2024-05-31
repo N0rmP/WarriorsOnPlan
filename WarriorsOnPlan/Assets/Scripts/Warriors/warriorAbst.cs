@@ -51,10 +51,7 @@ public abstract class warriorAbst : Thing, IMovableSupplement
     public List<caseAll> copyToolAll { get { return listToolAll.ToList<caseAll>(); } }
     public List<toolWeapon> copyWeapon { get { return listWeapon.ToList<toolWeapon>(); } }
     public List<caseAll> copyCircuit { get { return listCircuit.ToList<caseAll>(); } }
-    public navigatorAbst navigator { get; set; }
-    public wigwaggerAbst wigwagger { get; set; }
-    public selecterAbst selecterForAttack { get; set; }
-    public selecterAbst selecterForSkill { get; set; }
+
     public Thing whatToAttack {
         get {
             return whatToAttack_;
@@ -197,13 +194,6 @@ public abstract class warriorAbst : Thing, IMovableSupplement
                 break;
             case enumCaseType.circuit:
                 listCircuit.Add(parCase);
-                switch (parCase) {
-                    case navigatorAbst tempN:
-                        this.navigator = tempN;
-                        break;
-                    default:
-                        break;
-                }
                 break;
             /*case enumCaseType.effect:
                 listEffect.Insert(insertPosition, parCase);

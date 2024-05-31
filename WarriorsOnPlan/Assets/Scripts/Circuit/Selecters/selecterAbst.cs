@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class selecterAbst
 {
-    public warriorAbst owner { get;}
+    public warriorAbst owner { get; private set; }
 
     public selecterAbst(warriorAbst parOwner) {
         owner = parOwner;

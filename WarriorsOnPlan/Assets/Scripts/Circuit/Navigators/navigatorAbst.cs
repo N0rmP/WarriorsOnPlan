@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class navigatorAbst : caseAll, ICaseUpdateState
+public abstract class navigatorAbst : ICaseUpdateState
 {
+    public warriorAbst owner { get; private set; }
+
     // route will be recalculated just before every movement, but can remain only when whole nodes in route have nothing on them
     protected Stack<EDirection> route;
 
-    public navigatorAbst() : base(enumCaseType.circuit) {
+    public navigatorAbst(warriorAbst parOwner) {
+        owner = parOwner;
         route = new Stack<EDirection>();
     }
 
