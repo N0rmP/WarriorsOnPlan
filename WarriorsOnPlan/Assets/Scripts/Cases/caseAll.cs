@@ -20,16 +20,8 @@ public abstract class caseAll {
         caseType = parCaseType;
     }
 
-    public void selfRemove() {
-        owner.removeCase(this);
-    }
-
     //be aware of that source / target can be different from owner
     //on~ method with none-void-return is separated to interfaces
-
-    //onEngage includes onCombatStart / onEngageDuringCombat
-    public virtual void onEngage(Thing source) { }
-    public virtual void onAdded(Thing source) { }
 
     public virtual void onTurnStart(Thing source) { }
     public virtual void onTurnEnd(Thing source) { }
