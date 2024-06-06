@@ -16,7 +16,7 @@ public enum enumAnimationType {
     trigAttackPunch
 }
 
-public abstract class toolWeapon : caseAll {
+public abstract class toolWeapon : caseBase {
     //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
     //most toolWeapon's min range is 0.
     protected readonly int damageOriginal;
@@ -52,9 +52,9 @@ public abstract class toolWeapon : caseAll {
         }
     }
 
-    public override void onAfterThisAttack(Thing source, Thing target, damageInfo DInfo) {
+    public void resetTimer() {
         timerCur = timerMax;
     }
 
-    public abstract void showEffect(Thing parTarget);
+    public abstract void showEffect(Thing source, Thing parTarget);
 }

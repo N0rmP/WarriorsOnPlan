@@ -105,7 +105,7 @@ public class combatManager : MonoBehaviour
         //before combat starts, activate all onEngage from warriors
         foreach (List<warriorAbst> lis in warriorsActionOrder_) {
             foreach (warriorAbst wa in lis) {
-                foreach (caseAll ca in wa.copyCaseAllAll) {
+                foreach (ICaseEngage ca in wa.getCaseList<ICaseEngage>()) {
                     ca.onEngage(wa);
                 }
             }
@@ -125,8 +125,8 @@ public class combatManager : MonoBehaviour
                 warriorsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
                 wa.updateTargets();
                 wa.updateState();
-                foreach (caseAll ca in wa.copyCaseAllAll) {
-                    ca.onBeforeAction(wa);
+                foreach (ICaseBeforeAction cb in wa.getCaseList<ICaseBeforeAction>()) {
+                    cb.onBeforeAction(wa);
                 }
 
                 // decide what action this warrior does this time, priority is (Being Controlled) > UseSkill > Attack > Move
@@ -144,7 +144,7 @@ public class combatManager : MonoBehaviour
                         break;
                     case enumStateWarrior.idleAttack:
                         wa.clearAttackAnimation();
-                        foreach (toolWeapon tw in wa.copyWeapon) {
+                        foreach (toolWeapon tw in wa.copyWeapons) {
                             if (tw.timerCur <= 0) {
                                 wa.addAttackAnimation(tw.animationType.ToString());
                                 processAttack(wa, wa.whatToAttack, tw.getDamageInfo());
@@ -179,12 +179,12 @@ public class combatManager : MonoBehaviour
             //turn end processes
             foreach (warriorAbst wa in tempListActors) {
                 //update weapon timer
-                foreach (toolWeapon tw in wa.copyWeapon) {
+                foreach (toolWeapon tw in wa.copyWeapons) {
                     tw.updateTimer();
                 }
                 //onTurnEnd
-                foreach (caseAll ca in wa.copyCaseAllAll) {
-                    ca.onTurnEnd(wa);
+                foreach (ICaseTurnEnd cb in wa.getCaseList<ICaseTurnEnd>()) {
+                    cb.onTurnEnd(wa);
                 }
             }
 
@@ -193,32 +193,30 @@ public class combatManager : MonoBehaviour
     }
 
     #region processors
-    public void processAttack(warriorAbst source, Thing target, damageInfo DInfo) {
+    public void processAttack(Thing source, Thing target, damageInfo DInfo) {
         //before attack
-        foreach (caseAll ca in source.copyCaseAllAll) {
-            ca.onBeforeAttack(source, target, DInfo);
+        foreach (ICaseBeforeAttack cb in source.getCaseList<ICaseBeforeAttack>()) {
+            cb.onBeforeAttack(source, target, DInfo);
         }
         //before damaged
-        if (target is warriorAbst) {
-            foreach (caseAll ac in ((warriorAbst)target).copyCaseAllAll) {
-                ac.onBeforeDamaged(source, target, DInfo);
-            }
+        foreach (ICaseBeforeDamaged cb in target.getCaseList<ICaseBeforeDamaged>()) {
+            cb.onBeforeDamaged(source, target, DInfo);
         }
         //attck now
         DInfo.ATTACK(target);
-        source.addDamageTotalDealt(DInfo.damage);
+        if (source is warriorAbst tempSource) {
+            tempSource.addDamageTotalDealt(DInfo.damage);
+        }
         //after damaged
-        if (target is warriorAbst) {
-            foreach (caseAll ac in ((warriorAbst)target).copyCaseAllAll) {
-                ac.onAfterDamaged(source, target, DInfo);
-            }
+        foreach (ICaseAfterDamaged cb in target.getCaseList<ICaseAfterDamaged>()) {
+            cb.onAfterDamaged(source, target, DInfo);
         }
         //after attack
-        foreach (caseAll ca in source.copyCaseAllAll) {
-            ca.onAfterAttack(source, target, DInfo);
+        foreach (ICaseAfterAttack cb in source.getCaseList<ICaseAfterAttack>()) {
+            cb.onAfterAttack(source, target, DInfo);
         }
         //after the caseAll attack
-        DInfo.sourceCaseAll.onAfterThisAttack(source, target, DInfo);
+        (DInfo.sourceCaseAll as toolWeapon)?.resetTimer();
     }
 
     //processMove with EDirection parameter makes a warrior walk a node to the parameter-direction

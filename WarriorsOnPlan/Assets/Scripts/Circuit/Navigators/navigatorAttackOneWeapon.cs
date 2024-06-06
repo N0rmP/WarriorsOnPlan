@@ -23,7 +23,7 @@ public class navigatorAttackOneWeapon : navigatorAbst
 
         rangeRange.Clear();
 
-        foreach (toolWeapon tw in owner.copyWeapon) {
+        foreach (toolWeapon tw in owner.copyWeapons) {
             if (rangeRange.Count == 0) {
                 rangeRange.Add((tw.rangeMin, tw.rangeMax));
                 continue;

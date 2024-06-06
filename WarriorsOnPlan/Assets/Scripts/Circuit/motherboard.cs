@@ -28,7 +28,7 @@ public class motherboard
 
     public navigatorAbst navigator { get; private set; }    //ICaseUpdateState 상속
     //publlic skillAlarmerAbst skillAlarmer { get; set; }   //ICaseUpdateState 상속
-    public wigwaggerAbst wigwagger { get; private set; }    //caseAll 상속
+    public wigwaggerAbst wigwaggerForMove { get; private set; }    //caseAll 상속
     public selecterAbst selecterForAttack { get; private set; } //아무 것도 상속받지 않음
     public selecterAbst selecterForSkill { get; private set; }  //아무 것도 상속받지 않음
 }

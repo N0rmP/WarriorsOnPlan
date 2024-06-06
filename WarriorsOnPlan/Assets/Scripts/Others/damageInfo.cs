@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class damageInfo
 {
-    public readonly caseAll sourceCaseAll;
+    public readonly Thing sourceAttacker;
+    public readonly caseBase sourceCaseAll;
 
     private int damage_;
     //there are three kinds of damage changers, add / multiply / fix
@@ -15,12 +16,12 @@ public class damageInfo
     private float totalMultiply;
     private int fixedDamage;
 
-    private Action<Thing> delEffect;
+    private Action<Thing, Thing> delEffect;
 
     public int damage { get { return damage_; } }
     public enumDamageType damageType { get; set; }
 
-    public damageInfo(caseAll parSourceCaseAll, int parDamage, enumDamageType parDType, Action<Thing> parDelegate) {
+    public damageInfo(caseBase parSourceCaseAll, int parDamage, enumDamageType parDType, Action<Thing, Thing> parDelegate) {
         sourceCaseAll = parSourceCaseAll;
         damage_ = parDamage;
         damageType = parDType;
@@ -70,7 +71,7 @@ public class damageInfo
 
     public void ATTACK(Thing target) {
         calculateFinalDamage();
-        target.setCurHp(-damage_, sourceCaseAll.owner, true);
-        gameManager.GM.TC.addDelegate(() => delEffect(target), 0.5f);
+        target.setCurHp(-damage_, sourceAttacker, true);
+        gameManager.GM.TC.addDelegate(() => delEffect(sourceAttacker, target), 0.5f);
     }
 }
