@@ -21,6 +21,7 @@ public abstract class toolWeapon : caseBase {
     //most toolWeapon's min range is 0.
     protected readonly int damageOriginal;
 
+    public Thing owner { get; set; }
     public int rangeMin { get; private set; }
     public int rangeMax { get; private set; }
     public int damageCur { get; set; }
@@ -43,7 +44,7 @@ public abstract class toolWeapon : caseBase {
     }
 
     public damageInfo getDamageInfo() {
-        return new damageInfo(this, damageCur, damageType, this.showEffect);
+        return new damageInfo(owner, this, damageCur, damageType, this.showEffect);
     }
 
     public void updateTimer() {

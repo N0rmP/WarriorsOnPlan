@@ -8,8 +8,8 @@ public class tester : warriorAbst
         base.init(parisPlrSide, parCoor0, parCoor1, parMaxHp);
         //¡Úcode below is just for test, initiating warrior may follow json/xml file later
         this.addCase(new weaponTester());
-        this.selecterForAttack = new selecterClosest(this);
-        this.selecterForSkill = new selecterClosest(this);
+        this.selecterForAttack = new selecterClosest();
+        this.selecterForSkill = new selecterClosest();
         this.navigator = new navigatorAttackOneWeapon(this);
     }
 }

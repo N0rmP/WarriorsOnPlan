@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class combatManager : MonoBehaviour
-{
+public class combatManager : MonoBehaviour {
     public static combatManager CM;
     public graphComponent GC { get; private set; }
     public fxComponent FC { get; private set; }
@@ -21,28 +21,10 @@ public class combatManager : MonoBehaviour
     private List<warriorAbst>[] warriorsActionOrder_;
     private List<warriorAbst>[] warriorsDead_;
 
+    //★ 중립 유닛들까지 포함한 Combat Loop를 새로 고안할 것
+    private List<Thing> neutralsActionOrder_;
+
     #region properties
-    //warriors in combatManager can't be copies because they consist of list & array
-    public List<warriorAbst>[] warriorsHpSorted {
-        get {
-            return warriorsHpSorted_;
-        }
-    }
-    public List<warriorAbst>[] warriorsDamageDealtSorted {
-        get {
-            return warriorsDamageDealtSorted_;
-        }
-    }
-    public List<warriorAbst>[] warriorsActionOrder {
-        get {
-            return warriorsActionOrder_;
-        }
-    }
-    public List<warriorAbst>[] warriorsDead {
-        get {
-            return warriorsDead_;
-        }
-    }
     #endregion properties
 
     private comparerHp comparerHpInstance;
@@ -164,7 +146,7 @@ public class combatManager : MonoBehaviour
                     foreach (warriorAbst dwa in lis) {
                         if (dwa.stateCur == enumStateWarrior.deadRecently) {
                             dwa.animate();
-                            dwa.stateCur = enumStateWarrior.dead;
+                            dwa.destroiedTotally();
                         }
                     }
                 }

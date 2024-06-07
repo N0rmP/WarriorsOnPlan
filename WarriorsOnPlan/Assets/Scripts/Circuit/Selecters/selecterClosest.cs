@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.SceneTemplate;
 using UnityEngine;
 
 public class selecterClosest : selecterAbst {
 
-    public selecterClosest(warriorAbst parOwner) : base(parOwner) { }
+    public override Thing select(Thing source) {
+        //★ 제 3자 Thing을 타겟으로도 할 수 있게 변경할 것
+        List<Thing> tempPotentialTargetList =
+            (source is warriorAbst tempSource) ?
+            (combatManager.CM.warriorsHpSorted[(tempSource.isPlrSide ? 1 : 0)].ConvertAll(
+                new System.Converter<warriorAbst, Thing>((x) => (Thing)x)
+                )) :
+            null
+        ;
 
-    public override Thing select(bool parIsPlrSide) {
-        //★ 이 새끼 지금 owner 자기자신을 target으로 반환하는 반역 행위 중
-        List<warriorAbst> tempPotentialTargetList = combatManager.CM.warriorsHpSorted[(parIsPlrSide ? 1 : 0)];
+
         int minDistance = int.MaxValue;
         int tempDistance;
-        node ownerPosition = owner.curPosition;
+        node ownerPosition = source.curPosition;
         node tempNode;
         warriorAbst targetCur = null;
 

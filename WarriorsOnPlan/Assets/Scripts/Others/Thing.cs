@@ -13,16 +13,9 @@ public enum enumStateWarrior {
     none = 9999
 }
 
-public class Thing : movableObject {
-    #region variable
-    protected int maxHp_;
-    protected int curHp_;
-    protected node curPosition_;
-    public int maxHp { get { return maxHp_; } }
-    public int curHp { get { return curHp_; } }
-    public node curPosition { get; set; }
+public class Thing : movableObject, IMovableSupplement {
+    #region variable    
 
-    public enumStateWarrior stateCur { get; set; }
     private ICaseUpdateState semaphoreState;
 
     protected caseBase caseSkill;
@@ -33,20 +26,48 @@ public class Thing : movableObject {
     private Animator thisAnimController;
 
     #region property
+    public int maxHp { get; protected set; }
+    public int curHp { get; protected set; }
+    public node curPosition { get; set; }
+    public enumStateWarrior stateCur { get; private set; }
     public toolWeapon[] copyWeapons {
         get { return listToolWeapon.ToArray(); }
     }
+    public Thing whatToAttack { get; private set; }
+    public Thing whatToUseSkill { get; private set; }
     public navigatorAbst navigator { get; protected set; }
     public wigwaggerAbst wigwaggerForMove { get; protected set; }
-    //public wigwaggerForSkillAbst wigwaggerForSkill {get;private set;}
+    //public wigwaggerForSkillAbst wigwaggerForSkill { get;private set; }
     public selecterAbst selecterForAttack { get; protected set; }
     public selecterAbst selecterForSkill { get; protected set; }
     #endregion property
     #endregion variable
 
     public void init(int parMaxHp) {
-        maxHp_ = parMaxHp;
-        curHp_ = maxHp_;
+        semaphoreState = null;
+        listCaseBaseAll = new List<caseBase>();
+        listToolWeapon = new List<toolWeapon>();
+        setAttackTriggerName = new SortedSet<string>();
+        thisAnimController = gameObject.GetComponent<Animator>();
+        stateCur = enumStateWarrior.idleAttack;
+        maxHp = parMaxHp;
+        curHp = maxHp;
+
+        setAttackTriggerName = new SortedSet<string>();
+    }
+
+    #region overrides
+    public void whenStartMove() { }
+
+    public void whenEndMove() {
+        thisAnimController.SetBool("isRun", false);
+    }
+    #endregion overrides
+
+    #region processes
+    public void updateTargets() {
+        whatToAttack = selecterForAttack.select(this);
+        whatToUseSkill = selecterForSkill.select(this);
     }
 
     public void updateState() {
@@ -88,36 +109,61 @@ public class Thing : movableObject {
         int tempResultChange = 0;
         //★ 체력 증감 이전 효과 발동
         if (isPlus) {
-            if (curHp_ + parValue < 0) {
-                tempResultChange = -curHp_;
-                curHp_ = 0;
-            } else if (curHp_ + parValue > maxHp_) {
-                tempResultChange = maxHp_ - curHp_;
-                curHp_ = maxHp_;
+            if (curHp + parValue < 0) {
+                tempResultChange = -curHp;
+                curHp = 0;
+            } else if (curHp + parValue > maxHp) {
+                tempResultChange = maxHp - curHp;
+                curHp = maxHp;
             } else {
                 tempResultChange = parValue;
-                curHp_ += parValue;
+                curHp += parValue;
             }
         } else {
-            tempResultChange = (parValue > curHp_) ? (parValue - curHp_) : (curHp_ - parValue);
-            curHp_ = parValue;
+            tempResultChange = (parValue > curHp) ? (parValue - curHp) : (curHp - parValue);
+            curHp = parValue;
         }
         //★ 체력 증감 이후 효과 발동
 
         //if curHp_ is below zero, warrior dies
-        if (curHp_ <= 0) {
+        if (curHp <= 0) {
             destroied(source);
         }
 
         return tempResultChange;
     }
 
+    public void destroy(Thing target) {
+        foreach (ICaseDestroy ca in getCaseList<ICaseDestroy>()) {
+            ca.onDestroy(this, target);
+        }
+    }
+
+    public virtual void destroied(Thing source) {
+        //onDestroy of source
+        source.destroy(this);
+
+        //onDestroied
+        foreach (ICaseDestroied ca in getCaseList<ICaseDestroied>()) {
+            ca.onDestroied(this, source);
+        }
+
+        stateCur = enumStateWarrior.deadRecently;
+    }
+
+    public virtual void destroiedTotally() {
+        stateCur = enumStateWarrior.dead;
+    }
+    #endregion processes
+
+    #region utility
     public virtual void addCase(caseBase parCase) {
         listCaseBaseAll.Add(parCase);
         switch (parCase.caseType) {
             case enumCaseType.tool:
                 if (parCase is toolWeapon tempToolWeapon) {
                     listToolWeapon.Add(tempToolWeapon);
+                    tempToolWeapon.owner = this;
                     setAttackTriggerName.Add(tempToolWeapon.animationType.ToString());
                     thisAnimController.SetFloat("multiplierAttack", setAttackTriggerName.Count);
                 }
@@ -181,21 +227,32 @@ public class Thing : movableObject {
         return tempResult;
     }
 
-    public void destroy(Thing target) {
-        foreach (ICaseDestroy ca in getCaseList<ICaseDestroy>()) {
-            ca.onDestroy(this, target);
-        }
+    public void clearAttackAnimation() {
+        setAttackTriggerName.Clear();
     }
 
-    public virtual void destroied(Thing source) {
-        //onDestroy of source
-        source.destroy(this);
-
-        //onDestroied
-        foreach (ICaseDestroied ca in getCaseList<ICaseDestroied>()) {
-            ca.onDestroied(this, source);
-        }
-
-        stateCur = enumStateWarrior.deadRecently;
+    public void addAttackAnimation(string parString) {
+        setAttackTriggerName.Add(parString);
     }
+
+    public void animate() {
+        switch (stateCur) {
+            case enumStateWarrior.move:
+                thisAnimController.SetBool("isRun", true);
+                break;
+            case enumStateWarrior.idleAttack:
+                thisAnimController.SetTrigger("trigAttackStart");
+                foreach (string trigName in setAttackTriggerName) {
+                    thisAnimController.SetTrigger(trigName);
+                }
+                break;
+            case enumStateWarrior.deadRecently:
+                thisAnimController.SetTrigger("trigDead");
+                //★ 페이드 아웃
+                break;
+            default:
+                break;
+        }
+    }
+    #endregion utility
 }

@@ -21,7 +21,8 @@ public class damageInfo
     public int damage { get { return damage_; } }
     public enumDamageType damageType { get; set; }
 
-    public damageInfo(caseBase parSourceCaseAll, int parDamage, enumDamageType parDType, Action<Thing, Thing> parDelegate) {
+    public damageInfo(Thing parSourceAttacker, caseBase parSourceCaseAll, int parDamage, enumDamageType parDType, Action<Thing, Thing> parDelegate) {
+        sourceAttacker = parSourceAttacker;
         sourceCaseAll = parSourceCaseAll;
         damage_ = parDamage;
         damageType = parDType;
