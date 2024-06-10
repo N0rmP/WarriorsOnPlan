@@ -11,6 +11,8 @@ public class combatManager : MonoBehaviour {
     public graphComponent GC { get; private set; }
     public fxComponent FC { get; private set; }
 
+    private bool isCombatLooping = false;
+
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
     private float intervalTime = 1f;
@@ -18,13 +20,18 @@ public class combatManager : MonoBehaviour {
     //warriors array's indices represent different team, 0 = player's / 1 = computer's
     private List<warriorAbst>[] warriorsHpSorted_;
     private List<warriorAbst>[] warriorsDamageDealtSorted_;
-    private List<warriorAbst>[] warriorsActionOrder_;
+    private List<Thing>[] warriorsActionOrder_;
     private List<warriorAbst>[] warriorsDead_;
 
     //★ 중립 유닛들까지 포함한 Combat Loop를 새로 고안할 것
     private List<Thing> neutralsActionOrder_;
 
     #region properties
+    public Thing[] copyNeutralActionOrder {
+        get {
+            return neutralsActionOrder_.ToArray();
+        }
+    }
     #endregion properties
 
     private comparerHp comparerHpInstance;
@@ -55,14 +62,15 @@ public class combatManager : MonoBehaviour {
             new List<warriorAbst>(),
             new List<warriorAbst>()
         };
-        warriorsActionOrder_ = new List<warriorAbst>[2] {
-            new List<warriorAbst>(),
-            new List<warriorAbst>()
+        warriorsActionOrder_ = new List<Thing>[2] {
+            new List<Thing>(),
+            new List<Thing>()
         };
         warriorsDead_ = new List<warriorAbst>[2]{
             new List<warriorAbst>(),
             new List<warriorAbst>()
-        };
+        };        
+        neutralsActionOrder_ = new List<Thing>();
     }
 
     public void Start() {
@@ -81,38 +89,47 @@ public class combatManager : MonoBehaviour {
             return (warriorsHpSorted_[0].Count <= 0 || warriorsHpSorted_[1].Count <= 0);
         }
 
-        bool isPlrTurn = true;
-        List<warriorAbst> tempListActors;
+        int codeTurn = 0;
+        List<Thing> tempListActors;
 
         //before combat starts, activate all onEngage from warriors
-        foreach (List<warriorAbst> lis in warriorsActionOrder_) {
-            foreach (warriorAbst wa in lis) {
-                foreach (ICaseEngage ca in wa.getCaseList<ICaseEngage>()) {
-                    ca.onEngage(wa);
-                }
+        tempListActors = new List<Thing>();
+        tempListActors.AddRange(warriorsActionOrder_[0]);
+        tempListActors.AddRange(warriorsActionOrder_[1]);
+        tempListActors.AddRange(neutralsActionOrder_);
+        foreach (Thing th in tempListActors) {
+            foreach (ICaseEngage ca in th.getCaseList<ICaseEngage>()) {
+                ca.onEngage(th);
             }
         }
 
         while (true) {
             //★ 플레이어의 warrior는 사전에 지정한 순서대로, 상대방은 따로 지정되지 않았다면 남은 체력 내림차순으로
             //★ 상대방 warriorsActionsOrder_[1]을 warriorsHpSorted[1]에 참조시키면 위 기능을 간단히 해결할 수 있다.
-            tempListActors = warriorsActionOrder_[isPlrTurn ? 0 : 1];
+            tempListActors = codeTurn switch { 
+                0 => warriorsActionOrder_[0],
+                1 => neutralsActionOrder_,
+                2 => warriorsActionOrder_[1],
+                _ => new List<Thing>()  //prevent error
+            };
 
             //★ 턴 시작 시 효과 발동
-            foreach (warriorAbst wa in tempListActors) {
+            foreach (Thing th in tempListActors) {
                 //process before action
                 warriorsHpSorted_[0].Sort(comparerHpInstance);
                 warriorsHpSorted_[1].Sort(comparerHpInstance);
+                neutralsActionOrder_.Sort(comparerHpInstance);
                 warriorsDamageDealtSorted_[0].Sort(comparerDamageDealtInstance);
                 warriorsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
-                wa.updateTargets();
-                wa.updateState();
-                foreach (ICaseBeforeAction cb in wa.getCaseList<ICaseBeforeAction>()) {
-                    cb.onBeforeAction(wa);
+                th.updateTargets();
+                foreach (ICaseBeforeAction cb in th.getCaseList<ICaseBeforeAction>()) {
+                    cb.onBeforeAction(th);
                 }
+                th.updateState();
+                
 
                 // decide what action this warrior does this time, priority is (Being Controlled) > UseSkill > Attack > Move
-                switch (wa.stateCur) {
+                switch (th.stateCur) {
                     // ★ 각각의 warrior 행동 시작 시 효과 발동
                     case enumStateWarrior.controlled:
                         break;
@@ -122,21 +139,21 @@ public class combatManager : MonoBehaviour {
                         //★ processUseSkill 호출
                         break;
                     case enumStateWarrior.move:
-                        processMove(wa, wa.navigator.getNextEDirection());
+                        processMove(th, th.navigator.getNextEDirection());
                         break;
                     case enumStateWarrior.idleAttack:
-                        wa.clearAttackAnimation();
-                        foreach (toolWeapon tw in wa.copyWeapons) {
+                        th.clearAttackAnimation();
+                        foreach (toolWeapon tw in th.copyWeapons) {
                             if (tw.timerCur <= 0) {
-                                wa.addAttackAnimation(tw.animationType.ToString());
-                                processAttack(wa, wa.whatToAttack, tw.getDamageInfo());
+                                th.addAttackAnimation(tw.animationType.ToString());
+                                processAttack(th, th.whatToAttack, tw.getDamageInfo());
                             }
                         }
                         break;
                     default:
                         break;
                 }
-                wa.animate();
+                th.animate();
 
                 // ★ 각각의 warrior 행동 종료 시 효과 발동
                 yield return new WaitForSeconds(intervalTime);
@@ -170,7 +187,7 @@ public class combatManager : MonoBehaviour {
                 }
             }
 
-            isPlrTurn = !isPlrTurn;
+            codeTurn = (++codeTurn >= 3 ? 0 : codeTurn);
         }
     }
 
@@ -202,7 +219,7 @@ public class combatManager : MonoBehaviour {
     }
 
     //processMove with EDirection parameter makes a warrior walk a node to the parameter-direction
-    public void processMove(warriorAbst source, EDirection parEDir) {
+    public void processMove(Thing source, EDirection parEDir) {
         //sendThing method will check if it's valid movement
         source.curPosition.sendThing(parEDir);
         Vector3 tempDestination = source.curPosition.getVector3();
@@ -211,7 +228,7 @@ public class combatManager : MonoBehaviour {
     }
 
     //processMove with two int parameters makes a warrior teleport to the destination
-    public void processMove(warriorAbst source, int parCoor0, int parCoor1) {
+    public void processMove(Thing source, int parCoor0, int parCoor1) {
 
     }
 
@@ -241,6 +258,10 @@ public class combatManager : MonoBehaviour {
     #endregion
 
     #region utility
+    public Thing[] copyWarriorsActionOrder(int parIndex) {
+        return warriorsActionOrder_[parIndex].ToArray();
+    }
+
     public void addWarrior(warriorAbst parWarrior, bool isSortAfterAdd = false) {
         int tempSide = parWarrior.isPlrSide ? 0 : 1;
         warriorsHpSorted_[tempSide].Add(parWarrior);
@@ -272,8 +293,8 @@ public class combatManager : MonoBehaviour {
     #endregion utility
 
     #region internalClasses
-    private class comparerHp : IComparer<warriorAbst> {
-        public int Compare(warriorAbst w1, warriorAbst w2) {
+    private class comparerHp : IComparer<Thing> {
+        public int Compare(Thing w1, Thing w2) {
             return (w1.curHp - w2.curHp);
         }
     }

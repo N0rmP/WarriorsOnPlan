@@ -16,7 +16,7 @@ public abstract class navigatorAbst : ICaseUpdateState
     }
 
     public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source) {
-        //set state to idleAttack if target is in range, otherwise move
+        //set state to idleAttack if arrived, otherwise move
         return checkIsArrival() ? (this, enumStateWarrior.idleAttack) : (this, enumStateWarrior.move);
     }
 
