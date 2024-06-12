@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class navigatorStationary : navigatorAbst
 {
-    public navigatorStationary(warriorAbst parOwner) : base(parOwner) { }
 
-    public override EDirection getNextEDirection() {
-        return EDirection.none;
+    public override node getNextRoute(Thing owner) {
+        return null;
     }
 
-    protected override bool checkIsArrival() {
+    public override bool checkIsArrival(Thing owner) {
         return true;
     }
 }

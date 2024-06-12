@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public enum EDirection {
@@ -85,6 +86,17 @@ public class node
         }
         thingHere_.curPosition = link_[(int)parDir];
         link_[(int)parDir].thingHere = thingHere_;
+        this.thingHere_ = null;
+        return true;
+    }
+
+    public bool sendThing(node parNode) {
+        //check if its not boundary, and if there is something on destination
+        if ((parNode == null) && (parNode.thingHere_ != null)) {
+            return false;
+        }
+        thingHere_.curPosition = parNode;
+        parNode.thingHere = thingHere_;
         this.thingHere_ = null;
         return true;
     }

@@ -25,10 +25,9 @@ public class Thing : movableObject, IMovableSupplement {
     private SortedSet<string> setAttackTriggerName;
     private Animator thisAnimController;
 
-    private navigatorAbst navigator_;
-    private wigwaggerAbst wigwaggerForMove_;
-    private selecterAbst selecterForAttack_;
-    private selecterAbst selecterForSkill_;
+    protected wigwaggerMove wigwaggerForMove;
+    protected selecterAbst selecterForAttack;
+    protected selecterAbst selecterForSkill;
 
     #region property
     public int maxHp { get; protected set; }
@@ -40,18 +39,6 @@ public class Thing : movableObject, IMovableSupplement {
     }
     public Thing whatToAttack { get; private set; }
     public Thing whatToUseSkill { get; private set; }
-    public navigatorAbst navigator {
-        get {
-            return navigator_;
-        }
-        //★ wigwagger를 true / false로 작동하도록 변경
-        //★ 현재의 wigwagger를 대체할 컴포넌트 구상,... 이름은 wigwagger 그대로 두고 현재의 wigwagger 이름을 sensor로 바꾸던가 하자
-        //★ navigator와 sensor를 보유하고 navigator의 경로찾기 기능을 제공하다가 sensor의 조건이 만족되면 navigator를 내부적으로 변경
-             protected set; }
-    public wigwaggerAbst wigwaggerForMove { get; protected set; }
-    //public wigwaggerForSkillAbst wigwaggerForSkill { get;private set; }
-    public selecterAbst selecterForAttack { get; protected set; }
-    public selecterAbst selecterForSkill { get; protected set; }
     #endregion property
     #endregion variable
 
@@ -117,6 +104,10 @@ public class Thing : movableObject, IMovableSupplement {
         }
     }
 
+    public node getNextRoute() {
+        return wigwaggerForMove.getNextRoute(this);
+    }
+
     public int setCurHp(int parValue, Thing source, bool isPlus = false) {
         int tempResultChange = 0;
         //★ 체력 증감 이전 효과 발동
@@ -169,6 +160,17 @@ public class Thing : movableObject, IMovableSupplement {
     #endregion processes
 
     #region utility
+    //★ 추후 wigwaggerForSkill 추가
+    protected void setCircuit(selecterAbst parSelecterForAttack, selecterAbst parSelecterForSkill, wigwaggerMove parWigwaggerForMove) {
+        selecterForAttack = parSelecterForAttack;
+        selecterForSkill = parSelecterForSkill;
+        wigwaggerForMove = parWigwaggerForMove;
+
+        addCase(parSelecterForAttack);
+        addCase(parSelecterForSkill);
+        addCase(parWigwaggerForMove);
+    }
+
     public virtual void addCase(caseBase parCase) {
         listCaseBaseAll.Add(parCase);
         switch (parCase.caseType) {

@@ -70,6 +70,7 @@ public class graphComponent
 
             // if tempCurSearch includes Goal Node and Lower distFromDeparture, update tempMinDistanceGoal
             //Debug.Log(tempCurSearch.curNode.coor0 + "," + tempCurSearch.curNode.coor1 + " : " + delGoalCheck(tempNode));
+            Debug.Log(tempCurSearch.curNode.coor0 + "," + tempCurSearch.curNode.coor1 + " : " + delGoalCheck(tempNode) + "  /  " + tempCurSearch.distFromDeparture + " < " + tempMinDistanceGoal.distFromDeparture);
             if (delGoalCheck(tempNode) && (tempCurSearch.distFromDeparture < tempMinDistanceGoal.distFromDeparture)) {
                 tempMinDistanceGoal = tempCurSearch;
             }

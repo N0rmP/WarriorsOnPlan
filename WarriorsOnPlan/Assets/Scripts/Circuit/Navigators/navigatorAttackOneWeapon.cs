@@ -5,19 +5,16 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEditor.SceneTemplate;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class navigatorAttackOneWeapon : navigatorAbst
 {
     // rangeMinMax represents the total attackable ranges of owner's weapons
     // indice represents each range-scope per two-indice
-    private List<(int min, int max)> rangeRange;
-
-    public navigatorAttackOneWeapon(warriorAbst parOwner) : base(parOwner) {
-        rangeRange = new List<(int min, int max)>();
-    }
+    private List<(int min, int max)> rangeRange = new List<(int min, int max)>();
 
     // iterate owner.listWeapon, make the coverage list of weapons
-    private void updateRangeRange() {
+    private void updateRangeRange(Thing owner) {
         int tempRangeMinCur;
         int tempRangeMaxCur;
 
@@ -43,12 +40,17 @@ public class navigatorAttackOneWeapon : navigatorAbst
                 // unless two IF state above didn't work, cur range is completely folded on the previous one and ignored
             }
         }
+
+        //if owner has no weapon, just make him move close to the target
+        if (rangeRange.Count == 0) {
+            rangeRange.Add((0, 1));
+        }
     }
 
 
     #region override
-    protected override bool checkIsArrival() {
-        updateRangeRange();
+    public override bool checkIsArrival(Thing owner) {
+        updateRangeRange(owner);
         int tempDistance = node.getDistance(owner.curPosition, owner.whatToAttack.curPosition);
         foreach ((int min, int max) tup in rangeRange) {
             if ((tempDistance < tup.min) || (tempDistance > tup.max)) { continue; }
@@ -57,24 +59,30 @@ public class navigatorAttackOneWeapon : navigatorAbst
         return false;
     }
 
-    public override EDirection getNextEDirection() {
+    public override node getNextRoute(Thing owner) {
+        Debug.Log("--------------------------------------");
         // ★ route.Count == 0 이면 BFS 실행
         //check is route valid
         bool tempIsRouteValid = (route.Count > 0);
-        node tempPos = owner.curPosition;
-        foreach (EDirection iterEDir in route) {
-            tempPos = tempPos.link[(int)iterEDir];
-            if (tempPos.thingHere != null) {
+        foreach (node nd in route) {
+            if (nd.thingHere != null) {
                 tempIsRouteValid = false;
                 break;
             }
         }
+        //★ 16.13 할 일
+        //★ 목표가 기존 위치와 달라질 경우 생각하기
 
         //if route is invalid, recalculate route
         if (!tempIsRouteValid) {
             int tempDistanceForRange;
             node tempTargetPos = owner.whatToAttack.curPosition;
-            updateRangeRange();
+
+            Debug.Log("owner pos : " + owner.curPosition.coor0 + "," + owner.curPosition.coor1);
+            Debug.Log("target pos : " + tempTargetPos.coor0 + "," + tempTargetPos.coor1);
+
+            Stack<EDirection> tempStack = new Stack<EDirection>();
+            updateRangeRange(owner);
             Func<node, bool> delGoalCheck =
             ((n) => {
                 tempDistanceForRange = node.getDistance(tempTargetPos, n);
@@ -85,10 +93,14 @@ public class navigatorAttackOneWeapon : navigatorAbst
                 }
                 return false;
             });
-            combatManager.CM.GC.BFS(owner.curPosition, delGoalCheck, ref route);
+
+            combatManager.CM.GC.BFS(owner.curPosition, delGoalCheck, ref tempStack);
+
+            polishEDirStackToRouteQueue(owner.curPosition, ref tempStack, ref route);
         }
 
-        return route.Pop();
+
+        return route.Dequeue();
     }
     #endregion override
 }

@@ -2,25 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.UI.GridLayoutGroup;
 
-public abstract class navigatorAbst : ICaseUpdateState
+public abstract class navigatorAbst : caseBase
 {
-    public warriorAbst owner { get; private set; }
 
     // route will be recalculated just before every movement, but can remain only when whole nodes in route have nothing on them
-    protected Stack<EDirection> route;
+    protected Queue<node> route;
 
-    public navigatorAbst(warriorAbst parOwner) {
-        owner = parOwner;
-        route = new Stack<EDirection>();
+    public navigatorAbst() : base(enumCaseType.circuit) {
+        route = new Queue<node>();
     }
 
-    public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source) {
-        //set state to idleAttack if arrived, otherwise move
-        return checkIsArrival() ? (this, enumStateWarrior.idleAttack) : (this, enumStateWarrior.move);
+    protected void polishEDirStackToRouteQueue(node parDeparture, ref Stack<EDirection> parStack, ref Queue<node> parRoute) {
+        node tempNode = parDeparture;
+        route.Clear();
+        while (parStack.Count > 0) {
+            tempNode = tempNode.link[(int)parStack.Pop()];
+            Debug.Log("route : " + tempNode.coor0 + "," + tempNode.coor1);
+            route.Enqueue(tempNode);
+        }
     }
 
-    protected abstract bool checkIsArrival();
+    public abstract bool checkIsArrival(Thing owner);
 
-    public abstract EDirection getNextEDirection();
+    public abstract node getNextRoute(Thing owner);
 }

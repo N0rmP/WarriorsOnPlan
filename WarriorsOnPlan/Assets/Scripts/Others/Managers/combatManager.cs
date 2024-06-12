@@ -113,7 +113,6 @@ public class combatManager : MonoBehaviour {
                 _ => new List<Thing>()  //prevent error
             };
 
-            //★ 턴 시작 시 효과 발동
             foreach (Thing th in tempListActors) {
                 //process before action
                 warriorsHpSorted_[0].Sort(comparerHpInstance);
@@ -139,7 +138,7 @@ public class combatManager : MonoBehaviour {
                         //★ processUseSkill 호출
                         break;
                     case enumStateWarrior.move:
-                        processMove(th, th.navigator.getNextEDirection());
+                        processMove(th);
                         break;
                     case enumStateWarrior.idleAttack:
                         th.clearAttackAnimation();
@@ -219,12 +218,14 @@ public class combatManager : MonoBehaviour {
     }
 
     //processMove with EDirection parameter makes a warrior walk a node to the parameter-direction
-    public void processMove(Thing source, EDirection parEDir) {
-        //sendThing method will check if it's valid movement
-        source.curPosition.sendThing(parEDir);
-        Vector3 tempDestination = source.curPosition.getVector3();
-        source.transform.rotation = Quaternion.LookRotation(tempDestination - source.transform.position);
-        source.startLinearMove(tempDestination);
+    public void processMove(Thing source) {
+        node tempDestination = source.getNextRoute();
+        
+        source.curPosition.sendThing(tempDestination);
+
+        Vector3 tempDestinationVector = source.curPosition.getVector3();
+        source.transform.rotation = Quaternion.LookRotation(tempDestinationVector - source.transform.position);
+        source.startLinearMove(tempDestinationVector);
     }
 
     //processMove with two int parameters makes a warrior teleport to the destination
