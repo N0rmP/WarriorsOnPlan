@@ -26,6 +26,7 @@ public class Thing : movableObject, IMovableSupplement {
     private Animator thisAnimController;
 
     protected wigwaggerMove wigwaggerForMove;
+    //¡Ú wigwaggerForSkill needed
     protected selecterAbst selecterForAttack;
     protected selecterAbst selecterForSkill;
 

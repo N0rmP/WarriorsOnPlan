@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using UnityEditor.SceneTemplate;
 using UnityEngine;
 using static UnityEngine.UI.GridLayoutGroup;
@@ -12,6 +13,7 @@ public class navigatorAttackOneWeapon : navigatorAbst
     // rangeMinMax represents the total attackable ranges of owner's weapons
     // indice represents each range-scope per two-indice
     private List<(int min, int max)> rangeRange = new List<(int min, int max)>();
+    private node prevTargetPos = null;
 
     // iterate owner.listWeapon, make the coverage list of weapons
     private void updateRangeRange(Thing owner) {
@@ -60,6 +62,7 @@ public class navigatorAttackOneWeapon : navigatorAbst
     }
 
     public override node getNextRoute(Thing owner) {
+        node tempTargetPos = owner.whatToAttack.curPosition;
         Debug.Log("--------------------------------------");
         // ★ route.Count == 0 이면 BFS 실행
         //check is route valid
@@ -70,13 +73,13 @@ public class navigatorAttackOneWeapon : navigatorAbst
                 break;
             }
         }
-        //★ 16.13 할 일
-        //★ 목표가 기존 위치와 달라질 경우 생각하기
+        if (tempTargetPos != prevTargetPos) {
+            tempIsRouteValid = false;
+        }
 
         //if route is invalid, recalculate route
         if (!tempIsRouteValid) {
             int tempDistanceForRange;
-            node tempTargetPos = owner.whatToAttack.curPosition;
 
             Debug.Log("owner pos : " + owner.curPosition.coor0 + "," + owner.curPosition.coor1);
             Debug.Log("target pos : " + tempTargetPos.coor0 + "," + tempTargetPos.coor1);
@@ -97,6 +100,7 @@ public class navigatorAttackOneWeapon : navigatorAbst
             combatManager.CM.GC.BFS(owner.curPosition, delGoalCheck, ref tempStack);
 
             polishEDirStackToRouteQueue(owner.curPosition, ref tempStack, ref route);
+            prevTargetPos = tempTargetPos;
         }
 
 
