@@ -16,7 +16,7 @@ public enum enumAnimationType {
     trigAttackPunch
 }
 
-public abstract class toolWeapon : caseBase {
+public abstract class toolWeapon : caseTimer {
     //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
     //most toolWeapon's min range is 0.
     protected readonly int damageOriginal;
@@ -27,34 +27,20 @@ public abstract class toolWeapon : caseBase {
     public int damageCur { get; set; }
     public enumDamageType damageType { get; private set; }
     public enumAnimationType animationType { get; private set; }
-    public int timerMax { get; private set; }
-    public int timerCur { get; private set; }
 
-    public toolWeapon(string parWeaponName, int parDamageOriginal) : base(enumCaseType.tool) {
+    public toolWeapon(int parTimerMax, string parWeaponName, int parDamageOriginal, bool parIsTimerMax = false) : base(parTimerMax, enumCaseType.tool, parIsTimerMax) {
         dataWeaponEntity tempDWE = gameManager.GM.EC.getWeaponEntiy(parWeaponName);
 
         rangeMin = tempDWE.RangeMin;
         rangeMax = tempDWE.RangeMax;
-        timerMax = tempDWE.TimerMax;
         damageType = tempDWE.DamageType;
         animationType = tempDWE.AnimationType;
 
         damageCur = damageOriginal = parDamageOriginal;
-        timerCur = 0;
     }
 
     public damageInfo getDamageInfo() {
         return new damageInfo(owner, this, damageCur, damageType, this.showEffect);
-    }
-
-    public void updateTimer() {
-        if (timerCur > 0) {
-            timerCur--;
-        }
-    }
-
-    public void resetTimer() {
-        timerCur = timerMax;
     }
 
     public abstract void showEffect(Thing source, Thing parTarget);

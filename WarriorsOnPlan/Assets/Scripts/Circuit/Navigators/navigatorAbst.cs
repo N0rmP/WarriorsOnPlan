@@ -19,7 +19,6 @@ public abstract class navigatorAbst : caseBase
         route.Clear();
         while (parStack.Count > 0) {
             tempNode = tempNode.link[(int)parStack.Pop()];
-            Debug.Log("route : " + tempNode.coor0 + "," + tempNode.coor1);
             route.Enqueue(tempNode);
         }
     }

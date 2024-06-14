@@ -114,6 +114,17 @@ public class combatManager : MonoBehaviour {
             };
 
             foreach (Thing th in tempListActors) {
+                //update weapon timer
+                foreach (caseTimer ct in th.getCaseList<caseTimer>()) {
+                    ct.updateTimer();
+                }
+                //onTurnEnd
+                foreach (ICaseTurnStart cb in th.getCaseList<ICaseTurnStart>()) {
+                    cb.onTurnStart(th);
+                }
+            }
+
+            foreach (Thing th in tempListActors) {
                 //process before action
                 warriorsHpSorted_[0].Sort(comparerHpInstance);
                 warriorsHpSorted_[1].Sort(comparerHpInstance);
@@ -141,13 +152,7 @@ public class combatManager : MonoBehaviour {
                         processMove(th);
                         break;
                     case enumStateWarrior.idleAttack:
-                        th.clearAttackAnimation();
-                        foreach (toolWeapon tw in th.copyWeapons) {
-                            if (tw.timerCur <= 0) {
-                                th.addAttackAnimation(tw.animationType.ToString());
-                                processAttack(th, th.whatToAttack, tw.getDamageInfo());
-                            }
-                        }
+                        
                         break;
                     default:
                         break;
@@ -175,14 +180,10 @@ public class combatManager : MonoBehaviour {
                 }
             }
             //turn end processes
-            foreach (warriorAbst wa in tempListActors) {
-                //update weapon timer
-                foreach (toolWeapon tw in wa.copyWeapons) {
-                    tw.updateTimer();
-                }
+            foreach (Thing th in tempListActors) {
                 //onTurnEnd
-                foreach (ICaseTurnEnd cb in wa.getCaseList<ICaseTurnEnd>()) {
-                    cb.onTurnEnd(wa);
+                foreach (ICaseTurnEnd cb in th.getCaseList<ICaseTurnEnd>()) {
+                    cb.onTurnEnd(th);
                 }
             }
 
@@ -191,7 +192,8 @@ public class combatManager : MonoBehaviour {
     }
 
     #region processors
-    public void processAttack(Thing source, Thing target, damageInfo DInfo) {
+    //★ 무기를 사용한 공격 행동 / 피해를 주는 과정을 따로 만들어볼 것
+    public void processDealDamage(Thing source, Thing target, damageInfo DInfo) {
         //before attack
         foreach (ICaseBeforeAttack cb in source.getCaseList<ICaseBeforeAttack>()) {
             cb.onBeforeAttack(source, target, DInfo);
@@ -215,6 +217,16 @@ public class combatManager : MonoBehaviour {
         }
         //after the caseAll attack
         (DInfo.sourceCaseAll as toolWeapon)?.resetTimer();
+    }
+
+    public void processAttack(Thing source, Thing target) {
+        source.clearAttackAnimation();
+        foreach (toolWeapon tw in source.copyWeapons) {
+            if (tw.timerCur <= 0) {
+                source.addAttackAnimation(tw.animationType.ToString());
+                processDealDamage(source, source.whatToAttack, tw.getDamageInfo());
+            }
+        }
     }
 
     //processMove with EDirection parameter makes a warrior walk a node to the parameter-direction

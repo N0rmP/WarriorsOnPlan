@@ -63,7 +63,6 @@ public class navigatorAttackOneWeapon : navigatorAbst
 
     public override node getNextRoute(Thing owner) {
         node tempTargetPos = owner.whatToAttack.curPosition;
-        Debug.Log("--------------------------------------");
         // ★ route.Count == 0 이면 BFS 실행
         //check is route valid
         bool tempIsRouteValid = (route.Count > 0);
@@ -80,9 +79,6 @@ public class navigatorAttackOneWeapon : navigatorAbst
         //if route is invalid, recalculate route
         if (!tempIsRouteValid) {
             int tempDistanceForRange;
-
-            Debug.Log("owner pos : " + owner.curPosition.coor0 + "," + owner.curPosition.coor1);
-            Debug.Log("target pos : " + tempTargetPos.coor0 + "," + tempTargetPos.coor1);
 
             Stack<EDirection> tempStack = new Stack<EDirection>();
             updateRangeRange(owner);
