@@ -8,7 +8,6 @@ public class damageInfo
     public readonly Thing sourceAttacker;
     public readonly caseBase sourceCaseAll;
 
-    private int damage_;
     //there are three kinds of damage changers, add / multiply / fix
     //basically add is processed first, and multiply is processed after it
     //fix ignores all other changers and fix damage strictly, you should be careful when fixing damage
@@ -18,13 +17,13 @@ public class damageInfo
 
     private Action<Thing, Thing> delEffect;
 
-    public int damage { get { return damage_; } }
+    public int damage { get; private set; }
     public enumDamageType damageType { get; set; }
 
     public damageInfo(Thing parSourceAttacker, caseBase parSourceCaseAll, int parDamage, enumDamageType parDType, Action<Thing, Thing> parDelegate) {
         sourceAttacker = parSourceAttacker;
         sourceCaseAll = parSourceCaseAll;
-        damage_ = parDamage;
+        damage = parDamage;
         damageType = parDType;
         totalAdd = 0;
         totalMultiply = 1.0f;
@@ -39,20 +38,17 @@ public class damageInfo
         }
 
         totalAdd += parValue;
-        if (totalAdd < 0) { totalAdd = 0; }
     }
 
     //parameter of multiplyDamage represents the increased ratio by float, not percentage
     //for example if one caseAll doubles damage, parValue should be 1f not 100f nor 2f
     public void mulitplyDamage(float parValue) {
         //magic damage can't decrease
-        //multiplier can't be below zero
-        if ((damageType == enumDamageType.magic) && (parValue < 1)) {
+        if ((damageType == enumDamageType.magic) && (parValue < 1)){
             return;
         }
 
-        totalMultiply += parValue;
-        if (totalMultiply < 0f) { totalMultiply = 0f; }
+        totalMultiply += (parValue - 1f);
     }
 
     //fixedDamage has the top priority, the only one that can change the fixed damage is fixing damage later
@@ -63,16 +59,21 @@ public class damageInfo
     public void calculateFinalDamage() {
         //fix damage precedes all
         if (fixedDamage != -1) {
-            damage_ = fixedDamage;
+            damage = fixedDamage;
         } else {
             //add first, multiply next
-            damage_ = (int)(Mathf.Round((damage_ + totalAdd) * totalMultiply));
+            damage = (int)(Mathf.Round((damage + totalAdd) * totalMultiply));
+            //damage can't be below zero
+            if (damage < 0) {
+                damage = 0;
+            }
         }
     }
 
-    public void ATTACK(Thing target) {
+    public int DEAL(Thing target) {
         calculateFinalDamage();
-        target.setCurHp(-damage_, sourceAttacker, true);
+        target.setCurHp(-damage, sourceAttacker, true);
         gameManager.GM.TC.addDelegate(() => delEffect(sourceAttacker, target), 0.5f);
+        return damage;
     }
 }

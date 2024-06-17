@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 public class combatManager : MonoBehaviour {
     public static combatManager CM;
@@ -152,7 +153,7 @@ public class combatManager : MonoBehaviour {
                         processMove(th);
                         break;
                     case enumStateWarrior.idleAttack:
-                        
+                        processAttack(th, th.whatToAttack);
                         break;
                     default:
                         break;
@@ -195,15 +196,15 @@ public class combatManager : MonoBehaviour {
     //★ 무기를 사용한 공격 행동 / 피해를 주는 과정을 따로 만들어볼 것
     public void processDealDamage(Thing source, Thing target, damageInfo DInfo) {
         //before attack
-        foreach (ICaseBeforeAttack cb in source.getCaseList<ICaseBeforeAttack>()) {
-            cb.onBeforeAttack(source, target, DInfo);
+        foreach (ICaseBeforeDealDamage cb in source.getCaseList<ICaseBeforeDealDamage>()) {
+            cb.onBeforeDealDamage(source, target, DInfo);
         }
         //before damaged
         foreach (ICaseBeforeDamaged cb in target.getCaseList<ICaseBeforeDamaged>()) {
             cb.onBeforeDamaged(source, target, DInfo);
         }
         //attck now
-        DInfo.ATTACK(target);
+        int tempDamage = DInfo.DEAL(target);
         if (source is warriorAbst tempSource) {
             tempSource.addDamageTotalDealt(DInfo.damage);
         }
@@ -212,20 +213,33 @@ public class combatManager : MonoBehaviour {
             cb.onAfterDamaged(source, target, DInfo);
         }
         //after attack
-        foreach (ICaseAfterAttack cb in source.getCaseList<ICaseAfterAttack>()) {
-            cb.onAfterAttack(source, target, DInfo);
+        foreach (ICaseAfterDealDamage cb in source.getCaseList<ICaseAfterDealDamage>()) {
+            cb.onAfterDealDamage(source, target, DInfo);
         }
-        //after the caseAll attack
-        (DInfo.sourceCaseAll as toolWeapon)?.resetTimer();
     }
 
     public void processAttack(Thing source, Thing target) {
+        damageInfo tempDInfo;
+        List<damageInfo> tempListDInfo = new List<damageInfo>();
+
         source.clearAttackAnimation();
+        foreach (ICaseBeforeAttack cb in source.getCaseList<ICaseBeforeAttack>()) {
+            cb.onBeforeAttack(source, target);
+        }
         foreach (toolWeapon tw in source.copyWeapons) {
             if (tw.timerCur <= 0) {
                 source.addAttackAnimation(tw.animationType.ToString());
-                processDealDamage(source, source.whatToAttack, tw.getDamageInfo());
+                tempDInfo = tw.getDamageInfo();
+                processDealDamage(source, source.whatToAttack, tempDInfo);
+                tw.resetTimer();
+                tempListDInfo.Add(tempDInfo);
+                if (tw is ICaseThisWeaponUsed tempCB) {
+                    tempCB.onThisWeaponUsed(source, target, tempDInfo);
+                }
             }
+        }
+        foreach (ICaseAfterAttack cb in source.getCaseList<ICaseAfterAttack>()) {
+            cb.onAfterAttack(source, target, tempListDInfo);
         }
     }
 
