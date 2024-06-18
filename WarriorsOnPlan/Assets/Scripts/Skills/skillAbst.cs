@@ -2,15 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class skillAbst : caseTimer {
+public abstract class skillAbst : caseTimerSelfishTurn {
 
-    public int rangeMin { get; protected set;}
-    public int rangeMax { get; protected set; }
-    
+    public bool isRanged { get; protected set; }
 
-    public skillAbst(int parTimerMax, bool parIsTimerMax = false) : base(parTimerMax, enumCaseType.skill, parIsTimerMax) { }
-
-    
+    public skillAbst(int parTimerMax, bool parIsTimerMax = true) : base(parTimerMax, enumCaseType.skill, parIsTimerMax) { }
 
     public abstract void useSkill(Thing source, Thing target);
 }

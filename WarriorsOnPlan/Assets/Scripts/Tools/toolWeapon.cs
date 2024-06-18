@@ -16,7 +16,7 @@ public enum enumAnimationType {
     trigAttackPunch
 }
 
-public abstract class toolWeapon : caseTimer {
+public abstract class toolWeapon : caseTimerSelfishTurn {
     //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
     //most toolWeapon's min range is 0.
     protected readonly int damageOriginal;
