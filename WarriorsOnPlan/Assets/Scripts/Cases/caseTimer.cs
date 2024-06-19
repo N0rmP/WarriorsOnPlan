@@ -12,14 +12,14 @@ public class caseTimer : caseBase
         timerCur = parIsTimerMax ? timerMax : 0;
     }
 
-    protected void updateTimer() {
+    protected virtual void updateTimer() {
         if (timerCur > 0) {
             timerCur--;
         }
         //★ effect 등의 일시적인 caseBase의 경우 삭제될 것
     }
 
-    protected void resetTimer() {
+    public void resetTimer() {
         timerCur = timerMax;
     }
 }

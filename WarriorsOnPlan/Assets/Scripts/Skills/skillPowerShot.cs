@@ -6,12 +6,13 @@ public class skillPowerShot : skillAbst
 {
     private readonly int damageOriginal;
 
-    public skillPowerShot(int parDamage) : base(5) {
+    public skillPowerShot(int parDamage) : base(3) {
         isRanged = true;
         damageOriginal = parDamage;
     }
 
     public override void useSkill(Thing source, Thing target) {
+        Debug.Log("!!!!!!!!! POW!!!!!!!!!!!!! WER!!!!!!!! SHOOOOOOOOOOOOOOOTTTTTTT!!!!!!!!!!");
         combatManager.CM.processDealDamage(source, target, new damageInfo(source, this, damageOriginal, enumDamageType.basic, this.showEffect));
     }
 

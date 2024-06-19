@@ -28,7 +28,6 @@ public class Thing : movableObject, IMovableSupplement {
     protected wigwaggerMove wigwaggerForMove;
     //★ wigwaggerForSkill needed
     protected selecterAbst selecterForAttack;
-    protected selecterAbst selecterForSkill;
 
     #region property
     public int maxHp { get; protected set; }
@@ -39,7 +38,7 @@ public class Thing : movableObject, IMovableSupplement {
         get { return listToolWeapon.ToArray(); }
     }
     public Thing whatToAttack { get; private set; }
-    public Thing whatToUseSkill { get; private set; }
+    
     #endregion property
     #endregion variable
 
@@ -65,9 +64,8 @@ public class Thing : movableObject, IMovableSupplement {
     #endregion overrides
 
     #region processes
-    public void updateTargets() {
+    public virtual void updateTargets() {
         whatToAttack = selecterForAttack.select(this);
-        whatToUseSkill = selecterForSkill.select(this);
     }
 
     public void updateState() {
@@ -161,14 +159,11 @@ public class Thing : movableObject, IMovableSupplement {
     #endregion processes
 
     #region utility
-    //★ 추후 wigwaggerForSkill 추가
-    protected void setCircuit(selecterAbst parSelecterForAttack, selecterAbst parSelecterForSkill, wigwaggerMove parWigwaggerForMove) {
+    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove) {
         selecterForAttack = parSelecterForAttack;
-        selecterForSkill = parSelecterForSkill;
         wigwaggerForMove = parWigwaggerForMove;
 
         addCase(parSelecterForAttack);
-        addCase(parSelecterForSkill);
         addCase(parWigwaggerForMove);
     }
 
@@ -250,7 +245,7 @@ public class Thing : movableObject, IMovableSupplement {
         setAttackTriggerName.Add(parString);
     }
 
-    public void animate() {
+    public virtual void animate() {
         switch (stateCur) {
             case enumStateWarrior.move:
                 thisAnimController.SetBool("isRun", true);

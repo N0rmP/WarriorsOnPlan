@@ -15,7 +15,7 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-53993
+60077
 Successfully changed project path to: C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,12 +49,12 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [8812] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 2796229652 [EditorId] 2796229652 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [8588] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 1867770863 [EditorId] 1867770863 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [8812] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 2796229652 [EditorId] 2796229652 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [8588] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 1867770863 [EditorId] 1867770863 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
 [Physics::Module] Initialized MultithreadedJobDispatcher with 11 workers.
-Refreshing native plugins compatible for Editor in 14.08 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 12.37 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.20f1 (61c2feb0970d)
 [Subsystems] Discovering subsystems at path D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Resources/UnitySubsystems
@@ -70,51 +70,51 @@ Initialize mono
 Mono path[0] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Managed'
 Mono path[1] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56196
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56232
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.005237 seconds.
-- Loaded All Assemblies, in  0.268 seconds
+Registered in 0.004947 seconds.
+- Loaded All Assemblies, in  0.265 seconds
 Native extension for WindowsStandalone target not found
 [usbmuxd] Start listen thread
 [usbmuxd] Listen thread started
 Native extension for iOS target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 200 ms
+Android Extension - Scanning For ADB Devices 186 ms
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.476 seconds
-Domain Reload Profiling: 744ms
-	BeginReloadAssembly (81ms)
+- Finished resetting the current domain, in  0.440 seconds
+Domain Reload Profiling: 705ms
+	BeginReloadAssembly (82ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
 	RebuildCommonClasses (25ms)
-	RebuildNativeTypeToScriptingClass (8ms)
-	initialDomainReloadingComplete (41ms)
-	LoadAllAssembliesAndSetupDomain (113ms)
-		LoadAssemblies (81ms)
+	RebuildNativeTypeToScriptingClass (7ms)
+	initialDomainReloadingComplete (40ms)
+	LoadAllAssembliesAndSetupDomain (110ms)
+		LoadAssemblies (82ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (111ms)
-			TypeCache.Refresh (109ms)
-				TypeCache.ScanAssembly (99ms)
+		AnalyzeDomain (108ms)
+			TypeCache.Refresh (107ms)
+				TypeCache.ScanAssembly (96ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (0ms)
-	FinalizeReload (476ms)
+	FinalizeReload (440ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (431ms)
+		SetupLoadedEditorAssemblies (396ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (295ms)
+			InitializePlatformSupportModulesInManaged (270ms)
 			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
 			BeforeProcessingInitializeOnLoad (2ms)
-			ProcessInitializeOnLoadAttributes (97ms)
-			ProcessInitializeOnLoadMethodAttributes (33ms)
+			ProcessInitializeOnLoadAttributes (87ms)
+			ProcessInitializeOnLoadMethodAttributes (35ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -122,8 +122,8 @@ Domain Reload Profiling: 744ms
 ========================================================================
 Worker process is ready to serve import requests
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.477 seconds
-Refreshing native plugins compatible for Editor in 6.60 ms, found 3 plugins.
+- Loaded All Assemblies, in  0.493 seconds
+Refreshing native plugins compatible for Editor in 6.27 ms, found 3 plugins.
 Native extension for WindowsStandalone target not found
 Native extension for iOS target not found
 Native extension for Android target not found
@@ -138,47 +138,47 @@ Mono: successfully reloaded assembly
 [Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
 [Package Manager] Cannot connect to Unity Package Manager local server
-- Finished resetting the current domain, in  0.451 seconds
-Domain Reload Profiling: 926ms
-	BeginReloadAssembly (112ms)
+- Finished resetting the current domain, in  0.443 seconds
+Domain Reload Profiling: 935ms
+	BeginReloadAssembly (118ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (5ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (21ms)
-	RebuildCommonClasses (25ms)
+		CreateAndSetChildDomain (20ms)
+	RebuildCommonClasses (26ms)
 	RebuildNativeTypeToScriptingClass (8ms)
-	initialDomainReloadingComplete (33ms)
-	LoadAllAssembliesAndSetupDomain (297ms)
-		LoadAssemblies (238ms)
+	initialDomainReloadingComplete (32ms)
+	LoadAllAssembliesAndSetupDomain (307ms)
+		LoadAssemblies (251ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (122ms)
-			TypeCache.Refresh (103ms)
-				TypeCache.ScanAssembly (90ms)
-			ScanForSourceGeneratedMonoScriptInfo (13ms)
-			ResolveRequiredComponents (5ms)
-	FinalizeReload (452ms)
+		AnalyzeDomain (124ms)
+			TypeCache.Refresh (108ms)
+				TypeCache.ScanAssembly (94ms)
+			ScanForSourceGeneratedMonoScriptInfo (12ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (443ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (332ms)
+		SetupLoadedEditorAssemblies (325ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (24ms)
+			InitializePlatformSupportModulesInManaged (23ms)
 			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (54ms)
-			ProcessInitializeOnLoadAttributes (233ms)
-			ProcessInitializeOnLoadMethodAttributes (16ms)
-			AfterProcessingInitializeOnLoad (2ms)
+			BeforeProcessingInitializeOnLoad (52ms)
+			ProcessInitializeOnLoadAttributes (225ms)
+			ProcessInitializeOnLoadMethodAttributes (18ms)
+			AfterProcessingInitializeOnLoad (4ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (5ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.06 seconds
-Refreshing native plugins compatible for Editor in 7.48 ms, found 3 plugins.
+		AwakeInstancesAfterBackupRestoration (7ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
+Refreshing native plugins compatible for Editor in 6.97 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 3305 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 48 unused Assets / (65.3 KB). Loaded Objects now: 3759.
+Unloading 48 unused Assets / (65.4 KB). Loaded Objects now: 3759.
 Memory consumption went from 205.0 MB to 204.9 MB.
-Total: 2.883300 ms (FindLiveObjects: 0.225300 ms CreateObjectMapping: 0.133400 ms MarkObjects: 2.416600 ms  DeleteObjects: 0.107400 ms)
+Total: 2.466700 ms (FindLiveObjects: 0.207700 ms CreateObjectMapping: 0.071200 ms MarkObjects: 2.086200 ms  DeleteObjects: 0.100900 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
@@ -195,106 +195,209 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 425439.401104 seconds.
-  path: Assets/Scripts/Skills/skillPowerShot.cs
-  artifactKey: Guid(7316945cc48fcff44890133108931ae6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Skills/skillPowerShot.cs using Guid(7316945cc48fcff44890133108931ae6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5fad64b2c6516fe4eb8e50e6fdf16448') in 0.002279 seconds
+  Time since last request: 453258.216654 seconds.
+  path: Assets/Scripts/Tools/toolWeapon.cs
+  artifactKey: Guid(6faf50dd1b1225f43a8d77391112e905) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Tools/toolWeapon.cs using Guid(6faf50dd1b1225f43a8d77391112e905) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7b3d53a288a8dc6e48f50d0bdba6bfe2') in 0.004155 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 691.739539 seconds.
-  path: Assets/Scripts/Skills/skillAbst.cs
-  artifactKey: Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Skills/skillAbst.cs using Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9bdc4903d8f7bdb4298b28ce19fb2271') in 0.000570 seconds
+  Time since last request: 1043.490417 seconds.
+  path: Assets/Scripts/Cases/caseTimer.cs
+  artifactKey: Guid(2e65be17fe055a74baa7556cceb53cd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimer.cs using Guid(2e65be17fe055a74baa7556cceb53cd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5d89785f12a148ea6b7acdda33518af6') in 0.000536 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 93.304804 seconds.
-  path: Assets/Scripts/Skills/skillAbst.cs
-  artifactKey: Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Skills/skillAbst.cs using Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cb6319c23b1728d434dd01896d2ca8b8') in 0.000450 seconds
+  Time since last request: 9.381566 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2320c800c802acb92bce35b0e1f58232') in 0.000476 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 55.930708 seconds.
-  path: Assets/Scripts/Skills/skillAbst.cs
-  artifactKey: Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Skills/skillAbst.cs using Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '242c415d17ca78a63896cdd2a91249fd') in 0.000443 seconds
+  Time since last request: 5.345631 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'da594324e09e8080824702490ca60d26') in 0.000474 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 787.533659 seconds.
-  path: Assets/Scripts/Skills/skillAbst.cs
-  artifactKey: Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Skills/skillAbst.cs using Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e0c4fa39a8fbc9634d09f114786c353d') in 0.000529 seconds
+  Time since last request: 8.777683 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8a897435bf2542e604a5e9b8821fe43e') in 0.000471 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 56.251720 seconds.
-  path: Assets/Scripts/Skills/skillAbst.cs
-  artifactKey: Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Skills/skillAbst.cs using Guid(0f83be6622c4e9745afa55a21d009217) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '526cb3f7b595cf0f3d082360ab0924fa') in 0.000405 seconds
+  Time since last request: 25.510229 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '766523f7fce30e4a35a122e0ea5f5a22') in 0.000472 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 231.040512 seconds.
-  path: Assets/Scripts/Tools/weaponTester.cs
-  artifactKey: Guid(d733a2e5e31d4a84d9c9ccbb4ee7c046) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Tools/weaponTester.cs using Guid(d733a2e5e31d4a84d9c9ccbb4ee7c046) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c6cd47648e5a112b18301c431b8f8817') in 0.005418 seconds
+  Time since last request: 78.946103 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4ea09b98d4e9d803718ce4498ef127c') in 0.000485 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.444 seconds
-Refreshing native plugins compatible for Editor in 7.15 ms, found 3 plugins.
-Native extension for WindowsStandalone target not found
-Native extension for iOS target not found
-Native extension for Android target not found
-[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
-[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
-[Package Manager] Cannot connect to Unity Package Manager local server
-Mono: successfully reloaded assembly
-[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
-[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
-[Package Manager] Cannot connect to Unity Package Manager local server
-- Finished resetting the current domain, in  0.879 seconds
-Domain Reload Profiling: 1322ms
-	BeginReloadAssembly (152ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (6ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (52ms)
-	RebuildCommonClasses (25ms)
-	RebuildNativeTypeToScriptingClass (8ms)
-	initialDomainReloadingComplete (23ms)
-	LoadAllAssembliesAndSetupDomain (234ms)
-		LoadAssemblies (276ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (24ms)
-			TypeCache.Refresh (11ms)
-				TypeCache.ScanAssembly (1ms)
-			ScanForSourceGeneratedMonoScriptInfo (7ms)
-			ResolveRequiredComponents (4ms)
-	FinalizeReload (880ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (310ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (24ms)
-			SetLoadedEditorAssemblies (3ms)
-			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (52ms)
-			ProcessInitializeOnLoadAttributes (210ms)
-			ProcessInitializeOnLoadMethodAttributes (18ms)
-			AfterProcessingInitializeOnLoad (2ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (5ms)
+Received Import Request.
+  Time since last request: 7.725255 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'db2c1d5b92c6a2206f27d7d7888b40b1') in 0.000471 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 7.324742 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dc7090ec6e523e935e1a767fb9f41b3b') in 0.000456 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 26.902960 seconds.
+  path: Assets/Scripts/Cases/caseTimerHostilTurn.cs
+  artifactKey: Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerHostilTurn.cs using Guid(4b206010a11eb364eb0217505fd5b957) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9e1721b38266e8aba07f690c78a99e31') in 0.000429 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 40.403643 seconds.
+  path: Assets/Scripts/Cases/caseTimerFriendlyTurn.cs
+  artifactKey: Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerFriendlyTurn.cs using Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f04ca9b19486e575a77cadd9b125e836') in 0.000478 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 1.129290 seconds.
+  path: Assets/Scripts/Cases/ICaseAfterAction.cs
+  artifactKey: Guid(a55b08daa042d224f87efdeae62de35e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/ICaseAfterAction.cs using Guid(a55b08daa042d224f87efdeae62de35e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5e7063b3db3146664109ceeb1e066cac') in 0.000492 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 12.947962 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9dbe404aa957bc506bf454b79fec0d01') in 0.000569 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 50.795035 seconds.
+  path: Assets/Scripts/Cases/caseTimerFriendlyTurn.cs
+  artifactKey: Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerFriendlyTurn.cs using Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '409b9a590b00dd407727e64643f55c95') in 0.000458 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 4.153765 seconds.
+  path: Assets/Scripts/Cases/caseTimerFriendlyTurn.cs
+  artifactKey: Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerFriendlyTurn.cs using Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '216b9ee3458265c8488c9f9db5903dde') in 0.000405 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 5.645880 seconds.
+  path: Assets/Scripts/Cases/caseTimerFriendlyTurn.cs
+  artifactKey: Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerFriendlyTurn.cs using Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0a4b4cda7cf6cf1e81e0d03dccb459f9') in 0.000427 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 9.330398 seconds.
+  path: Assets/Scripts/Cases/caseTimerFriendlyTurn.cs
+  artifactKey: Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerFriendlyTurn.cs using Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'deaf2cd01fe8841108061933aec1e013') in 0.000531 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 16.661421 seconds.
+  path: Assets/Scripts/Cases/caseTimerFriendlyTurn.cs
+  artifactKey: Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerFriendlyTurn.cs using Guid(0c0dbae3122b5d04497d7f50a31286ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8cbe52dc36795abebef4ad10d1b6652a') in 0.000486 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 20.651298 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ad231160ff503add301ac4fd35a7189d') in 0.000465 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 25.126595 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2b35f3c99e491aafcd7849f475966593') in 0.000420 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 19.506584 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '960c968ddc5ed281e32900e7edb7c6bf') in 0.000399 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 5.050019 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fe06c207073db4ff9a1ec38b30b7945d') in 0.000443 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 20.266734 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a2202f38a3e4ac9275f230f7fb3e5508') in 0.000440 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 12.496737 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'eae243ff8937527c3b6241c8274197ab') in 0.000490 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 2.659934 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96b4199a3b24a1d3cb4a971c482ceaa8') in 0.000469 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 15.318142 seconds.
+  path: Assets/Scripts/Cases/caseTimerSelfishTurn.cs
+  artifactKey: Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimerSelfishTurn.cs using Guid(7a84aab5baba221429c538a3a887c24d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b4ff06c001293a7ad2b4b40b8e7615c0') in 0.000455 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0

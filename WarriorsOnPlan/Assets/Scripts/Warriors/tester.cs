@@ -9,10 +9,11 @@ public class tester : warriorAbst
         base.init(parisPlrSide, parCoor0, parCoor1, parMaxHp);
         //¡Úcode below is just for test, initiating warrior may follow json/xml file later
         this.addCase(new weaponTester());
+        this.addCase(new skillPowerShot(5));
         setCircuit(
             new selecterClosest(new System.Object[1] { (System.Object)0b010 }),
-            new selecterClosest(new System.Object[1] { (System.Object)0b010 }),
-            new wigwaggerMove(new sensorNothing(), new navigatorAttackOneWeapon())
+            new wigwaggerMove(new sensorNothing(), new navigatorAttackOneWeapon()),
+            new selecterClosest(new System.Object[1] { (System.Object)0b010 })
             );
     }
 }

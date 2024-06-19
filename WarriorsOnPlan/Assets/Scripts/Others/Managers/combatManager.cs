@@ -115,11 +115,11 @@ public class combatManager : MonoBehaviour {
             };
 
             foreach (Thing th in tempListActors) {
-                //update weapon timer
-                foreach (caseTimer ct in th.getCaseList<caseTimer>()) {
-                    ct.updateTimer();
+                //update timers
+                foreach (caseTimerHostilTurn ct in th.getCaseList<caseTimerHostilTurn>()) {
+                    ct.updateOnTurnStart(th);
                 }
-                //onTurnEnd
+                //onTurnStart
                 foreach (ICaseTurnStart cb in th.getCaseList<ICaseTurnStart>()) {
                     cb.onTurnStart(th);
                 }
@@ -133,6 +133,9 @@ public class combatManager : MonoBehaviour {
                 warriorsDamageDealtSorted_[0].Sort(comparerDamageDealtInstance);
                 warriorsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
                 th.updateTargets();
+                foreach (caseTimerSelfishTurn ct in th.getCaseList<caseTimerSelfishTurn>()) {
+                    ct.updateOnActionStart(th);
+                }
                 foreach (ICaseBeforeAction cb in th.getCaseList<ICaseBeforeAction>()) {
                     cb.onBeforeAction(th);
                 }
@@ -147,7 +150,9 @@ public class combatManager : MonoBehaviour {
                     case enumStateWarrior.focussing:
                         break;
                     case enumStateWarrior.skill:
-                        //★ processUseSkill 호출
+                        if (th is warriorAbst tempWA) {
+                            processUseSkill(tempWA);
+                        }
                         break;
                     case enumStateWarrior.move:
                         processMove(th);
@@ -161,9 +166,22 @@ public class combatManager : MonoBehaviour {
                 th.animate();
 
                 // ★ 각각의 warrior 행동 종료 시 효과 발동
+                foreach (ICaseAfterAction cb in th.getCaseList<ICaseAfterAction>()) {
+                    cb.onAfterAction(th);
+                }
+                foreach (caseTimerSelfishTurn ct in th.getCaseList<caseTimerSelfishTurn>()) {
+                    ct.updateOnActionEnd(th);
+                    if ((ct.timerCur <= 0) && (ct is skillAbst tempSkill)) {
+                        foreach (ICaseSkillReady cb in th.getCaseList<ICaseSkillReady>()) {
+                            cb.onSkillReady(th);
+                        }
+                    }
+                }
+
                 yield return new WaitForSeconds(intervalTime);
 
                 //dead warriors
+                // ★ 중립 세력 추가시키기
                 foreach (List<warriorAbst> lis in warriorsDead_) {
                     foreach (warriorAbst dwa in lis) {
                         if (dwa.stateCur == enumStateWarrior.deadRecently) {
@@ -176,7 +194,7 @@ public class combatManager : MonoBehaviour {
                 //check if this combat is over after each action
                 if (overCheck()) {
                     //★ 1초 정지 (사망 애니메이션을 보여서 가독성 강화)
-                    //★게임 종료 처리
+                    //★ 게임 종료 처리
                     //return (warriorsHpSorted_[1].Count <= 0);
                 }
             }
@@ -185,6 +203,12 @@ public class combatManager : MonoBehaviour {
                 //onTurnEnd
                 foreach (ICaseTurnEnd cb in th.getCaseList<ICaseTurnEnd>()) {
                     cb.onTurnEnd(th);
+                }
+                foreach (caseTimerHostilTurn ct in th.getCaseList<caseTimerHostilTurn>()) {
+                    ct.updateOnTurnEnd(th);
+                }
+                foreach (caseTimerFriendlyTurn ct in th.getCaseList<caseTimerFriendlyTurn>()) {
+                    ct.updateOnTurnEnd(th);
                 }
             }
 
@@ -260,8 +284,14 @@ public class combatManager : MonoBehaviour {
     }
 
     //processUseSkill makes a warrior use his skill, this method is used for consistency and ICase calls
-    public void processUseSkill(warriorAbst source, int parCoor0, int parCoor1) {
-
+    public void processUseSkill(warriorAbst source) {
+        foreach (ICaseBeforeUseSkill cb in source.getCaseList<ICaseBeforeUseSkill>()) {
+            cb.onBeforeUseSkill(source);
+        }
+        source.useSkill();
+        foreach (ICaseAfterUseSkill cb in source.getCaseList<ICaseAfterUseSkill>()) {
+            cb.onAfterUseSkill(source);
+        }
     }
 
     //processPlace 
