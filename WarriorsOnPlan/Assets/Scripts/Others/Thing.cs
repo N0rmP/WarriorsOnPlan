@@ -13,8 +13,15 @@ public enum enumStateWarrior {
     none = 9999
 }
 
+public enum enumSide { 
+    player = 0,
+    enemy = 1,
+    neutral = 2
+}
+
 public class Thing : movableObject, IMovableSupplement {
-    #region variable    
+    #region variable
+    protected int damageTotalDealt_;
 
     private ICaseUpdateState semaphoreState;
 
@@ -23,26 +30,31 @@ public class Thing : movableObject, IMovableSupplement {
     protected List<toolWeapon> listToolWeapon;
 
     private SortedSet<string> setAttackTriggerName;
-    private Animator thisAnimController;
+    protected Animator thisAnimController;
 
     protected wigwaggerMove wigwaggerForMove;
     //★ wigwaggerForSkill needed
     protected selecterAbst selecterForAttack;
+    protected selecterAbst selecterForSkill;
+
+    private skillAbst thisSkill;
 
     #region property
+    public enumSide thisSide { get; protected set; }
     public int maxHp { get; protected set; }
     public int curHp { get; protected set; }
+    public int damageTotalDealt { get { return damageTotalDealt_; } }
+    public Thing whatToAttack { get; private set; }
+    public Thing whatToUseSkill { get; private set; }
     public node curPosition { get; set; }
     public enumStateWarrior stateCur { get; private set; }
     public toolWeapon[] copyWeapons {
         get { return listToolWeapon.ToArray(); }
     }
-    public Thing whatToAttack { get; private set; }
-    
     #endregion property
     #endregion variable
 
-    public void init(int parMaxHp) {
+    public virtual void init(enumSide parSide, int parMaxHp) {
         semaphoreState = null;
         listCaseBaseAll = new List<caseBase>();
         listToolWeapon = new List<toolWeapon>();
@@ -53,19 +65,24 @@ public class Thing : movableObject, IMovableSupplement {
         curHp = maxHp;
 
         setAttackTriggerName = new SortedSet<string>();
+
+        thisSide = parSide;
+        damageTotalDealt_ = 0;
+        //★
     }
 
-    #region overrides
+    #region interface_implements
     public void whenStartMove() { }
 
     public void whenEndMove() {
         thisAnimController.SetBool("isRun", false);
     }
-    #endregion overrides
+    #endregion interface_implements
 
     #region processes
     public virtual void updateTargets() {
         whatToAttack = selecterForAttack.select(this);
+        whatToUseSkill = selecterForSkill.select(this);
     }
 
     public void updateState() {
@@ -135,6 +152,10 @@ public class Thing : movableObject, IMovableSupplement {
         return tempResultChange;
     }
 
+    public void useSkill() {
+        thisSkill.useSkill(this, whatToUseSkill);
+    }
+
     public void destroy(Thing target) {
         foreach (ICaseDestroy ca in getCaseList<ICaseDestroy>()) {
             ca.onDestroy(this, target);
@@ -151,6 +172,9 @@ public class Thing : movableObject, IMovableSupplement {
         }
 
         stateCur = enumStateWarrior.deadRecently;
+
+        combatManager.CM.addDeadThing(this);
+        combatManager.CM.removeThing(this);
     }
 
     public virtual void destroiedTotally() {
@@ -159,12 +183,21 @@ public class Thing : movableObject, IMovableSupplement {
     #endregion processes
 
     #region utility
-    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove) {
-        selecterForAttack = parSelecterForAttack;
+    //★ 추후 wigwaggerForSkill 집어넣을 것
+    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove, selecterAbst parSelecterForSkill) {
         wigwaggerForMove = parWigwaggerForMove;
+        selecterForAttack = parSelecterForAttack;
+        selecterForSkill = parSelecterForSkill;
 
-        addCase(parSelecterForAttack);
         addCase(parWigwaggerForMove);
+        addCase(parSelecterForAttack);
+        addCase(parSelecterForSkill);
+    }
+
+    public void addDamageTotalDealt(int par) {
+        if (par > 0) {
+            damageTotalDealt_ += par;
+        }
     }
 
     public virtual void addCase(caseBase parCase) {
@@ -183,6 +216,9 @@ public class Thing : movableObject, IMovableSupplement {
             /*case enumCaseType.effect:
                 listEffect.Insert(insertPosition, parCase);
                 break;*/
+            case enumCaseType.skill:
+                thisSkill = (skillAbst)parCase;
+                break;
             default:
                 break;
         }
@@ -203,6 +239,9 @@ public class Thing : movableObject, IMovableSupplement {
             /*case enumCaseType.effect:
                 listEffect.Remove(parCase);
                 break;*/
+            case enumCaseType.skill:
+                thisSkill = null;
+                break;
             default:
                 break;
         }
@@ -245,20 +284,41 @@ public class Thing : movableObject, IMovableSupplement {
         setAttackTriggerName.Add(parString);
     }
 
-    public virtual void animate() {
+    public virtual void animate(Vector3 parLookDirection) {
+        void Look(Vector3 parLookDirection) {
+            if (parLookDirection != null) {
+                transform.rotation = Quaternion.LookRotation(parLookDirection - transform.position);
+            }
+        }
+
+        thisAnimController.SetBool("isFocussing", false);
+        thisAnimController.SetBool("isControlled", false);
         switch (stateCur) {
+            case enumStateWarrior.deadRecently:
+                thisAnimController.SetTrigger("trigDead");
+                //★ 페이드 아웃
+                break;
+            case enumStateWarrior.controlled:
+                thisAnimController.SetBool("isControlled", true);
+                break;
+            case enumStateWarrior.focussing:
+                Look(parLookDirection);
+                thisAnimController.SetBool("isFocussing", true);
+                break;
             case enumStateWarrior.move:
+                Look(parLookDirection);
                 thisAnimController.SetBool("isRun", true);
                 break;
             case enumStateWarrior.idleAttack:
+                Look(parLookDirection);
                 thisAnimController.SetTrigger("trigAttackStart");
                 foreach (string trigName in setAttackTriggerName) {
                     thisAnimController.SetTrigger(trigName);
                 }
                 break;
-            case enumStateWarrior.deadRecently:
-                thisAnimController.SetTrigger("trigDead");
-                //★ 페이드 아웃
+            case enumStateWarrior.skill:
+                Look(parLookDirection);
+                thisAnimController.SetTrigger("trigUseSkill");
                 break;
             default:
                 break;

@@ -25,7 +25,7 @@ public abstract class selecterAbst : caseBase {
             tempResult.AddRange(tempCM.copyWarriorsActionOrder(1));
         }
         if ((targetGroup & 0b100) != 0) {
-            tempResult.AddRange(tempCM.copyNeutralActionOrder);
+            tempResult.AddRange(tempCM.copyWarriorsActionOrder(2));
         }
 
         return tempResult.ToArray();
