@@ -13,7 +13,8 @@ public class tester : Thing
         setCircuit(
             new selecterClosest(new System.Object[1] { (System.Object)0b010 }),
             new wigwaggerMove(new sensorNothing(), new navigatorAttackOneWeapon()),
-            new selecterClosest(new System.Object[1] { (System.Object)0b010 })
+            new selecterClosest(new System.Object[1] { (System.Object)0b010 }),
+            new wigwaggerSkillSelfReady(new System.Object[1] { 5 })
             );
     }
 }

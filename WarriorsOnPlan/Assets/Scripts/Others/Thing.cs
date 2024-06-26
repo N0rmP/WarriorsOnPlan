@@ -33,7 +33,7 @@ public class Thing : movableObject, IMovableSupplement {
     protected Animator thisAnimController;
 
     protected wigwaggerMove wigwaggerForMove;
-    //★ wigwaggerForSkill needed
+    protected wigwaggerSkillabst wigwaggerForSkill;
     protected selecterAbst selecterForAttack;
     protected selecterAbst selecterForSkill;
 
@@ -184,14 +184,16 @@ public class Thing : movableObject, IMovableSupplement {
 
     #region utility
     //★ 추후 wigwaggerForSkill 집어넣을 것
-    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove, selecterAbst parSelecterForSkill) {
-        wigwaggerForMove = parWigwaggerForMove;
+    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove, selecterAbst parSelecterForSkill, wigwaggerSkillabst parWigwaggerForSkill) {
         selecterForAttack = parSelecterForAttack;
+        wigwaggerForMove = parWigwaggerForMove;
         selecterForSkill = parSelecterForSkill;
+        wigwaggerForSkill = parWigwaggerForSkill;
 
         addCase(parWigwaggerForMove);
         addCase(parSelecterForAttack);
         addCase(parSelecterForSkill);
+        addCase(parWigwaggerForSkill);
     }
 
     public void addDamageTotalDealt(int par) {

@@ -25,18 +25,30 @@ public abstract class toolWeapon : caseTimerSelfishTurn {
     public int rangeMin { get; private set; }
     public int rangeMax { get; private set; }
     public int damageCur { get; set; }
+    public bool isReady { get; protected set; }
     public enumDamageType damageType { get; private set; }
     public enumAnimationType animationType { get; private set; }
 
-    public toolWeapon(int parTimerMax, string parWeaponName, int parDamageOriginal, bool parIsTimerMax = false) : base(parTimerMax, enumCaseType.tool, parIsTimerMax) {
+    public toolWeapon(int parTimerMax, string parWeaponName, int parDamageOriginal, bool parIsTimerMax = false) : base(parTimerMax, enumCaseType.tool, parIsTimerMax, false) {
         dataWeaponEntity tempDWE = gameManager.GM.EC.getWeaponEntiy(parWeaponName);
 
         rangeMin = tempDWE.RangeMin;
         rangeMax = tempDWE.RangeMax;
         damageType = tempDWE.DamageType;
         animationType = tempDWE.AnimationType;
+        isReady = false;
 
         damageCur = damageOriginal = parDamageOriginal;
+    }
+
+    protected override void doOnAlarmed(Thing source) {
+        isReady = true;
+    }
+
+    public damageInfo attack() {
+        isReady = false;
+        resetTimer();
+        return getDamageInfo();
     }
 
     public damageInfo getDamageInfo() {

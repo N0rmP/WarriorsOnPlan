@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class caseTimerHostilTurn : caseTimer
+public class caseTimerHostileTurn : caseTimer
 {
     private bool isTurnStartPassed;
 
-    public caseTimerHostilTurn(int parTimerMax, enumCaseType parEnumCaseType, bool parIsTimerMax = true) : base(parTimerMax, parEnumCaseType, parIsTimerMax) {
+    public caseTimerHostileTurn(int parTimerMax, enumCaseType parEnumCaseType, bool parIsTimerMax = true, bool parIsAutoReset = true) : base(parTimerMax, parEnumCaseType, parIsTimerMax, parIsAutoReset) {
         isTurnStartPassed = false;
     }
 
@@ -16,7 +16,7 @@ public class caseTimerHostilTurn : caseTimer
 
     public void updateOnTurnEnd(Thing source) {
         if (isTurnStartPassed) {
-            updateTimer();
+            updateTimer(source);
             isTurnStartPassed = false;
         }
     }

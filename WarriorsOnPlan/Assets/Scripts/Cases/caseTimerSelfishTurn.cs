@@ -5,7 +5,7 @@ using UnityEngine;
 public class caseTimerSelfishTurn : caseTimer {
     private bool isActionStartPassed;
 
-    public caseTimerSelfishTurn(int parTimerMax, enumCaseType parEnumCaseType, bool parIsTimerMax = true) : base(parTimerMax, parEnumCaseType, parIsTimerMax) {
+    public caseTimerSelfishTurn(int parTimerMax, enumCaseType parEnumCaseType, bool parIsTimerMax = true, bool parIsAutoReset = true) : base(parTimerMax, parEnumCaseType, parIsTimerMax, parIsAutoReset) {
         isActionStartPassed = false;
     }
 
@@ -15,7 +15,7 @@ public class caseTimerSelfishTurn : caseTimer {
 
     public void updateOnActionEnd(Thing source) {
         if (isActionStartPassed) {
-            updateTimer();
+            updateTimer(source);
             isActionStartPassed = false;
         }
     }

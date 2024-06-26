@@ -16,7 +16,7 @@ public class combatManager : MonoBehaviour {
 
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
-    private float intervalTime = 1f;
+    private float intervalTime = 0.5f;
 
     //warriors array's indices represent different team, 0 = player's / 1 = computer's
     private List<Thing>[] thingsHpSorted_;
@@ -85,6 +85,7 @@ public class combatManager : MonoBehaviour {
 
         int codeTurn = 0;
         List<Thing> tempListActors;
+        Vector3 tempLookDirection;
 
         //before combat starts, activate all onEngage from warriors
         tempListActors = new List<Thing>();
@@ -100,7 +101,6 @@ public class combatManager : MonoBehaviour {
         isCombatLooping = true;
 
         while (true) {
-            //★ 상대방 warriorsActionsOrder_[1]을 warriorsHpSorted[1]에 참조시키면 위 기능을 간단히 해결할 수 있다.
             //nuetral side's turn precedes enemy's turn to assure that player can make use of the nuetral side perfectly
             tempListActors = codeTurn switch { 
                 0 => thingsActionOrder_[0],
@@ -111,7 +111,7 @@ public class combatManager : MonoBehaviour {
 
             foreach (Thing th in tempListActors) {
                 //update timers
-                foreach (caseTimerHostilTurn ct in th.getCaseList<caseTimerHostilTurn>()) {
+                foreach (caseTimerHostileTurn ct in th.getCaseList<caseTimerHostileTurn>()) {
                     ct.updateOnTurnStart(th);
                 }
                 //onTurnStart
@@ -136,9 +136,8 @@ public class combatManager : MonoBehaviour {
                     cb.onBeforeAction(th);
                 }
                 th.updateState();
-                
 
-                // decide what action this warrior does this time, priority is (Being Controlled) > UseSkill > Attack > Move
+                tempLookDirection = Vector3.negativeInfinity;
                 switch (th.stateCur) {
                     // ★ 각각의 warrior 행동 시작 시 효과 발동
                     case enumStateWarrior.controlled:
@@ -146,18 +145,18 @@ public class combatManager : MonoBehaviour {
                     case enumStateWarrior.focussing:
                         break;
                     case enumStateWarrior.skill:
-                        processUseSkill(th);
+                        tempLookDirection = processUseSkill(th);
                         break;
                     case enumStateWarrior.move:
-                        processMove(th);
+                        tempLookDirection = processMove(th);
                         break;
                     case enumStateWarrior.idleAttack:
-                        processAttack(th, th.whatToAttack);
+                        tempLookDirection = processAttack(th, th.whatToAttack);
                         break;
                     default:
                         break;
                 }
-                th.animate();
+                th.animate(tempLookDirection);
 
                 // ★ 각각의 warrior 행동 종료 시 효과 발동
                 foreach (ICaseAfterAction cb in th.getCaseList<ICaseAfterAction>()) {
@@ -172,6 +171,7 @@ public class combatManager : MonoBehaviour {
                     }
                 }
 
+                //interval between things
                 yield return new WaitForSeconds(intervalTime);
 
                 //dead warriors
@@ -179,7 +179,7 @@ public class combatManager : MonoBehaviour {
                 foreach (List<Thing> lis in thingsDead_) {
                     foreach (Thing dwa in lis) {
                         if (dwa.stateCur == enumStateWarrior.deadRecently) {
-                            dwa.animate();
+                            dwa.animate(tempLookDirection);
                             dwa.destroiedTotally();
                         }
                     }
@@ -193,19 +193,23 @@ public class combatManager : MonoBehaviour {
                     //return (warriorsHpSorted_[1].Count <= 0);
                 }
             }
+
             //turn end processes
             foreach (Thing th in tempListActors) {
                 //onTurnEnd
                 foreach (ICaseTurnEnd cb in th.getCaseList<ICaseTurnEnd>()) {
                     cb.onTurnEnd(th);
                 }
-                foreach (caseTimerHostilTurn ct in th.getCaseList<caseTimerHostilTurn>()) {
+                foreach (caseTimerHostileTurn ct in th.getCaseList<caseTimerHostileTurn>()) {
                     ct.updateOnTurnEnd(th);
                 }
                 foreach (caseTimerFriendlyTurn ct in th.getCaseList<caseTimerFriendlyTurn>()) {
                     ct.updateOnTurnEnd(th);
                 }
             }
+
+            //interval between turns
+            yield return new WaitForSeconds(intervalTime);
 
             codeTurn = (++codeTurn >= 3 ? 0 : codeTurn);
         }
@@ -235,7 +239,7 @@ public class combatManager : MonoBehaviour {
         }
     }
 
-    public void processAttack(Thing source, Thing target) {
+    public Vector3 processAttack(Thing source, Thing target) {
         damageInfo tempDInfo;
         List<damageInfo> tempListDInfo = new List<damageInfo>();
 
@@ -244,11 +248,11 @@ public class combatManager : MonoBehaviour {
             cb.onBeforeAttack(source, target);
         }
         foreach (toolWeapon tw in source.copyWeapons) {
-            if (tw.timerCur <= 0) {
+            Debug.Log(tw.timerCur);
+            if (tw.isReady) {
                 source.addAttackAnimation(tw.animationType.ToString());
-                tempDInfo = tw.getDamageInfo();
+                tempDInfo = tw.attack();
                 processDealDamage(source, source.whatToAttack, tempDInfo);
-                tw.resetTimer();
                 tempListDInfo.Add(tempDInfo);
                 if (tw is ICaseThisWeaponUsed tempCB) {
                     tempCB.onThisWeaponUsed(source, target, tempDInfo);
@@ -258,10 +262,12 @@ public class combatManager : MonoBehaviour {
         foreach (ICaseAfterAttack cb in source.getCaseList<ICaseAfterAttack>()) {
             cb.onAfterAttack(source, target, tempListDInfo);
         }
+
+        return target.transform.position;
     }
 
     //processMove with EDirection parameter makes a warrior walk a node to the parameter-direction
-    public void processMove(Thing source) {
+    public Vector3 processMove(Thing source) {
         node tempDestination = source.getNextRoute();
         
         source.curPosition.sendThing(tempDestination);
@@ -269,15 +275,17 @@ public class combatManager : MonoBehaviour {
         Vector3 tempDestinationVector = source.curPosition.getVector3();
         source.transform.rotation = Quaternion.LookRotation(tempDestinationVector - source.transform.position);
         source.startLinearMove(tempDestinationVector);
+
+        return source.curPosition.getVector3();
     }
 
     //processMove with two int parameters makes a warrior teleport to the destination
-    public void processMove(Thing source, int parCoor0, int parCoor1) {
-
+    public Vector3 processMove(Thing source, int parCoor0, int parCoor1) {
+        return Vector3.negativeInfinity;
     }
 
     //processUseSkill makes a warrior use his skill, this method is used for consistency and ICase calls
-    public void processUseSkill(Thing source) {
+    public Vector3 processUseSkill(Thing source) {
         foreach (ICaseBeforeUseSkill cb in source.getCaseList<ICaseBeforeUseSkill>()) {
             cb.onBeforeUseSkill(source);
         }
@@ -285,6 +293,8 @@ public class combatManager : MonoBehaviour {
         foreach (ICaseAfterUseSkill cb in source.getCaseList<ICaseAfterUseSkill>()) {
             cb.onAfterUseSkill(source);
         }
+
+        return (source.whatToUseSkill == null) ? Vector3.negativeInfinity : source.whatToUseSkill.transform.position;
     }
 
     public void processSpawn(string sourceName, enumSide parSide, (int c0, int c1) parCoor) {
@@ -319,6 +329,9 @@ public class combatManager : MonoBehaviour {
         int tempIndex = (int)parThing.thisSide;
         thingsHpSorted_[tempIndex].Add(parThing);
         thingsDamageDealtSorted_[tempIndex].Add(parThing);
+
+        //★ 추후 행동 순서 결정 시스템이 만들어지면 조정할 것
+        thingsActionOrder_[tempIndex].Add(parThing);
 
         if (isSortAfterAdd) {
             updateTotal();
