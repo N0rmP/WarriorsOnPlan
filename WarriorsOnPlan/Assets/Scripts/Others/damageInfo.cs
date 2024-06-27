@@ -18,6 +18,7 @@ public class damageInfo
     private Action<Thing, Thing> delEffect;
 
     public int damage { get; private set; }
+    public int dealtDamage { get; private set; }
     public enumDamageType damageType { get; set; }
 
     public damageInfo(Thing parSourceAttacker, caseBase parSourceCaseAll, int parDamage, enumDamageType parDType, Action<Thing, Thing> parDelegate) {
@@ -72,7 +73,7 @@ public class damageInfo
 
     public int DEAL(Thing target) {
         calculateFinalDamage();
-        target.setCurHp(-damage, sourceAttacker, true);
+        dealtDamage = target.setCurHp(-damage, sourceAttacker);
         gameManager.GM.TC.addDelegate(() => delEffect(sourceAttacker, target), 0.5f);
         return damage;
     }

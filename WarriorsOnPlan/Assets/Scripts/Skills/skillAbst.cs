@@ -16,7 +16,7 @@ public abstract class skillAbst : caseTimerSelfishTurn {
 
     public void useSkill(Thing source, Thing target) {
         actualUseSkill(source, target);
-        반환 형식으로 데미지 / 회복량 등을 자유롭게 반환할 수 있는 형태 구상하기
+        resetTimer();
     }
 
     protected abstract void actualUseSkill(Thing sourcem, Thing target);

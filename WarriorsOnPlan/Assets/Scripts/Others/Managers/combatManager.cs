@@ -71,6 +71,7 @@ public class combatManager : MonoBehaviour {
 
     public void Start() {
         //★ test
+        UI 사용해서 아군 warrior circuit 설정하기
         processSpawn("tester", enumSide.player, (6, 6));
         processSpawn("tester", enumSide.enemy, (0, 0));
 

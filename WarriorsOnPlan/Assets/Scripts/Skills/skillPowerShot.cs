@@ -11,7 +11,7 @@ public class skillPowerShot : skillAbst
         damageOriginal = parDamage;
     }
 
-    public override void useSkill(Thing source, Thing target) {
+    protected override void actualUseSkill(Thing source, Thing target) {
         Debug.Log("!!!!!!!!! POW!!!!!!!!!!!!! WER!!!!!!!! SHOOOOOOOOOOOOOOOTTTTTTT!!!!!!!!!!");
         combatManager.CM.processDealDamage(source, target, new damageInfo(source, this, damageOriginal, enumDamageType.basic, this.showEffect));
     }

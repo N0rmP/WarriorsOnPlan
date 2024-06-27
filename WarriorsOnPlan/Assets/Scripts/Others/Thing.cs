@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum enumStateWarrior {
     dead = 0,
@@ -124,9 +127,20 @@ public class Thing : movableObject, IMovableSupplement {
         return wigwaggerForMove.getNextRoute(this);
     }
 
-    public int setCurHp(int parValue, Thing source, bool isPlus = false) {
+    public int setCurHp(int parValue, Thing source, bool isPlus = true) {
+        //onBeforeHp Increase / Decrease
+        bool tempIsIncrease = (isPlus && parValue >= 0) || (!isPlus && (parValue - curHp) >= 0);
+        if (tempIsIncrease) {
+            foreach (ICaseBeforeHpIncrease cb in getCaseList<ICaseBeforeHpIncrease>()) {
+                cb.onBeforeHpIncrease(source, ref parValue);
+            }
+        } else {
+            foreach (ICaseBeforeHpDecrease cb in getCaseList<ICaseBeforeHpDecrease>()) {
+                cb.onBeforeHpDecrease(source, ref parValue);
+            }
+        }
+
         int tempResultChange = 0;
-        //★ 체력 증감 이전 효과 발동
         if (isPlus) {
             if (curHp + parValue < 0) {
                 tempResultChange = -curHp;
@@ -142,7 +156,17 @@ public class Thing : movableObject, IMovableSupplement {
             tempResultChange = (parValue > curHp) ? (parValue - curHp) : (curHp - parValue);
             curHp = parValue;
         }
-        //★ 체력 증감 이후 효과 발동
+
+        //onAfterHp Increase / Decrease
+        if (tempIsIncrease) {
+            foreach (ICaseAfterHpIncrease cb in getCaseList<ICaseAfterHpIncrease>()) {
+                cb.onAfterHpIncrease(source, tempResultChange);
+            }
+        } else {
+            foreach (ICaseAfterHpDecrease cb in getCaseList<ICaseAfterHpDecrease>()) {
+                cb.onAfterHpDecrease(source, tempResultChange);
+            }
+        }
 
         //if curHp_ is below zero, warrior dies
         if (curHp <= 0) {
