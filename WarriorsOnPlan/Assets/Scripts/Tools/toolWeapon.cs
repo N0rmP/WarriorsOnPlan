@@ -22,20 +22,14 @@ public abstract class toolWeapon : caseTimerSelfishTurn {
     protected readonly int damageOriginal;
 
     public Thing owner { get; set; }
-    public int rangeMin { get; private set; }
-    public int rangeMax { get; private set; }
+    public int rangeMin { get; protected set; }
+    public int rangeMax { get; protected set; }
     public int damageCur { get; set; }
     public bool isReady { get; protected set; }
-    public enumDamageType damageType { get; private set; }
-    public enumAnimationType animationType { get; private set; }
+    public enumDamageType damageType { get; protected set; }
+    public enumAnimationType animationType { get; protected set; }
 
     public toolWeapon(int parTimerMax, string parWeaponName, int parDamageOriginal, bool parIsTimerMax = false) : base(parTimerMax, enumCaseType.tool, parIsTimerMax, false) {
-        dataWeaponEntity tempDWE = gameManager.GM.EC.getWeaponEntiy(parWeaponName);
-
-        rangeMin = tempDWE.RangeMin;
-        rangeMax = tempDWE.RangeMax;
-        damageType = tempDWE.DamageType;
-        animationType = tempDWE.AnimationType;
         isReady = false;
 
         damageCur = damageOriginal = parDamageOriginal;
