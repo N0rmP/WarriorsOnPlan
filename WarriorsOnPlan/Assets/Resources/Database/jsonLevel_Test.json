@@ -9,8 +9,8 @@
         ["tester", coor0, coor1, selecterForAttack, parameter0, selecterForSkill, parameter1, wigwaggerMove, parameter2, wigwaggerSkill, parameter3, HP, skillParameters, toolList]
     ],
     "friendlyWarriors" : [
-        ["tester", coor0, coor1, selecterForAttack, parameter0, selecterForSkill, parameter1, wigwaggerMove, parameter2, wigwaggerSkill, parameter3, HP, skillParameters],
-        ["tester", coor0, coor1, selecterForAttack, parameter0, selecterForSkill, parameter1, wigwaggerMove, parameter2, wigwaggerSkill, parameter3, HP, skillParameters]
+        ["tester", HP, skillParameters],
+        ["tester", HP, skillParameters]
     ],
     "toolsProvided" : [
         ["trainingSword", parameters],
