@@ -1,8 +1,36 @@
 {
-    "name" : "level test",
-    "enemyWarriors" : [
-        ["tester", coor0, coor1, selecterForAttack, parameter0, selecterForSkill, parameter1, wigwaggerMove, parameter2, wigwaggerSkill, parameter3, HP, skillParameters toolList],
-        ["tester", coor0, coor1, selecterForAttack, parameter0, selecterForSkill, parameter1, wigwaggerMove, parameter2, wigwaggerSkill, parameter3, HP, skillParameters, toolList]
+    "LevelName" : "level test",
+    "EnemyWarriors" : [
+        {
+            "CodeThing" : 9999, 
+            "Coordinate0" : 0, "Coordinate1" : 0, 
+            "HP" : 3, 
+            "SkillParameter" : [],
+            "ToolList" : [
+                {"CodeTool" : 0, "ToolParameter" : []}
+            ],
+            "CodeSelecterForAttack" : 0, "Parameter0" : [], 
+            "CodeSelecterForSkill" : 0, "Parameter1" : [], 
+            "CodeSensor" : 0, "Rarameter2" : [], 
+            "NavigatorIdle" : 0, "Parameter3" : [], 
+            "NavigatorPrioritized" : -1, "Parameter4" : [], 
+            "wigwaggerSkill" : 0, "Parameter5" : []
+        },
+        {
+            "CodeThing" : 9999, 
+            "Coordinate0" : 0, "Coordinate1" : 1, 
+            "HP" : 3, 
+            "SkillParameter" : [],
+            "ToolList" : [
+                {"CodeTool" : 0, "ToolParameter" : []}
+            ],
+            "CodeSelecterForAttack" : 0, "Parameter0" : [], 
+            "CodeSelecterForSkill" : 0, "Parameter1" : [], 
+            "CodeSensor" : 0, "Rarameter2" : [], 
+            "NavigatorIdle" : 0, "Parameter3" : [], 
+            "NavigatorPrioritized" : -1, "Parameter4" : [], 
+            "wigwaggerSkill" : 0, "Parameter5" : []
+        }
     ],
     "neutralThings" : [
         ["tester", coor0, coor1, selecterForAttack, parameter0, selecterForSkill, parameter1, wigwaggerMove, parameter2, wigwaggerSkill, parameter3, HP, skillParameters, toolList],

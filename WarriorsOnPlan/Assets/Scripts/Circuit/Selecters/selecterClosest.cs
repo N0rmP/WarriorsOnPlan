@@ -6,7 +6,7 @@ using UnityEditor.SceneTemplate;
 using UnityEngine;
 
 public class selecterClosest : selecterAbst {
-    public selecterClosest(System.Object[] parArray) : base(parArray) {
+    public selecterClosest(object[] parArray) : base(parArray) {
     }
 
     public override Thing select(Thing source) {

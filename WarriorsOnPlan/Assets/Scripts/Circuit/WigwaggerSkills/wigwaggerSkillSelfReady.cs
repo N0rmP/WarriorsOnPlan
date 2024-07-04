@@ -5,9 +5,7 @@ using UnityEngine;
 public class wigwaggerSkillSelfReady : wigwaggerSkillabst, ICaseSkillReady, ICaseAfterUseSkill {
     private bool isUseSkill;
 
-    public wigwaggerSkillSelfReady(System.Object[] parArray) : base((int)parArray[0]) {
-
-    }
+    public wigwaggerSkillSelfReady(object[] parArray) : base((int)parArray[0]) { }
 
     public void onAfterUseSkill(Thing source, Thing target = null) {
         isUseSkill = false;

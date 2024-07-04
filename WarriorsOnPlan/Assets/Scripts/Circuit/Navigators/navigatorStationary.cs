@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class navigatorStationary : navigatorAbst
 {
+    public navigatorStationary(object[] parArray) : base(parArray) { }
 
     public override node getNextRoute(Thing owner) {
         return null;

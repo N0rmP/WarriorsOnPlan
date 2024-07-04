@@ -10,7 +10,7 @@ public abstract class navigatorAbst : caseBase
     // route will be recalculated just before every movement, but can remain only when whole nodes in route have nothing on them
     protected Queue<node> route;
 
-    public navigatorAbst() : base(enumCaseType.circuit) {
+    public navigatorAbst(object[] parArray) : base(enumCaseType.circuit) {
         route = new Queue<node>();
     }
 
