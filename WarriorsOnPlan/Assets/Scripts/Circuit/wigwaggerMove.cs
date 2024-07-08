@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class wigwaggerMove : caseBase, ICaseTurnStart, ICaseUpdateState {
-    private sensorAbst sensor;
+    private sensorAbst sensorIdle;
+    private sensorAbst sensorPrioritized;
     private navigatorAbst navIdle;
     private navigatorAbst navPrioritized;
 
+    private sensorAbst sensorCur;
     private navigatorAbst navCur;
 
-    public wigwaggerMove(sensorAbst parSensor, navigatorAbst parNavIdle, navigatorAbst parNavPrioritized = null) : base(enumCaseType.circuit) {
-        sensor = parSensor;
+    public wigwaggerMove(sensorAbst parSensorIdle, sensorAbst parSensorPrioitized, navigatorAbst parNavIdle, navigatorAbst parNavPrioritized = null) : base(enumCaseType.circuit) {
+        sensorIdle = parSensorIdle;
+        sensorPrioritized = parSensorPrioitized;
         navIdle = parNavIdle;
         navPrioritized = parNavPrioritized;
 
@@ -22,11 +25,11 @@ public class wigwaggerMove : caseBase, ICaseTurnStart, ICaseUpdateState {
     }
 
     public void onTurnStart(Thing source) {
-        if (sensor.checkWigwagging(source) && (navPrioritized != null)) {
-            navCur = navPrioritized;
-        } else {
-            navCur = navIdle;
-        }
+        //sensor update
+        sensorCur = (sensorCur.checkReturnToIdle(source)) ? sensorIdle : sensorPrioritized;
+
+        //navigator update
+        navCur = (sensorCur.checkWigwagging(source) && (navPrioritized != null)) ? navPrioritized : navIdle;
     }
 
     public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source) {

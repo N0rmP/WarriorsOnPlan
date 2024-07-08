@@ -9,8 +9,8 @@
             "ToolList" : [
                 {"CodeTool" : 0, "ToolParameter" : []}
             ],
-            "CodeSelecterForAttack" : 0, "Parameter0" : [], 
-            "CodeSelecterForSkill" : 0, "Parameter1" : [], 
+            "CodeSelecterForAttack" : 0, "Parameter0" : [2], 
+            "CodeSelecterForSkill" : 0, "Parameter1" : [2], 
             "CodeSensor" : 0, "Rarameter2" : [], 
             "NavigatorIdle" : 0, "Parameter3" : [], 
             "NavigatorPrioritized" : -1, "Parameter4" : [], 

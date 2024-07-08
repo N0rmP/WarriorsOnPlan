@@ -11,10 +11,10 @@ public class tester : Thing
         this.addCase(new weaponTester());
         this.addCase(new skillPowerShot(5));
         setCircuit(
-            new selecterClosest(new System.Object[1] { (System.Object)0b010 }),
-            new wigwaggerMove(new sensorNothing(), new navigatorAttackOneWeapon()),
-            new selecterClosest(new System.Object[1] { (System.Object)0b010 }),
-            new wigwaggerSkillSelfReady(new System.Object[1] { 5 })
+            new selecterClosest(new object[1] { (object)0b010 }),
+            new wigwaggerMove(new sensorNothing(new object[0]), new navigatorAttackOneWeapon(new object[0])),
+            new selecterClosest(new object[1] { (object)0b010 }),
+            new wigwaggerSkillSelfReady(new object[1] { 0 })
             );
     }
 }

@@ -5,4 +5,5 @@ using UnityEngine;
 public abstract class sensorAbst : caseBase {
     public sensorAbst(object[] parArray) : base(enumCaseType.circuit) { }
     public abstract bool checkWigwagging(Thing source);
+    public virtual bool checkReturnToIdle(Thing source) { return true; }
 }

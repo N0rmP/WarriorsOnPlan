@@ -15,7 +15,7 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-57707
+58983
 Successfully changed project path to: C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,12 +49,12 @@ C:/Users/c4607/OneDrive/Desktop/WarriorsOnPlan/WarriorsOnPlan
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [21232] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 3374725562 [EditorId] 3374725562 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [1808] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 4018215185 [EditorId] 4018215185 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [21232] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 3374725562 [EditorId] 3374725562 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [1808] Host "[IP] 192.168.219.175 [Port] 0 [Flags] 2 [Guid] 4018215185 [EditorId] 4018215185 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-G6HG4DQ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
 [Physics::Module] Initialized MultithreadedJobDispatcher with 11 workers.
-Refreshing native plugins compatible for Editor in 68.67 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 11.19 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.20f1 (61c2feb0970d)
 [Subsystems] Discovering subsystems at path D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Resources/UnitySubsystems
@@ -70,51 +70,51 @@ Initialize mono
 Mono path[0] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/Managed'
 Mono path[1] = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56060
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56116
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
 Register platform support module: D:/Programs/Unity Editors/2022.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.004707 seconds.
-- Loaded All Assemblies, in  0.998 seconds
+Registered in 0.006271 seconds.
+- Loaded All Assemblies, in  0.280 seconds
 Native extension for WindowsStandalone target not found
 [usbmuxd] Start listen thread
 [usbmuxd] Listen thread started
 Native extension for iOS target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 323 ms
+Android Extension - Scanning For ADB Devices 204 ms
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.621 seconds
-Domain Reload Profiling: 1619ms
-	BeginReloadAssembly (78ms)
+- Finished resetting the current domain, in  0.485 seconds
+Domain Reload Profiling: 765ms
+	BeginReloadAssembly (89ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (133ms)
-	RebuildNativeTypeToScriptingClass (10ms)
-	initialDomainReloadingComplete (41ms)
-	LoadAllAssembliesAndSetupDomain (735ms)
-		LoadAssemblies (78ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (46ms)
+	LoadAllAssembliesAndSetupDomain (110ms)
+		LoadAssemblies (89ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (733ms)
-			TypeCache.Refresh (731ms)
-				TypeCache.ScanAssembly (523ms)
+		AnalyzeDomain (108ms)
+			TypeCache.Refresh (106ms)
+				TypeCache.ScanAssembly (97ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
-			ResolveRequiredComponents (1ms)
-	FinalizeReload (622ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (486ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (577ms)
+		SetupLoadedEditorAssemblies (441ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (441ms)
+			InitializePlatformSupportModulesInManaged (289ms)
 			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
 			BeforeProcessingInitializeOnLoad (2ms)
-			ProcessInitializeOnLoadAttributes (91ms)
-			ProcessInitializeOnLoadMethodAttributes (40ms)
+			ProcessInitializeOnLoadAttributes (104ms)
+			ProcessInitializeOnLoadMethodAttributes (42ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -122,8 +122,8 @@ Domain Reload Profiling: 1619ms
 ========================================================================
 Worker process is ready to serve import requests
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  1.901 seconds
-Refreshing native plugins compatible for Editor in 7.13 ms, found 3 plugins.
+- Loaded All Assemblies, in  0.444 seconds
+Refreshing native plugins compatible for Editor in 5.24 ms, found 3 plugins.
 Native extension for WindowsStandalone target not found
 Native extension for iOS target not found
 Native extension for Android target not found
@@ -138,47 +138,47 @@ Mono: successfully reloaded assembly
 [Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
 [Package Manager] Cannot connect to Unity Package Manager local server
-- Finished resetting the current domain, in  0.623 seconds
-Domain Reload Profiling: 2522ms
-	BeginReloadAssembly (119ms)
+- Finished resetting the current domain, in  0.458 seconds
+Domain Reload Profiling: 901ms
+	BeginReloadAssembly (121ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (5ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (22ms)
-	RebuildCommonClasses (26ms)
-	RebuildNativeTypeToScriptingClass (8ms)
-	initialDomainReloadingComplete (34ms)
-	LoadAllAssembliesAndSetupDomain (1712ms)
-		LoadAssemblies (1490ms)
+		CreateAndSetChildDomain (23ms)
+	RebuildCommonClasses (28ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (31ms)
+	LoadAllAssembliesAndSetupDomain (254ms)
+		LoadAssemblies (218ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (287ms)
-			TypeCache.Refresh (264ms)
-				TypeCache.ScanAssembly (198ms)
-			ScanForSourceGeneratedMonoScriptInfo (17ms)
-			ResolveRequiredComponents (4ms)
-	FinalizeReload (624ms)
+		AnalyzeDomain (104ms)
+			TypeCache.Refresh (88ms)
+				TypeCache.ScanAssembly (77ms)
+			ScanForSourceGeneratedMonoScriptInfo (12ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (458ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (446ms)
+		SetupLoadedEditorAssemblies (343ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (40ms)
-			SetLoadedEditorAssemblies (4ms)
+			InitializePlatformSupportModulesInManaged (24ms)
+			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (60ms)
-			ProcessInitializeOnLoadAttributes (315ms)
-			ProcessInitializeOnLoadMethodAttributes (22ms)
-			AfterProcessingInitializeOnLoad (4ms)
+			BeforeProcessingInitializeOnLoad (54ms)
+			ProcessInitializeOnLoadAttributes (242ms)
+			ProcessInitializeOnLoadMethodAttributes (18ms)
+			AfterProcessingInitializeOnLoad (2ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (6ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 7.66 ms, found 3 plugins.
+		AwakeInstancesAfterBackupRestoration (5ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 5.88 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 3314 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 43 unused Assets / (63.2 KB). Loaded Objects now: 3773.
+Unloading 43 unused Assets / (63.4 KB). Loaded Objects now: 3773.
 Memory consumption went from 208.3 MB to 208.3 MB.
-Total: 5.278600 ms (FindLiveObjects: 0.536500 ms CreateObjectMapping: 0.279300 ms MarkObjects: 4.295200 ms  DeleteObjects: 0.166700 ms)
+Total: 2.561200 ms (FindLiveObjects: 0.247800 ms CreateObjectMapping: 0.089800 ms MarkObjects: 2.116300 ms  DeleteObjects: 0.106600 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
@@ -195,73 +195,25 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 197843.537006 seconds.
-  path: Assets/Scripts/Circuit/wigwaggerMove.cs
-  artifactKey: Guid(78fd697027376fd43bc91a7ac9494514) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/wigwaggerMove.cs using Guid(78fd697027376fd43bc91a7ac9494514) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '349ad1dd81a4c2cb2f18eff8a2edc95a') in 0.002380 seconds
+  Time since last request: 541474.895737 seconds.
+  path: Assets/Scripts/Cases/caseTimer.cs
+  artifactKey: Guid(2e65be17fe055a74baa7556cceb53cd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Cases/caseTimer.cs using Guid(2e65be17fe055a74baa7556cceb53cd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '50699fb01cee2371fb43c8d0550ff49c') in 0.002475 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 26.684741 seconds.
-  path: Assets/Scripts/Circuit/Sensors/sensorNothing.cs
-  artifactKey: Guid(7c44186972348f643bd0942568d8a4ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/Sensors/sensorNothing.cs using Guid(7c44186972348f643bd0942568d8a4ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '162d9305b2be7f416f3ecb14ed4abc35') in 0.000455 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 5.686900 seconds.
-  path: Assets/Scripts/Circuit/Sensors/sensorAbst.cs
-  artifactKey: Guid(93a4691c5192fc641b35913268d5201b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/Sensors/sensorAbst.cs using Guid(93a4691c5192fc641b35913268d5201b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cb024ccc55be072fe06648c18b72daaf') in 0.000426 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 1709.153985 seconds.
-  path: Assets/Scripts/Circuit/Navigators/navigatorAbst.cs
-  artifactKey: Guid(6e8c5c01f2c4d634a9f2030a9c62baf1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/Navigators/navigatorAbst.cs using Guid(6e8c5c01f2c4d634a9f2030a9c62baf1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cb63153b247397281d1eceba8214f008') in 0.000526 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 11.948843 seconds.
-  path: Assets/Scripts/Circuit/Navigators/navigatorStationary.cs
-  artifactKey: Guid(a9613eac523b71b4088c3fb2067559d8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/Navigators/navigatorStationary.cs using Guid(a9613eac523b71b4088c3fb2067559d8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1959945341e4862b63a2c83ff06089c8') in 0.000459 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 8.756586 seconds.
-  path: Assets/Scripts/Circuit/Navigators/navigatorStationary.cs
-  artifactKey: Guid(a9613eac523b71b4088c3fb2067559d8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/Navigators/navigatorStationary.cs using Guid(a9613eac523b71b4088c3fb2067559d8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4391375c29f778e018f072acdf38825') in 0.000433 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 1117.294733 seconds.
-  path: Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillSelfReady.cs
-  artifactKey: Guid(24fa9d82eeed24048a7d0e6e55311fa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillSelfReady.cs using Guid(24fa9d82eeed24048a7d0e6e55311fa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1b7ba1cd4a45ae779da254becf5773c3') in 0.000550 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 4.739813 seconds.
-  path: Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillSelfReady.cs
-  artifactKey: Guid(24fa9d82eeed24048a7d0e6e55311fa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillSelfReady.cs using Guid(24fa9d82eeed24048a7d0e6e55311fa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6f1958e34bfcec9b958b44a853771b6b') in 0.000459 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
-========================================================================
-Received Import Request.
-  Time since last request: 2.794640 seconds.
+  Time since last request: 3673.400535 seconds.
   path: Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillAbst.cs
   artifactKey: Guid(0beb23815f8ff684eafc4f00dc7d65ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillAbst.cs using Guid(0beb23815f8ff684eafc4f00dc7d65ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd9ab8d418a9c12c848a4444f99ae494c') in 0.000518 seconds
+Start importing Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillAbst.cs using Guid(0beb23815f8ff684eafc4f00dc7d65ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b3ac48f4db002e35ea2fe17781b2b816') in 0.000935 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 9.046223 seconds.
+  path: Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillAbst.cs
+  artifactKey: Guid(0beb23815f8ff684eafc4f00dc7d65ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Circuit/WigwaggerSkills/wigwaggerSkillAbst.cs using Guid(0beb23815f8ff684eafc4f00dc7d65ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '70d92634107dc486363aef167235d446') in 0.000605 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
