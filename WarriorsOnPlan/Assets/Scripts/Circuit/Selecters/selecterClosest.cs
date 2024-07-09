@@ -6,8 +6,8 @@ using UnityEditor.SceneTemplate;
 using UnityEngine;
 
 public class selecterClosest : selecterAbst {
-    public selecterClosest(object[] parArray) : base(parArray) {
-    }
+
+    public selecterClosest(int parTargetGroup) : base(parTargetGroup) { }
 
     public override Thing select(Thing source) {
         Thing[] tempPotentialTargetList = getTargetArray();

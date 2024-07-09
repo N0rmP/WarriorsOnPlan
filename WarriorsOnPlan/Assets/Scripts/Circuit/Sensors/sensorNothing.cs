@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class sensorNothing : sensorAbst {
-    public sensorNothing(object[] parArray) : base(parArray) { }
+    public sensorNothing(int parTimerMax = -1) : base(parTimerMax) { }
 
     public override bool checkWigwagging(Thing source) {
         return false;

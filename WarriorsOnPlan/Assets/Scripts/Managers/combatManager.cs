@@ -18,7 +18,7 @@ public class combatManager : MonoBehaviour {
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
     private float intervalTime = 0.5f;
 
-    //warriors array's indices represent different team, 0 = player's / 1 = computer's
+    //warriors array's indices represent different team, 0 = player's / 1 = computer's / 2 = neutral
     private List<Thing>[] thingsHpSorted_;
     private List<Thing>[] thingsDamageDealtSorted_;
     private List<Thing>[] thingsActionOrder_;

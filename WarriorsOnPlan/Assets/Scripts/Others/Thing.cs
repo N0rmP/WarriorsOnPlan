@@ -35,10 +35,10 @@ public class Thing : movableObject, IMovableSupplement {
     private SortedSet<string> setAttackTriggerName;
     protected Animator thisAnimController;
 
-    protected wigwaggerMove wigwaggerForMove;
-    protected wigwaggerSkillabst wigwaggerForSkill;
     protected selecterAbst selecterForAttack;
     protected selecterAbst selecterForSkill;
+    protected wigwaggerMove wigwaggerForMove;
+    protected wigwaggerSkill wigwaggerForSkill;    
 
     private skillAbst thisSkill;
 
@@ -208,15 +208,13 @@ public class Thing : movableObject, IMovableSupplement {
 
     #region utility
     //★ 추후 wigwaggerForSkill 집어넣을 것
-    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove, selecterAbst parSelecterForSkill, wigwaggerSkillabst parWigwaggerForSkill) {
+    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove, selecterAbst parSelecterForSkill, wigwaggerSkill parWigwaggerForSkill) {
         selecterForAttack = parSelecterForAttack;
         wigwaggerForMove = parWigwaggerForMove;
         selecterForSkill = parSelecterForSkill;
         wigwaggerForSkill = parWigwaggerForSkill;
 
         addCase(parWigwaggerForMove);
-        addCase(parSelecterForAttack);
-        addCase(parSelecterForSkill);
         addCase(parWigwaggerForSkill);
     }
 

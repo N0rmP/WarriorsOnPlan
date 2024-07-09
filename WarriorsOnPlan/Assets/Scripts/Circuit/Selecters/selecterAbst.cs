@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class selecterAbst : caseBase {
+public abstract class selecterAbst {
     // targetGroup represents the target groups by binary numbers
     // each digit represents (from lower digit) players's warriorAbst list / enemy's warriorAbst list / neutral Thing list
     int targetGroup;
 
-    public selecterAbst(System.Object[] parArray) : base(enumCaseType.circuit) {
-        targetGroup = parArray[0].ConvertTo<int>();
+    public selecterAbst(int parTargetGroup) {
+        targetGroup = parTargetGroup;
     }
 
     protected Thing[] getTargetArray() {

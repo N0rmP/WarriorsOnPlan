@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.UI.GridLayoutGroup;
 
-public abstract class navigatorAbst : caseBase
+public abstract class navigatorAbst
 {
 
     // route will be recalculated just before every movement, but can remain only when whole nodes in route have nothing on them
     protected Queue<node> route;
 
-    public navigatorAbst(object[] parArray) : base(enumCaseType.circuit) {
+    public navigatorAbst() {
         route = new Queue<node>();
     }
 
