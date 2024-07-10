@@ -207,15 +207,33 @@ public class Thing : movableObject, IMovableSupplement {
     #endregion processes
 
     #region utility
-    //★ 추후 wigwaggerForSkill 집어넣을 것
-    public void setCircuit(selecterAbst parSelecterForAttack, wigwaggerMove parWigwaggerForMove, selecterAbst parSelecterForSkill, wigwaggerSkill parWigwaggerForSkill) {
-        selecterForAttack = parSelecterForAttack;
-        wigwaggerForMove = parWigwaggerForMove;
-        selecterForSkill = parSelecterForSkill;
-        wigwaggerForSkill = parWigwaggerForSkill;
+    public void setCircuit(
+        int parCodeSelecterForAttack,       int[] ppSelecterForAttack,
+        int parCodeSelecterForSkill,        int[] ppSelecterForSkill,
+        int parCodeMoveSensorIdle,          int[] ppMoveSensorIdle,
+        int parCodeMoveSensorPrioritized,   int[] ppMoveSensorPrioritized,
+        int parCodeNavigatorIdle,           int[] ppNavigatorIdle,
+        int parCodeNavigatorPrioritized,    int[] ppNavigatorPrioritized,
+        int parCodeSkillSensorIdle,         int[] ppSkillSensorIdle,
+        int parCodeSkillSensorPrioritized,  int[] ppSkillSensorPrioritized) {
 
-        addCase(parWigwaggerForMove);
-        addCase(parWigwaggerForSkill);
+        selecterForAttack = circuitMaker.makeSelecter(parCodeSelecterForAttack, ppSelecterForAttack);
+        selecterForSkill = circuitMaker.makeSelecter(parCodeSelecterForSkill, ppSelecterForSkill);
+
+        wigwaggerForMove = new wigwaggerMove(
+            circuitMaker.makeSensor(parCodeMoveSensorIdle, ppMoveSensorIdle),
+            circuitMaker.makeNavigator(parCodeNavigatorIdle, ppNavigatorIdle),
+            circuitMaker.makeSensor(parCodeMoveSensorPrioritized, ppMoveSensorPrioritized),
+            circuitMaker.makeNavigator(parCodeNavigatorPrioritized, ppNavigatorPrioritized)
+            );
+
+        wigwaggerForSkill = new wigwaggerSkill(
+            circuitMaker.makeSensor(parCodeSkillSensorIdle, ppSkillSensorIdle),
+            circuitMaker.makeSensor(parCodeSkillSensorPrioritized, ppSkillSensorPrioritized)
+            );
+
+        addCase(wigwaggerForMove);
+        addCase(wigwaggerForSkill);
     }
 
     public void addDamageTotalDealt(int par) {

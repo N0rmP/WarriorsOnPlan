@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
+using System.IO;
+
 public class combatManager : MonoBehaviour {
     public static combatManager CM;
     public graphComponent GC { get; private set; }
@@ -71,6 +73,9 @@ public class combatManager : MonoBehaviour {
 
     public void Start() {
         //★ test
+        dataLevel test = gameManager.GM.JC.getJson<dataLevel>("Assets/Resources/Database/jsonLevel_Test.json");
+        Debug.Log(test.LevelName);
+
         processSpawn("tester", enumSide.player, (6, 6));
         processSpawn("tester", enumSide.enemy, (0, 0));
 
@@ -216,7 +221,22 @@ public class combatManager : MonoBehaviour {
     }
 
     #region processors
-    //★ 무기를 사용한 공격 행동 / 피해를 주는 과정을 따로 만들어볼 것
+    public void processLevelInitiate(string parLevelName) {
+        dataLevel tempDataLevel = gameManager.GM.JC.getJson<dataLevel>(parLevelName);
+
+        //적 워리어 스폰
+
+        //중립 띵 스폰
+
+        //아군 워리어 스폰
+
+        //제공될 툴 정리정돈
+
+        //ui 준비
+
+        //플레이어 준비 단계 시작
+    }
+
     public void processDealDamage(Thing source, Thing target, damageInfo DInfo) {
         //before attack
         foreach (ICaseBeforeDealDamage cb in source.getCaseList<ICaseBeforeDealDamage>()) {
