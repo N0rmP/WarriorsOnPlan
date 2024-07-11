@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 #region data_entities
 [System.Serializable]
@@ -31,7 +33,16 @@ public class dataNotFriendlyThing {
     public int Coordinate1;
     public int HP;
     public List<int> SkillParameters;
-    public dataTool[] ToolList;
+    [JsonProperty("ToolsProvided")]
+    /*
+    [JsonProperty("ToolsProvided")]
+    [JsonProperty("ToolsProvided")]
+    [JsonProperty("ToolsProvided")]
+    [JsonProperty("ToolsProvided")]
+    [JsonProperty("ToolsProvided")]
+    [JsonProperty("ToolsProvided")]
+    */
+    public dataTool[] ToolsProvided;
     public int CodeSelecterForAttack; public int[] Parameter0;
     public int CodeSelecterForSkill; public int[] Parameter1;
     public int CodeMoveSensorPrioritized; public int[] Parameter2;
