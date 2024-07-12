@@ -20,10 +20,10 @@ public class dataWeapon {
 [System.Serializable]
 public class dataLevel {
     public string LevelName;
-    public List<dataNotFriendlyThing> EnemyWarriors;
-    public List<dataNotFriendlyThing> NeutralThings;
-    public List<dataFriendlyThing> FriendlyWarriors;
-    public List<dataTool> ToolsProvided;
+    public dataNotFriendlyThing[] EnemyWarriors;
+    public dataNotFriendlyThing[] NeutralThings;
+    public dataFriendlyThing[] FriendlyWarriors;
+    public dataTool[] ToolsProvided;
 }
 
 [System.Serializable]
@@ -32,17 +32,8 @@ public class dataNotFriendlyThing {
     public int Coordinate0;
     public int Coordinate1;
     public int HP;
-    public List<int> SkillParameters;
-    [JsonProperty("ToolsProvided")]
-    /*
-    [JsonProperty("ToolsProvided")]
-    [JsonProperty("ToolsProvided")]
-    [JsonProperty("ToolsProvided")]
-    [JsonProperty("ToolsProvided")]
-    [JsonProperty("ToolsProvided")]
-    [JsonProperty("ToolsProvided")]
-    */
-    public dataTool[] ToolsProvided;
+    public int[] SkillParameters;
+    public dataTool[] ToolList;
     public int CodeSelecterForAttack; public int[] Parameter0;
     public int CodeSelecterForSkill; public int[] Parameter1;
     public int CodeMoveSensorPrioritized; public int[] Parameter2;
@@ -71,7 +62,7 @@ public class dataTool {
 public class jsonComponent {
     public T getJson<T>(string parPath) where T : class {
         if (File.Exists(parPath)) {
-            return JsonUtility.FromJson<T>(parPath);
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(parPath));
         } else {
             Debug.Log("json call failed");
             return null;

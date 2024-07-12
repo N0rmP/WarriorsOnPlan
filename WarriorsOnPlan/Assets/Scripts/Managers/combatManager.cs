@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 using System.IO;
+using Newtonsoft.Json;
 
 public class combatManager : MonoBehaviour {
     public static combatManager CM;
@@ -73,8 +74,18 @@ public class combatManager : MonoBehaviour {
 
     public void Start() {
         //¡Ú test
-        dataLevel test = gameManager.GM.JC.getJson<dataLevel>("Assets/Resources/Database/jsonLevel_Test.json");
-        Debug.Log(test.LevelName);
+        Debug.Log("file is exist : " + File.Exists("Assets/Resources/Database/jsonLevel_Test.json"));
+        try{
+            dataLevel test = gameManager.GM.JC.getJson<dataLevel>("Assets/Resources/Database/jsonLevel_Test.json");
+            Debug.Log(test.LevelName);
+            foreach (dataNotFriendlyThing ht in test.EnemyWarriors) {
+                foreach (dataTool dt in ht.ToolList) {
+                    Debug.Log("tool : " + dt.CodeTool + " / " + dt.ToolParameters);
+                }
+            }
+        }catch(Exception e){
+            Debug.Log("ERROR : " + e.GetType() + " / " + e.Message);
+        }
 
         processSpawn("tester", enumSide.player, (6, 6));
         processSpawn("tester", enumSide.enemy, (0, 0));

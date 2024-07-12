@@ -7,7 +7,7 @@
             "HP" : 3, 
             "SkillParameters" : [],
             "ToolList" : [
-                {"CodeTool" : -1, "ToolParameter" : []}
+                {"CodeTool" : -1, "ToolParameters" : []}
             ],
             "CodeSelecterForAttack" : 0, "Parameter0" : [2], 
             "CodeSelecterForSkill" : 0, "Parameter1" : [2], 
@@ -22,9 +22,9 @@
             "CodeThing" : -1, 
             "Coordinate0" : 0, "Coordinate1" : 1, 
             "HP" : 3, 
-            "SkillParameter" : [],
+            "SkillParameters" : [],
             "ToolList" : [
-                {"CodeTool" : -1, "ToolParameter" : [2, 1]}
+                {"CodeTool" : -1, "ToolParameters" : [2, 1]}
             ],
             "CodeSelecterForAttack" : 0, "Parameter0" : [2], 
             "CodeSelecterForSkill" : 0, "Parameter1" : [2], 
@@ -36,8 +36,8 @@
             "CodeSkillSensorPrioritized" : 0, "Parameter7" : []
         }
     ],
-    "neutralThings" : [],
-    "friendlyWarriors" : [
+    "NeutralThings" : [],
+    "FriendlyWarriors" : [
         {
             "CodeThing" : -1, 
             "Coordinate0" : 6, "Coordinate1" : 6, 
@@ -51,7 +51,7 @@
             "SkillParameters" : []
         }
     ],
-    "toolsProvided" : [
+    "ToolsProvided" : [
         {"CodeTool" : -1, "ToolParameters" : [2, 1]},
         {"CodeTool" : -1, "ToolParameters" : [2, 1]},
         {"CodeTool" : -1, "ToolParameters" : [2, 1]}
