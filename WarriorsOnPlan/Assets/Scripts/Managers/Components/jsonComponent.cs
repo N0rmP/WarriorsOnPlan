@@ -28,7 +28,7 @@ public class dataLevel {
 
 [System.Serializable]
 public class dataNotFriendlyThing {
-    public int CodeThing;
+    public string NameThing;
     public int Coordinate0;
     public int Coordinate1;
     public int HP;
@@ -36,16 +36,17 @@ public class dataNotFriendlyThing {
     public dataTool[] ToolList;
     public int CodeSelecterForAttack; public int[] Parameter0;
     public int CodeSelecterForSkill; public int[] Parameter1;
-    public int CodeMoveSensorPrioritized; public int[] Parameter2;
-    public int CodeNavigatorIdle; public int[] Parameter3;
-    public int CodeNavigatorPrioritized; public int[] Parameter4;
-    public int CodeSkillSensorIdle; public int[] Parameter5;
-    public int CodeSkillSensorPrioritized; public int[] Parameter6;
+    public int CodeMoveSensorIdle; public int[] Parameter2;
+    public int CodeMoveSensorPrioritized; public int[] Parameter3;
+    public int CodeNavigatorIdle; public int[] Parameter4;
+    public int CodeNavigatorPrioritized; public int[] Parameter5;
+    public int CodeSkillSensorIdle; public int[] Parameter6;
+    public int CodeSkillSensorPrioritized; public int[] Parameter7;
 }
 
 [System.Serializable]
 public class dataFriendlyThing {
-    public int CodeThing;
+    public string NameThing;
     public int Coordinate0;
     public int Coordinate1;
     public int HP;

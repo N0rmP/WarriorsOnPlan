@@ -73,22 +73,7 @@ public class combatManager : MonoBehaviour {
     }
 
     public void Start() {
-        //★ test
-        Debug.Log("file is exist : " + File.Exists("Assets/Resources/Database/jsonLevel_Test.json"));
-        try{
-            dataLevel test = gameManager.GM.JC.getJson<dataLevel>("Assets/Resources/Database/jsonLevel_Test.json");
-            Debug.Log(test.LevelName);
-            foreach (dataNotFriendlyThing ht in test.EnemyWarriors) {
-                foreach (dataTool dt in ht.ToolList) {
-                    Debug.Log("tool : " + dt.CodeTool + " / " + dt.ToolParameters);
-                }
-            }
-        }catch(Exception e){
-            Debug.Log("ERROR : " + e.GetType() + " / " + e.Message);
-        }
-
-        processSpawn("tester", enumSide.player, (6, 6));
-        processSpawn("tester", enumSide.enemy, (0, 0));
+        processLevelInitiate("jsonLevel_Test");
 
         Coroutine c = StartCoroutine(combatLoop());
     }
@@ -233,13 +218,43 @@ public class combatManager : MonoBehaviour {
 
     #region processors
     public void processLevelInitiate(string parLevelName) {
-        dataLevel tempDataLevel = gameManager.GM.JC.getJson<dataLevel>(parLevelName);
+        dataLevel tempDataLevel = gameManager.GM.JC.getJson<dataLevel>("Assets/Resources/Database/" + parLevelName + ".json");
 
-        //적 워리어 스폰
+        Thing tempThing;
 
-        //중립 띵 스폰
+        //spawn enemy warriors
+        foreach (dataNotFriendlyThing ET in tempDataLevel.EnemyWarriors) {
+            tempThing = processSpawn(ET.NameThing, enumSide.enemy, (ET.Coordinate0, ET.Coordinate1));
+            스킬 매개변수
+            tempThing.setCircuit(
+                ET.CodeSelecterForAttack, ET.Parameter0,
+                ET.CodeSelecterForSkill, ET.Parameter1,
+                ET.CodeMoveSensorIdle, ET.Parameter2,
+                ET.CodeMoveSensorPrioritized, ET.Parameter3,
+                ET.CodeNavigatorIdle, ET.Parameter4,
+                ET.CodeNavigatorPrioritized, ET.Parameter5,
+                ET.CodeSkillSensorIdle, ET.Parameter6,
+                ET.CodeSkillSensorPrioritized, ET.Parameter7);            
+        }
 
-        //아군 워리어 스폰
+        //spawn neutral warriors
+        foreach (dataNotFriendlyThing NT in tempDataLevel.NeutralThings) {
+            tempThing = processSpawn(NT.NameThing, enumSide.neutral, (NT.Coordinate0, NT.Coordinate1));
+            tempThing.setCircuit(
+                NT.CodeSelecterForAttack, NT.Parameter0,
+                NT.CodeSelecterForSkill, NT.Parameter1,
+                NT.CodeMoveSensorIdle, NT.Parameter2,
+                NT.CodeMoveSensorPrioritized, NT.Parameter3,
+                NT.CodeNavigatorIdle, NT.Parameter4,
+                NT.CodeNavigatorPrioritized, NT.Parameter5,
+                NT.CodeSkillSensorIdle, NT.Parameter6,
+                NT.CodeSkillSensorPrioritized, NT.Parameter7);
+        }
+
+        //spawn friendly warriors
+        foreach (dataFriendlyThing FT in tempDataLevel.FriendlyWarriors) {
+            processSpawn(FT.NameThing, enumSide.neutral, (FT.Coordinate0, FT.Coordinate1));
+        }
 
         //제공될 툴 정리정돈
 
@@ -328,7 +343,7 @@ public class combatManager : MonoBehaviour {
         return (source.whatToUseSkill == null) ? Vector3.negativeInfinity : source.whatToUseSkill.transform.position;
     }
 
-    public void processSpawn(string sourceName, enumSide parSide, (int c0, int c1) parCoor) {
+    public Thing processSpawn(string sourceName, enumSide parSide, (int c0, int c1) parCoor) {
         GameObject w1 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/" + sourceName));
 
         Thing tempThing = w1.GetComponent<Thing>();
@@ -336,6 +351,8 @@ public class combatManager : MonoBehaviour {
         addThing(tempThing);
 
         processPlace(tempThing, parCoor);
+
+        return tempThing;
     }
 
     //processPlace 

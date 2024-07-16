@@ -2,7 +2,7 @@
     "LevelName" : "level test",
     "EnemyWarriors" : [
         {
-            "CodeThing" : -1, 
+            "NameThing" : "tester", 
             "Coordinate0" : 0, "Coordinate1" : 0, 
             "HP" : 3, 
             "SkillParameters" : [],
@@ -19,7 +19,7 @@
             "CodeSkillSensorPrioritized" : 0, "Parameter7" : []
         },
         {
-            "CodeThing" : -1, 
+            "NameThing" : "tester", 
             "Coordinate0" : 0, "Coordinate1" : 1, 
             "HP" : 3, 
             "SkillParameters" : [],
@@ -39,13 +39,13 @@
     "NeutralThings" : [],
     "FriendlyWarriors" : [
         {
-            "CodeThing" : -1, 
+            "NameThing" : "tester", 
             "Coordinate0" : 6, "Coordinate1" : 6, 
             "HP" : 3, 
             "SkillParameters" : []
         },
         {
-            "CodeThing" : -1, 
+            "NameThing" : "tester", 
             "Coordinate0" : 6, "Coordinate1" : 5, 
             "HP" : 3, 
             "SkillParameters" : []
