@@ -224,8 +224,7 @@ public class combatManager : MonoBehaviour {
 
         //spawn enemy warriors
         foreach (dataNotFriendlyThing ET in tempDataLevel.EnemyWarriors) {
-            tempThing = processSpawn(ET.NameThing, enumSide.enemy, (ET.Coordinate0, ET.Coordinate1));
-            스킬 매개변수
+            tempThing = processSpawn(ET.NameThing, enumSide.enemy, (ET.Coordinate0, ET.Coordinate1), ET.SkillParameters);
             tempThing.setCircuit(
                 ET.CodeSelecterForAttack, ET.Parameter0,
                 ET.CodeSelecterForSkill, ET.Parameter1,
@@ -239,7 +238,7 @@ public class combatManager : MonoBehaviour {
 
         //spawn neutral warriors
         foreach (dataNotFriendlyThing NT in tempDataLevel.NeutralThings) {
-            tempThing = processSpawn(NT.NameThing, enumSide.neutral, (NT.Coordinate0, NT.Coordinate1));
+            tempThing = processSpawn(NT.NameThing, enumSide.neutral, (NT.Coordinate0, NT.Coordinate1), NT.SkillParameters);
             tempThing.setCircuit(
                 NT.CodeSelecterForAttack, NT.Parameter0,
                 NT.CodeSelecterForSkill, NT.Parameter1,
@@ -253,7 +252,7 @@ public class combatManager : MonoBehaviour {
 
         //spawn friendly warriors
         foreach (dataFriendlyThing FT in tempDataLevel.FriendlyWarriors) {
-            processSpawn(FT.NameThing, enumSide.neutral, (FT.Coordinate0, FT.Coordinate1));
+            processSpawn(FT.NameThing, enumSide.neutral, (FT.Coordinate0, FT.Coordinate1), FT.SkillParameters);
         }
 
         //제공될 툴 정리정돈
@@ -343,11 +342,11 @@ public class combatManager : MonoBehaviour {
         return (source.whatToUseSkill == null) ? Vector3.negativeInfinity : source.whatToUseSkill.transform.position;
     }
 
-    public Thing processSpawn(string sourceName, enumSide parSide, (int c0, int c1) parCoor) {
+    public Thing processSpawn(string sourceName, enumSide parSide, (int c0, int c1) parCoor, int[] parSkillParameters) {
         GameObject w1 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/" + sourceName));
 
         Thing tempThing = w1.GetComponent<Thing>();
-        tempThing.init(parSide, 5);
+        tempThing.init(parSide, 5, parSkillParameters);
         addThing(tempThing);
 
         processPlace(tempThing, parCoor);

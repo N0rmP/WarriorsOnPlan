@@ -6,7 +6,12 @@ public abstract class skillAbst : caseTimerSelfishTurn {
 
     public bool isRanged { get; protected set; }
 
-    public skillAbst(int parTimerMax, bool parIsTimerMax = false) : base(parTimerMax, enumCaseType.skill, parIsTimerMax) { }
+    public skillAbst(int[] parSkillParameters) : base(
+        parSkillParameters == null ? -1 : parSkillParameters[0]
+        , enumCaseType.skill
+        , (parSkillParameters != null && parSkillParameters[1] != 0) ? true : false) {
+        isRanged = false;
+    }
 
     protected override void doOnAlarmed(Thing source) {
         foreach (ICaseSkillReady cb in source.getCaseList<ICaseSkillReady>()) {

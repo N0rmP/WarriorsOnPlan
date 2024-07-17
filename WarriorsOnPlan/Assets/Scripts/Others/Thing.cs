@@ -57,7 +57,7 @@ public class Thing : movableObject, IMovableSupplement {
     #endregion property
     #endregion variable
 
-    public virtual void init(enumSide parSide, int parMaxHp) {
+    public virtual void init(enumSide parSide, int parMaxHp, int[] parSkillParameters) {
         semaphoreState = null;
         listCaseBaseAll = new List<caseBase>();
         listToolWeapon = new List<toolWeapon>();
@@ -72,7 +72,11 @@ public class Thing : movableObject, IMovableSupplement {
         thisSide = parSide;
         damageTotalDealt_ = 0;
         //¡Ú
+
+        initPersonal(parSkillParameters);
     }
+
+    protected virtual void initPersonal(int[] parSkillParameters = null) { }
 
     #region interface_implements
     public void whenStartMove() { }

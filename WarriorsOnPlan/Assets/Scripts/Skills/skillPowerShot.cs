@@ -6,9 +6,9 @@ public class skillPowerShot : skillAbst
 {
     private readonly int damageOriginal;
 
-    public skillPowerShot(int parDamage) : base(3) {
+    public skillPowerShot(int[] parSkillParameters) : base(parSkillParameters) {
         isRanged = true;
-        damageOriginal = parDamage;
+        damageOriginal = parSkillParameters[2];
     }
 
     protected override void actualUseSkill(Thing source, Thing target) {
