@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class weaponTester : toolWeapon
 {
-    public weaponTester(object[] parArray) : base(3, "training bow", (int)parArray[0]) { }
+    public weaponTester(int[] parArray) : base(parArray[0], "weaponTester", parArray[1]) { }
 
     public override void showEffect(Thing source, Thing parTarget) {
         combatManager.CM.FC.callVFX(enumVFXType.simple, enumMoveType.parabola, source.transform.position, parTarget.transform.position, 0.7f);

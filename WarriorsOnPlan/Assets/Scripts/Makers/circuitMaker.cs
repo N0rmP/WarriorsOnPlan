@@ -13,13 +13,11 @@ public class circuitMaker
         0   =   selecterClosest (target group bits)
     */
     public static selecterAbst makeSelecter(int parCode, int[] pp) {
-        switch (parCode) {
-            case 0:
-                return new selecterClosest(pp[0]);
-            case -1:
-            default:
-                return null;
-        }
+        return parCode switch {
+            0 => new selecterClosest(pp[0]),
+            -1 => null,
+            _ => null
+        };
     }
     #endregion makeSelecter
 
@@ -30,13 +28,11 @@ public class circuitMaker
         0   =   sensorNothing ()
     */
     public static sensorAbst makeSensor(int parCode, int[] pp) {
-        switch (parCode) {
-            case 0:
-                return new sensorNothing();
-            case -1:
-            default:
-                return null;
-        }
+        return parCode switch {
+            0 => new sensorNothing(),
+            -1 => null,
+            _ => null
+        };
     }
     #endregion makeSensor
 
@@ -48,15 +44,12 @@ public class circuitMaker
         1   =   navigatorAttackOneWeapon ()
     */
     public static navigatorAbst makeNavigator(int parCode, int[] pp) {
-        switch (parCode) {
-            case 0:
-                return new navigatorStationary();
-            case 1:
-                return new navigatorAttackOneWeapon();
-            case -1:
-            default:
-                return null;
-        }
+        return parCode switch {
+            0 => new navigatorStationary(),
+            1 => new navigatorAttackOneWeapon(),
+            -1 => null,
+            _ => null
+        };
     }
     #endregion makeNavigator
 }

@@ -27,6 +27,8 @@ public class combatManager : MonoBehaviour {
     private List<Thing>[] thingsActionOrder_;
     private List<Thing>[] thingsDead_;
 
+    private List<caseBase> toolsProvided;
+
     #region properties
     #endregion properties
 
