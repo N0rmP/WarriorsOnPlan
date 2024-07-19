@@ -15,6 +15,8 @@ public class combatManager : MonoBehaviour {
     public graphComponent GC { get; private set; }
     public fxComponent FC { get; private set; }
 
+    public uiToolsStorage UT;
+
     private bool isCombatLooping = false;
 
     // interval time between each action
@@ -72,6 +74,8 @@ public class combatManager : MonoBehaviour {
             new List<Thing>(),
             new List<Thing>()
         };
+
+        toolsProvided = new List<caseBase>();
     }
 
     public void Start() {
@@ -258,6 +262,12 @@ public class combatManager : MonoBehaviour {
         }
 
         //제공될 툴 정리정돈
+        foreach (dataTool DT in tempDataLevel.ToolsProvided) {
+            toolsProvided.Add(
+                toolMaker.makeTool(DT.CodeTool, DT.ToolParameters)
+                );
+        }
+        UT.prepareBubbles(toolsProvided);
 
         //ui 준비
 
