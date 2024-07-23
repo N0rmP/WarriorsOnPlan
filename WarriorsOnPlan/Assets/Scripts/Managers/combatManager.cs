@@ -81,7 +81,7 @@ public class combatManager : MonoBehaviour {
     public void Start() {
         processLevelInitiate("jsonLevel_Test");
 
-        Coroutine c = StartCoroutine(combatLoop());
+        //Coroutine c = StartCoroutine(combatLoop());
     }
     #endregion callbacks
 

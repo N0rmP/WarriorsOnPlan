@@ -4,20 +4,33 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class uiBubbleTool : MonoBehaviour
-{
-    public static int totalBubbles = 0;
+public class uiBubbleTool : MonoBehaviour {
+    public static int countTotalBubbles { get; private set; }
 
     private int indexThis;
 
-    public caseBase toolStored;
-
     public void Awake() {
-        indexThis = totalBubbles++;
+        indexThis = countTotalBubbles++;
+    }
+
+    public static void resetCount() {
+        countTotalBubbles = 0;
     }
 
     public void setImage(string parToolName) {
-        transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Image_weaponTester.png");
+        transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Image_" + parToolName);
+
+        if (parToolName == null) {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void setImage(Sprite parSprite) {
+        transform.GetChild(0).GetComponent<Image>().sprite = parSprite;
+
+        if (parSprite == null) {
+            gameObject.SetActive(false);
+        }
     }
 
     public void OnMouseDown() {
