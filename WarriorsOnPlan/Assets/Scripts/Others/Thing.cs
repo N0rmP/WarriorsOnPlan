@@ -28,7 +28,7 @@ public class Thing : movableObject, IMovableSupplement {
 
     private ICaseUpdateState semaphoreState;
 
-    protected caseBase caseSkill;
+    protected skillAbst thisSkill;
     protected List<caseBase> listCaseBaseAll;
     protected List<toolWeapon> listToolWeapon;
 
@@ -38,9 +38,7 @@ public class Thing : movableObject, IMovableSupplement {
     protected selecterAbst selecterForAttack;
     protected selecterAbst selecterForSkill;
     protected wigwaggerMove wigwaggerForMove;
-    protected wigwaggerSkill wigwaggerForSkill;    
-
-    private skillAbst thisSkill;
+    protected wigwaggerSkill wigwaggerForSkill;
 
     #region property
     public enumSide thisSide { get; protected set; }

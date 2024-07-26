@@ -17,6 +17,7 @@ public class wigwaggerMove : caseTimerSelfishTurn, ICaseTurnStart, ICaseUpdateSt
         navIdle = parNavIdle;
         navPrioritized = parNavPrioritized;
 
+        sensorCur = (sensorPrioritized != null) ? sensorPrioritized : sensorIdle;
         navCur = parNavIdle;
     }
 
