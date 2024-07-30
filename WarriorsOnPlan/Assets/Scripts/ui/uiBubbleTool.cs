@@ -18,7 +18,7 @@ public class uiBubbleTool : MonoBehaviour {
     }
 
     public void setImage(string parToolName) {
-        transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Image_" + parToolName);
+        transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Tool/Image_" + parToolName);
 
         if (parToolName == null) {
             gameObject.SetActive(false);
