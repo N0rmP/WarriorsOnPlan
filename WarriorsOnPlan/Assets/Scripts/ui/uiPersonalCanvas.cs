@@ -25,13 +25,6 @@ public class uiPersonalCanvas : MonoBehaviour
         }
     }
 
-    private void Start() {
-        //¡Ú test
-        updateHpText(99);
-        setSkillImage("PowerShot");
-        updateSkillTimer(0, 1);
-    }
-
     public void setSkillImage(string parSkillName) {
         transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Skill/Image_" + parSkillName);
     }

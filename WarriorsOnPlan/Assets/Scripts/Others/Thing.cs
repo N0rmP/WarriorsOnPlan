@@ -28,6 +28,8 @@ public class Thing : movableObject, IMovableSupplement {
 
     private ICaseUpdateState semaphoreState;
 
+    protected uiPersonalCanvas thisPersonalCanvas;
+
     protected skillAbst thisSkill;
     protected List<caseBase> listCaseBaseAll;
     protected List<toolWeapon> listToolWeapon;
@@ -72,6 +74,13 @@ public class Thing : movableObject, IMovableSupplement {
         //¡Ú
 
         initPersonal(parSkillParameters);
+
+        GameObject tempPersonalCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/canvasPersonal"));
+        tempPersonalCanvas.transform.SetParent(transform);
+        thisPersonalCanvas = tempPersonalCanvas.GetComponent<uiPersonalCanvas>();
+        thisPersonalCanvas.setSkillImage(thisSkill.skillName);
+        thisPersonalCanvas.updateHpText(curHp);
+        thisPersonalCanvas.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
     }
 
     protected virtual void initPersonal(int[] parSkillParameters = null) { }
@@ -174,6 +183,8 @@ public class Thing : movableObject, IMovableSupplement {
         if (curHp <= 0) {
             destroied(source);
         }
+
+        thisPersonalCanvas.updateHpText(curHp);
 
         return tempResultChange;
     }
@@ -368,5 +379,9 @@ public class Thing : movableObject, IMovableSupplement {
                 break;
         }
     }
+
+    public void updateSkillTimer(int parTimerCur, int parTimerMax) {
+        thisPersonalCanvas.updateSkillTimer(parTimerCur, parTimerMax);
+    } 
     #endregion utility
 }

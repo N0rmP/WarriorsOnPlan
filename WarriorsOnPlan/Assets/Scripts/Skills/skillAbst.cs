@@ -15,6 +15,11 @@ public abstract class skillAbst : caseTimerSelfishTurn {
         skillName = this.GetType().Name.Substring(5);
     }
 
+    protected override void updateTimer(Thing source) {
+        base.updateTimer(source);
+        source.updateSkillTimer(timerCur, timerMax);
+    }
+
     protected override void doOnAlarmed(Thing source) {
         foreach (ICaseSkillReady cb in source.getCaseList<ICaseSkillReady>()) {
             cb.onSkillReady(source);
