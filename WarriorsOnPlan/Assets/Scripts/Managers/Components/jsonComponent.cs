@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 #region data_entities
 [System.Serializable]
-public class dataWeapon {
+public struct dataWeapon {
     public string name;
     public int rangeMin;
     public int rangeMax;
@@ -18,7 +18,7 @@ public class dataWeapon {
 }
 
 [System.Serializable]
-public class dataLevel {
+public struct dataLevel {
     public string LevelName;
     public dataNotFriendlyThing[] EnemyWarriors;
     public dataNotFriendlyThing[] NeutralThings;
@@ -27,25 +27,23 @@ public class dataLevel {
 }
 
 [System.Serializable]
-public class dataNotFriendlyThing {
+public struct dataNotFriendlyThing {
     public string NameThing;
     public int Coordinate0;
     public int Coordinate1;
     public int HP;
     public int[] SkillParameters;
     public dataTool[] ToolList;
-    public int CodeSelecterForAttack; public int[] Parameter0;
-    public int CodeSelecterForSkill; public int[] Parameter1;
-    public int CodeMoveSensorIdle; public int[] Parameter2;
-    public int CodeMoveSensorPrioritized; public int[] Parameter3;
-    public int CodeNavigatorIdle; public int[] Parameter4;
-    public int CodeNavigatorPrioritized; public int[] Parameter5;
-    public int CodeSkillSensorIdle; public int[] Parameter6;
-    public int CodeSkillSensorPrioritized; public int[] Parameter7;
+    public int CodeSensorForMove; public int[] Parameter0;
+    public int CodeNavigatorPrioritized; public int[] Parameter1;
+    public int CodeNavigatorIdle; public int[] Parameter2;
+    public int CodeSensorForSkill; public int[] Parameter3;
+    public int CodeSelecterForSkill; public int[] Parameter4;
+    public int CodeSelecterForAttack; public int[] Parameter5;
 }
 
 [System.Serializable]
-public class dataFriendlyThing {
+public struct dataFriendlyThing {
     public string NameThing;
     public int Coordinate0;
     public int Coordinate1;
@@ -54,20 +52,39 @@ public class dataFriendlyThing {
 }
 
 [System.Serializable]
-public class dataTool {
+public struct dataTool {
     public int CodeTool;
     public int[] ToolParameters;
+}
+
+[System.Serializable]
+public struct dataArbitraryString {
+    public string SwissArmyString;
+}
+
+[System.Serializable]
+public struct dataArbitraryStringArray {
+    public string[] SwissArmyStringArray;
 }
 #endregion data_entities
 
 public class jsonComponent {
-    public T getJson<T>(string parPath) where T : class {
-        if (File.Exists(parPath)) {
-            return JsonConvert.DeserializeObject<T>(File.ReadAllText(parPath));
+
+    public static string strLanguage = "English";
+
+    public T getJson<T>(string parHalfPath, bool isTranslationRequired = true) where T : struct {
+        string tempPath = "Assets/Resources/Database/" +
+            (isTranslationRequired ? strLanguage + "/" : "") + 
+            parHalfPath + ".json";
+
+        T tempResult;
+        if (File.Exists(tempPath)) {
+            tempResult = JsonConvert.DeserializeObject<T>(File.ReadAllText(tempPath));
         } else {
-            Debug.Log("json call failed");
-            return null;
+            Debug.Log("json call failed, tried to call from \'" + tempPath + "\'");
+            tempResult = new T();
         }
+        return tempResult;
     }
 
 }

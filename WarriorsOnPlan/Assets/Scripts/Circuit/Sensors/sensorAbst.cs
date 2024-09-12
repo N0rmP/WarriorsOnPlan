@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class sensorAbst {
+public abstract class sensorAbst : circuitAbst<sensorAbst> {
     protected int timerCur;
     protected int timerMax;
 
@@ -18,7 +18,7 @@ public abstract class sensorAbst {
 
     public abstract bool checkWigwagging(Thing source);
 
-    public virtual bool checkReturnToIdle(Thing source) { 
-        return true; 
+    public virtual bool checkKeepBasic(Thing source) { 
+        return true;
     }
 }

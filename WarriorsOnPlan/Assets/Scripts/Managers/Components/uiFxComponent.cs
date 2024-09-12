@@ -11,12 +11,15 @@ public class uiFxComponent : MonoBehaviour
 {
     private Dictionary<Image, (Color changePerSecond, float timerLeft)> containerColorChange;
     private Dictionary<TextMeshProUGUI, int> containerCount;
+    private Dictionary<GameObject, (Vector3 destination, float multiplier)> containerMove;
 
+    // some changes are too frequent with once in a frame, timerSlower represents their change frequency by seconds
     private float timerSlower = 0f;
 
     public void Awake() {
-        containerColorChange = new Dictionary<Image, (Color changePerSecond, float timerLeft)>();
+        containerColorChange = new Dictionary<Image, (Color, float)>();
         containerCount = new Dictionary<TextMeshProUGUI, int>();
+        containerMove = new Dictionary<GameObject, (Vector3, float)>();
     }
 
     public void LateUpdate() {
@@ -43,7 +46,7 @@ public class uiFxComponent : MonoBehaviour
 
             foreach (TextMeshProUGUI key in containerCount.Keys.ToArray()) {
                 tempCurText = Convert.ToInt32(key.text);
-                //if the text reaches the destination number, remove it
+                //if the text reaches destination number, remove it
                 if (tempCurText == containerCount[key]) {
                     containerCount.Remove(key);
                     continue;
@@ -55,11 +58,31 @@ public class uiFxComponent : MonoBehaviour
                     tempResult = (tempCurText > containerCount[key]) ? (tempCurText - 1) : (tempCurText + 1);
                 }
                 key.text = tempResult.ToString();
-                Debug.Log(key.text);
             }
         }
 
+        void funcMove(float parDeltaTime) {
+            (Vector3 destination, float multiplier) tempVelocity;
+            Vector3 tempStick;
+
+            foreach (GameObject key in containerMove.Keys.ToArray()) {
+                tempVelocity = containerMove[key];
+                tempStick = tempVelocity.destination - key.GetComponent<RectTransform>().localPosition;
+
+                //if the gameobject approaches destination enough, remove it
+                if (tempStick.magnitude < 3f) {
+                    key.GetComponent<RectTransform>().localPosition = tempVelocity.destination;
+                    containerMove.Remove(key);
+                    continue;
+                }
+                //...move
+                key.GetComponent<RectTransform>().localPosition += tempStick.normalized * parDeltaTime * tempVelocity.multiplier * tempStick.magnitude * 5f;
+            }
+        }
+
+
         funcColorChange(Time.deltaTime);
+        funcMove(Time.deltaTime);
 
         timerSlower -= Time.deltaTime;
         if (timerSlower < 0f) {
@@ -90,6 +113,16 @@ public class uiFxComponent : MonoBehaviour
         } else {
             //else add key and value
             containerCount.Add(parText, parDestinationValue);
+        }
+    }
+
+    public void addMove(GameObject parGameObject, Vector3 parDestination, float parMultiplier = 1f) {
+        if (containerMove.ContainsKey(parGameObject)) {
+            //if key is already added, update its value
+            containerMove[parGameObject] = (parDestination, parMultiplier);
+        } else {
+            //else add key and value
+            containerMove.Add(parGameObject, (parDestination, parMultiplier));
         }
     }
     #endregion addNremove

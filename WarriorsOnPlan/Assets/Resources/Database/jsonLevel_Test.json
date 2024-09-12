@@ -9,14 +9,12 @@
             "ToolList" : [
                 {"CodeTool" : -1, "ToolParameters" : []}
             ],
-            "CodeSelecterForAttack" : 0, "Parameter0" : [2], 
-            "CodeSelecterForSkill" : 0, "Parameter1" : [2], 
-            "CodeMoveSensorIdle" : 0, "Parameter2" : [], 
-            "CodeMoveSensorPrioritized" : -1, "Parameter3" : [], 
-            "CodeNavigatorIdle" : 0, "Parameter4" : [], 
-            "CodeNavigatorPrioritized" : -1, "Parameter5" : [], 
-            "CodeSkillSensorIdle" : 0, "Parameter6" : [],
-            "CodeSkillSensorPrioritized" : 0, "Parameter7" : []
+            "CodeSensorForMove" : 0, "Parameter0" : [], 
+            "CodeNavigatorPrioritized" : 0, "Parameter1" : [], 
+            "CodeNavigatorIdle" : 0, "Parameter2" : [], 
+            "CodeSensorForSkill" : -1, "Parameter3" : [], 
+            "CodeSelecterForSkill" : 0, "Parameter4" : [2], 
+            "CodeSelecterForAttack" : -1, "Parameter5" : [2]
         },
         {
             "NameThing" : "tester", 
@@ -26,14 +24,12 @@
             "ToolList" : [
                 {"CodeTool" : -1, "ToolParameters" : [2, 1]}
             ],
-            "CodeSelecterForAttack" : 0, "Parameter0" : [2], 
-            "CodeSelecterForSkill" : 0, "Parameter1" : [2], 
-            "CodeMoveSensorIdle" : 0, "Parameter2" : [], 
-            "CodeMoveSensorPrioritized" : -1, "Parameter3" : [], 
-            "CodeNavigatorIdle" : 0, "Parameter4" : [], 
-            "CodeNavigatorPrioritized" : -1, "Parameter5" : [], 
-            "CodeSkillSensorIdle" : 0, "Parameter6" : [],
-            "CodeSkillSensorPrioritized" : 0, "Parameter7" : []
+            "CodeSensorForMove" : 0, "Parameter0" : [], 
+            "CodeNavigatorPrioritized" : 0, "Parameter1" : [], 
+            "CodeNavigatorIdle" : 0, "Parameter2" : [], 
+            "CodeSensorForSkill" : -1, "Parameter3" : [], 
+            "CodeSelecterForSkill" : 0, "Parameter4" : [2], 
+            "CodeSelecterForAttack" : -1, "Parameter5" : [2]
         }
     ],
     "NeutralThings" : [],

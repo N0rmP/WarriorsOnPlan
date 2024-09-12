@@ -9,15 +9,11 @@ public class test : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TextMeshProUGUI tempTMP = null;
-        int tempindex = tempTMP.text.IndexOf("text");
-        TMP_TextInfo tempTextInfo = tempTMP.textInfo;
-        TMP_CharacterInfo tempCharInfo = tempTextInfo.characterInfo[tempindex];
+        Debug.Log(gameObject.ToString() + " _ anchored  : " + GetComponent<RectTransform>().anchoredPosition);
+        Debug.Log(gameObject.ToString() + " _ local     : " + GetComponent<RectTransform>().localPosition);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void sayAnything() {
+        Debug.Log("!!! SHOUT LOUD !!!");
     }
 }

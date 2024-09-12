@@ -117,7 +117,7 @@ public class combatManager : MonoBehaviour {
             };
 
             foreach (Thing th in tempListActors) {
-                //update timers
+                //update timers 0
                 foreach (caseTimerHostileTurn ct in th.getCaseList<caseTimerHostileTurn>()) {
                     ct.updateOnTurnStart(th);
                 }
@@ -136,12 +136,15 @@ public class combatManager : MonoBehaviour {
                 thingsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
                 thingsDamageDealtSorted_[2].Sort(comparerDamageDealtInstance);
                 th.updateTargets();
+                //update timers 1
                 foreach (caseTimerSelfishTurn ct in th.getCaseList<caseTimerSelfishTurn>()) {
                     ct.updateOnActionStart(th);
                 }
+                //onBeforeAction
                 foreach (ICaseBeforeAction cb in th.getCaseList<ICaseBeforeAction>()) {
                     cb.onBeforeAction(th);
                 }
+                //state decision
                 th.updateState();
 
                 tempLookDirection = Vector3.negativeInfinity;
@@ -224,7 +227,7 @@ public class combatManager : MonoBehaviour {
 
     #region processors
     public void processLevelInitiate(string parLevelName) {
-        dataLevel tempDataLevel = gameManager.GM.JC.getJson<dataLevel>("Assets/Resources/Database/" + parLevelName + ".json");
+        dataLevel tempDataLevel = gameManager.GM.JC.getJson<dataLevel>(parLevelName, false);
 
         Thing tempThing;
 
@@ -232,28 +235,25 @@ public class combatManager : MonoBehaviour {
         foreach (dataNotFriendlyThing ET in tempDataLevel.EnemyWarriors) {
             tempThing = processSpawn(ET.NameThing, enumSide.enemy, (ET.Coordinate0, ET.Coordinate1), ET.SkillParameters);
             tempThing.setCircuit(
-                ET.CodeSelecterForAttack, ET.Parameter0,
-                ET.CodeSelecterForSkill, ET.Parameter1,
-                ET.CodeMoveSensorIdle, ET.Parameter2,
-                ET.CodeMoveSensorPrioritized, ET.Parameter3,
-                ET.CodeNavigatorIdle, ET.Parameter4,
-                ET.CodeNavigatorPrioritized, ET.Parameter5,
-                ET.CodeSkillSensorIdle, ET.Parameter6,
-                ET.CodeSkillSensorPrioritized, ET.Parameter7);            
+                ET.CodeSensorForMove, ET.Parameter0,
+                ET.CodeNavigatorPrioritized, ET.Parameter1,
+                ET.CodeNavigatorIdle, ET.Parameter2,
+                ET.CodeSensorForSkill, ET.Parameter3,
+                ET.CodeSelecterForSkill, ET.Parameter4,
+                ET.CodeSelecterForAttack, ET.Parameter5
+                );
         }
 
         //spawn neutral warriors
         foreach (dataNotFriendlyThing NT in tempDataLevel.NeutralThings) {
             tempThing = processSpawn(NT.NameThing, enumSide.neutral, (NT.Coordinate0, NT.Coordinate1), NT.SkillParameters);
             tempThing.setCircuit(
-                NT.CodeSelecterForAttack, NT.Parameter0,
-                NT.CodeSelecterForSkill, NT.Parameter1,
-                NT.CodeMoveSensorIdle, NT.Parameter2,
-                NT.CodeMoveSensorPrioritized, NT.Parameter3,
-                NT.CodeNavigatorIdle, NT.Parameter4,
-                NT.CodeNavigatorPrioritized, NT.Parameter5,
-                NT.CodeSkillSensorIdle, NT.Parameter6,
-                NT.CodeSkillSensorPrioritized, NT.Parameter7);
+                NT.CodeSensorForMove, NT.Parameter0,
+                NT.CodeNavigatorPrioritized, NT.Parameter1,
+                NT.CodeNavigatorIdle, NT.Parameter2,
+                NT.CodeSensorForSkill, NT.Parameter3,
+                NT.CodeSelecterForSkill, NT.Parameter4,
+                NT.CodeSelecterForAttack, NT.Parameter5);
         }
 
         //spawn friendly warriors
@@ -382,6 +382,16 @@ public class combatManager : MonoBehaviour {
     #region utility
     public Thing[] copyWarriorsActionOrder(int parIndex) {
         return thingsActionOrder_[parIndex].ToArray();
+    }
+
+    public Thing[] copyWarriorsActionOrder(int[] parIndice) {
+        List<Thing> tempResult = new List<Thing>();
+
+        foreach (int i in parIndice) {
+            tempResult.AddRange(thingsActionOrder_[i]);
+        }
+
+        return tempResult.ToArray();
     }
 
     public void addThing(Thing parThing, bool isSortAfterAdd = false) {

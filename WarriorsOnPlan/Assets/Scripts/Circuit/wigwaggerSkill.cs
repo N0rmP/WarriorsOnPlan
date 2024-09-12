@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class wigwaggerSkill : caseTimerSelfishTurn, ICaseTurnStart, ICaseUpdateState {
-    private sensorAbst sensorIdle;
-    private sensorAbst sensorPrioritized;
+    private sensorAbst sensorBasic;
+    private sensorAbst sensorSpare;
 
     private sensorAbst sensorCur;
 
-    public wigwaggerSkill(sensorAbst parSensorIdle, sensorAbst parSensorPrioritized = null) : base(-1, enumCaseType.circuit, false, false) {
-        sensorIdle = parSensorIdle;
-        sensorPrioritized = parSensorPrioritized;
+    public wigwaggerSkill(sensorAbst parSensorBasic, sensorAbst parSensorSpare = null) : base(-1, enumCaseType.circuit, false, false) {
+        sensorBasic = parSensorBasic;
+        sensorSpare = parSensorSpare;
     }
-
+     
     public void onTurnStart(Thing source) {
         //sensor update
-        sensorCur = ((sensorPrioritized == null) || (sensorCur.checkReturnToIdle(source))) ? sensorIdle : sensorPrioritized;
+        sensorCur = ((sensorSpare == null) || (sensorBasic.checkKeepBasic(source))) ? sensorBasic : sensorSpare;
     }
 
     public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source) {

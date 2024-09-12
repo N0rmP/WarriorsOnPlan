@@ -7,7 +7,9 @@ using UnityEngine;
 
 public class selecterClosest : selecterAbst {
 
-    public selecterClosest(int parTargetGroup) : base(parTargetGroup) { }
+    public selecterClosest(Thing source, int parTargetGroup) : base(source, parTargetGroup) {
+        code = 0;
+    }
 
     public override Thing select(Thing source) {
         Thing[] tempPotentialTargetList = getTargetArray();

@@ -28,7 +28,7 @@ public class Thing : movableObject, IMovableSupplement {
 
     private ICaseUpdateState semaphoreState;
 
-    protected uiPersonalCanvas thisPersonalCanvas;
+    protected uiCanvasPersonal thisCanvasPersonal;
 
     protected skillAbst thisSkill;
     protected List<caseBase> listCaseBaseAll;
@@ -37,10 +37,7 @@ public class Thing : movableObject, IMovableSupplement {
     private SortedSet<string> setAttackTriggerName;
     protected Animator thisAnimController;
 
-    protected selecterAbst selecterForAttack;
-    protected selecterAbst selecterForSkill;
-    protected wigwaggerMove wigwaggerForMove;
-    protected wigwaggerSkill wigwaggerForSkill;
+    protected circuitHub thisCircuitHub;
 
     #region property
     public enumSide thisSide { get; protected set; }
@@ -63,6 +60,7 @@ public class Thing : movableObject, IMovableSupplement {
         listToolWeapon = new List<toolWeapon>();
         setAttackTriggerName = new SortedSet<string>();
         thisAnimController = gameObject.GetComponent<Animator>();
+        thisCircuitHub = new circuitHub(this);  addCase(thisCircuitHub);
         stateCur = enumStateWarrior.idleAttack;
         maxHp = parMaxHp;
         curHp = maxHp;
@@ -77,10 +75,10 @@ public class Thing : movableObject, IMovableSupplement {
 
         GameObject tempPersonalCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/canvasPersonal"));
         tempPersonalCanvas.transform.SetParent(transform);
-        thisPersonalCanvas = tempPersonalCanvas.GetComponent<uiPersonalCanvas>();
-        thisPersonalCanvas.setSkillImage(thisSkill.skillName);
-        thisPersonalCanvas.updateHpText(curHp);
-        thisPersonalCanvas.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
+        thisCanvasPersonal = tempPersonalCanvas.GetComponent<uiCanvasPersonal>();
+        thisCanvasPersonal.setSkillImage(thisSkill.skillName);
+        thisCanvasPersonal.updateHpText(curHp);
+        thisCanvasPersonal.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
     }
 
     protected virtual void initPersonal(int[] parSkillParameters = null) { }
@@ -95,8 +93,8 @@ public class Thing : movableObject, IMovableSupplement {
 
     #region processes
     public virtual void updateTargets() {
-        whatToAttack = selecterForAttack.select(this);
-        whatToUseSkill = selecterForSkill.select(this);
+        whatToAttack = thisCircuitHub.selectAttackTarget(this);
+        whatToUseSkill = thisCircuitHub.selectSkillTarget(this);
     }
 
     public void updateState() {
@@ -135,7 +133,7 @@ public class Thing : movableObject, IMovableSupplement {
     }
 
     public node getNextRoute() {
-        return wigwaggerForMove.getNextRoute(this);
+        return thisCircuitHub.getNextRoute(this);
     }
 
     public int setCurHp(int parValue, Thing source, bool isPlus = true) {
@@ -184,7 +182,7 @@ public class Thing : movableObject, IMovableSupplement {
             destroied(source);
         }
 
-        thisPersonalCanvas.updateHpText(curHp);
+        thisCanvasPersonal.updateHpText(curHp);
 
         return tempResultChange;
     }
@@ -221,32 +219,26 @@ public class Thing : movableObject, IMovableSupplement {
 
     #region utility
     public void setCircuit(
-        int parCodeSelecterForAttack,       int[] ppSelecterForAttack,
-        int parCodeSelecterForSkill,        int[] ppSelecterForSkill,
-        int parCodeMoveSensorIdle,          int[] ppMoveSensorIdle,
-        int parCodeMoveSensorPrioritized,   int[] ppMoveSensorPrioritized,
-        int parCodeNavigatorIdle,           int[] ppNavigatorIdle,
-        int parCodeNavigatorPrioritized,    int[] ppNavigatorPrioritized,
-        int parCodeSkillSensorIdle,         int[] ppSkillSensorIdle,
-        int parCodeSkillSensorPrioritized,  int[] ppSkillSensorPrioritized) {
+        int parCodeSensorForMove, int[] ppSensorForMove,
+        int parCodeNavigatorPrioritized, int[] ppNavigatorPrioritized,
+        int parCodeNavigatorIdle, int[] ppNavigatorIdle,
+        int parCodeSensorForSkill, int[] ppSensorForSkill,
+        int parCodeSelecterForSkill, int[] ppSelecterForSkill,
+        int parCodeSelecterForAttack, int[] ppSelecterForAttack) {
 
-        selecterForAttack = circuitMaker.makeSelecter(parCodeSelecterForAttack, ppSelecterForAttack);
-        selecterForSkill = circuitMaker.makeSelecter(parCodeSelecterForSkill, ppSelecterForSkill);
-
-        wigwaggerForMove = new wigwaggerMove(
-            circuitMaker.makeSensor(parCodeMoveSensorIdle, ppMoveSensorIdle),
-            circuitMaker.makeNavigator(parCodeNavigatorIdle, ppNavigatorIdle),
-            circuitMaker.makeSensor(parCodeMoveSensorPrioritized, ppMoveSensorPrioritized),
-            circuitMaker.makeNavigator(parCodeNavigatorPrioritized, ppNavigatorPrioritized)
+        thisCircuitHub.setCircuitHub(
+        this,
+        parCodeSensorForMove, ppSensorForMove,
+        parCodeNavigatorPrioritized, ppNavigatorPrioritized,
+        parCodeNavigatorIdle, ppNavigatorIdle,
+        parCodeSensorForSkill, ppSensorForSkill,
+        parCodeSelecterForSkill, ppSelecterForSkill,
+        parCodeSelecterForAttack, ppSelecterForAttack
             );
+    }
 
-        wigwaggerForSkill = new wigwaggerSkill(
-            circuitMaker.makeSensor(parCodeSkillSensorIdle, ppSkillSensorIdle),
-            circuitMaker.makeSensor(parCodeSkillSensorPrioritized, ppSkillSensorPrioritized)
-            );
-
-        addCase(wigwaggerForMove);
-        addCase(wigwaggerForSkill);
+    public string[] getCircuitInfo() {
+        return thisCircuitHub.getTotalInfo();
     }
 
     public void addDamageTotalDealt(int par) {
@@ -381,7 +373,7 @@ public class Thing : movableObject, IMovableSupplement {
     }
 
     public void updateSkillTimer(int parTimerCur, int parTimerMax) {
-        thisPersonalCanvas.updateSkillTimer(parTimerCur, parTimerMax);
+        thisCanvasPersonal.updateSkillTimer(parTimerCur, parTimerMax);
     } 
     #endregion utility
 }

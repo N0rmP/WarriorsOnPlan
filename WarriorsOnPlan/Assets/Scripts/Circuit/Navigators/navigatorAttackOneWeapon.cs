@@ -15,6 +15,10 @@ public class navigatorAttackOneWeapon : navigatorAbst
     private List<(int min, int max)> rangeRange = new List<(int min, int max)>();
     private node prevTargetPos = null;
 
+    public navigatorAttackOneWeapon() {
+        code = 1;
+    }
+
     // iterate owner.listWeapon, make the coverage list of weapons
     private void updateRangeRange(Thing owner) {
         int tempRangeMinCur;

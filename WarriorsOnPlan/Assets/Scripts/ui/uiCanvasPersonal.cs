@@ -5,13 +5,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class uiPersonalCanvas : MonoBehaviour
+public class uiCanvasPersonal : MonoBehaviour
 {
+    private static uiBoxInformation curBoxInformation = null;
+
     private float destinationSlider;
-    private Slider sliderSkill;
+    private Slider sliderSkill { get { return transform.GetChild(2).GetComponent<Slider>(); } }
+    private Image imageHp { get { return transform.GetChild(1).GetComponent<Image>(); } }
 
     void Awake() {
-        sliderSkill = transform.GetChild(1).GetComponent<Slider>();
+        if (curBoxInformation == null) {
+            curBoxInformation = GameObject.Find("boxInformation")?.GetComponent<uiBoxInformation>();
+        }
     }
 
     void LateUpdate() {
@@ -26,24 +31,27 @@ public class uiPersonalCanvas : MonoBehaviour
     }
 
     public void setSkillImage(string parSkillName) {
-        transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Skill/Image_" + parSkillName);
+        sliderSkill.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Skill/Image_" + parSkillName);
+    }
+
+    public void clickShowStatus() {
+        curBoxInformation?.showStatus(transform.parent.GetComponent<Thing>());
     }
 
     #region updates
     public void updateHpText(int parValue) {
-        int tempChange = parValue - Convert.ToInt32(transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text);
-        Image tempImg = transform.GetChild(0).GetComponent<Image>();
+        int tempChange = parValue - Convert.ToInt32(imageHp.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
 
         if (tempChange > 0) {
             //heal
-            tempImg.color = new Color(0f, 1f, 0f);
+            imageHp.color = new Color(0f, 1f, 0f);
         } else if (tempChange < 0) {
             //damage
-            tempImg.color = new Color(0.5f, 0f, 0f);
+            imageHp.color = new Color(0.5f, 0f, 0f);
         }
 
-        gameManager.GM.UC.addCount(transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>(), parValue);
-        gameManager.GM.UC.addColorChange(tempImg, new Color(1f, 0f, 0f), 1f);
+        gameManager.GM.UC.addCount(imageHp.transform.GetChild(0).GetComponent<TextMeshProUGUI>(), parValue);
+        gameManager.GM.UC.addColorChange(imageHp, new Color(1f, 0f, 0f), 1f);
     }
 
     public void updateSkillTimer(int parTimerCur, int parTimerMax) {

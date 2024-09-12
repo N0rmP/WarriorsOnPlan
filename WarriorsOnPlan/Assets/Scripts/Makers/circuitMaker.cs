@@ -12,9 +12,9 @@ public class circuitMaker
         -1  =   null
         0   =   selecterClosest (target group bits)
     */
-    public static selecterAbst makeSelecter(int parCode, int[] pp) {
+    public static selecterAbst makeSelecter(Thing source, int parCode, int[] pp) {
         return parCode switch {
-            0 => new selecterClosest(pp[0]),
+            0 => new selecterClosest(source, pp[0]),
             -1 => null,
             _ => null
         };
@@ -30,6 +30,7 @@ public class circuitMaker
     public static sensorAbst makeSensor(int parCode, int[] pp) {
         return parCode switch {
             0 => new sensorNothing(),
+            1 => new sensorHp(pp[0], pp[1], pp[2] != 0),
             -1 => null,
             _ => null
         };
