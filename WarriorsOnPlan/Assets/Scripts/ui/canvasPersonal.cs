@@ -3,24 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class uiCanvasPersonal : MonoBehaviour
-{
-    private static uiBoxInformation curBoxInformation = null;
-
+public class canvasPersonal : MonoBehaviour {
     private float destinationSlider;
-    private Slider sliderSkill { get { return transform.GetChild(2).GetComponent<Slider>(); } }
-    private Image imageHp { get { return transform.GetChild(1).GetComponent<Image>(); } }
+    private Image imageHp;
+    private Slider sliderSkill;
 
-    void Awake() {
-        if (curBoxInformation == null) {
-            curBoxInformation = GameObject.Find("boxInformation")?.GetComponent<uiBoxInformation>();
-        }
+    public void Awake() {
+        imageHp = transform.GetChild(0).GetComponent<Image>();
+        sliderSkill = transform.GetChild(1).GetComponent<Slider>();
     }
 
-    void LateUpdate() {
-        transform.LookAt(transform.position + gameManager.GM.camera.transform.forward);
+    public void Update() {
+        transform.LookAt(transform.position + gameManager.GM.cameraMain.transform.forward);
 
         if (destinationSlider < sliderSkill.value) {
             sliderSkill.value -= 0.0025f;
@@ -28,14 +25,6 @@ public class uiCanvasPersonal : MonoBehaviour
                 sliderSkill.value = destinationSlider;
             }
         }
-    }
-
-    public void setSkillImage(string parSkillName) {
-        sliderSkill.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Skill/Image_" + parSkillName);
-    }
-
-    public void clickShowStatus() {
-        curBoxInformation?.showStatus(transform.parent.GetComponent<Thing>());
     }
 
     #region updates
@@ -65,5 +54,15 @@ public class uiCanvasPersonal : MonoBehaviour
         sliderSkill.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (parTimerCur > 0) ? parTimerCur.ToString() : "";
     }
     #endregion updates
+
+    public void setSkillImage(string parSkillName) {
+
+
+        sliderSkill.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Skill/Image_" + parSkillName);
+    }
+
+    public void click() {
+        combatUIManager.CUM.CStatus.chooseThing(transform.parent.GetComponent<Thing>());
+    }
 }
 

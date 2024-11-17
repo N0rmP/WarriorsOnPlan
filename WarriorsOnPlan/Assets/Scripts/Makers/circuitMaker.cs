@@ -30,7 +30,7 @@ public class circuitMaker
     public static sensorAbst makeSensor(int parCode, int[] pp) {
         return parCode switch {
             0 => new sensorNothing(),
-            1 => new sensorHp(pp[0], pp[1], pp[2] != 0),
+            1 => new sensorHpBelow(pp[0], pp[1]),
             -1 => null,
             _ => null
         };

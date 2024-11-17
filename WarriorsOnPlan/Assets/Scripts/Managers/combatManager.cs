@@ -5,19 +5,21 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
-
 using System.IO;
 using Newtonsoft.Json;
 
+public enum enumCombatState { 
+    preparing   = 0,
+    looping     = 1,
+    done        = 2
+}
+
 public class combatManager : MonoBehaviour {
-    public static combatManager CM;
+    public static combatManager CM { get; private set; }
     public graphComponent GC { get; private set; }
     public fxComponent FC { get; private set; }
 
-    public uiToolsStorage UT;
-
-    private bool isCombatLooping = false;
+    public enumCombatState combatState { get; private set; }
 
     // interval time between each action
     //★ intervalTime에 비례해 애니메이션 속도를 빠르게 할 수 있나 확인... 근데 그냥 게임 자체에 배속을 걸 수 있는지 찾는 게 빠를 것도 같다.
@@ -30,9 +32,6 @@ public class combatManager : MonoBehaviour {
     private List<Thing>[] thingsDead_;
 
     private List<caseBase> toolsProvided;
-
-    #region properties
-    #endregion properties
 
     private comparerHp comparerHpInstance;
     private comparerDamageDealt comparerDamageDealtInstance;
@@ -52,6 +51,8 @@ public class combatManager : MonoBehaviour {
         //comparers
         comparerHpInstance = new comparerHp();
         comparerDamageDealtInstance = new comparerDamageDealt();
+
+        combatState = enumCombatState.preparing;
 
         //list initiate
         thingsHpSorted_ = new List<Thing>[3]{
@@ -105,7 +106,7 @@ public class combatManager : MonoBehaviour {
             }
         }
 
-        isCombatLooping = true;
+        combatState = enumCombatState.looping;
 
         while (true) {
             //nuetral side's turn precedes enemy's turn to assure that player can make use of the nuetral side perfectly
@@ -197,7 +198,7 @@ public class combatManager : MonoBehaviour {
 
                 //check if this combat is over after each action
                 if (overCheck()) {
-                    isCombatLooping = false;
+                    combatState = enumCombatState.done;
                     //★ 1초 정지 (사망 애니메이션을 보여서 가독성 강화)
                     //★ 게임 종료 처리
                     //return (warriorsHpSorted_[1].Count <= 0);
@@ -233,7 +234,7 @@ public class combatManager : MonoBehaviour {
 
         //spawn enemy warriors
         foreach (dataNotFriendlyThing ET in tempDataLevel.EnemyWarriors) {
-            tempThing = processSpawn(ET.NameThing, enumSide.enemy, (ET.Coordinate0, ET.Coordinate1), ET.SkillParameters);
+            tempThing = processSpawn(ET.NameThing, enumSide.enemy, ET.HP, (ET.Coordinate0, ET.Coordinate1), ET.SkillParameters);
             tempThing.setCircuit(
                 ET.CodeSensorForMove, ET.Parameter0,
                 ET.CodeNavigatorPrioritized, ET.Parameter1,
@@ -246,7 +247,7 @@ public class combatManager : MonoBehaviour {
 
         //spawn neutral warriors
         foreach (dataNotFriendlyThing NT in tempDataLevel.NeutralThings) {
-            tempThing = processSpawn(NT.NameThing, enumSide.neutral, (NT.Coordinate0, NT.Coordinate1), NT.SkillParameters);
+            tempThing = processSpawn(NT.NameThing, enumSide.neutral, NT.HP, (NT.Coordinate0, NT.Coordinate1), NT.SkillParameters);
             tempThing.setCircuit(
                 NT.CodeSensorForMove, NT.Parameter0,
                 NT.CodeNavigatorPrioritized, NT.Parameter1,
@@ -258,7 +259,7 @@ public class combatManager : MonoBehaviour {
 
         //spawn friendly warriors
         foreach (dataFriendlyThing FT in tempDataLevel.FriendlyWarriors) {
-            processSpawn(FT.NameThing, enumSide.neutral, (FT.Coordinate0, FT.Coordinate1), FT.SkillParameters);
+            processSpawn(FT.NameThing, enumSide.player, FT.HP, (FT.Coordinate0, FT.Coordinate1), FT.SkillParameters);
         }
 
         //제공될 툴 정리정돈
@@ -267,7 +268,7 @@ public class combatManager : MonoBehaviour {
                 toolMaker.makeTool(DT.CodeTool, DT.ToolParameters)
                 );
         }
-        UT.prepareBubbles(toolsProvided);
+        combatUIManager.CUM.TS.prepareBubbles(toolsProvided.ToArray());
 
         //ui 준비
 
@@ -354,11 +355,11 @@ public class combatManager : MonoBehaviour {
         return (source.whatToUseSkill == null) ? Vector3.negativeInfinity : source.whatToUseSkill.transform.position;
     }
 
-    public Thing processSpawn(string sourceName, enumSide parSide, (int c0, int c1) parCoor, int[] parSkillParameters) {
+    public Thing processSpawn(string sourceName, enumSide parSide, int parMaxHp, (int c0, int c1) parCoor, int[] parSkillParameters) {
         GameObject w1 = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/" + sourceName));
 
         Thing tempThing = w1.GetComponent<Thing>();
-        tempThing.init(parSide, 5, parSkillParameters);
+        tempThing.init(parSide, parMaxHp, parSkillParameters);
         addThing(tempThing);
 
         processPlace(tempThing, parCoor);
@@ -426,6 +427,13 @@ public class combatManager : MonoBehaviour {
         thingsDamageDealtSorted_[0].Sort(comparerDamageDealtInstance);
         thingsDamageDealtSorted_[1].Sort(comparerDamageDealtInstance);
         thingsDamageDealtSorted_[2].Sort(comparerDamageDealtInstance);
+    }
+
+    public bool checkControllability(Thing parThing) {
+        return (
+            parThing.thisSide == enumSide.player &&
+            combatManager.CM.combatState == enumCombatState.preparing
+            );
     }
     #endregion utility
 

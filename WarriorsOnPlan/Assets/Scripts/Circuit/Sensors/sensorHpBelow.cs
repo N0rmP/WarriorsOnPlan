@@ -14,4 +14,8 @@ public class sensorHpBelow : sensorAbst
     public override bool checkWigwagging(Thing source) {
         return source.curHp <= threshold;
     }
+
+    public override int[] getParameters() {
+        return new int[1] { threshold };
+    }
 }

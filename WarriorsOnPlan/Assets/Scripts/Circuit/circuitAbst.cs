@@ -28,4 +28,9 @@ public class circuitAbst<T> : ISingleInfo where T : circuitAbst<T> {
     public virtual T getValidCircuit(Thing source) {
         return (T)this;
     }
+
+    // getParameters returns the integers to be shown on circuit setting
+    public virtual int[] getParameters() {
+        return null;
+    }
 }

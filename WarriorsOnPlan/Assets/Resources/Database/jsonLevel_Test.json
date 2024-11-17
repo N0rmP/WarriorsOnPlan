@@ -3,7 +3,7 @@
     "EnemyWarriors" : [
         {
             "NameThing" : "tester", 
-            "Coordinate0" : 0, "Coordinate1" : 0, 
+            "Coordinate0" : 6, "Coordinate1" : 6, 
             "HP" : 3, 
             "SkillParameters" : [3, 0, 5],
             "ToolList" : [
@@ -18,8 +18,8 @@
         },
         {
             "NameThing" : "tester", 
-            "Coordinate0" : 0, "Coordinate1" : 1, 
-            "HP" : 3, 
+            "Coordinate0" : 6, "Coordinate1" : 5, 
+            "HP" : 4, 
             "SkillParameters" : [3, 0, 5],
             "ToolList" : [
                 {"CodeTool" : -1, "ToolParameters" : [2, 1]}
@@ -36,14 +36,14 @@
     "FriendlyWarriors" : [
         {
             "NameThing" : "tester", 
-            "Coordinate0" : 6, "Coordinate1" : 6, 
+            "Coordinate0" : 0, "Coordinate1" : 0, 
             "HP" : 3, 
             "SkillParameters" : [3, 0 ,5]
         },
         {
             "NameThing" : "tester", 
-            "Coordinate0" : 6, "Coordinate1" : 5, 
-            "HP" : 3, 
+            "Coordinate0" : 0, "Coordinate1" : 1, 
+            "HP" : 4, 
             "SkillParameters" : [3, 0, 5]
         }
     ],

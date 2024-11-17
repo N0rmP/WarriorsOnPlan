@@ -54,6 +54,18 @@ public class circuitHub : caseTimerSelfishTurn, ICaseUpdateState {
         };
     }
 
+    public int[] getSingleParameter(int parCircuitType) { 
+        return parCircuitType switch { 
+            0 => sensorForMove.getParameters(),
+            1 => navigatorPrioritized.getParameters(),
+            2 => navigatorIdle.getParameters(),
+            3 => sensorForSkill.getParameters(),
+            4 => selecterForSkill.getParameters(),
+            5 => selecterForAttack.getParameters(),
+            _ => (new sensorNothing()).getParameters()
+        };
+    }
+
     public node getNextRoute(Thing source) {
         return navigatorCur.getNextRoute(source);
     }

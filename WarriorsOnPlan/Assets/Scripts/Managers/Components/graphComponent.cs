@@ -10,17 +10,21 @@ public class graphComponent
     public readonly int size0;
     public readonly int size1;
 
+    private GameObject prefabNode;
+
     private node[,] graph;
 
     public graphComponent(int parSize0, int parSize1) {
         size0 = parSize0;
         size1 = parSize1;
+        prefabNode = Resources.Load<GameObject>("Prefabs/Node");
         graph = new node[size0, size1];
 
         // create nodes and connect each other
         for (int i = 0; i < size0; i++) {
             for (int j = 0; j < size1; j++) {
-                graph[i, j] = new node(i, j);
+                graph[i, j] = GameObject.Instantiate(prefabNode).GetComponent<node>().init(i, j);
+                graph[i, j].transform.SetParent(combatManager.CM.transform);
 
                 if (i > 0) {
                     if (j > 0) {

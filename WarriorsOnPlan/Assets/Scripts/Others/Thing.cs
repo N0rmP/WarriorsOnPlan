@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public enum enumStateWarrior {
@@ -24,11 +25,10 @@ public enum enumSide {
 
 public class Thing : movableObject, IMovableSupplement {
     #region variable
-    protected int damageTotalDealt_;
-
     private ICaseUpdateState semaphoreState;
 
-    protected uiCanvasPersonal thisCanvasPersonal;
+    protected canvasPersonal thisCanvasPersonal;
+    protected cursor thisCursor;
 
     protected skillAbst thisSkill;
     protected List<caseBase> listCaseBaseAll;
@@ -42,8 +42,15 @@ public class Thing : movableObject, IMovableSupplement {
     #region property
     public enumSide thisSide { get; protected set; }
     public int maxHp { get; protected set; }
-    public int curHp { get; protected set; }
-    public int damageTotalDealt { get { return damageTotalDealt_; } }
+    public int curHp { get; private set; }
+    public int weaponAmplifierAdd { get; private set; }
+    public int weaponAmplifierMultiply { get; private set; }
+    public int skillAmplifierAdd { get; private set; }
+    public int skillAmplifierMultiply { get; private set; }
+    public int armorAdd { get; private set; }
+    public int armorMultiply { get; private set; }
+    public int damageTotalDealt { get; private set; }
+    public int damageTotalTaken { get; private set; }
     public Thing whatToAttack { get; private set; }
     public Thing whatToUseSkill { get; private set; }
     public node curPosition { get; set; }
@@ -62,23 +69,42 @@ public class Thing : movableObject, IMovableSupplement {
         thisAnimController = gameObject.GetComponent<Animator>();
         thisCircuitHub = new circuitHub(this);  addCase(thisCircuitHub);
         stateCur = enumStateWarrior.idleAttack;
-        maxHp = parMaxHp;
-        curHp = maxHp;
 
         setAttackTriggerName = new SortedSet<string>();
 
         thisSide = parSide;
-        damageTotalDealt_ = 0;
-        //★
+
+        weaponAmplifierAdd = 0;
+        weaponAmplifierMultiply = 0;
+        skillAmplifierAdd = 0;
+        skillAmplifierMultiply = 0;
+        armorAdd = 0;
+        armorMultiply = 0;
+        damageTotalDealt = 0;
+        damageTotalTaken = 0;
 
         initPersonal(parSkillParameters);
 
-        GameObject tempPersonalCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/canvasPersonal"));
-        tempPersonalCanvas.transform.SetParent(transform);
-        thisCanvasPersonal = tempPersonalCanvas.GetComponent<uiCanvasPersonal>();
+        GameObject tempObj;
+
+        tempObj = Instantiate(Resources.Load<GameObject>("Prefabs/UI/canvasPersonal"));
+        tempObj.transform.SetParent(transform);
+        thisCanvasPersonal = tempObj.GetComponent<canvasPersonal>();
         thisCanvasPersonal.setSkillImage(thisSkill.skillName);
         thisCanvasPersonal.updateHpText(curHp);
         thisCanvasPersonal.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
+
+        thisCanvasPersonal.transform.GetChild(2).gameObject.AddComponent<releasablePersonal>().init(this);
+        if (thisSide == enumSide.player) {            
+            thisCanvasPersonal.transform.GetChild(2).gameObject.AddComponent<dragablePersonal>().init(this);
+        }
+
+        tempObj = Instantiate(Resources.Load<GameObject>("Prefabs/Cursor"));
+        tempObj.transform.SetParent(transform);
+        thisCursor = tempObj.GetComponent<cursor>();
+
+        maxHp = parMaxHp;
+        setCurHp(maxHp, null, false);
     }
 
     protected virtual void initPersonal(int[] parSkillParameters = null) { }
@@ -136,9 +162,10 @@ public class Thing : movableObject, IMovableSupplement {
         return thisCircuitHub.getNextRoute(this);
     }
 
+    // isPlus ain't asking is value positive or negative, it's asking is newly-setting curHp or adding value to the origial curHp
     public int setCurHp(int parValue, Thing source, bool isPlus = true) {
         //onBeforeHp Increase / Decrease
-        bool tempIsIncrease = (isPlus && parValue >= 0) || (!isPlus && (parValue - curHp) >= 0);
+        bool tempIsIncrease = (isPlus && parValue > 0) || (!isPlus && (curHp != maxHp) && (parValue > curHp));
         if (tempIsIncrease) {
             foreach (ICaseBeforeHpIncrease cb in getCaseList<ICaseBeforeHpIncrease>()) {
                 cb.onBeforeHpIncrease(source, ref parValue);
@@ -199,7 +226,9 @@ public class Thing : movableObject, IMovableSupplement {
 
     public virtual void destroied(Thing source) {
         //onDestroy of source
-        source.destroy(this);
+        if (source != this || source != null) {
+            source.destroy(this);
+        }
 
         //onDestroied
         foreach (ICaseDestroied ca in getCaseList<ICaseDestroied>()) {
@@ -241,10 +270,8 @@ public class Thing : movableObject, IMovableSupplement {
         return thisCircuitHub.getTotalInfo();
     }
 
-    public void addDamageTotalDealt(int par) {
-        if (par > 0) {
-            damageTotalDealt_ += par;
-        }
+    public int[] getCircuitParameters(int parCircuitType) {
+        return thisCircuitHub.getSingleParameter(parCircuitType);
     }
 
     public virtual void addCase(caseBase parCase) {
@@ -269,6 +296,8 @@ public class Thing : movableObject, IMovableSupplement {
             default:
                 break;
         }
+
+        updateCaseResult();
     }
 
     public virtual void removeCase(caseBase parCase) {
@@ -292,9 +321,23 @@ public class Thing : movableObject, IMovableSupplement {
             default:
                 break;
         }
+
+        updateCaseResult();
+    }
+
+    public void updateCaseResult() {
+        // ★ 각 능력치 재계산
+        if (combatUIManager.CUM.CStatus.thisThing == this) {
+            combatUIManager.CUM.CStatus.updateTotal();
+        }
     }
 
     public List<T> getCaseList<T>() {
+        // during prearing step getCaseList doesn't work by returning only empty list
+        if (combatManager.CM.combatState == enumCombatState.preparing) {
+            return new List<T> { };
+        }
+
         List<T> tempResult = null;
 
         foreach (caseBase cb in listCaseBaseAll) {
@@ -309,6 +352,11 @@ public class Thing : movableObject, IMovableSupplement {
     }
 
     public List<caseBase> getCaseList(enumCaseType parCaseType) {
+        // during prearing step getCaseList doesn't work by returning only empty list
+        if (combatManager.CM.combatState == enumCombatState.preparing) {
+            return new List<caseBase> { };
+        }
+
         List<caseBase> tempResult = null;
 
         foreach (caseBase cb in listCaseBaseAll) {
@@ -321,6 +369,24 @@ public class Thing : movableObject, IMovableSupplement {
         }
 
         return tempResult;
+    }
+
+    public bool checkContainCase(caseBase parCase) {
+        foreach (caseBase cb in listCaseBaseAll) {
+            if (cb.GetType() == parCase.GetType()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool checkContainConcreteCase(caseBase parCase) {
+        foreach (caseBase cb in listCaseBaseAll) {
+            if (cb == parCase) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void clearAttackAnimation() {
@@ -374,6 +440,53 @@ public class Thing : movableObject, IMovableSupplement {
 
     public void updateSkillTimer(int parTimerCur, int parTimerMax) {
         thisCanvasPersonal.updateSkillTimer(parTimerCur, parTimerMax);
-    } 
+    }
+
+    public void setCursorChosen(bool par) {
+        thisCursor.setIsChosen(par);
+    }
+
+    public void setCursorHovered(bool par) {
+        thisCursor.setIsHovered(par);
+    }
     #endregion utility
+
+    #region number
+    // most numbers can be negative, damageTotal-Delat & Taken can't be negative
+    public void addWeaponAmplifierAdd(int par) {
+        weaponAmplifierAdd += par;
+    }
+
+    public void addWeaponAmplifierMultiply(int par) {
+        weaponAmplifierMultiply += par;
+    }
+
+    public void addSkillAmplifierAdd(int par) {
+        skillAmplifierAdd += par;
+    }
+
+    public void addSkillAmplifierMultiply(int par) {
+        skillAmplifierMultiply += par;
+    }
+
+    public void addArmorAdd(int par) {
+        armorAdd += par;
+    }
+
+    public void addArmorMultiply(int par) {
+        armorMultiply += par;
+    }
+
+    public void addDamageTotalDealt(int par) {
+        if (par > 0) {
+            damageTotalDealt += par;
+        }
+    }
+
+    public void addDamageTotalTaken(int par) {
+        if (par > 0) {
+            damageTotalTaken += par;
+        }
+    }
+    #endregion number
 }

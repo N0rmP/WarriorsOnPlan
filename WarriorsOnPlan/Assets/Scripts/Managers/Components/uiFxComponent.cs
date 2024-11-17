@@ -16,6 +16,7 @@ public class uiFxComponent : MonoBehaviour
     // some changes are too frequent with once in a frame, timerSlower represents their change frequency by seconds
     private float timerSlower = 0f;
 
+    #region callback
     public void Awake() {
         containerColorChange = new Dictionary<Image, (Color, float)>();
         containerCount = new Dictionary<TextMeshProUGUI, int>();
@@ -80,7 +81,6 @@ public class uiFxComponent : MonoBehaviour
             }
         }
 
-
         funcColorChange(Time.deltaTime);
         funcMove(Time.deltaTime);
 
@@ -90,6 +90,27 @@ public class uiFxComponent : MonoBehaviour
             timerSlower = 0.1f;
         }
     }
+    #endregion callback
+
+    /*
+    public bool checkMouseOnIt(GameObject parObj) {
+        // if parObj doesn't have Recttransform, skip
+        RectTransform tempRect;
+        if (!parObj.TryGetComponent<RectTransform>(out tempRect)) {
+            return false;
+        }
+
+        Vector3 tempMin = tempRect.position - new Vector3(tempRect.rect.width * tempRect.pivot.x, tempRect.rect.height * tempRect.pivot.y, 0f);
+        Vector3 tempMax = tempRect.position + new Vector3(tempRect.rect.width * (1.0f - tempRect.pivot.x), tempRect.rect.height * (1.0f - tempRect.pivot.y), 0f);
+
+        return (
+            (posMouse.x >= tempMin.x) &&
+            (posMouse.x <= tempMax.x) &&
+            (posMouse.y >= tempMin.y) &&
+            (posMouse.y <= tempMax.y)
+            );
+    }
+    */
 
     #region addNremove
     public void addColorChange(Image parImg, Color parDestinationColor, float parTimerMax) {

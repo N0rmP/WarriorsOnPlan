@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
+// uiBasic should be with RectTransform & exRectTransform
 public class uiBasic : MonoBehaviour
 {
     public static Stack<uiBasic> stackUI = new Stack<uiBasic>();
@@ -24,15 +25,14 @@ public class uiBasic : MonoBehaviour
     private RectTransform thisRectTransform;
     private Vector3 originalLocalPosition;
 
-    public void Awake() {
+    public void Start() {
         thisRectTransform = gameObject.GetComponent<RectTransform>();
         originalLocalPosition = thisRectTransform.localPosition;
-        gameObject.SetActive(false);
     }
 
     public void Update() {
         // mouse left click input
-        if (stackUI.Count > 0 && stackUI.Peek() == this && Input.GetMouseButtonDown(0) && !checkMouseOnThis()) {
+        if (stackUI.Count > 0 && stackUI.Peek() == this && Input.GetMouseButtonDown(0) && !GetComponent<RectTransform>().checkHovered()) {
             deactivatePanel();
         }
 
@@ -40,27 +40,6 @@ public class uiBasic : MonoBehaviour
         if (isMove) {
             move(Time.deltaTime);
         }
-    }
-
-    private bool checkMouseOnThis() {
-        Vector3 tempMousePosition = Input.mousePosition - new Vector3(optionAIO.screenWidth / 2, optionAIO.screenHeight / 2, 0);
-        Vector2 tempRectMin = thisRectTransform.rect.min;
-        Vector2 tempRectMax = thisRectTransform.rect.max;
-
-        /*
-        Debug.Log("obj : " + gameObject + 
-            "\nmouse pos : " + tempMousePosition + 
-            "\nthis rect : " + tempRectMin + " , " + tempRectMax
-            );
-        */
-        
-
-        return (
-            (tempMousePosition.x >= tempRectMin.x) &&
-            (tempMousePosition.x <= tempRectMax.x) &&
-            (tempMousePosition.y >= tempRectMin.y) &&
-            (tempMousePosition.y <= tempRectMax.y)
-            );
     }
 
     public void activatePanel(Vector3 parDestination) {
