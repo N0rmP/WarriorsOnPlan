@@ -8,12 +8,22 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 
 public class test : MonoBehaviour {
-    public void Awake() {
-        save(AssetPreview.GetAssetPreview(Resources.Load("Prefabs/tester")).EncodeToPNG());        
-    }
+    public GameObject Texts;
 
-    public void save(byte[] parByte) {
-        System.IO.File.WriteAllBytes("Assets/Resources/Test/test.png", parByte);
+    public void foo() {
+        string temp = "temp name ";
+        int[] tteemp = new int[2] { Random.Range(1, 30), Random.Range(1, 30) };
+        for (int i = 0; i < tteemp[0]; i++) {
+            temp += "temp name ";
+        }
+        Texts.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = temp;
+        temp = "temp info ";
+        for (int i = 0; i < tteemp[1]; i++) {
+            temp += "temp info ";
+        }
+        Texts.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = temp;
+        Debug.Log(tteemp[0] + " , " + tteemp[1]);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(Texts.GetComponent<RectTransform>());
     }
 
     public void sayAnything() {

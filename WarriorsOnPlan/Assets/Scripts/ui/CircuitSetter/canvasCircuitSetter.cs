@@ -8,12 +8,9 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
-public class canvasCircuitSetter : MonoBehaviour
-{
-    #region editorRequired
-    public GameObject panelChoice;
-    public GameObject[] arrButtonCircuitType;
-    #endregion editorRequired
+public class canvasCircuitSetter : MonoBehaviour {
+    private GameObject panelChoice;
+    private GameObject[] arrButtonCircuitType;
 
     #region CircuitLists
     // because all these circuits should be used only for getting information in this class, creator parameters don't matter
@@ -52,12 +49,27 @@ public class canvasCircuitSetter : MonoBehaviour
 
     //�� public TextMeshProUGUI tempTMProU;
     public void Start() {
+        panelChoice = transform.GetChild(1).gameObject;
+        panelChoice.SetActive(false);
+
+        arrButtonCircuitType = new GameObject[6];
+        int tempInd = 0;
+        Button tempButton;
+        foreach (Transform t in transform.GetChild(0)) {
+            if (t.TryGetComponent<Button>(out tempButton)) {
+                arrButtonCircuitType[tempInd++] = t.gameObject;
+                if (tempInd == arrButtonCircuitType.Length) {
+                    break;
+                }
+            }
+        }
+
         listButtonChoice = new List<GameObject>();
-        foreach (Transform trn in gameObject.transform.GetChild(0).Find("panelChoice")) {
+        foreach (Transform trn in panelChoice.transform) {
             listButtonChoice.Add(trn.gameObject);
         }
 
-        wordNUMBER = optionAIO.curTranslation switch {
+        wordNUMBER = gameManager.GM.option.curTranslation switch {
             enumTranslation.english => "(Number)",
             enumTranslation.korean => "(숫자)",
             _ => ""
@@ -102,7 +114,7 @@ public class canvasCircuitSetter : MonoBehaviour
 
         setInputfieldTotal(source);
 
-        gameObject.GetComponent<uiBasic>().activatePanel();
+        GetComponent<uiBasic>().activatePanel();
     }
 
     public void activateChoicePanel(int parcurCircuitTypeBeingChosen) {

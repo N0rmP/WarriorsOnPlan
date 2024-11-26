@@ -28,12 +28,12 @@ public class dragableBubbleInventory : dragableBubbleAbst, IPointerClickHandler 
     }
 
     protected override void leave() {
-        combatUIManager.CUM.CStatus.RI.removeBubble(this, true);
+        combatUIManager.CUM.CStatus.removeBubble(this, true);
     }
 
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Right) {
-            combatUIManager.CUM.CStatus.RI.removeBubble(this, true);
+            combatUIManager.CUM.CStatus.removeBubble(this, true);
         }
     }
 }

@@ -15,7 +15,7 @@ public class circuitHub : caseTimerSelfishTurn, ICaseUpdateState {
     private selecterAbst selecterForAttack;
     
 
-    public circuitHub(Thing source) : base(-1, enumCaseType.circuit) {
+    public circuitHub(Thing source) : base(-1, enumCaseType.circuit, false) {
         sensorForMove = new sensorNothing();
         navigatorPrioritized = new navigatorStationary();
         navigatorIdle = new navigatorStationary();

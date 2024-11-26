@@ -6,7 +6,7 @@ public class caseTimerHostileTurn : caseTimer
 {
     private bool isTurnStartPassed;
 
-    public caseTimerHostileTurn(int parTimerMax, enumCaseType parEnumCaseType, bool parIsTimerMax = true, bool parIsAutoReset = true) : base(parTimerMax, parEnumCaseType, parIsTimerMax, parIsAutoReset) {
+    public caseTimerHostileTurn(int parTimerMax, enumCaseType parEnumCaseType, bool parIsVisible, bool parIsTimerMax = true, bool parIsAutoReset = true) : base(parTimerMax, parEnumCaseType, parIsVisible, parIsTimerMax, parIsAutoReset) {
         isTurnStartPassed = false;
     }
 

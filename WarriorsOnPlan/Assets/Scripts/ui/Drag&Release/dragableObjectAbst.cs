@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler {
-    private static GameObject canvasMain = null;
-
     protected enumDrag thisDrag = enumDrag.none;
 
     private RectTransform thisRectTransform;
@@ -17,10 +15,6 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
     private Vector3 posReturn;
 
     public virtual void Awake() {
-        if (canvasMain == null) {
-            canvasMain = GameObject.Find("CANVAS") ?? null;
-        }
-
         if (!TryGetComponent<RectTransform>(out thisRectTransform)){
             Destroy(this);
         }
@@ -41,7 +35,7 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
     }
 
     public void OnDrag(PointerEventData eventData) {
-        thisRectTransform.localPosition = Input.mousePosition - new Vector3(optionAIO.screenWidth / 2.0f, optionAIO.screenHeight / 2.0f, 0f);
+        thisRectTransform.localPosition = Input.mousePosition - new Vector3(gameManager.GM.option.screenWidth / 2.0f, gameManager.GM.option.screenHeight / 2.0f, 0f);
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData) {
@@ -52,7 +46,7 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
             posReturn = thisRectTransform.localPosition;
         }
 
-        transform.SetParent(canvasMain.transform);
+        transform.SetParent(gameManager.GM.canvasMain.transform);
 
         doWhenHoveringStart();
     }

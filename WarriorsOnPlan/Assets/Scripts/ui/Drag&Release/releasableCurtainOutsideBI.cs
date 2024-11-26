@@ -9,7 +9,7 @@ public class releasableCurtainOutsideBI : releasableObjectAbst {
     }
 
     protected override bool doWhenReleased(object[] parParameters) {
-        combatUIManager.CUM.CStatus.RI.removeTool((caseBase)parParameters[0]);
+        combatUIManager.CUM.CStatus.removeTool((caseBase)parParameters[0]);
         return true;
     }
 }

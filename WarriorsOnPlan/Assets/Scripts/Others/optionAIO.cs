@@ -7,15 +7,28 @@ public enum enumTranslation {
     korean
 }
 
+public readonly struct dataBasicWords {
+    public readonly string strMelee;
+    public readonly string strNumber;
+
+    public dataBasicWords(string parMelee, string parNumber) {
+        strMelee = parMelee;
+        strNumber = parNumber;
+    }
+}
+
 public class optionAIO {
     #region statics
-    public static int screenWidth { get; private set; } = 1920;
-    public static int screenHeight { get; private set; } = 1080;
+    public int screenWidth { get; private set; } = 1920;
+    public int screenHeight { get; private set; } = 1080;
 
     // stick represents how long is 1.0f of World Space in Screen Space
     public float stick { get; private set; }
 
-    public static enumTranslation curTranslation = enumTranslation.english;
+    public enumTranslation curTranslation = enumTranslation.english;
+    
+    public dataBasicWords basicWords { get; private set; }
+
     #endregion statics
 
     private List<ICaseResolutionChange> listCaseResolutionChange = new List<ICaseResolutionChange>();
@@ -24,6 +37,9 @@ public class optionAIO {
 
     public optionAIO(){
         setStick();
+
+        // ★ 추후 삭제할 것
+        basicWords = new dataBasicWords("Melee", "Number");
     }
 
     private void changeResolution(int parNewWidth, int parNewHeight) {
@@ -34,6 +50,11 @@ public class optionAIO {
         foreach (ICaseResolutionChange crc in listCaseResolutionChange.ToArray()) {
             crc.onResolutionChange(parNewWidth, parNewHeight);
         }
+    }
+
+    private void changeTranslation(enumTranslation parEnumTranslation) { 
+        // ★ 언어 변경
+        // ★ basic keyword json 파일을 만들고 참조하여 기본 단어들 변경
     }
 
     private void setStick() {

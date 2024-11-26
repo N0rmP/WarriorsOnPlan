@@ -235,6 +235,9 @@ public class combatManager : MonoBehaviour {
         //spawn enemy warriors
         foreach (dataNotFriendlyThing ET in tempDataLevel.EnemyWarriors) {
             tempThing = processSpawn(ET.NameThing, enumSide.enemy, ET.HP, (ET.Coordinate0, ET.Coordinate1), ET.SkillParameters);
+            foreach (dataTool dt in ET.ToolList) {
+                tempThing.addCase(toolMaker.makeTool(dt.CodeTool, dt.ToolParameters));
+            }
             tempThing.setCircuit(
                 ET.CodeSensorForMove, ET.Parameter0,
                 ET.CodeNavigatorPrioritized, ET.Parameter1,
@@ -248,6 +251,9 @@ public class combatManager : MonoBehaviour {
         //spawn neutral warriors
         foreach (dataNotFriendlyThing NT in tempDataLevel.NeutralThings) {
             tempThing = processSpawn(NT.NameThing, enumSide.neutral, NT.HP, (NT.Coordinate0, NT.Coordinate1), NT.SkillParameters);
+            foreach (dataTool dt in NT.ToolList) {
+                tempThing.addCase(toolMaker.makeTool(dt.CodeTool, dt.ToolParameters));
+            }
             tempThing.setCircuit(
                 NT.CodeSensorForMove, NT.Parameter0,
                 NT.CodeNavigatorPrioritized, NT.Parameter1,
@@ -306,10 +312,9 @@ public class combatManager : MonoBehaviour {
             cb.onBeforeAttack(source, target);
         }
         foreach (toolWeapon tw in source.copyWeapons) {
-            Debug.Log(tw.timerCur);
             if (tw.isReady) {
                 source.addAttackAnimation(tw.animationType.ToString());
-                tempDInfo = tw.attack();
+                tempDInfo = tw.attack(source);
                 processDealDamage(source, source.whatToAttack, tempDInfo);
                 tempListDInfo.Add(tempDInfo);
                 if (tw is ICaseThisWeaponUsed tempCB) {

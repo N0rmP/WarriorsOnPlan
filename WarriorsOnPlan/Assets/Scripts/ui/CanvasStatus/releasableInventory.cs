@@ -7,10 +7,15 @@ using UnityEngine.EventSystems;
 public class releasableInventory : releasableObjectAbst {
     private Transform contentTransform;
 
+    private GameObject objCurtainInventory;
+
     private carrierGeneric<GameObject> carrierBubble;
 
     public void Awake() {
         contentTransform = transform.GetChild(0).GetChild(0);
+
+        objCurtainInventory = transform.GetChild(1).gameObject;
+        objCurtainInventory.SetActive(false);
 
         carrierBubble = new carrierGeneric<GameObject>(
             () => {
@@ -49,9 +54,13 @@ public class releasableInventory : releasableObjectAbst {
         return true;
     }
 
-    public void openInventory() {
+    public void openInventory(Thing parThing) {
         clear();
-        addTool(combatUIManager.CUM.CStatus.thisThing.getCaseList(enumCaseType.tool).ToArray());
+        addTool(parThing.getCaseList(enumCaseType.tool, false).ToArray());
+    }
+
+    public void setInteractivity(bool parIsControllable) {
+        objCurtainInventory.SetActive(!parIsControllable);
     }
 
     #region addNremove

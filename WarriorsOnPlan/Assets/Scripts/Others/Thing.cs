@@ -23,14 +23,13 @@ public enum enumSide {
     neutral = 2
 }
 
-public class Thing : movableObject, IMovableSupplement {
+public abstract class Thing : movableObject, IMovableSupplement {
     #region variable
     private ICaseUpdateState semaphoreState;
 
     protected canvasPersonal thisCanvasPersonal;
     protected cursor thisCursor;
 
-    protected skillAbst thisSkill;
     protected List<caseBase> listCaseBaseAll;
     protected List<toolWeapon> listToolWeapon;
 
@@ -51,6 +50,7 @@ public class Thing : movableObject, IMovableSupplement {
     public int armorMultiply { get; private set; }
     public int damageTotalDealt { get; private set; }
     public int damageTotalTaken { get; private set; }
+    public skillAbst thisSkill { get; protected set; }
     public Thing whatToAttack { get; private set; }
     public Thing whatToUseSkill { get; private set; }
     public node curPosition { get; set; }
@@ -83,14 +83,19 @@ public class Thing : movableObject, IMovableSupplement {
         damageTotalDealt = 0;
         damageTotalTaken = 0;
 
-        initPersonal(parSkillParameters);
+        try {
+            addCase(makeSkill(parSkillParameters));
+        } catch (Exception e) {
+            Debug.Log(GetType() + " results in a error while making skill ((" + e.Message);
+            addCase(new skillPowerShot(new int[5] { 2, 1, 1, 3, 1 }));
+        }
 
         GameObject tempObj;
 
         tempObj = Instantiate(Resources.Load<GameObject>("Prefabs/UI/canvasPersonal"));
         tempObj.transform.SetParent(transform);
         thisCanvasPersonal = tempObj.GetComponent<canvasPersonal>();
-        thisCanvasPersonal.setSkillImage(thisSkill.skillName);
+        thisCanvasPersonal.setSkill(thisSkill);
         thisCanvasPersonal.updateHpText(curHp);
         thisCanvasPersonal.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
 
@@ -107,7 +112,7 @@ public class Thing : movableObject, IMovableSupplement {
         setCurHp(maxHp, null, false);
     }
 
-    protected virtual void initPersonal(int[] parSkillParameters = null) { }
+    protected abstract skillAbst makeSkill(int[] parSkillParameters);
 
     #region interface_implements
     public void whenStartMove() { }
@@ -280,7 +285,6 @@ public class Thing : movableObject, IMovableSupplement {
             case enumCaseType.tool:
                 if (parCase is toolWeapon tempToolWeapon) {
                     listToolWeapon.Add(tempToolWeapon);
-                    tempToolWeapon.owner = this;
                     setAttackTriggerName.Add(tempToolWeapon.animationType.ToString());
                     thisAnimController.SetFloat("multiplierAttack", setAttackTriggerName.Count);
                 }
@@ -333,7 +337,8 @@ public class Thing : movableObject, IMovableSupplement {
     }
 
     public List<T> getCaseList<T>() {
-        // during prearing step getCaseList doesn't work by returning only empty list
+        // to prevent on~ methods to be called during prearing step getCaseList doesn't work by returning only empty list
+        // you can use it anyway by setting parIsForObserving to false
         if (combatManager.CM.combatState == enumCombatState.preparing) {
             return new List<T> { };
         }
@@ -351,9 +356,10 @@ public class Thing : movableObject, IMovableSupplement {
         return tempResult;
     }
 
-    public List<caseBase> getCaseList(enumCaseType parCaseType) {
-        // during prearing step getCaseList doesn't work by returning only empty list
-        if (combatManager.CM.combatState == enumCombatState.preparing) {
+    public List<caseBase> getCaseList(enumCaseType parCaseType, bool parIsForObserving = true) {
+        // to prevent on~ methods to be called during prearing step getCaseList doesn't work by returning only empty list
+        // you can use it anyway by setting parIsForObserving to false
+        if (parIsForObserving && combatManager.CM.combatState == enumCombatState.preparing) {
             return new List<caseBase> { };
         }
 

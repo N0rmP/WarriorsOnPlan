@@ -25,7 +25,7 @@ public class uiBasic : MonoBehaviour
     private RectTransform thisRectTransform;
     private Vector3 originalLocalPosition;
 
-    public void Start() {
+    public void Awake() {
         thisRectTransform = gameObject.GetComponent<RectTransform>();
         originalLocalPosition = thisRectTransform.localPosition;
     }

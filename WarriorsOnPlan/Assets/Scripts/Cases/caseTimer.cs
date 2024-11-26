@@ -5,10 +5,11 @@ using UnityEngine;
 public class caseTimer : caseBase
 {
     private bool isAutoReset;
+    // timer isn't restricted to be above 0, it can be used to show some skills don't need timer but programmer should be aware of this
     public int timerMax { get; protected set; }
     public int timerCur { get; protected set; }
 
-    public caseTimer(int parTimerMax, enumCaseType parEnumCaseType, bool parIsTimerMax = true, bool parIsAutoReset = true) : base(parEnumCaseType) {
+    public caseTimer(int parTimerMax, enumCaseType parEnumCaseType, bool parIsVisible, bool parIsTimerMax = true, bool parIsAutoReset = true) : base(parEnumCaseType, parIsVisible) {
         timerMax = parTimerMax;
         timerCur = parIsTimerMax ? timerMax : 0;
         isAutoReset = parIsAutoReset;

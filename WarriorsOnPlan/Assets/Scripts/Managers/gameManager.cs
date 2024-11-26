@@ -13,6 +13,7 @@ public class gameManager : MonoBehaviour {
     public dragComponent DC { get; private set; }
 
     public Camera cameraMain { get; private set; }
+    public Canvas canvasMain { get; private set; }
     public optionAIO option { get; private set; }
 
     public void Awake() {
@@ -30,13 +31,14 @@ public class gameManager : MonoBehaviour {
         UC = gameObject.AddComponent<uiFxComponent>();
         DC = gameObject.AddComponent<dragComponent>();
 
-        SceneManager.sceneLoaded += findCamera;
-        findCamera(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        SceneManager.sceneLoaded += findCC;
+        findCC(SceneManager.GetActiveScene(), LoadSceneMode.Single);
         option = new optionAIO();
     }
 
-    private void findCamera(Scene parScene, LoadSceneMode parLSM) {
+    private void findCC(Scene parScene, LoadSceneMode parLSM) {
         this.cameraMain = GameObject.Find("MainCamera").GetComponent<Camera>();
+        this.canvasMain = GameObject.Find("CANVAS").GetComponent<Canvas>();
     }
 
     public bool checkFileExist(string parPath) {

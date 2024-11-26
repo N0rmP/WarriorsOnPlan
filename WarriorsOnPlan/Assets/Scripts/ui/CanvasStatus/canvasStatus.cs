@@ -8,23 +8,28 @@ public class canvasStatus : MonoBehaviour
 {
     public Thing thisThing { get; private set; }
 
-    public releasableInventory RI { get; private set; }
+    private releasableInventory RI { get; set; }
+    private canvasCircuitSetter CCS;
 
-    void Start()
-    {
+    public void Awake() {
         RI = transform.GetChild(3).GetComponent<releasableInventory>();
+        CCS = GameObject.Find("canvasCircuitSetter").GetComponent<canvasCircuitSetter>();
+    }
+
+    public void Start() {
 
         dataArbitraryStringArray tempData = gameManager.GM.JC.getJson<dataArbitraryStringArray>("Tooltip/statusTooltip");
         int tempSet = 0;    // tempSet represents the number of texts set into the text-showers
         int tempEnd = tempData.SwissArmyStringArray.Length;
-        uiTextShower tempShower = null;
+        showerText tempShower = null;
         foreach (Transform obj in transform) {
             if (tempSet >= tempEnd) {
                 break;
             }
 
-            if (obj.TryGetComponent<uiTextShower>(out tempShower)) {
+            if (obj.TryGetComponent<showerText>(out tempShower)) {
                 tempShower.initText(tempData.SwissArmyStringArray[tempSet * 2], tempData.SwissArmyStringArray[tempSet * 2 + 1]);
+                tempSet++;
             }
         }
     }
@@ -44,16 +49,16 @@ public class canvasStatus : MonoBehaviour
     public void updateTotal() {
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = thisThing.name;
         updateHP(thisThing.curHp, thisThing.maxHp);
-        // ★ 스킬 정보창 준비
-        RI.openInventory();
+        transform.GetChild(2).GetComponent<boxSkill>().setSkill(thisThing?.thisSkill);
+        RI.openInventory(thisThing);
         updateNumber();
 
         if (combatManager.CM.checkControllability(thisThing)) {
             transform.GetChild(10).GetComponent<Button>().interactable = true;
-            // ★ canvasInventory 조작이 불가능하도록 변경
+            RI.setInteractivity(true);
         } else {
             transform.GetChild(10).GetComponent<Button>().interactable = false;
-            // ★ canvasInventory 조작이 가능하도록 변경
+            RI.setInteractivity(false);
         }
     }
 
@@ -73,5 +78,17 @@ public class canvasStatus : MonoBehaviour
         transform.GetChild(7).GetChild(1).GetComponent<TextMeshProUGUI>().text = "+" + thisThing.armorAdd + " / " + thisThing.armorMultiply + "%";
         transform.GetChild(8).GetChild(1).GetComponent<TextMeshProUGUI>().text = thisThing.damageTotalDealt.ToString();
         transform.GetChild(9).GetChild(1).GetComponent<TextMeshProUGUI>().text = thisThing.damageTotalTaken.ToString();
+    }
+
+    public void removeBubble(dragableBubbleInventory parBubble, bool isUnequip) {
+        RI.removeBubble(parBubble, isUnequip);
+    }
+
+    public void removeTool(caseBase parTool) {
+        RI.removeTool(parTool);
+    }
+
+    public void openCircuitSetter() {
+        CCS.activateSetter(thisThing);
     }
 }

@@ -55,10 +55,8 @@ public class canvasPersonal : MonoBehaviour {
     }
     #endregion updates
 
-    public void setSkillImage(string parSkillName) {
-
-
-        sliderSkill.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Skill/Image_" + parSkillName);
+    public void setSkill(skillAbst parSkill) {
+        sliderSkill.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = parSkill.caseImage;
     }
 
     public void click() {

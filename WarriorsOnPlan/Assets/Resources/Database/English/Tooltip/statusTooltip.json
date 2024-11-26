@@ -3,7 +3,7 @@
         "Weapon Amplifier", "increase damage of weapons. addition precedes multiplication.",
         "Skill Amplifier", "incrase damage / shield / heal of skill. addition precedes multiplication.",
         "Weapon Range", "distance weapons can reach. this range includes all weapons' range, and ignores skill's range.",
-        "Armor", "decrease damage to this warrior. multiplication precedes addition.",
+        "Armor", "decrease damage toward this warrior. multiplication precedes addition.",
         "Total Damage Dealt", "total damage this warrior has dealt.",
         "Total Damage Taken", "total damage this warrior has taken."
     ]
