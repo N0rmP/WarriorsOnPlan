@@ -1,14 +1,21 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
+using System.Text;
 
+using Cases;
+using Processes;
+using static Unity.VisualScripting.Member;
 public enum enumStateWarrior {
     dead = 0,
-    deadRecently = 1,
+    //deadRecently = 1,
     controlled = 10,
     focussing = 20,
     skill = 30,
@@ -17,14 +24,16 @@ public enum enumStateWarrior {
     none = 9999
 }
 
-public enum enumSide { 
-    player = 0,
-    enemy = 1,
-    neutral = 2
-}
-
-public abstract class Thing : movableObject, IMovableSupplement {
+public abstract class Thing : MonoBehaviour {
     #region variable
+    private int curHp_;
+
+    private (int coor0, int coor1) curCoor;
+
+    protected int codeSkill = 92001;
+
+    private int actionOrder_ = 999;
+
     private ICaseUpdateState semaphoreState;
 
     protected canvasPersonal thisCanvasPersonal;
@@ -35,13 +44,35 @@ public abstract class Thing : movableObject, IMovableSupplement {
 
     private SortedSet<string> setAttackTriggerName;
     protected Animator thisAnimController;
+    private ITransparency thisITransparency;
 
     protected circuitHub thisCircuitHub;
 
     #region property
+    public enumStateWarrior stateCur { get; private set; }
     public enumSide thisSide { get; protected set; }
+    public Vector3 vecMeshCenter { get; protected set; }
+    public int actionOrder { 
+        get {
+            return actionOrder_;
+        }
+        set {
+            if (combatManager.CM.combatState != enumCombatState.preparing) {
+                return;
+            }
+            actionOrder_ = value;
+        }
+    }
+    protected int maxHpOriginal { get; set; }
     public int maxHp { get; protected set; }
-    public int curHp { get; private set; }
+    public int curHp {
+        get {
+            return curHp_;
+        }
+        private set {
+            curHp_ = Math.Clamp(value, 0, maxHp);
+        }
+    }
     public int weaponAmplifierAdd { get; private set; }
     public int weaponAmplifierMultiply { get; private set; }
     public int skillAmplifierAdd { get; private set; }
@@ -53,26 +84,138 @@ public abstract class Thing : movableObject, IMovableSupplement {
     public skillAbst thisSkill { get; protected set; }
     public Thing whatToAttack { get; private set; }
     public Thing whatToUseSkill { get; private set; }
-    public node curPosition { get; set; }
-    public enumStateWarrior stateCur { get; private set; }
+    public node curPosition {
+        get {
+            if (curCoor == (-1, -1)) {
+                return null;
+            } else {
+                return combatManager.CM.GC[curCoor.coor0, curCoor.coor1];
+            }
+        }
+
+        set {
+            curCoor = value?.getCoor() ?? (-1, -1);
+        }
+    }
     public toolWeapon[] copyWeapons {
         get { return listToolWeapon.ToArray(); }
     }
+
+    public Sprite portrait { get; protected set; }
     #endregion property
     #endregion variable
 
+    #region callbacks
+    public void Update() {
+        // ★ 메터리얼 페이드 인아웃 구현
+    }
+    #endregion callbacks
+
+    #region initiation
     public virtual void init(enumSide parSide, int parMaxHp, int[] parSkillParameters) {
-        semaphoreState = null;
+        vecMeshCenter = gameObject.getTotalBounds().center;
+        thisAnimController = gameObject.GetComponent<Animator>();
+
         listCaseBaseAll = new List<caseBase>();
         listToolWeapon = new List<toolWeapon>();
         setAttackTriggerName = new SortedSet<string>();
-        thisAnimController = gameObject.GetComponent<Animator>();
-        thisCircuitHub = new circuitHub(this);  addCase(thisCircuitHub);
-        stateCur = enumStateWarrior.idleAttack;
-
-        setAttackTriggerName = new SortedSet<string>();
 
         thisSide = parSide;
+        semaphoreState = null;
+        stateCur = enumStateWarrior.idleAttack;
+        weaponAmplifierAdd = 0;
+        weaponAmplifierMultiply = 0;
+        skillAmplifierAdd = 0;
+        skillAmplifierMultiply = 0;
+        armorAdd = 0;
+        armorMultiply = 0;
+        damageTotalDealt = 0;
+        damageTotalTaken = 0;
+
+        portrait = Resources.Load<Sprite>("Image/Portrait/Portrait_" + GetType()) ??
+                   Resources.Load<Sprite>("Image/Portrait/Portrait_tester");
+
+        GameObject tempObj;
+
+        maxHpOriginal = parMaxHp;
+        setMaxHp(maxHpOriginal, false);
+        setCurHp(maxHp, false);
+
+        // initiate canvasPersonal
+        tempObj = Instantiate(Resources.Load<GameObject>("Prefab/UI/canvasPersonal"));
+        tempObj.transform.SetParent(transform);
+        // tempObj.transform.localPosition = vecMeshCenter;
+        tempObj.GetComponent<Canvas>().worldCamera = Camera.main;
+        thisCanvasPersonal = tempObj.GetComponent<canvasPersonal>();
+        thisCanvasPersonal.updateHpText(curHp);
+        thisCanvasPersonal.transform.Find("SwissArmyObject").AddComponent<releasablePersonal>().init(this);
+        if (thisSide == enumSide.player) {
+            thisCanvasPersonal.transform.Find("SwissArmyObject").AddComponent<dragablePersonal>().init(this);
+        }
+
+        tempObj = Instantiate(Resources.Load<GameObject>("Prefab/Cursor"));
+        transform.SetParent(tempObj.transform);
+        thisCursor = tempObj.GetComponent<cursor>();
+        thisCursor.setDelEndRun(() => thisAnimController.SetBool("isRun", false));
+
+        // skill making
+        thisSkill = null;
+        try {
+            addCase(gameManager.GM.MC.makeCodableObject<skillAbst>(codeSkill, parSkillParameters));
+        } catch (Exception e) {
+            string temp = GetType() + " results in a error while making skill with code " + codeSkill + " / parameters ";
+            foreach (int i in from n in parSkillParameters select n) {
+                temp += i.ToString() + ", ";
+            }
+            Debug.Log(temp + " ((" + e.Message);
+            addCase(gameManager.GM.MC.makeCodableObject<skillAbst>(92001, new int[5] { 3, 3, 1, 5, 1 }));
+        }
+
+        // initiate canvasPersonal with skill
+        thisCanvasPersonal.setSkill(thisSkill);
+        updatePanelSkillTimer();
+
+        // prepare circuits, be aware that this is the only creation of circuitHub in total script of Thing class
+        thisCircuitHub = new circuitHub(new int[2] { (int)parSide, 0b010});
+        addCase(thisCircuitHub);
+
+        // ★ 만약 다른 shader를 사용하는 Thing이 존재한다면 아래 내용을 변경해야 함
+        thisITransparency = gameObject.AddComponent<transparencyStripple>();
+        thisITransparency.init();
+        thisITransparency.fadeStrict(1f);
+    }
+
+    public void restore(mementoThing parMementoThing) {
+        // ★ Thing이 사망하여 제거된 상태였을 경우, 원래대로 되돌리기
+
+        setMaxHp(parMementoThing.maxHp, false);
+        setCurHp(parMementoThing.curHp, false);
+
+        if (curHp <= 0) {
+            destroied();
+            return;
+        }
+        // you don't need any code when reviving thing, state will be idleAttack / position will be set / houseComponent setting will be done there
+
+        thisSide = parMementoThing.side;
+
+        // graph is vacated in houseComponent.restore
+        stopMoving();
+        combatManager.CM.systemPlace(this, parMementoThing.coordinates);
+
+        foreach (caseBase cb in listCaseBaseAll.ToArray()) {
+            if (cb is skillAbst || cb is circuitHub) {
+                continue;
+            }
+            removeCase(cb); 
+        }
+        foreach (toolWeapon tw in listToolWeapon.ToArray()) {
+            removeCase(tw);
+        }
+        thisCircuitHub.restore(parMementoThing.mCircuitHub);
+
+        semaphoreState = null;
+        stateCur = enumStateWarrior.idleAttack;
 
         weaponAmplifierAdd = 0;
         weaponAmplifierMultiply = 0;
@@ -83,53 +226,97 @@ public abstract class Thing : movableObject, IMovableSupplement {
         damageTotalDealt = 0;
         damageTotalTaken = 0;
 
-        try {
-            addCase(makeSkill(parSkillParameters));
-        } catch (Exception e) {
-            Debug.Log(GetType() + " results in a error while making skill ((" + e.Message);
-            addCase(new skillPowerShot(new int[5] { 2, 1, 1, 3, 1 }));
+        thisSkill.restore(parMementoThing.mSkill);
+        foreach (mementoIParametable mc in parMementoThing.listCase) {
+            addCase(mc.getRestoredIt<caseBase>());
         }
 
-        GameObject tempObj;
-
-        tempObj = Instantiate(Resources.Load<GameObject>("Prefabs/UI/canvasPersonal"));
-        tempObj.transform.SetParent(transform);
-        thisCanvasPersonal = tempObj.GetComponent<canvasPersonal>();
-        thisCanvasPersonal.setSkill(thisSkill);
         thisCanvasPersonal.updateHpText(curHp);
-        thisCanvasPersonal.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
+        updatePanelSkillTimer();
+        updatePanelImageEff();
 
-        thisCanvasPersonal.transform.GetChild(2).gameObject.AddComponent<releasablePersonal>().init(this);
-        if (thisSide == enumSide.player) {            
-            thisCanvasPersonal.transform.GetChild(2).gameObject.AddComponent<dragablePersonal>().init(this);
-        }
-
-        tempObj = Instantiate(Resources.Load<GameObject>("Prefabs/Cursor"));
-        tempObj.transform.SetParent(transform);
-        thisCursor = tempObj.GetComponent<cursor>();
-
-        maxHp = parMaxHp;
-        setCurHp(maxHp, null, false);
+        resetAnimator();
+        combatManager.CM.GC[parMementoThing.coordinates.c0, parMementoThing.coordinates.c1].placeThing(this);
+        Look(transform.position -
+            thisSide switch {
+                enumSide.player => new Vector3(0f, 0f, 1f),
+                enumSide.enemy => new Vector3(0f, 0f, -1f),
+                enumSide.neutral => new Vector3(1f, 0f, 0f),
+                _ => new Vector3(0f, 0f, 0f)
+            });
+        thisITransparency.fadeStrict(stateCur > enumStateWarrior.dead ? 1f : 0f);        
     }
 
-    protected abstract skillAbst makeSkill(int[] parSkillParameters);
+    // protected abstract skillAbst makeSkill(int[] parSkillParameters);
+    #endregion initiation
 
-    #region interface_implements
-    public void whenStartMove() { }
-
-    public void whenEndMove() {
-        thisAnimController.SetBool("isRun", false);
+    #region Move
+    // Thing is child of cursor, it's meaningless to set position of Thing only and you should call these methods to move Thing by moving cursor
+    public void setPosition(Vector3 parPosition) {
+        thisCursor.transform.position = parPosition;
     }
-    #endregion interface_implements
 
-    #region processes
+    public void stopMoving() {
+        thisCursor.stop();
+    }
+
+    public void moveLinear(Vector3 parDestination) {
+        thisCursor.GetComponent<cursor>().startLinearMove(parDestination, 1f / (float)combatManager.CM.combatSpeed);
+    }
+
+    public void moveParabola(Vector3 parDestination) {
+        thisCursor.GetComponent<cursor>().startParabolaMove(parDestination, 1f / (float)combatManager.CM.combatSpeed);
+    }
+    #endregion Move
+
+    #region affecting
     public virtual void updateTargets() {
         whatToAttack = thisCircuitHub.selectAttackTarget(this);
         whatToUseSkill = thisCircuitHub.selectSkillTarget(this);
     }
 
+    public void updatePanelTotal() {
+        updatePanelSkillTimer();
+        updatePanelHp();
+        updatePanelImageEff();
+    }
+
+    public void updatePanelSkillTimer() {
+        if (thisSkill.isCoolTimeNeeded) {
+            thisCanvasPersonal.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
+        } else {
+            thisCanvasPersonal.openSkillTimer();
+        }
+    }
+
+    public void updatePanelHp() {
+        thisCanvasPersonal.updateHpText(curHp);
+    }
+
+    public void updatePanelImageEff() {
+        thisCanvasPersonal.clearImgEffect();
+        foreach (caseBase cb in getCaseList(enumCaseType.effect, false)) {
+            if (cb.isVisible) {
+                thisCanvasPersonal.addImgEffect(cb);
+            }
+        }
+    }
+
+    public void addPanelImgEffect(caseBase parCB) {
+        // if parCB is not visible or Effect, skip it
+        if (!parCB.isVisible || parCB.caseType != enumCaseType.effect) {
+            return;
+        }
+
+        thisCanvasPersonal.addImgEffect(parCB);
+    }
+
+    public void removePanelImgEffect(caseBase parCB) {
+        thisCanvasPersonal.removeImgEffect(parCB);
+    }    
+
     public void updateState() {
-        if (stateCur <= enumStateWarrior.deadRecently) { return; }
+        if (stateCur <= enumStateWarrior.dead) { return; }
         /*
         although technically updateState could be processed with onBeforeAction, it's separated due to algorithm below
         
@@ -163,24 +350,8 @@ public abstract class Thing : movableObject, IMovableSupplement {
         }
     }
 
-    public node getNextRoute() {
-        return thisCircuitHub.getNextRoute(this);
-    }
-
     // isPlus ain't asking is value positive or negative, it's asking is newly-setting curHp or adding value to the origial curHp
-    public int setCurHp(int parValue, Thing source, bool isPlus = true) {
-        //onBeforeHp Increase / Decrease
-        bool tempIsIncrease = (isPlus && parValue > 0) || (!isPlus && (curHp != maxHp) && (parValue > curHp));
-        if (tempIsIncrease) {
-            foreach (ICaseBeforeHpIncrease cb in getCaseList<ICaseBeforeHpIncrease>()) {
-                cb.onBeforeHpIncrease(source, ref parValue);
-            }
-        } else {
-            foreach (ICaseBeforeHpDecrease cb in getCaseList<ICaseBeforeHpDecrease>()) {
-                cb.onBeforeHpDecrease(source, ref parValue);
-            }
-        }
-
+    public int setCurHp(int parValue, bool isPlus = true) {
         int tempResultChange = 0;
         if (isPlus) {
             if (curHp + parValue < 0) {
@@ -194,64 +365,36 @@ public abstract class Thing : movableObject, IMovableSupplement {
                 curHp += parValue;
             }
         } else {
+            parValue = Math.Clamp(parValue, 0, maxHp);
             tempResultChange = (parValue > curHp) ? (parValue - curHp) : (curHp - parValue);
             curHp = parValue;
         }
 
-        //onAfterHp Increase / Decrease
-        if (tempIsIncrease) {
-            foreach (ICaseAfterHpIncrease cb in getCaseList<ICaseAfterHpIncrease>()) {
-                cb.onAfterHpIncrease(source, tempResultChange);
-            }
-        } else {
-            foreach (ICaseAfterHpDecrease cb in getCaseList<ICaseAfterHpDecrease>()) {
-                cb.onAfterHpDecrease(source, tempResultChange);
-            }
-        }
-
-        //if curHp_ is below zero, warrior dies
-        if (curHp <= 0) {
-            destroied(source);
-        }
-
-        thisCanvasPersonal.updateHpText(curHp);
-
         return tempResultChange;
     }
 
+    public void setMaxHp(int parValue, bool isPlus = true) {
+        maxHp = Math.Max(isPlus ? maxHp + parValue : parValue, 1);
+    }
+
+    /*
     public void useSkill() {
         thisSkill.useSkill(this, whatToUseSkill);
     }
+    */
 
-    public void destroy(Thing target) {
-        foreach (ICaseDestroy ca in getCaseList<ICaseDestroy>()) {
-            ca.onDestroy(this, target);
-        }
-    }
-
-    public virtual void destroied(Thing source) {
-        //onDestroy of source
-        if (source != this || source != null) {
-            source.destroy(this);
-        }
-
-        //onDestroied
-        foreach (ICaseDestroied ca in getCaseList<ICaseDestroied>()) {
-            ca.onDestroied(this, source);
-        }
-
-        stateCur = enumStateWarrior.deadRecently;
-
-        combatManager.CM.addDeadThing(this);
-        combatManager.CM.removeThing(this);
-    }
-
-    public virtual void destroiedTotally() {
+    public virtual void destroied() {
         stateCur = enumStateWarrior.dead;
+        curPosition?.expelThing(false);
+        combatManager.CM.HouC.killThing(this);
     }
-    #endregion processes
 
-    #region utility
+    public void destroiedSystemically() { 
+        // ★ 시스템적 삭제
+    }
+    #endregion affecting
+
+    #region circuit
     public void setCircuit(
         int parCodeSensorForMove, int[] ppSensorForMove,
         int parCodeNavigatorPrioritized, int[] ppNavigatorPrioritized,
@@ -261,14 +404,14 @@ public abstract class Thing : movableObject, IMovableSupplement {
         int parCodeSelecterForAttack, int[] ppSelecterForAttack) {
 
         thisCircuitHub.setCircuitHub(
-        this,
+        thisSide,
         parCodeSensorForMove, ppSensorForMove,
         parCodeNavigatorPrioritized, ppNavigatorPrioritized,
         parCodeNavigatorIdle, ppNavigatorIdle,
         parCodeSensorForSkill, ppSensorForSkill,
         parCodeSelecterForSkill, ppSelecterForSkill,
         parCodeSelecterForAttack, ppSelecterForAttack
-            );
+            );    
     }
 
     public string[] getCircuitInfo() {
@@ -278,24 +421,29 @@ public abstract class Thing : movableObject, IMovableSupplement {
     public int[] getCircuitParameters(int parCircuitType) {
         return thisCircuitHub.getSingleParameter(parCircuitType);
     }
+    #endregion circuit
 
+    #region case
     public virtual void addCase(caseBase parCase) {
+        if (parCase == null) {
+            return;
+        }
+
         listCaseBaseAll.Add(parCase);
         switch (parCase.caseType) {
             case enumCaseType.tool:
                 if (parCase is toolWeapon tempToolWeapon) {
                     listToolWeapon.Add(tempToolWeapon);
-                    setAttackTriggerName.Add(tempToolWeapon.animationType.ToString());
-                    thisAnimController.SetFloat("multiplierAttack", setAttackTriggerName.Count);
                 }
                 break;
             case enumCaseType.circuit:
                 break;
-            /*case enumCaseType.effect:
-                listEffect.Insert(insertPosition, parCase);
-                break;*/
+            case enumCaseType.effect:
+                break;
             case enumCaseType.skill:
-                thisSkill = (skillAbst)parCase;
+                if (thisSkill == null) {
+                    thisSkill = (skillAbst)parCase;
+                }
                 break;
             default:
                 break;
@@ -310,15 +458,13 @@ public abstract class Thing : movableObject, IMovableSupplement {
             case enumCaseType.tool:
                 if (parCase is toolWeapon tempToolWeapon) {
                     listToolWeapon.Remove(tempToolWeapon);
-                    setAttackTriggerName.Remove(tempToolWeapon.animationType.ToString());
-                    thisAnimController.SetFloat("multiplierAttack", Mathf.Max(setAttackTriggerName.Count, 1f));
                 }
                 break;
             case enumCaseType.circuit:
                 break;
-            /*case enumCaseType.effect:
-                listEffect.Remove(parCase);
-                break;*/
+            case enumCaseType.effect:
+                thisCanvasPersonal.removeImgEffect(parCase);
+                break;
             case enumCaseType.skill:
                 thisSkill = null;
                 break;
@@ -336,10 +482,10 @@ public abstract class Thing : movableObject, IMovableSupplement {
         }
     }
 
-    public List<T> getCaseList<T>() {
+    public List<T> getCaseList<T>(bool parIsForObserving = true) {
         // to prevent on~ methods to be called during prearing step getCaseList doesn't work by returning only empty list
         // you can use it anyway by setting parIsForObserving to false
-        if (combatManager.CM.combatState == enumCombatState.preparing) {
+        if (parIsForObserving && combatManager.CM.combatState != enumCombatState.combat) {
             return new List<T> { };
         }
 
@@ -359,7 +505,7 @@ public abstract class Thing : movableObject, IMovableSupplement {
     public List<caseBase> getCaseList(enumCaseType parCaseType, bool parIsForObserving = true) {
         // to prevent on~ methods to be called during prearing step getCaseList doesn't work by returning only empty list
         // you can use it anyway by setting parIsForObserving to false
-        if (parIsForObserving && combatManager.CM.combatState == enumCombatState.preparing) {
+        if (parIsForObserving && combatManager.CM.combatState == enumCombatState.combat) {
             return new List<caseBase> { };
         }
 
@@ -395,21 +541,81 @@ public abstract class Thing : movableObject, IMovableSupplement {
         return false;
     }
 
+    public List<toolWeapon> getListAvailableWeapon(Thing parTarget = null) {
+        int tempDistanceToTarget = node.getDistance(curPosition, (parTarget ?? whatToAttack).curPosition);
+        List<toolWeapon> tempResult = new List<toolWeapon>();
+        foreach (toolWeapon tw in getCaseList<toolWeapon>(false).ToArray()) {
+            // skip when target is out of the weapon's range
+            if (tempDistanceToTarget > tw.rangeMax || tempDistanceToTarget < tw.rangeMin || tw.isReady) {
+                continue;
+            }
+
+            tempResult.Add(tw);
+        }
+
+        return tempResult;
+    }
+    #endregion case
+
+    #region animation
+    public void Look(Vector3 parLookDestination) {
+        if (parLookDestination != null) {
+            transform.rotation = Quaternion.LookRotation(parLookDestination - transform.position);
+        }
+    }
+
+    private void setAnimationSpeed() {
+        thisAnimController.SetFloat("multiplierTotal", combatManager.CM.combatSpeed);
+        thisAnimController.SetFloat("multiplierAttack", Math.Max(1, combatManager.CM.combatSpeed * setAttackTriggerName.Count));
+    }
+
     public void clearAttackAnimation() {
         setAttackTriggerName.Clear();
     }
 
-    public void addAttackAnimation(string parString) {
-        setAttackTriggerName.Add(parString);
+    public void addAttackAnimation(enumAttackAnimation parEnumAttackAnimation) {
+        setAttackTriggerName.Add(parEnumAttackAnimation.ToString());
     }
 
-    public virtual void animate(Vector3 parLookDirection) {
-        void Look(Vector3 parLookDirection) {
-            if (parLookDirection != null) {
-                transform.rotation = Quaternion.LookRotation(parLookDirection - transform.position);
+    public void addAttackAnimation(IEnumerable parEnumAttackAnimation) {
+        foreach (enumAttackAnimation eaa in parEnumAttackAnimation) {
+            addAttackAnimation(eaa);
+        }
+    }
+
+    public int getAttackAnimationCount() {
+        return setAttackTriggerName.Count;
+    }
+
+    public void animateMove() {
+        setAnimationSpeed();
+        thisAnimController.SetBool("isRun", true);
+    }
+
+    public void animateAttack(bool parIsProjectile = true) {
+        int tempProjectileCount = 0;
+        setAnimationSpeed();
+        foreach (string trigName in setAttackTriggerName) {
+            thisAnimController.SetTrigger(trigName);
+            if (trigName == "trigAttackBrandish" || trigName == "trigAttackBow" || trigName == "trigAttackCase") {
+                tempProjectileCount++;
             }
         }
+        thisAnimController.SetTrigger("trigAttackStart");
+    }
 
+    public void animateUseSkill() {
+        setAnimationSpeed();
+        thisAnimController.SetTrigger("trigUseSkill");
+    }
+
+    public void animateDead() {
+        setAnimationSpeed();
+        thisAnimController.SetTrigger("trigDead");
+    }
+
+    /*
+    public virtual void animate() {
         thisAnimController.SetBool("isFocussing", false);
         thisAnimController.SetBool("isControlled", false);
         switch (stateCur) {
@@ -421,33 +627,60 @@ public abstract class Thing : movableObject, IMovableSupplement {
                 thisAnimController.SetBool("isControlled", true);
                 break;
             case enumStateWarrior.focussing:
-                Look(parLookDirection);
                 thisAnimController.SetBool("isFocussing", true);
                 break;
-            case enumStateWarrior.move:
-                Look(parLookDirection);
-                thisAnimController.SetBool("isRun", true);
+            case enumStateWarrior.move:                
                 break;
             case enumStateWarrior.idleAttack:
-                Look(parLookDirection);
-                thisAnimController.SetTrigger("trigAttackStart");
-                foreach (string trigName in setAttackTriggerName) {
-                    thisAnimController.SetTrigger(trigName);
-                }
+                animateAttack();
                 break;
             case enumStateWarrior.skill:
-                Look(parLookDirection);
                 thisAnimController.SetTrigger("trigUseSkill");
                 break;
             default:
                 break;
         }
+
+        현재 state가 업데이트되고 있지 않은 것으로 추정됨, 또한 이동 애니메이션을 processByproductMove가 담당하고 있어 이에 대한 정리정돈이 요구됨
     }
 
-    public void updateSkillTimer(int parTimerCur, int parTimerMax) {
-        thisCanvasPersonal.updateSkillTimer(parTimerCur, parTimerMax);
+    public void animate(Vector3 parLookDirection) {
+        Look(parLookDirection);
+        animate();
+    }
+    */
+
+    // reset all parameters, and play the idle animation state
+    public void resetAnimator() {
+        foreach (AnimatorControllerParameter ACP in thisAnimController.parameters) {
+            switch (ACP.type) {
+                case AnimatorControllerParameterType.Int:
+                    thisAnimController.SetInteger(ACP.name, 0);
+                    break;
+                case AnimatorControllerParameterType.Float:
+                    thisAnimController.SetFloat(ACP.name, (ACP.name.Substring(0, 10) == "multiplier") ? 1f : 0f);
+                    break;
+                case AnimatorControllerParameterType.Bool:
+                    thisAnimController.SetBool(ACP.name, false);
+                    break;
+                case AnimatorControllerParameterType.Trigger:
+                    thisAnimController.ResetTrigger(ACP.name);
+                    break;
+            }
+        }
+        thisAnimController.Play("Idle", 0);
     }
 
+    public void fadeIn(float parTimer = 1f, float parValue = 1f) {
+        thisITransparency.fadeIn(parTimer, parValue);
+    }
+
+    public void fadeOut(float parTimer = 1f, float parValue = 0f) {
+        thisITransparency.fadeOut(parTimer, parValue);
+    }
+    #endregion animation
+
+    #region cursor
     public void setCursorChosen(bool par) {
         thisCursor.setIsChosen(par);
     }
@@ -455,9 +688,9 @@ public abstract class Thing : movableObject, IMovableSupplement {
     public void setCursorHovered(bool par) {
         thisCursor.setIsHovered(par);
     }
-    #endregion utility
+    #endregion cursor
 
-    #region number
+    #region numberManagement
     // most numbers can be negative, damageTotal-Delat & Taken can't be negative
     public void addWeaponAmplifierAdd(int par) {
         weaponAmplifierAdd += par;
@@ -494,5 +727,135 @@ public abstract class Thing : movableObject, IMovableSupplement {
             damageTotalTaken += par;
         }
     }
-    #endregion number
+    #endregion numberManagement
+
+    #region memento
+    public mementoThing freezeDry() {
+        List<mementoIParametable> tempList = new List<mementoIParametable>();
+        foreach (caseBase c in listCaseBaseAll) {
+            if (c is not circuitHub and not skillAbst) {
+                tempList.Add(c.getMementoIParametable());
+            }            
+        }
+
+        return new mementoThing(
+            this,
+            maxHp,
+            curHp,
+            stateCur != enumStateWarrior.dead ? curPosition.getCoor() : (0, 0),
+            thisSkill.getMementoIParametable(),
+            tempList,
+            thisCircuitHub.getMementoIParametable()
+            );
+    }    
+    #endregion memento
+
+    #region processMaking
+    public processAbst makeAction() {
+        testStatus();
+        switch (stateCur) {
+            // ★ 각각의 warrior 행동 시작 시 효과 발동
+            case enumStateWarrior.controlled:
+                return makeActionSkip();
+            case enumStateWarrior.focussing:
+                return makeActionFocuss();
+            case enumStateWarrior.skill:
+                return makeActionSkill();
+            case enumStateWarrior.move:
+                return makeActionMove();
+            case enumStateWarrior.idleAttack:
+                return makeActionAttack();
+            default:
+                // thing's state can't have lower priority below idleAttack, so this part shouldn't be executed
+                Debug.Log(this.GetType() + " has inproper state now : " + stateCur);
+                return makeActionAttack();
+        }
+    }
+
+    private processActionSkip makeActionSkip() {
+        return new processActionSkip();
+    }
+
+    private processAbst makeActionFocuss() {
+        return new processActionFocuss(this);
+    }
+
+    private processActionSkill makeActionSkill() {
+        return new processActionSkill(this, whatToUseSkill);
+    }
+
+    private processActionMove makeActionMove() {
+        return new processActionMove(this, thisCircuitHub.getNextRoute(this));
+    }
+
+    private processActionAttack makeActionAttack() {
+        return new processActionAttack(this);
+    }
+    #endregion processMaking
+
+    #region test
+    public void testAllTools() {
+        string temp = "TOOL CHECK " + this + " : ";
+        foreach (caseBase ta in getCaseList(enumCaseType.tool, false)) {
+            temp += ta + ", ";
+        }
+        Debug.Log(temp);
+    }
+
+    public void testStatus() {
+        StringBuilder tempSB = new StringBuilder(this.ToString());
+
+        tempSB.Append("\nSide : ");
+        tempSB.Append(thisSide);
+
+        tempSB.Append("\nHP : ");
+        tempSB.Append(curHp);
+        tempSB.Append(" / ");
+        tempSB.Append(maxHp);
+
+        tempSB.Append("\nweaponAmplifierAdd : ");   tempSB.Append(weaponAmplifierAdd);
+        tempSB.Append("\nweaponamplifierMultiply : "); tempSB.Append(weaponAmplifierMultiply);
+        tempSB.Append("\nskillAmplifierAdd : "); tempSB.Append(skillAmplifierAdd);
+        tempSB.Append("\nskillAmplifierMultiply : "); tempSB.Append(skillAmplifierMultiply);
+        tempSB.Append("\narmorAdd : "); tempSB.Append(armorAdd);
+        tempSB.Append("\narmorMultiply : "); tempSB.Append(armorMultiply);
+        tempSB.Append("\ndamageTotalDealt : "); tempSB.Append(damageTotalDealt);
+        tempSB.Append("\ndamageTotalTaken : "); tempSB.Append(damageTotalTaken);
+
+
+        tempSB.Append("\nPosition : ");
+        tempSB.Append(curPosition.coor0);
+        tempSB.Append(" , ");
+        tempSB.Append(curPosition.coor1);
+
+        tempSB.Append("\nState : ");
+        tempSB.Append(stateCur);
+
+        tempSB.Append("\nSkill : ");
+        tempSB.Append(thisSkill.ToString());
+        tempSB.Append("   cooltime ");
+        tempSB.Append(thisSkill.timerCur);
+        tempSB.Append(" / ");
+        tempSB.Append(thisSkill.timerMax);
+
+        tempSB.Append("\nTools : ");
+        foreach (caseBase cb in getCaseList(enumCaseType.tool, false)) {
+            tempSB.Append(cb.ToString());
+            tempSB.Append(", ");
+        }
+
+        tempSB.Append("\nEffects : ");
+        foreach (caseBase cb in getCaseList(enumCaseType.effect, false)){
+            tempSB.Append(cb.ToString());
+            tempSB.Append(", ");
+        }
+
+        Debug.Log(tempSB.ToString());
+        thisCircuitHub.testAllCircuits();
+    }
+
+    public override string ToString() {
+        return GetType().ToString();
+    }
+    #endregion test
 }

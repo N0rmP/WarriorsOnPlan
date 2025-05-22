@@ -5,7 +5,11 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Cases;
+
 public abstract class dragableBubbleAbst : dragableObjectAbst {
+    protected showerCase thisShower;
+
     protected caseBase thisTool_;
 
     public caseBase thisTool {
@@ -13,22 +17,24 @@ public abstract class dragableBubbleAbst : dragableObjectAbst {
             return thisTool_;
         }
         set {
-            if (value.caseType != enumCaseType.tool) {
+            if (value != null && value.caseType != enumCaseType.tool) {
                 Debug.Log("error : non-tool caseBase is tried to be set in bubble");
                 return;
             }
             thisTool_ = value;
-            setImage(value.GetType().ToString());
+            thisShower.setCase(value);
+            setImage();
         }
     }
 
-    private void setImage(string parToolName) {
-        if (!File.Exists(@".\Assets\Resources\Image\Tool\Image_" + parToolName + ".png")) {
-            Debug.Log("file not found in bubble");
-            parToolName = "weaponTester";
-        }
+    public new void Awake() {
+        base.Awake();
+        thisShower = gameObject.AddComponent<showerCase>();
+        thisShower.setCaseTypeShown(new enumCaseType[1] { enumCaseType.tool });
+    }
 
-        transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Tool/Image_" + parToolName);
+    private void setImage() {
+        transform.GetChild(0).GetComponent<Image>().sprite = thisTool_?.caseImage;
     }
 
     private void setImage(Sprite parSprite) {

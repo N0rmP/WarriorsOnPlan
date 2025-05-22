@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public enum enumMoveType {
     stationary,
@@ -14,7 +15,7 @@ public class movableObject : MonoBehaviour {
     private float multiplier;
     private float ratio_;
     private float height;
-    private enumMoveType stateMove;
+    public enumMoveType stateMove { get; private set; }
 
     private float ratio {
         get { return ratio_; }
@@ -26,19 +27,26 @@ public class movableObject : MonoBehaviour {
     }
 
     public void Update() {
-        float tempDeltaTime = Time.deltaTime;
+        move(Time.deltaTime);
+    }
+
+    private void move(float parDeltaTime) {
         switch (stateMove) {
             case enumMoveType.stationary:
                 break;
             case enumMoveType.linear:
-                moveLinear(tempDeltaTime);
+                moveLinear(parDeltaTime);
                 break;
             case enumMoveType.parabola:
-                moveParabola(tempDeltaTime);
+                moveParabola(parDeltaTime);
                 break;
             default:
                 break;
         }
+    }
+
+    public void stop() {
+        stateMove = enumMoveType.stationary;
     }
 
     private void resetMovableObject() {
@@ -48,6 +56,10 @@ public class movableObject : MonoBehaviour {
         ratio_ = 0f;
         height = 4f;
         stateMove = enumMoveType.stationary;
+    }
+
+    protected bool checkIsStationary() {
+        return stateMove == enumMoveType.stationary;
     }
 
     #region similari_observers
@@ -83,12 +95,12 @@ public class movableObject : MonoBehaviour {
     }
 
     public void startLinearMove(Vector3 parDestination, float parTime = 1f) {
+        if (this is IMovableSupplement) { ((IMovableSupplement)this).whenStartMove(); }
+
         departure = transform.position;
         destination = parDestination;
         multiplier = getMultiplier(parDestination, transform.position, parTime);
         stateMove = enumMoveType.linear;
-
-        if (this is IMovableSupplement) { ((IMovableSupplement)this).whenStartMove(); }
     }
 
     public void startParabolaMove(Vector3 parDestination, float parTime = 1) {

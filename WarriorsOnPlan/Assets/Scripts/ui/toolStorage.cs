@@ -4,6 +4,8 @@ using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Cases;
+
 public class toolStorage : MonoBehaviour
 {
     private Transform transformContent;

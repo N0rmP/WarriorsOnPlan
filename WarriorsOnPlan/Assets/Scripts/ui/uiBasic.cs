@@ -1,14 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
+interface IHowToMove {
+    public void move(RectTransform parRect, Vector3 parDestination, float parSpeed, float parDeltaTime);
+}
+
+public enum enumHTM { 
+    soft,
+    steady
+}
+
 // uiBasic should be with RectTransform & exRectTransform
-public class uiBasic : MonoBehaviour
-{
+public class uiBasic : MonoBehaviour {
     public static Stack<uiBasic> stackUI = new Stack<uiBasic>();
 
-    Coroutine coroutineDeactivate = null;
+    private static HTMSoft instHTMSoft;
+    private static HTMSteady instHTMSteady;
+
+    public bool isRightClickDeactivate = true;
+    public enumHTM thisEnumHTM = enumHTM.soft;
+
+    public float speed = 1f;
 
     private bool isMove = false;
     private Vector3 moveDestination_;
@@ -18,27 +33,70 @@ public class uiBasic : MonoBehaviour
         }
         set {
             moveDestination_ = value;
+            if (delDoWhenMoveStart != null) {
+                delDoWhenMoveStart_();
+            }
             isMove = true;
         }
     }
+
+    private Coroutine coroutineDeactivate = null;
+
+    private Action delDoWhenMoveStart_ = null;
+    private Action delDoWhenMoveEnd_ = null;
+    public Action delDoWhenMoveStart {
+        private get {
+            return delDoWhenMoveStart_;
+        }
+        set {
+            if (delDoWhenMoveStart_ != null) {
+                delDoWhenMoveStart_ = value;
+            }
+        }
+    }
+    public Action delDoWhenMoveEnd {
+        private get {
+            return delDoWhenMoveStart_;
+        }
+        set {
+            if (delDoWhenMoveEnd_ != null) {
+                delDoWhenMoveEnd_ = value;
+            }
+        }
+    }
+
+    private IHowToMove thisHTM;
 
     private RectTransform thisRectTransform;
     private Vector3 originalLocalPosition;
 
     public void Awake() {
+        instHTMSoft = instHTMSoft ?? new HTMSoft();
+        instHTMSteady = instHTMSteady ?? new HTMSteady();
+
+        setHTM(thisEnumHTM);
+
         thisRectTransform = gameObject.GetComponent<RectTransform>();
         originalLocalPosition = thisRectTransform.localPosition;
     }
 
     public void Update() {
-        // mouse left click input
-        if (stackUI.Count > 0 && stackUI.Peek() == this && Input.GetMouseButtonDown(0) && !GetComponent<RectTransform>().checkHovered()) {
+        // if mouse left click out of this uiBasic, deactivate this uiBasic when needed
+        if (isRightClickDeactivate && stackUI.Count > 0 && stackUI.Peek() == this && Input.GetMouseButtonDown(0) && !GetComponent<RectTransform>().checkHovered()) {
             deactivatePanel();
         }
 
         // move
         if (isMove) {
-            move(Time.deltaTime);
+            if ((moveDestination - thisRectTransform.localPosition).magnitude < 5f) {
+                thisRectTransform.localPosition = moveDestination;
+                if (delDoWhenMoveEnd != null) {
+                    delDoWhenMoveEnd();
+                }
+                isMove = false;
+            } else {
+                thisHTM.move(thisRectTransform, moveDestination, speed, Time.deltaTime);
+            }
         }
     }
 
@@ -50,7 +108,9 @@ public class uiBasic : MonoBehaviour
         }
 
         gameObject.SetActive(true);
-        stackUI.Push(this);        
+        if (isRightClickDeactivate) {
+            stackUI.Push(this);
+        }
         moveDestination = parDestination;
     }
 
@@ -67,7 +127,9 @@ public class uiBasic : MonoBehaviour
             return;
         }
 
-        stackUI.Pop();
+        if (isRightClickDeactivate) {
+            stackUI.Pop();
+        }
         moveDestination = parDestination;
         coroutineDeactivate = StartCoroutine(delayedInactive(thisRectTransform.localPosition));
     }
@@ -83,14 +145,16 @@ public class uiBasic : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void move(float parDeltaTime) {
-        Vector3 tempStick = moveDestination - thisRectTransform.localPosition;
+    public void setHTM(enumHTM parEnumHTM) {
+        thisHTM = parEnumHTM switch {
+            enumHTM.soft => instHTMSoft,
+            enumHTM.steady => instHTMSteady,
+            _ => instHTMSoft
+        };
+    }
 
-        if (tempStick.magnitude < 5f) {
-            thisRectTransform.localPosition = moveDestination;
-            isMove = false;
-        } else {
-            thisRectTransform.localPosition += tempStick.normalized * parDeltaTime * tempStick.magnitude * 5f;
-        }
+    public void setMove(Vector3 parDestination, float parSpeed = 1f) {
+        moveDestination = parDestination;
+        speed = parSpeed;
     }
 }

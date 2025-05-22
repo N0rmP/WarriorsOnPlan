@@ -38,7 +38,7 @@ public class carrierGeneric<T> {
             return;
         }
 
-        // if parInterceptor is GameObject, deactivate it for optimizing
+        // if parInterceptor is GameObject, deactivate it
         if (parInterceptor is GameObject tempObj) {
             tempObj.SetActive(false);
         }
@@ -51,6 +51,18 @@ public class carrierGeneric<T> {
     public void returnTotal() {
         foreach (T item in spaceOperating.ToArray()) {
             returnSingle(item);
+        }
+    }
+
+    public void destroySingle(T parInterceptor) {
+        if (!spaceOperating.Contains(parInterceptor)) {
+            return;
+        }
+
+        spaceOperating.Remove(parInterceptor);
+
+        if (parInterceptor is GameObject tempObj) {
+            GameObject.Destroy(tempObj);
         }
     }
 

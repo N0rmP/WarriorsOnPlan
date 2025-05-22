@@ -8,7 +8,7 @@ using System.Text;
 using System;
 
 public class dragableBubbleInventory : dragableBubbleAbst, IPointerClickHandler {
-    public override void Awake() {
+    public new void Awake() {
         base.Awake();
         thisDrag = enumDrag.bubbleInventory;
     }

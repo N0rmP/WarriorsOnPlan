@@ -10,7 +10,7 @@ public class releasableNode : releasableObjectAbst {
         if (gameManager.GM.DC.curDragging == enumDrag.thing && gameObject.checkHoveredWorld()) {
             thisNode.setColor(new Color(1f, 1f, 0f, 1f));
         } else {
-            thisNode.returnColor();
+            thisNode.autoColor();
         }
     }
 

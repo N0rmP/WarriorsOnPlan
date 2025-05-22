@@ -6,27 +6,25 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class boxSkill : showerCase {
-    public void Start() {
-        base.Start();
-        setSkill(null);
+
+    protected override void init() {
+        base.init();
+        setCaseTypeShown((int)Cases.enumCaseType.skill);
     }
 
-    public void setSkill(skillAbst parSkill) {
-        thisCase = parSkill;
-
+    protected override void doWhenSetCase() {
         if (thisCase == null) {
-            transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            transform.GetChild(0).GetComponent<imgRoundRectangle>().setImg(null);
             transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
             return;
         }
 
         try {
-            transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = parSkill.caseImage;
-            transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(0).GetComponent<imgRoundRectangle>().setImg(thisCase.caseImage);
         } catch (Exception e) {
-            transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            transform.GetChild(0).GetComponent<imgRoundRectangle>().setImg(null);
             Debug.Log("error made in boxSkill : " + e.Message);
         }
-        transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = parSkill.caseName;
+        transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = thisCase.caseName;
     }
 }

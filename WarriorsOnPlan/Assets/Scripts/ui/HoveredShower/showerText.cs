@@ -11,15 +11,15 @@ public class showerText : hoveredShowerAbst {
     protected string strName;
     protected string strDescription;
 
-    protected override void init() {
+    protected override GameObject makeGut() {
         // make similar-Singleton canvasTextShown
         if (objTextShown == null) {
-            objTextShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Gut/canvasTextShown"));
+            objTextShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Gut/canvasTextShown"));
             objTextShown.transform.SetParent(gameManager.GM.canvasMain.transform);
             objTextShown.SetActive(false);
         }
 
-        objGut = objTextShown;
+        return objTextShown;
     }
 
     public void initText(string parName, string parDescription) {

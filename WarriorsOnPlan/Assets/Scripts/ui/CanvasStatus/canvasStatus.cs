@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+using Cases;
+
 public class canvasStatus : MonoBehaviour
 {
     public Thing thisThing { get; private set; }
@@ -46,29 +48,53 @@ public class canvasStatus : MonoBehaviour
         updateTotal();
     }
 
+    #region update_methods
     public void updateTotal() {
+        if (thisThing == null) {
+            updateNULL();
+            return;
+        }
+
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = thisThing.name;
         updateHP(thisThing.curHp, thisThing.maxHp);
-        transform.GetChild(2).GetComponent<boxSkill>().setSkill(thisThing?.thisSkill);
+        transform.GetChild(2).GetComponent<showerCase>().setCase(thisThing?.thisSkill);
         RI.openInventory(thisThing);
         updateNumber();
+        updateEffect();
 
         if (combatManager.CM.checkControllability(thisThing)) {
-            transform.GetChild(10).GetComponent<Button>().interactable = true;
+            transform.GetChild(11).GetComponent<Button>().interactable = true;
             RI.setInteractivity(true);
         } else {
-            transform.GetChild(10).GetComponent<Button>().interactable = false;
+            transform.GetChild(11).GetComponent<Button>().interactable = false;
             RI.setInteractivity(false);
         }
     }
 
     public void updateHP(int parCurHp, int parMaxHp) {
         Transform tempSlider = transform.GetChild(1).GetChild(1);
+
+        // if parMaxHp is zero, do not show HP bar value 
+        if (parMaxHp <= 0) {
+            tempSlider.GetComponent<Slider>().value = 1f;
+            tempSlider.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+        }
+
         tempSlider.GetComponent<Slider>().value = parCurHp / (float)parMaxHp;
         tempSlider.GetChild(2).GetComponent<TextMeshProUGUI>().text = parCurHp + " / " + parMaxHp;
     }
 
     public void updateNumber() {
+        if (thisThing == null) {
+            transform.GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+            transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+            transform.GetChild(6).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+            transform.GetChild(7).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+            transform.GetChild(8).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+            transform.GetChild(9).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+            return;
+        }
+
         transform.GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>().text = "+" + thisThing.weaponAmplifierAdd + " / " + thisThing.weaponAmplifierMultiply + "%";
         transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text = "+" + thisThing.skillAmplifierAdd + " / " + thisThing.skillAmplifierMultiply + "%";
 
@@ -80,6 +106,29 @@ public class canvasStatus : MonoBehaviour
         transform.GetChild(9).GetChild(1).GetComponent<TextMeshProUGUI>().text = thisThing.damageTotalTaken.ToString();
     }
 
+    public void updateEffect() {
+        transform.GetChild(10).GetComponent<boxEffect>().openEffect(thisThing);
+    }
+
+    // make canvasStatus to show nothing, it works like init method
+    public void updateNULL() {
+        if (thisThing != null) { 
+            thisThing = null;
+        }
+
+        transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+        updateHP(0, 0);
+        transform.GetChild(2).GetComponent<showerCase>().setCase(null);
+        RI.clear();
+        updateNumber();
+        updateEffect();
+
+
+        transform.GetChild(11).GetComponent<Button>().interactable = false;
+        RI.setInteractivity(false);
+    }
+    #endregion update_methods
+
     public void removeBubble(dragableBubbleInventory parBubble, bool isUnequip) {
         RI.removeBubble(parBubble, isUnequip);
     }
@@ -89,6 +138,10 @@ public class canvasStatus : MonoBehaviour
     }
 
     public void openCircuitSetter() {
+        if (thisThing == null) {
+            return;
+        }
+
         CCS.activateSetter(thisThing);
     }
 }

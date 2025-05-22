@@ -4,6 +4,8 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+using Cases;
+
 public class releasableInventory : releasableObjectAbst {
     private Transform contentTransform;
 

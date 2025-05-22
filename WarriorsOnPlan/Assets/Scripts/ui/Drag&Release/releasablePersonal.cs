@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+using Cases;
 
 // releasablePersonal won't be made on non-plrSide Things, they ain't controllable
 public class releasablePersonal : releasableObjectAbst {
@@ -32,9 +35,14 @@ public class releasablePersonal : releasableObjectAbst {
         return true;
     }
 
-    private bool swapPosition(Thing parThing) {
-        // Thing을 드래그 해서 드랍했을 때 thisThing과 parThing의 위치를 서로 변경하기 
-        return false;
+    private void swapPosition(Thing parThing) {
+        node tempThisThingPosition = thisThing.curPosition;
+        node tempParThingPosition = parThing.curPosition;
+
+        tempParThingPosition.expelThing();
+        thisThing.curPosition.sendThing(tempParThingPosition, true);
+
+        tempThisThingPosition.placeThing(parThing);
     }
 
     // releasablePersonal is in worldspace, it needs its own checkHovered method
@@ -48,14 +56,13 @@ public class releasablePersonal : releasableObjectAbst {
         }
 
         switch (parParameters[0]) {
-            case caseBase { caseType : enumCaseType.tool } tempTool:
-                grabTool(tempTool);
-                return true;
+            case caseBase { caseType: enumCaseType.tool } tempTool:
+                return grabTool(tempTool);
             case Thing tempThing:
                 swapPosition(tempThing);
-                return true;
+                return false;
             default:
                 return false;
-        }
+        }        
     }
 }

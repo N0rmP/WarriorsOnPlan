@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class dragablePersonal : dragableObjectAbst {
     private Thing thisThing = null;
 
-    public override void Awake() {
+    public new void Awake() {
         base.Awake();
         thisDrag = enumDrag.thing;
     }
@@ -34,18 +34,11 @@ public class dragablePersonal : dragableObjectAbst {
         tempRect.anchorMax = new Vector2(0.5f, 0.5f);
         tempRect.sizeDelta = new Vector2(130f, 130f);
 
-        string tempName = thisThing?.GetType().ToString();
-        if (!File.Exists("./Assets/Resources/Image/Portrait/Portrait_" + tempName + ".png")) {
-            Debug.Log("dragablePersonal file not found");
-            tempName = "tester";
-            return;
-        }
-        GetComponent<Image>().sprite = Resources.Load<Sprite>("Image/Portrait/Portrait_" + tempName);
+        GetComponent<Image>().sprite = thisThing.portrait;
         GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.8f);
     }
 
     protected override void doWhenHoveringEnd() {
-        Debug.Log("dragging ends, SAO returns");
         RectTransform tempRect = GetComponent<RectTransform>();
         tempRect.localRotation = Quaternion.Euler(0f, 0f, 0f);
         tempRect.localPosition = Vector3.zero;

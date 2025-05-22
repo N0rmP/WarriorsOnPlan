@@ -23,15 +23,10 @@ public abstract class releasableObjectAbst : MonoBehaviour {
         try {
             return doWhenReleased(parParameters);
         } catch (InvalidCastException e) {
-            String tempErrorMessage = "drag & drop error : ";
-            foreach (System.Object obj in parParameters) {
-                tempErrorMessage += obj.ToString() + ",";
-            }
-            tempErrorMessage += " are delivered to " + gameObject + " (" + e + ")";
-            Debug.Log(tempErrorMessage);
+            // if invalid arguement is passed from dragableObject to releasableObject, this try & catch statement will make it usless
             return false;
         } catch (Exception e) {
-            Debug.Log("unexpected error on " + this + " " + e);
+            Debug.Log("unexpected error on " + this + " ((" + e);
             return false;
         }
     }

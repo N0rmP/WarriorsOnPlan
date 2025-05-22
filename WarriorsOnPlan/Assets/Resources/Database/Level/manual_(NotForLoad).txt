@@ -1,7 +1,6 @@
 each index of SkillParameters represents...
 	[
 		max cool time ( if max cool time is -1, it means this skill doen't need the timer itself ),
-		set the cool time to the max value at the start of combat or not ( 0 = set it to max, 1 = set it to zero (the warriro can use skill instantly), default is 0 ),
 		range minimum ( range minimum should be 1 or more, if range maximum is -1 it means the skill doesn't need the range itself ),
 		range maximum,
 		other parameters ( you should check what parameters are required by reading script )
@@ -10,9 +9,26 @@ each index of SkillParameters represents...
 each index of WeaponParameters represents...
 	[
 		max cool time,
-		set the cool time to the max value at the start of combat or not ( 0 = set it to max, 1 = set it to zero (the warriro can use skill instantly), default is 1 ),
 		range minimum ( range minimum should be 1 or more ),
 		range maximum,
 		damage original ( damage should be 0 or more ),
 		other parameters ( you should check what parameters are required by reading script )
 	]
+
+each index of ToolParameters represents...
+	[
+		other parameters ( you should check what parameters are required by reading script )
+	]
+
+selecter code & parameters
+* targetGroup : 1 = select friendly, 2 = select hostile, 4 = select neutral
+* if the warrior can select multiple target groups them you should add the values of each group (ex : if the warrior can select hostile and neutral then targetGroup should be 6)
+	0 = selecterClosest : targetGroup
+
+sensor code & parameters
+	0 = sensorNothing (always return false) : no parameters required
+	1 = sensorHpBelow : timer max, threshold
+
+navigator code & parameters
+	0 = navigatorStationary (do not move) : no parameters required
+	1 = navigatorAttackOneWeapon : no parameters required

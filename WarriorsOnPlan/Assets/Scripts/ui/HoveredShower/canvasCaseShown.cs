@@ -1,10 +1,10 @@
+using Cases;
 using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class canvasCaseShown : MonoBehaviour {
     private GameObject objNumRange;
@@ -22,7 +22,7 @@ public class canvasCaseShown : MonoBehaviour {
 
         switch (parCase?.caseType) {
             case enumCaseType.effect:
-                // ★ 일정 턴 이후 사라지는 effect일 경우 쿨타임으로 해당 시간 표시
+                setEffectNumbers(parCase);
                 break;
             case enumCaseType.tool:
                 if (parCase is toolWeapon tempWeapon) {
@@ -38,16 +38,40 @@ public class canvasCaseShown : MonoBehaviour {
                 break;
         }
 
-        transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = parCase.caseImage;
+        transform.GetChild(0).GetChild(0).GetComponent<imgRoundRectangle>().setImg(parCase.caseImage);
         transform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = parCase.caseName;
         try {
+            foreach (KeyValuePair<string, int[]> p in parCase.getParameters()) {
+                Debug.Log(p.Key + " :: ");
+                foreach (int i in p.Value) {
+                    Debug.Log(i);
+                }
+            }
+
+            int[] tempParameters = parCase.getParameters()["concrete"];
+            object[] tempArgs = new object[tempParameters.Count()];
+            for (int i = 0; i < tempParameters.Length; i++) {
+                tempArgs[i] = tempParameters[i];
+            }
+
             transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = string.Format(
                 parCase.caseDescription,
-                (from n in parCase.getParameters() select n.ToString()).ToArray()
+                tempArgs
                 );
         } catch (FormatException e) {
-            Debug.Log(parCase.GetType() + " results in error with \"" + parCase.caseDescription + "\" in canvasCaseShown (( " + e);
+            Debug.Log(parCase.GetType() + " results in error with \"" + parCase.caseDescription + "\" in canvasCaseShown \n(( " + e);
             transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "preparing skill description failed";
+        }
+    }
+
+    private void setEffectNumbers(caseBase parCase) {
+        foldNumbers();
+
+        // timer
+        if (parCase is caseTimer tempCase) {
+            objNumTime.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
+                tempCase.timerMax.ToString();
+            objNumTime.SetActive(true);
         }
     }
 
@@ -64,15 +88,13 @@ public class canvasCaseShown : MonoBehaviour {
         // weapon damage, change text color if damage is changed
         // ★ 피해 형태에 따라 마법 피해라면 추가 그래픽 처리 만들기
         objNumDamage.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
-            parCase.damageOriginal.ToString();
+            parCase.damageCur.ToString();
         objNumDamage.SetActive(true);
 
         // weapon cool time
         objNumTime.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
             parCase.timerMax.ToString();
         objNumTime.SetActive(true);
-
-        transform.GetChild(1).gameObject.SetActive(true);
     }
 
     private void setSkillnumbers(skillAbst parSkill) {
@@ -93,15 +115,11 @@ public class canvasCaseShown : MonoBehaviour {
                 parSkill.timerMax.ToString();
             objNumTime.SetActive(true);
         }
-
-        transform.GetChild(1).gameObject.SetActive(true);
     }
 
     // foldNumbers not only fold all numbers but also deactivate the boxNumbers neither, you should activate it to show
     private void foldNumbers() {
-        transform.GetChild(1).gameObject.SetActive(false);
-
-        for (int i = transform.GetChild(1).childCount - 1; i > 0; i--) {
+        for (int i = transform.GetChild(1).childCount - 1; i >= 0; i--) {
             transform.GetChild(1).GetChild(i).gameObject.SetActive(false);
         }
     }

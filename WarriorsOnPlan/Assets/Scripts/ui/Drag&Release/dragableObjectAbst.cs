@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,9 +15,9 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
     private Transform transformParent;
     private Vector3 posReturn;
 
-    public virtual void Awake() {
-        if (!TryGetComponent<RectTransform>(out thisRectTransform)){
-            Destroy(this);
+    public void Awake() {
+        if (!TryGetComponent<RectTransform>(out thisRectTransform)) {
+            thisRectTransform = gameObject.AddComponent<RectTransform>();
         }
     }
 

@@ -17,6 +17,13 @@ public readonly struct dataBasicWords {
     }
 }
 
+// in keybinding (KeyCode)999 is used as any-key
+public readonly struct keybindingCombat {
+    public readonly KeyCode keyReenactNextAction;
+    public readonly KeyCode keyRestorePrevAction;
+    public readonly KeyCode keyChangeCombatSpeed;
+}
+
 public class optionAIO {
     #region statics
     public int screenWidth { get; private set; } = 1920;
@@ -38,7 +45,7 @@ public class optionAIO {
     public optionAIO(){
         setStick();
 
-        // ★ 추후 삭제할 것
+        // ★ 추후 삭제하고 json 파일로부터 저장된 문자열들을 가져올 수 있도록 변경할 것
         basicWords = new dataBasicWords("Melee", "Number");
     }
 
@@ -59,8 +66,8 @@ public class optionAIO {
 
     private void setStick() {
         stick = 
-            (gameManager.GM.cameraMain.GetComponent<Camera>().WorldToScreenPoint(new Vector3(0f, 0f, 0f)) -
-            gameManager.GM.cameraMain.GetComponent<Camera>().WorldToScreenPoint(new Vector3(1f, 1f, 0.5f))).magnitude;
+            (Camera.main.GetComponent<Camera>().WorldToScreenPoint(new Vector3(0f, 0f, 0f)) -
+            Camera.main.GetComponent<Camera>().WorldToScreenPoint(new Vector3(1f, 0f, 0f))).magnitude;
     } 
 
     public void addCase(ICaseResolutionChange parCase) {

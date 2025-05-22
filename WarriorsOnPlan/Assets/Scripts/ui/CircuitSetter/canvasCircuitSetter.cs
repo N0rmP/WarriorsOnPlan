@@ -8,14 +8,17 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
+using Circuits;
+
 public class canvasCircuitSetter : MonoBehaviour {
     private GameObject panelChoice;
     private GameObject[] arrButtonCircuitType;
 
     #region CircuitLists
+    /*
     // because all these circuits should be used only for getting information in this class, creator parameters don't matter
     private static List<ISingleInfo> listSelecters = new List<ISingleInfo> { 
-            new selecterClosest(null, 000)
+            new selecterClosest(enumSide.none, 000)
         };
     private static List<ISingleInfo> listSensors = new List<ISingleInfo> {
             new sensorNothing(),
@@ -25,6 +28,7 @@ public class canvasCircuitSetter : MonoBehaviour {
             new navigatorStationary(),
             new navigatorAttackOneWeapon()
         };
+    */
     #endregion CircuitLists
 
     private string wordNUMBER;
@@ -100,6 +104,7 @@ public class canvasCircuitSetter : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    /*
     private List<ISingleInfo> getListCircuitType(int parCode) {
         return parCode switch {
             0 or 3 => listSensors,
@@ -107,6 +112,16 @@ public class canvasCircuitSetter : MonoBehaviour {
             4 or 5 => listSelecters,
             _ => null
         };
+    }
+    */
+
+    private int convertNumToCode(int parCircuitTypeBeingChosen, int parCircuitChosen = 1) {
+        return parCircuitTypeBeingChosen switch {
+            0 or 3 => 1100,
+            1 or 2 => 1200,
+            4 or 5 => 1300,
+            _ => 91100
+        } + parCircuitChosen;
     }
 
     public void activateSetter(Thing source) {
@@ -117,13 +132,10 @@ public class canvasCircuitSetter : MonoBehaviour {
         GetComponent<uiBasic>().activatePanel();
     }
 
-    public void activateChoicePanel(int parcurCircuitTypeBeingChosen) {
-        curCircuitTypeBeingChosen = parcurCircuitTypeBeingChosen;
+    public void activateChoicePanel(int parCurCircuitTypeBeingChosen) {
+        curCircuitTypeBeingChosen = parCurCircuitTypeBeingChosen;
 
-        List<ISingleInfo> tempListCircuit = getListCircuitType(parcurCircuitTypeBeingChosen);
-
-        // prepare circuit type choice buttons
-        GameObject tempObject;
+        // deactivate circuit type choice buttons        
         for (int i = 0; i < arrButtonCircuitType.Count(); i++) {
             if (i != curCircuitTypeBeingChosen_) {
                 arrButtonCircuitType[i].GetComponent<Button>().interactable = false;
@@ -131,23 +143,33 @@ public class canvasCircuitSetter : MonoBehaviour {
         }
 
         // prepare choice buttons
-        for (int i = 0; i < 8; i++) {
-            tempObject = panelChoice.transform.GetChild(i).gameObject;
-            if (tempListCircuit.Count > i) {
-                tempObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = tempListCircuit[i].singleInfo;
-                tempObject.gameObject.SetActive(true);
-            } else {
-                tempObject.gameObject.SetActive(false);
+        Transform tempTransform;
+        int tempButtonIndex = 0;
+        // write descriptions of circuits
+        foreach (codableObject co in gameManager.GM.MC.iterateAdequateSet(convertNumToCode(parCurCircuitTypeBeingChosen))) {
+            if (co is not ISingleInfo) {
+                continue;
+            }
+
+            tempTransform = panelChoice.transform.GetChild(tempButtonIndex);
+            tempTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (co as ISingleInfo).singleInfo;
+            tempTransform.gameObject.SetActive(true);
+
+            if (++tempButtonIndex >= 8) {
+                break;
             }
         }
-        panelChoice.GetComponent<uiBasic>().activatePanel();
+        // deactivate buttons out of range of circuits
+        for (; tempButtonIndex < 8; tempButtonIndex++) {
+            panelChoice.GetComponent<uiBasic>().activatePanel();
+        }
     }
 
     public void chooseCircuit(int parCircuitChosen) {
         arrCircuitCodes[curCircuitTypeBeingChosen] = parCircuitChosen;
 
         arrButtonCircuitType[curCircuitTypeBeingChosen].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
-            getListCircuitType(curCircuitTypeBeingChosen)[parCircuitChosen].singleInfo;
+            gameManager.GM.MC.sneakISingleInfo(convertNumToCode(curCircuitTypeBeingChosen, parCircuitChosen)).singleInfo;
         setInputfieldSingle(curCircuitTypeBeingChosen);
         panelChoice.GetComponent<uiBasic>().deactivatePanel();
 

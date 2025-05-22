@@ -4,32 +4,32 @@
         {
             "NameThing" : "tester", 
             "Coordinate0" : 6, "Coordinate1" : 6, 
-            "HP" : 3, 
-            "SkillParameters" : [3, 0, 1, 4, 5],
+            "HP" : 6, 
+            "SkillParameters" : [3, 3, 1, 5, 2],
             "ToolList" : [
-                {"CodeTool" : -1, "ToolParameters" : [2, 1, 1, 3, 1]}
+                {"CodeIParametable" : 93001, "Parameters" : [1, 1, 1, 3, 1]}
             ],
-            "CodeSensorForMove" : 0, "Parameter0" : [], 
-            "CodeNavigatorPrioritized" : 0, "Parameter1" : [], 
+            "CodeSensorForMove" : 1102, "Parameter0" : [], 
+            "CodeNavigatorPrioritized" : 1202, "Parameter1" : [], 
             "CodeNavigatorIdle" : 0, "Parameter2" : [], 
-            "CodeSensorForSkill" : -1, "Parameter3" : [], 
-            "CodeSelecterForSkill" : 0, "Parameter4" : [2], 
-            "CodeSelecterForAttack" : -1, "Parameter5" : [2]
+            "CodeSensorForSkill" : 1102, "Parameter3" : [], 
+            "CodeSelecterForSkill" : 1301, "Parameter4" : [], 
+            "CodeSelecterForAttack" : 1301, "Parameter5" : []
         },
         {
-            "NameThing" : "tester", 
+            "NameThing" : "testerBleeder", 
             "Coordinate0" : 6, "Coordinate1" : 5, 
-            "HP" : 4, 
-            "SkillParameters" : [3, 0, 1, 4, 5],
+            "HP" : 8, 
+            "SkillParameters" : [-1, -1, -1, -1, 3, 1],
             "ToolList" : [
-                {"CodeTool" : -1, "ToolParameters" : [2, 1, 1, 3, 1]}
+                {"CodeIParametable" : 93001, "Parameters" : [2, 2, 1, 3, 1]}
             ],
-            "CodeSensorForMove" : 0, "Parameter0" : [], 
-            "CodeNavigatorPrioritized" : 0, "Parameter1" : [], 
+            "CodeSensorForMove" : 1102, "Parameter0" : [], 
+            "CodeNavigatorPrioritized" : 1202, "Parameter1" : [], 
             "CodeNavigatorIdle" : 0, "Parameter2" : [], 
-            "CodeSensorForSkill" : -1, "Parameter3" : [], 
-            "CodeSelecterForSkill" : 0, "Parameter4" : [2], 
-            "CodeSelecterForAttack" : -1, "Parameter5" : [2]
+            "CodeSensorForSkill" : 1102, "Parameter3" : [], 
+            "CodeSelecterForSkill" : 1301, "Parameter4" : [2], 
+            "CodeSelecterForAttack" : 1301, "Parameter5" : [2]
         }
     ],
     "NeutralThings" : [],
@@ -37,19 +37,19 @@
         {
             "NameThing" : "tester", 
             "Coordinate0" : 0, "Coordinate1" : 0, 
-            "HP" : 4, 
-            "SkillParameters" : [3, 0, 1, 4, 5]
+            "HP" : 10, 
+            "SkillParameters" : [3, 3, 1, 5, 2]
         },
         {
             "NameThing" : "tester", 
             "Coordinate0" : 0, "Coordinate1" : 1, 
-            "HP" : 5, 
-            "SkillParameters" : [3, 0, 1, 4, 5]
+            "HP" : 9, 
+            "SkillParameters" : [3, 3, 1, 5, 2]
         }
     ],
     "ToolsProvided" : [
-        {"CodeTool" : -1, "ToolParameters" : [2, 1, 1, 4, 1]},
-        {"CodeTool" : -1, "ToolParameters" : [2, 1, 1, 4, 1]},
-        {"CodeTool" : -1, "ToolParameters" : [2, 1, 1, 4, 1]}
+        {"CodeIParametable" : 93001, "Parameters" : [1, 1, 1, 5, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [1, 1, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [2, 1, 1, 2, 2]}
     ]
 }

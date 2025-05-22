@@ -17,11 +17,15 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
     private float fltTimerCur;
 
     #region callbacks
-    public void Start(){
+    public void Awake() {
         thisRectTransform = GetComponent<RectTransform>();
         isEntered = false;
         fltTimerCur = fltTimerMax;
         init();
+    }
+
+    public void Start(){        
+        objGut = makeGut();
     }
 
     public void Update(){
@@ -86,7 +90,8 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
         doAfterDeshow();
     }
 
-    protected abstract void init();
+    protected virtual void init() { }
+    protected abstract GameObject makeGut();
     protected virtual bool doBeforeShow() { return true; }
     protected virtual void doAfterDeshow() { }
 }
