@@ -18,6 +18,7 @@ public abstract class releasableObjectAbst : MonoBehaviour {
         return thisRectTransform.checkHovered();
     }
 
+    // ★ 이거 dragComponent.curDragging와 this.enumDragRequired를 비교해서 true일 때에만 실행하게 해도 될 거 같은데 좀 고져봐라
     public bool receiveRelease(System.Object[] parParameters) {
         // try statement do check the types of parameters
         try {

@@ -101,6 +101,7 @@ public class canvasCircuitSetter : MonoBehaviour {
             }
         );
 
+        GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, 0f, 0f);
         gameObject.SetActive(false);
     }
 

@@ -38,11 +38,10 @@ public class canvasPersonal : MonoBehaviour {
     public void Update() {
         transform.LookAt(transform.position + Camera.main.transform.forward);
 
-        if (destinationSlider < sliderSkill.value) {
-            sliderSkill.value -= 0.0025f;
-            if (Mathf.Abs(destinationSlider - sliderSkill.value) < 0.01f) {
-                sliderSkill.value = destinationSlider;
-            }
+        if (Mathf.Abs(destinationSlider - sliderSkill.value) > 0.01f) {
+            sliderSkill.value += destinationSlider < sliderSkill.value ? -0.0025f : 0.0025f;
+        } else {
+            sliderSkill.value = destinationSlider;
         }
     }
 

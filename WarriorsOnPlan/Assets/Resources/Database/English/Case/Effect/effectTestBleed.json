@@ -1,5 +1,5 @@
 {
     "SwissArmyStringArray" : [
-        "Test Bleed", "At the start of turn, take {0} damage."
+        "Test Bleed", "At the start of action, take {0} damage."
     ]
 }

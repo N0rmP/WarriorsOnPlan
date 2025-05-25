@@ -18,12 +18,7 @@ namespace Cases {
         public caseTimer(int[] parArrParameter, enumCaseType parEnumCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parArrParameter, parEnumCaseType, parIsVisible) { }
 
         protected virtual void updateTimer(Thing source) {
-            if (timerCur < 0) {
-                // if timerMax is below zero, this caseTimer might be used for special purpose or with its own concrete timer system
-                return;
-            } else if (timerCur > 0) {
-                timerCur--;
-            } else {
+            if (timerCur <= 0) {
                 doOnAlarmed(source);
 
                 if (isAutoReset) {
@@ -33,6 +28,8 @@ namespace Cases {
                 if (isRemovedOnAlarmed) {
                     combatManager.CM.executeProcess(new processByproductRemoveCase(source, this));
                 }
+            } else {
+                timerCur--;
             }
         }
 

@@ -49,10 +49,10 @@ namespace Cases {
             }
 
             makeOrRestore<sensorAbst>(ref sensorForMove, parCodeSensorForMove, ppSensorForMove);
-            makeOrRestore<navigatorAbst>(ref navigatorPrioritized, parCodeNavigatorPrioritized, ppNavigatorPrioritized);
-            if (sensorForMove is not sensorAnything) {
-                makeOrRestore<navigatorAbst>(ref navigatorIdle, parCodenavigatorInferior, ppnavigatorInferior);
+            if (sensorForMove is not sensorNothing) {
+                makeOrRestore<navigatorAbst>(ref navigatorPrioritized, parCodeNavigatorPrioritized, ppNavigatorPrioritized);
             }
+            makeOrRestore<navigatorAbst>(ref navigatorIdle, parCodenavigatorInferior, ppnavigatorInferior);
             makeOrRestore<sensorAbst>(ref sensorForSkill, parCodeSensorForSkill, ppSensorForSkill);
             // ★ 일단 당장의 제출을 위해 임시로 만들어볼 것, 나중에 circuitsetter에서 targetGroup 관련 매개변수를 가져오도록 변경할 것
             makeOrRestore<selecterAbst>(ref selecterForSkill, parCodeSelecterForSkill, new int[1] { 0b010 });
@@ -86,10 +86,7 @@ namespace Cases {
         }
 
         public node getNextRoute(Thing source) {
-            //if (!navigatorCur.checkIsRouteValid(source)) {
-                navigatorCur.calculateNewRoute(source);
-            //}
-
+            navigatorCur.calculateNewRoute(source);
             return navigatorCur.getNextRoute(source);
         }
 
@@ -112,9 +109,8 @@ namespace Cases {
             selecterForAttack = selecterForAttack?.getValidCircuit(source);
 
             // ★ sensorForMove를 통해 navigator 갱신
+            // Debug.Log(source + " : " + sensorForMove + " / " + sensorForMove.checkWigwagging(source));
             navigatorCur = sensorForMove.checkWigwagging(source) ? navigatorPrioritized : navigatorIdle;
-
-            Debug.Log(source + " : " + sensorForSkill.checkWigwagging(source) + " && " + source.thisSkill.isReady);
 
             return (this,
                 sensorForSkill.checkWigwagging(source) && source.thisSkill.isReady ? enumStateWarrior.skill :
@@ -133,17 +129,17 @@ namespace Cases {
             try {
                 List<object> tempResult = base.getReference();
                 tempResult.Add(sensorForMove.getMementoIParametable());
-                tempResult.Add(navigatorPrioritized.getMementoIParametable());
-                if (sensorForMove is not sensorAnything) {
-                    tempResult.Add(navigatorIdle.getMementoIParametable());
+                if (sensorForMove is not sensorNothing) {
+                    tempResult.Add(navigatorPrioritized.getMementoIParametable());
                 }
+                tempResult.Add(navigatorIdle.getMementoIParametable());
                 tempResult.Add(sensorForSkill.getMementoIParametable());
                 tempResult.Add(selecterForSkill.getMementoIParametable());
                 tempResult.Add(selecterForAttack.getMementoIParametable());
 
                 return tempResult;
             } catch (Exception e) {
-                Debug.Log("error occured in circuitHub.getReference");
+                Debug.Log("error occured in circuitHub.getReference  ((" + e.Message);
                 testAllCircuits();
 
                 List<object> tempResult = new List<object>();
@@ -161,7 +157,7 @@ namespace Cases {
             int tempInd = 0;
             sensorForMove = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();
             navigatorPrioritized = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
-            if (sensorForMove is not sensorAnything) {
+            if (sensorForMove is not sensorNothing) {
                 navigatorIdle = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
             }
             sensorForSkill = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();

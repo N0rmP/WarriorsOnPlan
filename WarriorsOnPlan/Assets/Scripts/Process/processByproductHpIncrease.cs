@@ -7,10 +7,12 @@ namespace Processes {
     public class processByproductHpIncrease : processByproductAbst {
         private Thing source;
         private int value;
+        private bool isShowInstant;
 
-        public processByproductHpIncrease(Thing parSource, int parValue, bool parIsShow = true) : base(parIsShow) {
+        public processByproductHpIncrease(Thing parSource, int parValue, bool parIsShow = true , bool parIsShowInstant = false) : base(parIsShow) {
             source = parSource;
             value = parValue;
+            isShowInstant = parIsShowInstant;
         }
 
         protected override void doBeforeActualDo() {
@@ -36,13 +38,18 @@ namespace Processes {
         }
 
         protected override void actualSHOW() {
-            gameManager.GM.TC.addDelegate(
-                () => {
-                    source.updatePanelHp();
-                    // ★ 증가한 체력이 숫자 모양으로 뿅 튀어나오게 만들기
-                },
-                combatManager.CM.getBodyAnimationDuration()
+            if (isShowInstant) {
+                source.updatePanelHp();
+                // ★ 증가한 체력이 숫자 모양으로 뿅 튀어나오게 만들기
+            } else {
+                gameManager.GM.TC.addDelegate(
+                    () => {
+                        source.updatePanelHp();
+                        // ★ 증가한 체력이 숫자 모양으로 뿅 튀어나오게 만들기
+                    },
+                    combatManager.CM.getBodyAnimationDuration()
                 );
+            }
         }
     }
 }

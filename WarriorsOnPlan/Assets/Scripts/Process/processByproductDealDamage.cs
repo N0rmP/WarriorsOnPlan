@@ -7,13 +7,15 @@ namespace Processes {
         // catution : sourceAttacker of damageInfo can be null if the damage ain't done directly but by effect (posion or burnt etc.)
         private damageInfo[] arrDInfo;
         private Thing target;
+        private bool isShowInstant;
 
         public int damageTotal { get; private set; }
 
-        public processByproductDealDamage(damageInfo[] parArrDInfo, Thing parTarget, bool parIsSHOW = true) : base(parIsSHOW) {
+        public processByproductDealDamage(damageInfo[] parArrDInfo, Thing parTarget, bool parIsShow = true, bool parIsShowInstant = false) : base(parIsShow) {
             arrDInfo = parArrDInfo;
             target = parTarget;
             damageTotal = 0;
+            isShowInstant = parIsShowInstant;
         }
 
         protected override void doBeforeActualDo() {
@@ -61,7 +63,7 @@ namespace Processes {
             damageInfo tempDI;
             for (int i = 0; i < arrDInfo.Length; i++) {
                 tempDI = arrDInfo[i];
-                tempPBHD = new processByproductHpDecrease(target, tempDI.sourceAttacker, tempDI.damage);
+                tempPBHD = new processByproductHpDecrease(target, tempDI.sourceAttacker, tempDI.damage, parIsShowInstant : isShowInstant);
                 combatManager.CM.executeProcess(tempPBHD);
                 tempDI.damageDealt = tempPBHD.valueFinal;
                 damageTotal += tempPBHD.valueFinal;
@@ -70,13 +72,16 @@ namespace Processes {
 
         protected override void actualSHOW() {
             foreach (damageInfo di in arrDInfo) {
-                gameManager.GM.TC.addDelegate(
-                    () => {
-                        di.SHOW(target.transform.position);
-                        // target.updatePanelHp();
-                    },
-                    combatManager.CM.getBodyAnimationDuration()
+                if (isShowInstant) {
+                    di.SHOW(target.transform.position);
+                } else {
+                    gameManager.GM.TC.addDelegate(
+                        () => {
+                            di.SHOW(target.transform.position);
+                        },
+                        combatManager.CM.getBodyAnimationDuration()
                     );
+                }
             }
         }
     }

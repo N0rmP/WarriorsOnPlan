@@ -129,10 +129,21 @@ public struct dataArbitraryStringArray : IDataInsurance {
 #endregion data_entities
 
 public class jsonComponent {
-
     public static string strLanguage = "English";
 
     public T getJson<T>(string parHalfPath, bool isTranslationRequired = true) where T : struct, IDataInsurance {
+        string tempPath = "Database/" +
+            (isTranslationRequired ? strLanguage + "/" : "") + 
+            parHalfPath;
+
+        T tempResult;
+        try {
+            tempResult = JsonConvert.DeserializeObject<T>(Resources.Load<TextAsset>(tempPath).ToString());
+        } catch (Exception e) {
+            tempResult = new T();
+            tempResult.emergencyInit();
+        }
+        /*
         string tempPath = "Assets/Resources/Database/" +
             (isTranslationRequired ? strLanguage + "/" : "") + 
             parHalfPath + ".json";
@@ -145,6 +156,7 @@ public class jsonComponent {
             tempResult = new T();
             tempResult.emergencyInit();
         }
+        */
         return tempResult;
     }
 

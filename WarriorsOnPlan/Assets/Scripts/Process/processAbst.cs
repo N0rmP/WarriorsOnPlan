@@ -33,7 +33,10 @@ namespace Processes {
             }
 
             thisCountAction = combatManager.CM.countAction;
-            Debug.Log(this + " : " + thisCountAction);
+            // skip all left code if combat ended
+            if (parPrev is processSystemCombatEnd) {
+                return;
+            }
             // set processLast & delSetNext of combatManager before actualDo, new process made during actualDo is latter in the process-chain
             parPrev = this;
             parDelSetNext = delSetNext;

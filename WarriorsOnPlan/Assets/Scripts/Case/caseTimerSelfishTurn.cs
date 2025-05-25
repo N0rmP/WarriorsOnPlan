@@ -14,17 +14,17 @@ namespace Cases {
         }
 
         public void updateOnActionStart(Thing source) {
-            combatManager.CM.executeProcess(new processByproductDelecate(() => isActionStartPassed = true));
+            isActionStartPassed = true;
         }
 
         public void updateOnActionEnd(Thing source) {
-            combatManager.CM.executeProcess(new processByproductDelecate(
+            if (isActionStartPassed) {
+                combatManager.CM.executeProcess(new processByproductDelecate(
                 () => {
-                    if (isActionStartPassed) {
-                        updateTimer(source);
-                    }
-                    isActionStartPassed = false;
+                    updateTimer(source);
                 }));
+                isActionStartPassed = false;
+            }
         }
     }
 }

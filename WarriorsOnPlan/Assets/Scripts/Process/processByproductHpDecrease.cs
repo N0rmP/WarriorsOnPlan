@@ -9,11 +9,13 @@ namespace Processes {
         private Thing attackerThing;
         private int value;
         public int valueFinal { get; private set; }
+        private bool isShowInstant;
 
-        public processByproductHpDecrease(Thing parSource, Thing parAttacker, int parValue, bool parIsShow = true) : base(parIsShow) {
+        public processByproductHpDecrease(Thing parSource, Thing parAttacker, int parValue, bool parIsShow = true, bool parIsShowInstant = false) : base(parIsShow) {
             source = parSource;
             attackerThing = parAttacker;
             value = parValue;
+            isShowInstant = parIsShowInstant;
         }
 
         protected override void doBeforeActualDo() {
@@ -44,13 +46,18 @@ namespace Processes {
         }
 
         protected override void actualSHOW() {
-            gameManager.GM.TC.addDelegate(
-                () => {
-                    source.updatePanelHp();
-                    // ★ 입은 피해가 숫자 모양으로 뿅 튀어나오게 만들기
-                },
-                combatManager.CM.getBodyAnimationDuration()
+            if (isShowInstant) {
+                source.updatePanelHp();
+                // ★ 입은 피해가 숫자 모양으로 뿅 튀어나오게 만들기
+            } else {
+                gameManager.GM.TC.addDelegate(
+                    () => {
+                        source.updatePanelHp();
+                        // ★ 입은 피해가 숫자 모양으로 뿅 튀어나오게 만들기
+                    },
+                    combatManager.CM.getBodyAnimationDuration()
                 );
+            }
         }
     }
 }

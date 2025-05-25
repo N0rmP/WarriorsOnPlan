@@ -5,7 +5,7 @@ using UnityEngine;
 using Processes;
 
 namespace Cases {
-    public class effectTestBleed : caseTimerSelfishTurn, ICaseTurnStart {
+    public class effectTestBleed : caseTimerSelfishTurn, ICaseBeforeAction {
         private int damagePerTurn = 0;
 
         public effectTestBleed(int[] parParameter) : base(parParameter, parIsVisible: true) {
@@ -13,10 +13,11 @@ namespace Cases {
             isRemovedOnAlarmed = true;
         }
 
-        public void onTurnStart(Thing source) {
+        public void onBeforeAction(Thing source) {
             combatManager.CM.executeProcess(new processByproductDealDamage(
                 new damageInfo[1] { new damageInfo(null, this, damagePerTurn, enumDamageType.absolute) },
-                source
+                source,
+                parIsShowInstant : true
                 ));
         }
 

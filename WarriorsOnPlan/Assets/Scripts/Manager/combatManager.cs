@@ -60,7 +60,7 @@ public class combatManager : MonoBehaviour {
         }
     }
 
-    private enumSide sideTurn;
+    public enumSide sideTurn { get; private set; }
 
     private const float fltInterval = 1.5f;
     private const float fltBodyAnimationDuration = fltInterval / 1.5f;
@@ -139,9 +139,9 @@ public class combatManager : MonoBehaviour {
             return;
         }
 
-        if (parProcess is processByproductDelecate && processLast is processByproductDelecate) {
+        if (parProcess is processByproductDelecate && processLast is processByproductDelecate tempProcessLast) {
             foreach (Action del in parProcess as processByproductDelecate) {
-                (processLast as processByproductDelecate).addDel(del);
+                tempProcessLast.addDel(del);
             }
             return;
         }
@@ -199,19 +199,17 @@ public class combatManager : MonoBehaviour {
             };
 
             // turn start
-            Debug.Log(sideTurn + " T U R N   S T A R T");
+            Debug.Log(sideTurn + " T U R N   S T A R T " + countAction);
             executeProcess(new processSystemTurnStart(tempArrActors));
 
             foreach (Thing th in tempArrActors) {
                 
-                if (th.stateCur <= enumStateWarrior.dead) {
+                if (th.stateCur <= enumStateWarrior.dead || combatState == enumCombatState.combatDone) {
                     continue;
                 }
 
                 // ACTUAL WARRIOR's ACTION
-                // sort All Things and update source Thing's targets
-                HouC.sortByHp();
-                HouC.sortByDD();
+                // sorting houseComponent will be done in each selecterAbst or class which requires sorting
                 // update targets, this precedes state decision because targets can affect it
                 th.updateTargets();
                 // state decision
@@ -226,7 +224,6 @@ public class combatManager : MonoBehaviour {
             }
 
             // turn end
-            Debug.Log(sideTurn + " TURN END");
             executeProcess(new processSystemTurnEnd(tempArrActors,
                 // turn change delegate, while no nuetral Thing exists there are only two turn types (player & enemy)
                 () => sideTurn = (++sideTurn == enumSide.neutral && HouC.arrNeutralAlive.Length < 1) || (int)sideTurn < 3 ? sideTurn : enumSide.player
@@ -243,7 +240,7 @@ public class combatManager : MonoBehaviour {
             tempTotalTakenDamage += t.damageTotalTaken;
         }
         curCombatResult = new combatResult(
-            HouC.arrEnemyAlive.Length < 1,
+            HouC.arrEnemyAlive.Length <= 0,
             countAction,
             tempTotalDealtDamage,
             tempTotalTakenDamage
@@ -265,6 +262,10 @@ public class combatManager : MonoBehaviour {
     }
 
     public void resumeREENACT() {
+        if (combatState != enumCombatState.reenact) {
+            return;
+        }
+
         StartCoroutine(REENACT());
     }
 
@@ -276,6 +277,7 @@ public class combatManager : MonoBehaviour {
             }
 
             processReenactedNext = processReenactedNext.REENACT();
+            combatUIManager.CUM.CStatus.updateTotal();
             yield return getInterval();
         }
 
@@ -366,6 +368,10 @@ public class combatManager : MonoBehaviour {
     }
 
     private void restoreCombat(mementoCombat parMC) {
+        if (combatState != enumCombatState.reenact) {
+            return;
+        }
+
         StopAllCoroutines();
         gameManager.GM.TC.clearDelegate();
         gameManager.GM.UC.clearAll();
@@ -384,11 +390,16 @@ public class combatManager : MonoBehaviour {
         // combatUIManager.CUM.CStatus.updateTotal();
 
         combatUIManager.CUM.setActionCounter(countAction, true);
+        combatUIManager.CUM.testShowTurn();
 
         /*
             3. boxInformation의 canvasStatistics 복구, 아마도 mementoStatistics가 필요할 것 (★ 추후 많은 구현 필요)
         */
-    }    
+    }
+
+    public bool checkIsPlayerWin() {
+        return curCombatResult.isPlayerWin;
+    }
     #endregion combat_utility
     #endregion combat_methods
 
@@ -436,10 +447,10 @@ public class combatManager : MonoBehaviour {
             tempThing = systemSpawn(ft.NameThing, enumSide.player, ft.HP, (ft.Coordinate0, ft.Coordinate1), ft.SkillParameters);
             //★ 제출용 player thing circuitHub 세팅, 추후 canvasCircuitSetter에서 확인 버튼 누를 때마다 세팅하게 변경 예정
             tempThing.setCircuit(
-                1103 , new int[1] { 5 },
-                1202, new int[0],
+                1101 , new int[2] { -1, -1},
                 1204, new int[0],
-                1102, new int[0],
+                1202, new int[0],
+                1102, new int[2] { -1, -1 },
                 1301, new int[0],
                 1301, new int[0]
                 );

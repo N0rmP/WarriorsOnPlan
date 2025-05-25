@@ -113,6 +113,6 @@ public class damageInfo {
 
     public void SHOW(Vector3 parTargetPosition) {
         // ★ 실제로 감소된 체력량 툭 튀어나오게 하기, 이거 processByproductDealDamage 혹은 processByproductDecreaseHp로 옮기죠?
-        combatManager.CM.FC.callVFX(vfxHit, combatManager.CM.FC.getRetrieverParticleStop(), parTargetPosition);
+        combatManager.CM.FC.callVFX(vfxHit, combatManager.CM.FC.getRetrieverParticleStop(), parTargetPosition + new Vector3(0f, 1f, 0f));
     }
 }

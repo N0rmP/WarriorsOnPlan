@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -150,12 +151,12 @@ public class node : MonoBehaviour {
 
     // getTechnicalDistance returns actual float distance between two nodes, it's used for in-script calculation like selecterClosest
     public static float getTechnicalDistance(node n1, node n2) {
-        return (n1.getVector3() - n2.getVector3()).magnitude;
+        return (n2.getVector3() - n1.getVector3()).magnitude;
     }
 
     // getLikestDirection returns the direction with the most similar vector with (target.vector - source.vector)
     public static EDirection getLikestDirection(node source, node target) {
-        Vector2 tempComparing = (new Vector2(target.coor0, target.coor1) - new Vector2(source.coor0, source.coor1)).normalized;
+        Vector2 tempComparing = (new Vector2(target.coor0 - source.coor0, target.coor1 - source.coor1)).normalized;
         int tempResult = 0;
         float tempMinDistance = float.MaxValue;
         Vector2 tempComparedCur;
@@ -169,6 +170,31 @@ public class node : MonoBehaviour {
         }
 
         return (EDirection)tempResult;
+    }
+
+    public static IEnumerable<EDirection> getDirectionClosestSorted(Vector2 parVectorToDestination) {
+        List<(EDirection edir, float dist)> tempPriorityList = new List<(EDirection edir, float dist)>();
+        float tempCurDistance;
+
+        for (int i = 0; i < 8; i++) {
+            tempCurDistance = (parVectorToDestination - new Vector2(directionConverter[i], directionConverter[(i + 2) % 8]).normalized).magnitude;
+            if (i == 0) {
+                tempPriorityList.Add(((EDirection)i, tempCurDistance));
+                continue;
+            }
+
+            for (int j = 0; j < i; j++) {
+                if (tempPriorityList[j].dist > tempCurDistance) {
+                    tempPriorityList.Insert(j, ((EDirection)i, tempCurDistance));
+                    break;
+                } else if (j == i - 1){
+                    tempPriorityList.Add(((EDirection)i, tempCurDistance));
+                    break;
+                }
+            }
+        }
+
+        return from tup in tempPriorityList select tup.edir;
     }
     #endregion StaticMethods
 

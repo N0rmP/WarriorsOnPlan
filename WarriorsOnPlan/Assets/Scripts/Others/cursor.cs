@@ -33,12 +33,12 @@ public class cursor : movableObject, IMovableSupplement {
 
     public void setIsChosen(bool par) {
         isChosen = par;
-        updateSR();
+        updateSprite();
     }
 
     public void setIsHovered(bool par) {
         isHovered = par;
-        updateSR();
+        updateSprite();
     }
 
     public void whenEndMove() {
@@ -47,7 +47,7 @@ public class cursor : movableObject, IMovableSupplement {
 
     public void whenStartMove() { }
 
-    private void updateSR() {
+    private void updateSprite() {
         SR.color = isChosen ? distinct :
             isHovered ? half :
             transparent;

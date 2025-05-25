@@ -22,6 +22,11 @@ namespace Processes {
             foreach (ICaseBeforeAction cb in source.getCaseList<ICaseBeforeAction>()) {
                 cb.onBeforeAction(source);
             }
+
+            // timer update
+            foreach (caseTimerSelfishTurn ct in source.getCaseList<caseTimerSelfishTurn>()) {
+                ct.updateOnActionStart(source);
+            }
         }
         protected override void doAfterActualDo() {
             base.doAfterActualDo();
@@ -31,20 +36,17 @@ namespace Processes {
                 cb.onAfterAction(source);
             }
 
-            // timer Update
+            // timer update
             foreach (caseTimerSelfishTurn ct in source.getCaseList<caseTimerSelfishTurn>()) {
                 ct.updateOnActionEnd(source);
             }
         }
 
-        protected override void actualDO() {
-            foreach (caseTimerSelfishTurn ct in source.getCaseList<caseTimerSelfishTurn>()) {
-                ct.updateOnActionStart(source);
-            }
-        }
+        protected override void actualDO() { }
 
         protected override void actualSHOW() {
             base.actualSHOW();
+
             combatUIManager.CUM.setActionCounter(thisCountAction);
             // 이거 2씩 증가 중임, 이거 하고 나면 Thing state 갱신되는지 확인 좀
         }

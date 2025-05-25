@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 using Cases;
 
@@ -30,6 +31,12 @@ namespace Processes {
                     ct.updateOnTurnStart(th);
                 }
             }
+        }
+
+        protected override void actualSHOW() {
+            base.actualSHOW();
+
+            combatUIManager.CUM.testShowTurn();
         }
     }
 }

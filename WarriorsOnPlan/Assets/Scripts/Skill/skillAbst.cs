@@ -71,7 +71,9 @@ namespace Cases {
         protected override void updateTimer(Thing source) {
             if (isCoolTimeNeeded) {
                 base.updateTimer(source);
-                source.updatePanelSkillTimer();
+                if (combatManager.CM.combatState == enumCombatState.reenact) {
+                    source.updatePanelSkillTimer();
+                }
             }
         }
 

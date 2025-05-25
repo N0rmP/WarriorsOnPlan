@@ -72,9 +72,10 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
     }
 
     protected void show() {
+        return; //★ 이거부터 고치고 circuitSetter 좀 어떻게 해봐
         if (!doBeforeShow()) {
             return;
-        }
+        }        
 
         objGut.GetComponent<RectTransform>().localPosition = new Vector3(9999f, 9999f);
         objGut.SetActive(true);

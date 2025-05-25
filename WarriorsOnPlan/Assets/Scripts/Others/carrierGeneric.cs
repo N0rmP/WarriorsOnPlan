@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class carrierGeneric<T> {
     // hanger is °Ý³³°í... IM POOR AT ENGLISH SO I FORGOT IT ONCE SRY

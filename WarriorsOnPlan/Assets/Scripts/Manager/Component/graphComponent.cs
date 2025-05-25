@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.ShaderData;
 
 public class graphComponent {
     public readonly int size0;
@@ -12,7 +10,7 @@ public class graphComponent {
     private GameObject prefabNode;
 
     private node[,] graph;
-
+    
     public graphComponent(int parSize0, int parSize1) {
         size0 = parSize0;
         size1 = parSize1;
@@ -27,6 +25,21 @@ public class graphComponent {
 
                 if (i > 0) {
                     if (j > 0) {
+                        graph[i, j].setLink(graph[i - 1, j - 1], EDirection.backward_left);
+                    }
+                    graph[i, j].setLink(graph[i - 1, j], EDirection.left);
+                    if (j < size1 - 1) {
+                        graph[i, j].setLink(graph[i - 1, j + 1], EDirection.forward_left);
+                    }
+                }
+
+                if (j > 0) {
+                    graph[i, j].setLink(graph[i, j - 1], EDirection.backward);
+                }
+                /*
+                ★ 희대의 멍청이 해삼 말미잘 등신 머저리의 상징으로써 이 주석을 남겨놓습니다. 과거의 최정훈은 두고두고 반성하세요 이 돌대가리 빡통아
+                if (i > 0) {
+                    if (j > 0) {
                         graph[i, j].setLink(graph[i - 1, j - 1], EDirection.forward_right);
                     }
                     graph[i, j].setLink(graph[i - 1, j], EDirection.forward);
@@ -38,6 +51,7 @@ public class graphComponent {
                 if (j > 0) {
                     graph[i, j].setLink(graph[i, j - 1], EDirection.right);
                 }
+                */
             }
         }
 
@@ -63,7 +77,11 @@ public class graphComponent {
         }
     }
 
-    public void BFS(node parDeparture, Func<node, bool> delGoalCheck, Stack<EDirection> parRoute, EDirection parFirstDirection = EDirection.forward) {
+    public void BFS(node parDeparture, Func<node, bool> delGoalCheck, Stack<EDirection> parRoute, Vector2 parVectorToDestination) {
+        if (parVectorToDestination == null) {
+            parVectorToDestination = Vector2.zero;
+        }
+
         // in this method we call tuple (node cur, EDirection EDirFromdeparture, int distFromDeparture) 'search'
         Queue<(node curNode, EDirection EDirFromDeparture, int distFromdeparture)> tempSearchQueue = new Queue<(node cur, EDirection EDirFromDeparture, int distFromDeparture)>();
         tempSearchQueue.Enqueue((parDeparture, EDirection.none, 0));
@@ -71,11 +89,15 @@ public class graphComponent {
         (node curNode, EDirection EDirFromDeparture, int distFromDeparture) tempMinDistanceGoal = (null, EDirection.none, int.MaxValue);
         node tempNode;
 
-        //reset variables for search
+        // calculate the order of directions in which nodes be added while BFS searching
+        IEnumerable<EDirection> tempFirstDirection = node.getDirectionClosestSorted(parVectorToDestination);
+        int tempLinkIndex;
+
+        // reset variables for search
         resetNodeSearchVariables();
 
         parDeparture.swissArmyVisited = true;
-        //parDeparture.swissArmyEDirection = EDirection.none;
+        // parDeparture.swissArmyEDirection = EDirection.none;
         while (tempSearchQueue.Count > 0){
             tempCurSearch = tempSearchQueue.Dequeue();            
             tempNode = tempCurSearch.curNode;
@@ -86,13 +108,14 @@ public class graphComponent {
             }
 
             // enqueue non-visited nodes around
-            for (int i = (int)parFirstDirection, j = 0; j < 8; j++, i = ++i >= 8 ? 0 : i) {
-                if (tempNode.link[i] == null || tempNode.link[i].swissArmyVisited || tempNode.link[i].thingHere != null) { 
+            foreach (EDirection edir in tempFirstDirection) {
+                tempLinkIndex = (int)edir;
+                if (tempNode.link[tempLinkIndex] == null || tempNode.link[tempLinkIndex].swissArmyVisited || tempNode.link[tempLinkIndex].thingHere != null) {
                     continue; 
                 }
-                tempNode.link[i].swissArmyVisited = true;
-                tempNode.link[i].swissArmyEDirection = (EDirection)i;
-                tempSearchQueue.Enqueue((tempNode.link[i], (EDirection)i, tempCurSearch.distFromDeparture + 1));
+                tempNode.link[tempLinkIndex].swissArmyVisited = true;
+                tempNode.link[tempLinkIndex].swissArmyEDirection = edir;
+                tempSearchQueue.Enqueue((tempNode.link[tempLinkIndex], edir, tempCurSearch.distFromDeparture + 1));
             }
         }
 

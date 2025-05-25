@@ -3,11 +3,11 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEditor.SceneTemplate;
+//using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
-using Unity.VisualScripting;
+//using Unity.VisualScripting;
 using System.Text;
 
 using Cases;
@@ -111,7 +111,7 @@ public abstract class Thing : MonoBehaviour {
     }
     #endregion callbacks
 
-    #region initiation
+    #region initiation_N_restoration
     public virtual void init(enumSide parSide, int parMaxHp, int[] parSkillParameters) {
         vecMeshCenter = gameObject.getTotalBounds().center;
         thisAnimController = gameObject.GetComponent<Animator>();
@@ -148,9 +148,9 @@ public abstract class Thing : MonoBehaviour {
         tempObj.GetComponent<Canvas>().worldCamera = Camera.main;
         thisCanvasPersonal = tempObj.GetComponent<canvasPersonal>();
         thisCanvasPersonal.updateHpText(curHp);
-        thisCanvasPersonal.transform.Find("SwissArmyObject").AddComponent<releasablePersonal>().init(this);
+        thisCanvasPersonal.transform.Find("SwissArmyObject").gameObject.AddComponent<releasablePersonal>().init(this);
         if (thisSide == enumSide.player) {
-            thisCanvasPersonal.transform.Find("SwissArmyObject").AddComponent<dragablePersonal>().init(this);
+            thisCanvasPersonal.transform.Find("SwissArmyObject").gameObject.AddComponent<dragablePersonal>().init(this);
         }
 
         tempObj = Instantiate(Resources.Load<GameObject>("Prefab/Cursor"));
@@ -231,13 +231,13 @@ public abstract class Thing : MonoBehaviour {
             addCase(mc.getRestoredIt<caseBase>());
         }
 
-        thisCanvasPersonal.updateHpText(curHp);
+        thisCanvasPersonal.updateHpText(curHp, true);
         updatePanelSkillTimer();
         updatePanelImageEff();
 
         resetAnimator();
         combatManager.CM.GC[parMementoThing.coordinates.c0, parMementoThing.coordinates.c1].placeThing(this);
-        Look(transform.position -
+        Look(transform.position +
             thisSide switch {
                 enumSide.player => new Vector3(0f, 0f, 1f),
                 enumSide.enemy => new Vector3(0f, 0f, -1f),
@@ -248,7 +248,7 @@ public abstract class Thing : MonoBehaviour {
     }
 
     // protected abstract skillAbst makeSkill(int[] parSkillParameters);
-    #endregion initiation
+    #endregion initiation_N_restoration
 
     #region Move
     // Thing is child of cursor, it's meaningless to set position of Thing only and you should call these methods to move Thing by moving cursor
@@ -546,7 +546,7 @@ public abstract class Thing : MonoBehaviour {
         List<toolWeapon> tempResult = new List<toolWeapon>();
         foreach (toolWeapon tw in getCaseList<toolWeapon>(false).ToArray()) {
             // skip when target is out of the weapon's range
-            if (tempDistanceToTarget > tw.rangeMax || tempDistanceToTarget < tw.rangeMin || tw.isReady) {
+            if (tempDistanceToTarget > tw.rangeMax || tempDistanceToTarget < tw.rangeMin || !tw.isReady) {
                 continue;
             }
 
@@ -752,7 +752,6 @@ public abstract class Thing : MonoBehaviour {
 
     #region processMaking
     public processAbst makeAction() {
-        testStatus();
         switch (stateCur) {
             // ★ 각각의 warrior 행동 시작 시 효과 발동
             case enumStateWarrior.controlled:

@@ -4,9 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 using Cases;
 using System.Text;
@@ -98,12 +96,7 @@ namespace Circuits {
             });
 
             combatManager.CM.GC.BFS(owner.curPosition, delGoalCheck, tempStack,
-                owner.thisSide switch { 
-                    enumSide.player => EDirection.forward,
-                    enumSide.enemy => EDirection.backward,
-                    enumSide.neutral => EDirection.right,
-                    _ => EDirection.forward
-                }
+                new Vector2(tempTargetPos.coor0 - owner.curPosition.coor0, tempTargetPos.coor1 - owner.curPosition.coor1)
             );
 
             polishEDirStackToRouteQueue(owner.curPosition, tempStack, route);

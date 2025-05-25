@@ -25,6 +25,8 @@ namespace Processes {
                     cb.onBeforeForcedMove(source, destination);
                 }
             }
+
+            departure = source.curPosition;
         }
 
         protected override void doAfterActualDo() {
@@ -37,7 +39,6 @@ namespace Processes {
         }
 
         protected override void actualDO() {
-            departure = source.curPosition;
             source.curPosition.sendThing(destination);
         }
 

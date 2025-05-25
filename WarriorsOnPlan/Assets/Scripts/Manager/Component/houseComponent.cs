@@ -247,14 +247,20 @@ public class houseComponent {
         switch (parThing.thisSide) {
             case enumSide.player:
                 listPlayerAlive.Remove(parThing);
+                listPlayerHpSorted.Remove(parThing);
+                listPlayerDDSorted.Remove(parThing);
                 listPlayerDead.Add(parThing);
                 break;
             case enumSide.enemy:
                 listEnemyAlive.Remove(parThing);
+                listEnemyHpSorted.Remove(parThing);
+                listEnemyDDSorted.Remove(parThing);
                 listEnemyDead.Add(parThing);
                 break;
             case enumSide.neutral:
                 listNeutralAlive.Remove(parThing);
+                listNeutralHpSorted.Remove(parThing);
+                listNeutralDDSorted.Remove(parThing);
                 listNeutralDead.Add(parThing);
                 break;
             default:
@@ -272,14 +278,20 @@ public class houseComponent {
         switch (parThing.thisSide) {
             case enumSide.player:
                 listPlayerDead.Remove(parThing);
+                listPlayerHpSorted.Add(parThing);
+                listPlayerDDSorted.Add(parThing);
                 listPlayerAlive.Add(parThing);
                 break;
             case enumSide.enemy:
                 listEnemyDead.Remove(parThing);
+                listEnemyHpSorted.Add(parThing);
+                listEnemyDDSorted.Add(parThing);
                 listEnemyAlive.Add(parThing);
                 break;
             case enumSide.neutral:
                 listNeutralDead.Remove(parThing);
+                listNeutralHpSorted.Add(parThing);
+                listNeutralDDSorted.Add(parThing);
                 listNeutralAlive.Add(parThing);
                 break;
             default:

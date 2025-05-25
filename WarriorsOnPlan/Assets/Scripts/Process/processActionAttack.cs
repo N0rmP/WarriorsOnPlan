@@ -40,16 +40,16 @@ namespace Processes {
         protected override void actualDO() {
             base.actualDO();
 
-            List<damageInfo> tempListDInfo = new List<damageInfo>();                        
+            List<damageInfo> listDInfo = new List<damageInfo>();                        
             
             foreach (toolWeapon tw in listWeapon){
                 foreach (damageInfo di in tw.attack(source)) {
-                    tempListDInfo.Add(di);
+                    listDInfo.Add(di);
                 }
             }
 
             combatManager.CM.executeProcess(
-                    new processByproductDealDamage(tempListDInfo.ToArray(), target)
+                    new processByproductDealDamage(listDInfo.ToArray(), target)
                 );
         }
 

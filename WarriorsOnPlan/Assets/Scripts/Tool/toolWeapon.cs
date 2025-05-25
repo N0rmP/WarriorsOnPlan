@@ -36,18 +36,18 @@ namespace Cases {
         }
         // ★ damageCur 방식 개선, 가능하면 Thing에 case changed를 bool 변수로 나타내게 해서 계산 빈도가 낮도록 메서드 1개 설계
         public int damageCur { get; set; }
-        public bool isReady { get; protected set; }
+        public virtual bool isReady {
+            get {
+                return timerCur <= 0;
+            }
+        }
         public enumDamageType damageType { get; protected set; } = enumDamageType.basic;
         public enumAttackAnimation attackAnimation { get; protected set; }
 
-        public toolWeapon(int[] parWeaponParameters) : base(parWeaponParameters, enumCaseType.tool, parIsVisible: true) {
-            isReady = (timerCur <= 0);
-        }
+        public toolWeapon(int[] parWeaponParameters) : base(parWeaponParameters, enumCaseType.tool, parIsVisible: true) { }
 
         public override void restore(mementoIParametable parMementoCase) {
             base.restore(parMementoCase);
-
-            isReady = (timerCur <= 0);
         }
 
         public override Dictionary<string, int[]> getParameters() {
@@ -72,10 +72,6 @@ namespace Cases {
             damageCur = parParameters["toolWeapon"][2];
         }
 
-        protected override void doOnAlarmed(Thing source) {
-            isReady = true;
-        }
-
         public virtual IEnumerable<damageInfo> attack(Thing parOwner) {
             doBeforeAttack();
             damageInfo tempDI = new damageInfo(parOwner, this, damageCur, damageType);
@@ -85,7 +81,6 @@ namespace Cases {
         }
 
         protected void doBeforeAttack() {
-            isReady = false;
             resetTimer();
         }
 
@@ -93,7 +88,6 @@ namespace Cases {
 
         #region basic_animation
         protected void showBasicProjectile(Vector3 parDeparture, Vector3 parDestination) {
-            Debug.Log("showBasicProjectil called");
             combatManager.CM.FC.callVFX(
                         enumVFX.projectile_simple,
                         combatManager.CM.FC.getRetrieverMoveStop(),

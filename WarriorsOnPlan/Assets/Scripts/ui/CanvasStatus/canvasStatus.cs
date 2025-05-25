@@ -78,6 +78,7 @@ public class canvasStatus : MonoBehaviour
         if (parMaxHp <= 0) {
             tempSlider.GetComponent<Slider>().value = 1f;
             tempSlider.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+            return;
         }
 
         tempSlider.GetComponent<Slider>().value = parCurHp / (float)parMaxHp;

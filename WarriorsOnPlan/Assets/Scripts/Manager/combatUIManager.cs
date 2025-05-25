@@ -52,4 +52,31 @@ public class combatUIManager : MonoBehaviour {
     public void closeCurtainOutsideBI() {
         curtainOutsideBI.SetActive(true);
     }
+
+    #region test
+    // ★ 이거 나중에 정식으로 만들어야 함
+    public void testShowTurn() {
+        TextMeshProUGUI tempTMPro = GameObject.Find("TEMP_TEXT_TURN").GetComponent<TextMeshProUGUI>();
+
+        if (combatManager.CM.combatState != enumCombatState.reenact) {
+            tempTMPro.text = "";
+            return;
+        }
+        
+        switch (combatManager.CM.sideTurn) {
+            case enumSide.player:
+                tempTMPro.text = "Player Turn";
+                tempTMPro.color = Color.blue;
+                break;
+            case enumSide.enemy:
+                tempTMPro.text = "Enemy Turn";
+                tempTMPro.color = Color.red;
+                break;
+            default:
+                tempTMPro.text = "Probably Neutral Turn";
+                tempTMPro.color = Color.yellow;
+                break;
+        }
+    }
+    #endregion test
 }
