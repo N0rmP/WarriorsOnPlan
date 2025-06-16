@@ -75,12 +75,18 @@ public class node : MonoBehaviour {
     }
 
     #region thingManagement
-    public void placeThing(Thing parThing) {
-        if (thingHere != null) { return; /* ★사용자 정의 exception 만들어서 "node에 뭐 있는데요?" UI라도 띄우기 */ }
+    public bool placeThing(Thing parThing, bool parIsTeleport = false) {
+        if (thingHere != null) { 
+            return false;
+        }
 
         parThing.curPosition = this;
         this.thingHere = parThing;
-        parThing.setPosition(getVector3());
+        if (parIsTeleport) {
+            parThing.setPosition(getVector3());
+        }
+
+        return true;
     }
 
     public bool sendThing(EDirection parDir) {
@@ -88,17 +94,20 @@ public class node : MonoBehaviour {
         if ((link[(int)parDir] == null) && (link[(int)parDir].thingHere != null)) {
             return false;
         }
+
         thingHere.curPosition = link[(int)parDir];
         link[(int)parDir].thingHere = thingHere;
         this.thingHere = null;
+
         return true;
     }
 
     public bool sendThing(node parNode, bool parIsTeleport = false) {
-        //check if its not boundary, and if there is something on destination
+        //check if it's out of boundary, and if there is something on destination
         if ((parNode == null) || (parNode.thingHere != null)) {
             return false;
         }
+
         thingHere.curPosition = parNode;
         parNode.thingHere = thingHere;
         this.thingHere = null;
@@ -110,10 +119,25 @@ public class node : MonoBehaviour {
         return true;
     }
 
+    // swapThing basically sends thing to parNode, if some-Thing is on parNode then change positions of two
+    public bool swapThing(node parNode, bool parIsTeleport = false) {
+        if (parNode == null || parNode == this) {
+            return false;
+        }
+
+        Thing tempThingbuffer = parNode.thingHere;
+        parNode.expelThing(false);
+        sendThing(parNode, parIsTeleport);
+        if (tempThingbuffer != null) {            
+            placeThing(tempThingbuffer, parIsTeleport);
+        }
+
+        return true;
+    }
+
     // expelThing only make thingHere not to be on this node, other processes like animation or position change ain't included
     public void expelThing(bool parIsPositionChange = true) {
         if (thingHere == null) {
-            Debug.Log("node (" + coor0 + " , " + coor1 + ") tried to expel thingHere while there's nothing on it");
             return;
         }
 
@@ -142,6 +166,7 @@ public class node : MonoBehaviour {
     #region StaticMethods
     // getDistance returns only the larger one between each coordinates difference, it's for distance calculation in weapon (or skill) range
     public static int getDistance(node n1, node n2) {
+
         return Math.Max(
                 Math.Abs(n1.coor0 - n2.coor0),
                 Math.Abs(n1.coor1 - n2.coor1)

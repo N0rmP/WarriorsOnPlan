@@ -7,17 +7,20 @@ using UnityEngine.EventSystems;
 public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler {
     protected enumDrag thisDrag = enumDrag.none;
 
-    private RectTransform thisRectTransform;
+    protected RectTransform thisRectTransform;
 
-    protected bool isForPreparing = true;
+    // protected bool isForPreparing = true;
     protected bool isReturnWhenReleased = true;
-    private Transform transformParent;
+    private static Transform transformCanvasDragableWandering;
+    private Transform parentToReturn;
     private Vector3 posReturn;
 
     public void Awake() {
         if (!TryGetComponent<RectTransform>(out thisRectTransform)) {
             thisRectTransform = gameObject.AddComponent<RectTransform>();
         }
+
+        transformCanvasDragableWandering = GameObject.Find("canvasDraggableWandering").transform;
     }
 
     // parIsAllDone is true when dragableObject did its job completely and it's time for it to be gone, it's different from returning
@@ -26,8 +29,8 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
             leave();
         }else{
             if (isReturnWhenReleased) {
-                transform.SetParent(transformParent);
-                //thisRectTransform.localPosition = posReturn;
+                transform.SetParent(parentToReturn);
+                thisRectTransform.localPosition = posReturn;
             } else {
                 gameObject.SetActive(false);
             }
@@ -42,27 +45,25 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
         gameManager.GM.DC.curDragging = thisDrag;
 
         if (isReturnWhenReleased) {
-            transformParent = transform.parent;
+            parentToReturn = transform.parent;
             posReturn = thisRectTransform.localPosition;
         }
 
-        transform.SetParent(gameManager.GM.canvasMain.transform);
+        transform.SetParent(transformCanvasDragableWandering);
 
         doWhenHoveringStart();
     }
 
     public virtual void OnEndDrag(PointerEventData eventData) {
         doAfterReleased(
-            gameManager.GM.DC.relayRelease(
-                getParameters()
-                )
-            );
+            gameManager.GM.DC.relayRelease(thisDrag, getDragableParameters())
+        );
 
         doWhenHoveringEnd();
     }
 
     protected virtual void doWhenHoveringStart() { }
     protected virtual void doWhenHoveringEnd() { }
-    protected abstract System.Object[] getParameters();
+    protected abstract System.Object[] getDragableParameters();
     protected abstract void leave();
 }

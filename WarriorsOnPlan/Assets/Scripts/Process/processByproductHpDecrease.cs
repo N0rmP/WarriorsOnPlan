@@ -46,14 +46,17 @@ namespace Processes {
         }
 
         protected override void actualSHOW() {
-            if (isShowInstant) {
+            void showHpDecrease() {
                 source.updatePanelHp();
-                // ★ 입은 피해가 숫자 모양으로 뿅 튀어나오게 만들기
+                gameManager.GM.PC.popupDamage(source.transform.position + new Vector3(Random.Range(-0.25f, 0.25f), 0f, 1f), value.ToString(), false);
+            }
+
+            if (isShowInstant) {
+                showHpDecrease();
             } else {
                 gameManager.GM.TC.addDelegate(
                     () => {
-                        source.updatePanelHp();
-                        // ★ 입은 피해가 숫자 모양으로 뿅 튀어나오게 만들기
+                        showHpDecrease();
                     },
                     combatManager.CM.getBodyAnimationDuration()
                 );

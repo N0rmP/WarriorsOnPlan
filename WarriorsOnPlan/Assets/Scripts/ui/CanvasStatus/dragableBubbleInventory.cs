@@ -8,22 +8,24 @@ using System.Text;
 using System;
 
 public class dragableBubbleInventory : dragableBubbleAbst, IPointerClickHandler {
+    public Thing owner { get; private set; }
+
     public new void Awake() {
         base.Awake();
         thisDrag = enumDrag.bubbleInventory;
     }
 
     protected override void doWhenHoveringStart() {
+        base.doWhenHoveringStart();
         combatUIManager.CUM.closeCurtainOutsideBI();
     }
 
     protected override void doWhenHoveringEnd(){
+        base.doWhenHoveringEnd();
         combatUIManager.CUM.openCurtainOutsideBI();
     }
-    
-    public Thing owner { get; private set; }
 
-    protected override System.Object[] getParameters() {
+    protected override System.Object[] getDragableParameters() {
         return new System.Object[1] { thisTool_ };
     }
 

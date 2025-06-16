@@ -84,6 +84,7 @@ public abstract class Thing : MonoBehaviour {
     public skillAbst thisSkill { get; protected set; }
     public Thing whatToAttack { get; private set; }
     public Thing whatToUseSkill { get; private set; }
+    public Sprite portrait { get; protected set; }
     public node curPosition {
         get {
             if (curCoor == (-1, -1)) {
@@ -100,14 +101,18 @@ public abstract class Thing : MonoBehaviour {
     public toolWeapon[] copyWeapons {
         get { return listToolWeapon.ToArray(); }
     }
-
-    public Sprite portrait { get; protected set; }
+    public int thisActionOrder {
+        get {
+            return combatManager.CM.HouC.getPersonalActionOrder(this);
+        }
+    }
     #endregion property
     #endregion variable
 
     #region callbacks
     public void Update() {
         // ★ 메터리얼 페이드 인아웃 구현
+        setCursorHovered(thisCanvasPersonal.gameObject.checkHoveredWorld());
     }
     #endregion callbacks
 
@@ -148,8 +153,8 @@ public abstract class Thing : MonoBehaviour {
         tempObj.GetComponent<Canvas>().worldCamera = Camera.main;
         thisCanvasPersonal = tempObj.GetComponent<canvasPersonal>();
         thisCanvasPersonal.updateHpText(curHp);
-        thisCanvasPersonal.transform.Find("SwissArmyObject").gameObject.AddComponent<releasablePersonal>().init(this);
         if (thisSide == enumSide.player) {
+            thisCanvasPersonal.transform.Find("SwissArmyObject").gameObject.AddComponent<releasablePersonal>().init(this);
             thisCanvasPersonal.transform.Find("SwissArmyObject").gameObject.AddComponent<dragablePersonal>().init(this);
         }
 
@@ -176,7 +181,7 @@ public abstract class Thing : MonoBehaviour {
         updatePanelSkillTimer();
 
         // prepare circuits, be aware that this is the only creation of circuitHub in total script of Thing class
-        thisCircuitHub = new circuitHub(new int[2] { (int)parSide, 0b010});
+        thisCircuitHub = new circuitHub(new int[2] { (int)parSide, thisSkill.targetGroupDefault});
         addCase(thisCircuitHub);
 
         // ★ 만약 다른 shader를 사용하는 Thing이 존재한다면 아래 내용을 변경해야 함
@@ -269,12 +274,7 @@ public abstract class Thing : MonoBehaviour {
     }
     #endregion Move
 
-    #region affecting
-    public virtual void updateTargets() {
-        whatToAttack = thisCircuitHub.selectAttackTarget(this);
-        whatToUseSkill = thisCircuitHub.selectSkillTarget(this);
-    }
-
+    #region panel
     public void updatePanelTotal() {
         updatePanelSkillTimer();
         updatePanelHp();
@@ -282,7 +282,7 @@ public abstract class Thing : MonoBehaviour {
     }
 
     public void updatePanelSkillTimer() {
-        if (thisSkill.isCoolTimeNeeded) {
+        if (thisSkill.isTimerNeeded) {
             thisCanvasPersonal.updateSkillTimer(thisSkill.timerCur, thisSkill.timerMax);
         } else {
             thisCanvasPersonal.openSkillTimer();
@@ -302,6 +302,14 @@ public abstract class Thing : MonoBehaviour {
         }
     }
 
+    public void updatePanelActionOrder() {
+        thisCanvasPersonal.updateActionOrder(combatManager.CM.HouC.getPersonalActionOrder(this));
+    }
+
+    public void updatePanelDragableReleasable() {
+        thisCanvasPersonal.updateDragableReleasable();
+    }
+
     public void addPanelImgEffect(caseBase parCB) {
         // if parCB is not visible or Effect, skip it
         if (!parCB.isVisible || parCB.caseType != enumCaseType.effect) {
@@ -313,7 +321,14 @@ public abstract class Thing : MonoBehaviour {
 
     public void removePanelImgEffect(caseBase parCB) {
         thisCanvasPersonal.removeImgEffect(parCB);
-    }    
+    }
+    #endregion panel
+
+    #region affecting
+    public virtual void updateTargets() {
+        whatToAttack = thisCircuitHub.selectAttackTarget(this);
+        whatToUseSkill = thisCircuitHub.selectSkillTarget(this);
+    }
 
     public void updateState() {
         if (stateCur <= enumStateWarrior.dead) { return; }
@@ -396,18 +411,18 @@ public abstract class Thing : MonoBehaviour {
 
     #region circuit
     public void setCircuit(
-        int parCodeSensorForMove, int[] ppSensorForMove,
-        int parCodeNavigatorPrioritized, int[] ppNavigatorPrioritized,
         int parCodeNavigatorIdle, int[] ppNavigatorIdle,
+        int parCodeSensorForMove, int[] ppSensorForMove,
+        int parCodeNavigatorPrioritized, int[] ppNavigatorPrioritized,        
         int parCodeSensorForSkill, int[] ppSensorForSkill,
         int parCodeSelecterForSkill, int[] ppSelecterForSkill,
         int parCodeSelecterForAttack, int[] ppSelecterForAttack) {
 
         thisCircuitHub.setCircuitHub(
         thisSide,
-        parCodeSensorForMove, ppSensorForMove,
-        parCodeNavigatorPrioritized, ppNavigatorPrioritized,
         parCodeNavigatorIdle, ppNavigatorIdle,
+        parCodeSensorForMove, ppSensorForMove,
+        parCodeNavigatorPrioritized, ppNavigatorPrioritized,        
         parCodeSensorForSkill, ppSensorForSkill,
         parCodeSelecterForSkill, ppSelecterForSkill,
         parCodeSelecterForAttack, ppSelecterForAttack
@@ -415,11 +430,27 @@ public abstract class Thing : MonoBehaviour {
     }
 
     public string[] getCircuitInfo() {
-        return thisCircuitHub.getTotalInfo();
+        return thisCircuitHub.getInfoTotal();
     }
 
-    public int[] getCircuitParameters(int parCircuitType) {
-        return thisCircuitHub.getSingleParameter(parCircuitType);
+    public string getCircuitInfo(int parNum) {
+        return thisCircuitHub.getInfoSingle(parNum);
+    }
+
+    public int getCircuitCode(int parNum) {
+        return thisCircuitHub.getCodeSingle(parNum);
+    }
+
+    public int[] getCircuitParameter(int parNum) {
+        return thisCircuitHub.getParameterSingle(parNum) ?? new int[0];
+    }
+
+    public int getSelecterForSkillTargetGroup() {
+        return thisCircuitHub.getSelecterForSkillTargetGroup();
+    }
+
+    public int getSelecterForAttackTargetGroup() {
+        return thisCircuitHub.getSelecterForAttackTargetGroup();
     }
     #endregion circuit
 
@@ -542,15 +573,18 @@ public abstract class Thing : MonoBehaviour {
     }
 
     public List<toolWeapon> getListAvailableWeapon(Thing parTarget = null) {
-        int tempDistanceToTarget = node.getDistance(curPosition, (parTarget ?? whatToAttack).curPosition);
         List<toolWeapon> tempResult = new List<toolWeapon>();
-        foreach (toolWeapon tw in getCaseList<toolWeapon>(false).ToArray()) {
-            // skip when target is out of the weapon's range
-            if (tempDistanceToTarget > tw.rangeMax || tempDistanceToTarget < tw.rangeMin || !tw.isReady) {
-                continue;
-            }
 
-            tempResult.Add(tw);
+        if (parTarget != null) {    // if parTarget is null, all weapons are useless
+            int tempDistanceToTarget = node.getDistance(curPosition, parTarget.curPosition);
+            foreach (toolWeapon tw in getCaseList<toolWeapon>(false).ToArray()) {
+                // skip when target is out of the weapon's range
+                if (tempDistanceToTarget > tw.rangeMax || tempDistanceToTarget < tw.rangeMin || !tw.isReady) {
+                    continue;
+                }
+
+                tempResult.Add(tw);
+            }
         }
 
         return tempResult;
@@ -562,6 +596,11 @@ public abstract class Thing : MonoBehaviour {
         if (parLookDestination != null) {
             transform.rotation = Quaternion.LookRotation(parLookDestination - transform.position);
         }
+    }
+
+    private void doBeforeAnimate() {
+        setAnimationSpeed();
+        thisAnimController.ResetTrigger("trigDamaged");
     }
 
     private void setAnimationSpeed() {
@@ -588,13 +627,13 @@ public abstract class Thing : MonoBehaviour {
     }
 
     public void animateMove() {
-        setAnimationSpeed();
+        doBeforeAnimate();
         thisAnimController.SetBool("isRun", true);
     }
 
     public void animateAttack(bool parIsProjectile = true) {
         int tempProjectileCount = 0;
-        setAnimationSpeed();
+        doBeforeAnimate();
         foreach (string trigName in setAttackTriggerName) {
             thisAnimController.SetTrigger(trigName);
             if (trigName == "trigAttackBrandish" || trigName == "trigAttackBow" || trigName == "trigAttackCase") {
@@ -605,12 +644,22 @@ public abstract class Thing : MonoBehaviour {
     }
 
     public void animateUseSkill() {
-        setAnimationSpeed();
+        doBeforeAnimate();
         thisAnimController.SetTrigger("trigUseSkill");
     }
 
+    public void animateDamaged() {
+        // damaged animation has lowest priority, skip damaged animation when warrior is not in idle animation
+        if (!thisAnimController.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
+            return;
+        }
+
+        doBeforeAnimate();
+        thisAnimController.SetTrigger("trigDamaged");
+    }
+
     public void animateDead() {
-        setAnimationSpeed();
+        doBeforeAnimate();
         thisAnimController.SetTrigger("trigDead");
     }
 

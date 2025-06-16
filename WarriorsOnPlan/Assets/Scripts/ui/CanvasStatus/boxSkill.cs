@@ -25,6 +25,6 @@ public class boxSkill : showerCase {
             transform.GetChild(0).GetComponent<imgRoundRectangle>().setImg(null);
             Debug.Log("error made in boxSkill : " + e.Message);
         }
-        transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = thisCase.caseName;
+        transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = thisCase.infoName;
     }
 }

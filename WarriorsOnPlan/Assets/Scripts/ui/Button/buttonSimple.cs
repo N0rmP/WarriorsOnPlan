@@ -4,9 +4,13 @@ using UnityEngine;
 using TMPro;
 
 public class buttonSimple : MonoBehaviour {
-    public void startCombat() {
-        combatManager.CM.startCombat();
+    public void activateBoxCircuitConcrete(int parCircuitTypeBeingChosen) {
+        combatUIManager.CUM.CCS.activateBoxCircuitConcrete(parCircuitTypeBeingChosen);
     }
+
+    public void confirmCircuitSetting() {
+        combatUIManager.CUM.CStatus.confirmCircuitSetting();
+    }    
 
     public void restorePrev() {
         combatManager.CM.restorePreviousAction();

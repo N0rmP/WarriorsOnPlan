@@ -106,6 +106,7 @@ public class mementoHouse {
 
 public class mementoThing {
     public Thing me { get; private set; }
+    public int actionOrder { get; private set; }
     public int maxHp { get; private set; }
     public int curHp { get; private set; }
     public readonly enumSide side;
@@ -128,6 +129,7 @@ public class mementoThing {
         mementoIParametable parMCircuitHub
         ) {
         me = parMe;
+        actionOrder = combatManager.CM.HouC.getPersonalActionOrder(me);
         maxHp = parMaxHp;
         curHp = parCurHp;
         side = me.thisSide;

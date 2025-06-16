@@ -19,7 +19,6 @@ public class canvasStatus : MonoBehaviour
     }
 
     public void Start() {
-
         dataArbitraryStringArray tempData = gameManager.GM.JC.getJson<dataArbitraryStringArray>("Tooltip/statusTooltip");
         int tempSet = 0;    // tempSet represents the number of texts set into the text-showers
         int tempEnd = tempData.SwissArmyStringArray.Length;
@@ -62,13 +61,9 @@ public class canvasStatus : MonoBehaviour
         updateNumber();
         updateEffect();
 
-        if (combatManager.CM.checkControllability(thisThing)) {
-            transform.GetChild(11).GetComponent<Button>().interactable = true;
-            RI.setInteractivity(true);
-        } else {
-            transform.GetChild(11).GetComponent<Button>().interactable = false;
-            RI.setInteractivity(false);
-        }
+        // curtainInventory is controlled by canvasStatus not combatUIManager.doWhenCombatStart,
+        // because it should be closed not only when combat starts but also when non-player thing is selected
+        RI.setInteractivity(combatManager.CM.checkControllability(thisThing));
     }
 
     public void updateHP(int parCurHp, int parMaxHp) {
@@ -144,5 +139,11 @@ public class canvasStatus : MonoBehaviour
         }
 
         CCS.activateSetter(thisThing);
+    }
+
+    public void confirmCircuitSetting() {
+        if (CCS.isActiveAndEnabled) {
+            CCS.confirm();
+        }
     }
 }

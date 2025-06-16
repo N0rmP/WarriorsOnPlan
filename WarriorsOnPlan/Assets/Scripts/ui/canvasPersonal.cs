@@ -14,6 +14,7 @@ public class canvasPersonal : MonoBehaviour {
     private float destinationSlider;
     private Image imageHp;
     private Slider sliderSkill;
+    private GameObject thisSwissArmyObject;
 
     public void Awake() {
         if (carrierIRR == null) {
@@ -23,7 +24,6 @@ public class canvasPersonal : MonoBehaviour {
                     GameObject tempObj = GameObject.Instantiate(tempIEPrefab);
                     tempObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.6f, 0.6f);
                     return tempObj.GetComponent<imgRoundRectangle>();
-
                 },
                 (x) => {
                     x.transform.SetParent(null);
@@ -33,6 +33,7 @@ public class canvasPersonal : MonoBehaviour {
 
         imageHp = transform.GetChild(0).GetComponent<Image>();
         sliderSkill = transform.GetChild(1).GetComponent<Slider>();
+        thisSwissArmyObject = transform.Find("SwissArmyObject").gameObject;
     }
 
     public void Update() {
@@ -90,10 +91,33 @@ public class canvasPersonal : MonoBehaviour {
         sliderSkill.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (parTimerCur > 0) ? parTimerCur.ToString() : "";
     }
 
+    public void updateActionOrder(int parActionOrder) {
+        transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = parActionOrder.ToString();
+    }
+
     // if skill doesn't require timer, you can make the skill icon fully open always by openSkillTimer
     public void openSkillTimer() {
         destinationSlider = 0f;
         sliderSkill.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+    }
+
+    public void updateDragableReleasable() {
+        dragablePersonal tempDragable; 
+        releasablePersonal tempReleasable;
+
+        // dragable update
+        if (thisSwissArmyObject.TryGetComponent<dragablePersonal>(out tempDragable)) {
+            // it means SwissArmyObject is being dragged if it is not child of this gameObject, force OnEndFrag execution and terminate dragging
+            if (thisSwissArmyObject.transform.parent != transform) {
+                tempDragable.OnEndDrag(new PointerEventData(EventSystem.current));
+            }
+            tempDragable.enabled = combatManager.CM.combatState == enumCombatState.preparing;
+        }
+
+        // releasable update
+        if (thisSwissArmyObject.TryGetComponent<releasablePersonal>(out tempReleasable)) {
+            tempReleasable.enabled = combatManager.CM.combatState == enumCombatState.preparing;
+        }
     }
     #endregion updates
 

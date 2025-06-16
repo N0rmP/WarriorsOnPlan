@@ -6,12 +6,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Circuits;
+using System.Linq;
 
 namespace Cases {
     public class circuitHub : caseTimerSelfishTurn, ICaseUpdateState {
         private sensorAbst sensorForMove;
-        private navigatorAbst navigatorPrioritized;
         private navigatorAbst navigatorIdle;
+        private navigatorAbst navigatorPrioritized;        
         private navigatorAbst navigatorCur;
 
         private sensorAbst sensorForSkill;
@@ -21,69 +22,88 @@ namespace Cases {
 
 
         public circuitHub(int[] parParameter) : base(new int[2] { -1, -1 }, enumCaseType.circuit, false) {
-            sensorForMove = new sensorNothing(new int[0]);
-            navigatorPrioritized = new navigatorStationary(new int[0]);
-            navigatorIdle = new navigatorStationary(new int[0]);
-            sensorForSkill = new sensorNothing(new int[0]);
-            selecterForSkill = new selecterClosest(new int[2] { parParameter[0], parParameter[1] });
-            selecterForAttack = new selecterClosest(new int[2] { parParameter[0], 0b010 });
+            setCircuitHub(
+                (enumSide)parParameter[0],
+                1202, new int[0],
+                1101, new int[0],
+                1202, new int[0],
+                1102, new int[0],
+                1301, new int[1] { parParameter[1] },
+                1301, new int[1] { 0b0010 }
+                );
+        }
+
+        private circuitAbst convertNumToCircuit(int parNum) {
+            return parNum switch {
+                0 => navigatorIdle,
+                1 => sensorForMove,
+                2 => navigatorPrioritized,
+                3 => sensorForSkill,
+                4 => selecterForSkill,
+                5 => selecterForAttack,
+                _ => navigatorIdle
+            };
         }
 
         #region setCircuitHub
+        
         public void setCircuitHub(
         enumSide parSourceSide,
+        int parCodenavigatorIdle, int[] ppNavigatorIdle,
         int parCodeSensorForMove, int[] ppSensorForMove,
-        int parCodeNavigatorPrioritized, int[] ppNavigatorPrioritized,
-        int parCodenavigatorInferior, int[] ppnavigatorInferior,
+        int parCodeNavigatorPrioritized, int[] ppNavigatorPrioritized,        
         int parCodeSensorForSkill, int[] ppSensorForSkill,
         int parCodeSelecterForSkill, int[] ppSelecterForSkill,
         int parCodeSelecterForAttack, int[] ppSelecterForAttack) {
 
             // makeOrRestore 
-            void makeOrRestore<T>(ref T parCircuit, int parCode, IEnumerable<int> parParameter) where T : circuitAbst<T> {
-                if (parCircuit.code == parCode) {
-                    parCircuit.restoreParameters(parParameter.GetEnumerator());
-                } else {
-                    parCircuit = gameManager.GM.MC.makeCodableObject<T>(parCode, parParameter);
-                }
+            void makeOrRestore<T>(ref T parCircuit, int parCode, IEnumerable<int> parParameter) where T : circuitAbst {
+                parCircuit = gameManager.GM.MC.makeCodableObject<T>(parCode, parParameter);
             }
 
-            makeOrRestore<sensorAbst>(ref sensorForMove, parCodeSensorForMove, ppSensorForMove);
-            if (sensorForMove is not sensorNothing) {
-                makeOrRestore<navigatorAbst>(ref navigatorPrioritized, parCodeNavigatorPrioritized, ppNavigatorPrioritized);
-            }
-            makeOrRestore<navigatorAbst>(ref navigatorIdle, parCodenavigatorInferior, ppnavigatorInferior);
-            makeOrRestore<sensorAbst>(ref sensorForSkill, parCodeSensorForSkill, ppSensorForSkill);
-            // ★ 일단 당장의 제출을 위해 임시로 만들어볼 것, 나중에 circuitsetter에서 targetGroup 관련 매개변수를 가져오도록 변경할 것
-            makeOrRestore<selecterAbst>(ref selecterForSkill, parCodeSelecterForSkill, new int[1] { 0b010 });
-            makeOrRestore<selecterAbst>(ref selecterForAttack, parCodeSelecterForAttack, new int[1] { 0b010 });
+            makeOrRestore(ref navigatorIdle, parCodenavigatorIdle, ppNavigatorIdle);
+            makeOrRestore(ref sensorForMove, parCodeSensorForMove, ppSensorForMove);
+            makeOrRestore(ref navigatorPrioritized, parCodeNavigatorPrioritized, ppNavigatorPrioritized);
+            makeOrRestore(ref sensorForSkill, parCodeSensorForSkill, ppSensorForSkill);
+            makeOrRestore(ref selecterForSkill, parCodeSelecterForSkill, ppSelecterForSkill);
+            makeOrRestore(ref selecterForAttack, parCodeSelecterForAttack, ppSelecterForAttack);
         }
         #endregion setCircuitHub
 
-        public string[] getTotalInfo() {
+        // region relay_GET relays internal information of each circuit
+        #region relay_GET
+        public string[] getInfoTotal() {
             return new string[6] {
-            sensorForMove.singleInfo,
-            navigatorPrioritized.singleInfo,
-            navigatorIdle.singleInfo,
-            sensorForSkill.singleInfo,
-            selecterForSkill.singleInfo,
-            selecterForAttack.singleInfo
+            navigatorIdle.infoDescription,
+            sensorForMove.infoDescription,
+            navigatorPrioritized.infoDescription,            
+            sensorForSkill.infoDescription,
+            selecterForSkill.infoDescription,
+            selecterForAttack.infoDescription
         };
         }
 
-        // getSingleParameter returns parameters of one-single circuitAbst
-        public int[] getSingleParameter(int parCircuitType) {
-            IParametable tempIP = (parCircuitType switch {
-                0 => sensorForMove,
-                1 => navigatorPrioritized,
-                2 => navigatorIdle,
-                3 => sensorForSkill,
-                4 => selecterForSkill,
-                5 => selecterForAttack,
-                _ => new sensorNothing(new int[0])
-            });
-            return tempIP?.getParameters()["concrete"];
+        public string getInfoSingle(int parNum) {
+            return convertNumToCircuit(parNum).infoDescription;
         }
+
+        public int getCodeSingle(int parNum) {
+            return convertNumToCircuit(parNum).code;
+        }
+
+        // getSingleParameter returns parameters of one-single circuitAbst
+        public int[] getParameterSingle(int parNum) {
+            return convertNumToCircuit(parNum).getParameters()["concrete"];
+        }
+
+        public int getSelecterForSkillTargetGroup() {
+            return selecterForSkill.targetGroup;
+        }
+
+        public int getSelecterForAttackTargetGroup() {
+            return selecterForAttack.targetGroup;
+        }
+        #endregion relay_GET
 
         public node getNextRoute(Thing source) {
             navigatorCur.calculateNewRoute(source);
@@ -100,16 +120,16 @@ namespace Cases {
 
         #region ICaseImplementation
         public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source) {
+            /* 서킷 변경이 일부에 한해 circuitHub가 총괄하도록 변경됨, 추후 필요성이 없다고 최종판단되면 삭제할 것
             // update circuit on their own
-            sensorForMove = sensorForMove?.getValidCircuit(source);
-            navigatorPrioritized = navigatorPrioritized?.getValidCircuit(source);
             navigatorIdle = navigatorIdle?.getValidCircuit(source);
+            sensorForMove = sensorForMove?.getValidCircuit(source);
+            navigatorPrioritized = navigatorPrioritized?.getValidCircuit(source);            
             sensorForSkill = sensorForSkill?.getValidCircuit(source);
             selecterForSkill = selecterForSkill?.getValidCircuit(source);
             selecterForAttack = selecterForAttack?.getValidCircuit(source);
+            */
 
-            // ★ sensorForMove를 통해 navigator 갱신
-            // Debug.Log(source + " : " + sensorForMove + " / " + sensorForMove.checkWigwagging(source));
             navigatorCur = sensorForMove.checkWigwagging(source) ? navigatorPrioritized : navigatorIdle;
 
             return (this,
@@ -119,8 +139,11 @@ namespace Cases {
         }
 
         protected override void updateTimer(Thing source) {
+            /*
+            ★ 추후 timer 기능이 인터페이스화 되면 type 확인하고 각각 실행시킬 것
             sensorForSkill.updateTimer();
             sensorForMove.updateTimer();
+            */
         }
         #endregion ICaseImplementation
 
@@ -128,11 +151,9 @@ namespace Cases {
         public override List<object> getReference() {
             try {
                 List<object> tempResult = base.getReference();
-                tempResult.Add(sensorForMove.getMementoIParametable());
-                if (sensorForMove is not sensorNothing) {
-                    tempResult.Add(navigatorPrioritized.getMementoIParametable());
-                }
                 tempResult.Add(navigatorIdle.getMementoIParametable());
+                tempResult.Add(sensorForMove.getMementoIParametable());
+                tempResult.Add(navigatorPrioritized.getMementoIParametable());
                 tempResult.Add(sensorForSkill.getMementoIParametable());
                 tempResult.Add(selecterForSkill.getMementoIParametable());
                 tempResult.Add(selecterForAttack.getMementoIParametable());
@@ -155,11 +176,9 @@ namespace Cases {
             base.restore(parMementoCase);
 
             int tempInd = 0;
+            navigatorIdle = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
             sensorForMove = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();
             navigatorPrioritized = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
-            if (sensorForMove is not sensorNothing) {
-                navigatorIdle = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
-            }
             sensorForSkill = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();
             selecterForSkill = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<selecterAbst>();
             selecterForAttack = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<selecterAbst>();
@@ -170,10 +189,10 @@ namespace Cases {
         public void testAllCircuits() {
             StringBuilder temp = new StringBuilder();
             temp.Append("- - - circuitHub TESTING- - - ");
+            temp.Append("\nnavigatorIdle : " + navigatorIdle);
             temp.Append("\nsensorForMove : " + sensorForMove);
-            temp.Append("\nnavigatorPrioritized : " + navigatorPrioritized);
-            temp.Append("\nnavigatorInferior : " + navigatorIdle);
-            temp.Append("\nnavigatorCur : " + navigatorCur);
+            temp.Append("\nnavigatorPrioritized : " + navigatorPrioritized);            
+            temp.Append("\n navigatorCur : " + navigatorCur);
             temp.Append("\nsensorForSkill : " + sensorForSkill);
             temp.Append("\nselecterForSkill : " + selecterForSkill);
             temp.Append("\nselecterForAttack : " + selecterForAttack);

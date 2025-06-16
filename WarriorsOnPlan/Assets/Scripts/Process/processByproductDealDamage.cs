@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,17 +72,27 @@ namespace Processes {
         }
 
         protected override void actualSHOW() {
+            Action<Vector3> tempDelShow = null;
+            HashSet<enumVFX> tempSetEnumVfx = new HashSet<enumVFX>();
             foreach (damageInfo di in arrDInfo) {
-                if (isShowInstant) {
-                    di.SHOW(target.transform.position);
-                } else {
-                    gameManager.GM.TC.addDelegate(
-                        () => {
-                            di.SHOW(target.transform.position);
-                        },
-                        combatManager.CM.getBodyAnimationDuration()
-                    );
+                if (tempSetEnumVfx.Contains(di.vfxHit)) {
+                    continue;
                 }
+                tempDelShow += di.SHOW;
+                tempSetEnumVfx.Add(di.vfxHit);
+            }
+
+            if (isShowInstant) {
+                tempDelShow(target.transform.position);
+                target.animateDamaged();
+            } else {
+                gameManager.GM.TC.addDelegate(
+                    () => {
+                        tempDelShow(target.transform.position);
+                        target.animateDamaged();
+                    }, 
+                    combatManager.CM.getBodyAnimationDuration()
+                );
             }
         }
     }

@@ -8,6 +8,12 @@ namespace Cases {
     public class effectTestBleed : caseTimerSelfishTurn, ICaseBeforeAction {
         private int damagePerTurn = 0;
 
+        #region InfoImplementation
+        public override object[] getDescriptionArgument() {
+            return new object[1] { damagePerTurn };
+        }
+        #endregion InfoImplementation
+
         public effectTestBleed(int[] parParameter) : base(parParameter, parIsVisible: true) {
             code = 94001;
             isRemovedOnAlarmed = true;

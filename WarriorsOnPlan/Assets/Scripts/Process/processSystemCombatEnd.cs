@@ -16,8 +16,7 @@ namespace Processes {
 
             TextMeshProUGUI tempTMPro = GameObject.Find("TEMP_TEXT_RESULT").GetComponent<TextMeshProUGUI>();
             tempTMPro.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, 0f, 0f);
-            tempTMPro.text = (combatManager.CM.checkIsPlayerWin() ? "Player Win" : "Player Defeated");
-
+            // tempTMPro.text = (combatManager.CM.checkIsPlayerWin() ? "Player Win" : "Player Defeated");
         }
     }
 }

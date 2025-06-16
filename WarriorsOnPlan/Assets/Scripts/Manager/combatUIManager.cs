@@ -9,13 +9,16 @@ public class combatUIManager : MonoBehaviour {
     public GameObject prefabBubble;
 
     public GameObject actionCounter { get; private set; }
+    private GameObject curtainOutsideBI;
+    private GameObject curtainDownBar;
 
     public toolStorage TS { get; private set; }
+    public scrollActionOrder SAO { get; private set; }
     public canvasStatus CStatus { get; private set; }
     public canvasStatistics CStatistics { get; private set; }
     public canvasCircuitSetter CCS { get; private set; }
 
-    private GameObject curtainOutsideBI;
+
 
     public void Awake() {
         if (CUM == null) {
@@ -29,11 +32,15 @@ public class combatUIManager : MonoBehaviour {
         actionCounter = GameObject.Find("boxActionCounter");
 
         TS = GameObject.Find("scrollToolStorage").GetComponent<toolStorage>();
+        SAO = GameObject.Find("scrollActionOrder").GetComponent<scrollActionOrder>();
         CStatus = GameObject.Find("canvasStatus").GetComponent<canvasStatus>();
         CStatistics = GameObject.Find("canvasStatistics").GetComponent<canvasStatistics>();
         CCS = GameObject.Find("canvasCircuitSetter").GetComponent<canvasCircuitSetter>();
 
         curtainOutsideBI = GameObject.Find("curtainOutsideBI");
+        curtainOutsideBI.SetActive(false);
+        curtainDownBar = GameObject.Find("curtainDownBar");
+        curtainDownBar.SetActive(false);
     }
 
     // if parIsStrict is false change numbers proceeds softly by ascending/descending gradually, if true just set the text once
@@ -45,6 +52,22 @@ public class combatUIManager : MonoBehaviour {
         }
     }
 
+    #region doWhen
+    public void doWhenCombatStart() {
+        setActionCounter(0, true);
+        SAO.confirm();
+        SAO.clearLineTotal();
+        closeCurtainDownBar();
+    }
+
+    public void doWhenPreparingStart() {
+        setActionCounter(0, true);
+        SAO.prepareBoxActionOrderBelt();
+        openCurtainDownBar();
+    }
+    #endregion doWhen
+
+    #region curtain
     public void openCurtainOutsideBI() {
         curtainOutsideBI.SetActive(false);
     }
@@ -52,6 +75,15 @@ public class combatUIManager : MonoBehaviour {
     public void closeCurtainOutsideBI() {
         curtainOutsideBI.SetActive(true);
     }
+
+    public void openCurtainDownBar() {
+        curtainDownBar.SetActive(false);
+    }
+
+    public void closeCurtainDownBar() {
+        curtainDownBar.SetActive(true);
+    }
+    #endregion curtain
 
     #region test
     // ★ 이거 나중에 정식으로 만들어야 함

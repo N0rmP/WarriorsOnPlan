@@ -14,14 +14,12 @@ namespace Cases {
         others  = 99
     }
 
-    public abstract class caseBase : codableObject {
+    public abstract class caseBase : codableObject, IInfo {
         public readonly enumCaseType caseType;            
 
         public bool isVisible { protected set; get; }
 
         public Sprite caseImage { get; protected set; }
-        public string caseName { get; protected set; }
-        public string caseDescription { get; protected set; }
         protected string pathCategory {
             get {
                 return "Case/" +
@@ -33,6 +31,25 @@ namespace Cases {
                     };
             }
         }
+
+        #region InfoImplementation
+        public string infoName { get; protected set; }
+        private string infoDescription_ = "E";
+        public string infoDescription {
+            get {
+                if (infoDescription_ == "E") {
+                    prepareInfo();
+                }
+                return string.Format(infoDescription_, getDescriptionArgument());
+            }
+            protected set {
+                infoDescription_ = value;
+            }
+        }
+        public virtual object[] getDescriptionArgument() {
+            return new object[0];
+        }
+        #endregion InfoImplementation
 
         public caseBase(int[] parArrParameter, enumCaseType parCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parArrParameter) {
             caseType = parCaseType;
@@ -50,8 +67,8 @@ namespace Cases {
 
         protected void prepareInfo() {
             dataArbitraryStringArray tempASA = gameManager.GM.JC.getJson<dataArbitraryStringArray>(pathCategory + GetType().Name);
-            caseName = tempASA.SwissArmyStringArray[0];
-            caseDescription = tempASA.SwissArmyStringArray[1];
+            infoName = tempASA.SwissArmyStringArray[0];
+            infoDescription_ = tempASA.SwissArmyStringArray[1];
         }
     }
 }

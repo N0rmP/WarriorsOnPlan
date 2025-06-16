@@ -21,6 +21,12 @@ namespace Processes {
 
         protected override void doBeforeActualDo() {
             base.doBeforeActualDo();
+
+            // if target is null, invalidate all other execution as processActionAttack
+            if (target is null) {
+                return;
+            }
+
             foreach (ICaseBeforeAttack cb in source.getCaseList<ICaseBeforeAttack>()) {
                 cb.onBeforeAttack(source, target);
             }
@@ -32,6 +38,12 @@ namespace Processes {
 
         protected override void doAfterActualDo() {
             base.doAfterActualDo();
+
+            // if target is null, invalidate all other execution as processActionAttack
+            if (target is null) {
+                return;
+            }
+
             foreach (ICaseAfterAttack cb in source.getCaseList<ICaseAfterAttack>()) {
                 cb.onAfterAttack(source, target, listDInfo.ToArray());
             }
@@ -40,21 +52,33 @@ namespace Processes {
         protected override void actualDO() {
             base.actualDO();
 
-            List<damageInfo> listDInfo = new List<damageInfo>();                        
-            
+            // if target is null, invalidate all other execution as processActionAttack
+            if (target is null) {
+                return;
+            }
+
+            List<damageInfo> listDInfo = new List<damageInfo>();               
             foreach (toolWeapon tw in listWeapon){
                 foreach (damageInfo di in tw.attack(source)) {
                     listDInfo.Add(di);
                 }
             }
 
-            combatManager.CM.executeProcess(
-                    new processByproductDealDamage(listDInfo.ToArray(), target)
-                );
+            if (target is not null) {
+                combatManager.CM.executeProcess(
+                        new processByproductDealDamage(listDInfo.ToArray(), target)
+                    );
+            }
         }
 
         protected override void actualSHOW() {
             base.actualSHOW();
+
+            if (target is null) {
+                // ★ 문자열 바꿔라
+                gameManager.GM.PC.popupBasicAlert(source.transform.position + new Vector3(0f, 0f, 1f), gameManager.GM.book.strAlertNoAttackTarget, false);
+                return;
+            }
 
             // source body animation
             source.Look(target.transform.position);
@@ -67,9 +91,9 @@ namespace Processes {
             // each weapon vfx animation
             int tempI = 0;
             //for (int i = 0; i < listWeapon.Count; i++) {
-            foreach(toolWeapon tw in listWeapon){
+            foreach (toolWeapon tw in listWeapon) {
                 gameManager.GM.TC.addDelegate(
-                    () => tw.showEffect(source, target), 
+                    () => tw.showEffect(source, target),
                     combatManager.CM.getBodyAnimationDuration() * (tempI + 1) / (float)(listWeapon.Count + 1)
                 );
                 tempI++;

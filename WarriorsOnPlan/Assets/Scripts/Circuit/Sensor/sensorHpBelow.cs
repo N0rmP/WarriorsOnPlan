@@ -7,8 +7,15 @@ namespace Circuits {
     public class sensorHpBelow : sensorAbst {
         private int threshold;
 
+        #region InfoImplementation
+        public override object[] getDescriptionArgument() {
+            return new object[1] { threshold };
+        }
+        #endregion InfoImplementation
+
         public sensorHpBelow(int[] parParameter) : base(parParameter) {
             code = 1103;
+            threshold = parParameter[0];
         }
 
         public override bool checkWigwagging(Thing source) {
@@ -33,7 +40,6 @@ namespace Circuits {
 
         public override void restoreParameters(IEnumerator<int> parParameters) {
             base.restoreParameters(parParameters);
-
             threshold = parParameters.MoveNext() ? parParameters.Current : 999;
         }
     }

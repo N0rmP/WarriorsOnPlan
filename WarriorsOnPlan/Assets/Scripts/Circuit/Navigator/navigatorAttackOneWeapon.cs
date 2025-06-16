@@ -58,6 +58,11 @@ namespace Circuits {
 
         #region override
         public override bool checkIsArrival(Thing owner) {
+            // if owner has no whatToAttack, return true (owner doesn't move)
+            if (owner.whatToAttack == null) {
+                return true;
+            }
+
             updateListRange(owner);
 
             int tempDistance = node.getDistance(owner.curPosition, owner.whatToAttack.curPosition);

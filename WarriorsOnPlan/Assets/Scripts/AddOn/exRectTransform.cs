@@ -7,13 +7,26 @@ public static class exRectTransform {
         Vector3 tempMin = parRT.position - new Vector3(parRT.rect.width * parRT.pivot.x, parRT.rect.height * parRT.pivot.y, 0f);
         Vector3 tempMax = parRT.position + new Vector3(parRT.rect.width * (1.0f - parRT.pivot.x), parRT.rect.height * (1.0f - parRT.pivot.y), 0f);
 
-        Vector3 posMouse = Input.mousePosition;
+        Vector3 tempPosMouse = Input.mousePosition;
 
         return (
-            (posMouse.x >= tempMin.x) &&
-            (posMouse.x <= tempMax.x) &&
-            (posMouse.y >= tempMin.y) &&
-            (posMouse.y <= tempMax.y)
+            (tempPosMouse.x >= tempMin.x) &&
+            (tempPosMouse.x <= tempMax.x) &&
+            (tempPosMouse.y >= tempMin.y) &&
+            (tempPosMouse.y <= tempMax.y)
             );
+    }
+
+    // convertVectorAcrossRect only works with Canvas.Screen Space - Overlay, please implement another method if not
+    public static Vector2 convertVectorAcrossRect(this RectTransform parDestination, Vector3 parWorldPosition) {
+        Vector2 tempResult;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            parDestination,
+            parWorldPosition,
+            null,
+            out tempResult
+        );
+        return tempResult;
+
     }
 }

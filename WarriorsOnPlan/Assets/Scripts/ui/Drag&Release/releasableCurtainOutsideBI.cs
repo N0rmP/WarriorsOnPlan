@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class releasableCurtainOutsideBI : releasableObjectAbst {
+public class releasableCurtainBoxInner : releasableObjectAbst {
     public override void Start() {
         base.Start();
-        gameObject.SetActive(false);
+        targetEnumDrag = (int)enumDrag.bubbleInventory;
     }
 
-    protected override bool doWhenReleased(object[] parParameters) {
+    protected override bool doWhenReleased(enumDrag parCurDragging, object[] parParameters) {
+        if (combatManager.CM.combatState != enumCombatState.preparing) {
+            return false;
+        }
+
         combatUIManager.CUM.CStatus.removeTool((Cases.caseBase)parParameters[0]);
         return true;
     }

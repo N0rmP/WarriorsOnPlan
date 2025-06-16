@@ -3,25 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum enumTranslation { 
-    english,
-    korean
-}
-
-public readonly struct dataBasicWords {
-    public readonly string strMelee;
-    public readonly string strNumber;
-
-    public dataBasicWords(string parMelee, string parNumber) {
-        strMelee = parMelee;
-        strNumber = parNumber;
-    }
-}
-
-// in keybinding (KeyCode)999 is used as any-key
-public readonly struct keybindingCombat {
-    public readonly KeyCode keyReenactNextAction;
-    public readonly KeyCode keyRestorePrevAction;
-    public readonly KeyCode keyChangeCombatSpeed;
+    English,
+    Korean
 }
 
 public class optionAIO {
@@ -32,9 +15,17 @@ public class optionAIO {
     // stick represents how long is 1.0f of World Space in Screen Space
     public float stick { get; private set; }
 
-    public enumTranslation curTranslation = enumTranslation.english;
-    
-    public dataBasicWords basicWords { get; private set; }
+    private enumTranslation curTranslation_ = enumTranslation.English;
+    public enumTranslation curTranslation {
+        get {
+            return curTranslation_;
+        }
+        set {
+            // ★ 게임 재시작 동반할 것, 안 그러면 게임 도중에 UI들 텍스트 갱신이 어려울테니
+            curTranslation_ = value;
+            gameManager.GM.setBook(value);
+        }
+    }
 
     #endregion statics
 
@@ -43,10 +34,11 @@ public class optionAIO {
     // ★ option 내역을 저장해두는 json 파일을 하나 만들 것, 게임 실행 시 가장 먼저 그것을 가져와 화면과 언어 등을 설정할 것
 
     public optionAIO(){
-        setStick();
+        if (gameManager.GM.option != null) { 
+            
+        }
 
-        // ★ 추후 삭제하고 json 파일로부터 저장된 문자열들을 가져올 수 있도록 변경할 것
-        basicWords = new dataBasicWords("Melee", "Number");
+        setStick();
     }
 
     private void changeResolution(int parNewWidth, int parNewHeight) {

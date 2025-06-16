@@ -39,27 +39,11 @@ public class canvasCaseShown : MonoBehaviour {
         }
 
         transform.GetChild(0).GetChild(0).GetComponent<imgRoundRectangle>().setImg(parCase.caseImage);
-        transform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = parCase.caseName;
+        transform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = parCase.infoName;
         try {
-            foreach (KeyValuePair<string, int[]> p in parCase.getParameters()) {
-                Debug.Log(p.Key + " :: ");
-                foreach (int i in p.Value) {
-                    Debug.Log(i);
-                }
-            }
-
-            int[] tempParameters = parCase.getParameters()["concrete"];
-            object[] tempArgs = new object[tempParameters.Count()];
-            for (int i = 0; i < tempParameters.Length; i++) {
-                tempArgs[i] = tempParameters[i];
-            }
-
-            transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = string.Format(
-                parCase.caseDescription,
-                tempArgs
-                );
+            transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = parCase.infoDescription;
         } catch (FormatException e) {
-            Debug.Log(parCase.GetType() + " results in error with \"" + parCase.caseDescription + "\" in canvasCaseShown \n(( " + e);
+            Debug.Log(parCase.GetType() + " results in error with \"" + parCase + "\" in canvasCaseShown \n(( " + e);
             transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "preparing skill description failed";
         }
     }
@@ -70,7 +54,7 @@ public class canvasCaseShown : MonoBehaviour {
         // timer
         if (parCase is caseTimer tempCase) {
             objNumTime.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
-                tempCase.timerMax.ToString();
+                tempCase.timerCur.ToString();
             objNumTime.SetActive(true);
         }
     }
@@ -81,7 +65,7 @@ public class canvasCaseShown : MonoBehaviour {
         // weapon range
         objNumRange.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
             parCase.rangeMax == 1 ?
-            gameManager.GM.option.basicWords.strMelee :
+            gameManager.GM.book.strMelee :
             parCase.rangeMax.ToString();
         objNumRange.SetActive(true);
 
@@ -92,9 +76,11 @@ public class canvasCaseShown : MonoBehaviour {
         objNumDamage.SetActive(true);
 
         // weapon cool time
+        /*
         objNumTime.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
             parCase.timerMax.ToString();
         objNumTime.SetActive(true);
+        */
     }
 
     private void setSkillnumbers(skillAbst parSkill) {
@@ -104,15 +90,15 @@ public class canvasCaseShown : MonoBehaviour {
         if (parSkill.isRangeNeeded) {
             objNumRange.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
                 parSkill.rangeMax == 1 ?
-                gameManager.GM.option.basicWords.strMelee :
+                gameManager.GM.book.strMelee :
                 parSkill.rangeMax.ToString();
             objNumRange.SetActive(true);
         }
 
         // skill cool time
-        if (parSkill.isCoolTimeNeeded) {
+        if (parSkill.isTimerNeeded) {
             objNumTime.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text =
-                parSkill.timerMax.ToString();
+                (parSkill.isReady ? gameManager.GM.book.strReady : parSkill.timerCur) + " / " + parSkill.timerMax;
             objNumTime.SetActive(true);
         }
     }

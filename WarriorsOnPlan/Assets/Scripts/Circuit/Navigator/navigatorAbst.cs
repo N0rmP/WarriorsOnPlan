@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 using static UnityEngine.UI.GridLayoutGroup;
 
 namespace Circuits {
-    public abstract class navigatorAbst : circuitAbst<navigatorAbst> {
+    public abstract class navigatorAbst : circuitAbst {
         // route will be recalculated just before every movement, but can remain only when whole nodes in route have nothing on them
         protected Queue<node> route;
 

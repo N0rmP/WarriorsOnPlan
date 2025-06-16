@@ -44,7 +44,10 @@ public class carrierGeneric<T> {
 
         hangerAvailable.Push(parInterceptor);
         spaceOperating.Remove(parInterceptor);
-        delReturn(parInterceptor);
+
+        if (delReturn != null) {
+            delReturn(parInterceptor);
+        }
     }
 
     public void returnTotal() {
@@ -65,8 +68,10 @@ public class carrierGeneric<T> {
         }
     }
 
+    #region test
     public void testCount() {
         Debug.Log("hangerAvailable : " + hangerAvailable.Count);
         Debug.Log("spaceOperating : " + spaceOperating.Count);
     }
+    #endregion test
 }

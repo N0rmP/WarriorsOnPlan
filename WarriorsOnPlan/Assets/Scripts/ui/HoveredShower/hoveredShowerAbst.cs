@@ -72,7 +72,6 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
     }
 
     protected void show() {
-        return; //★ 이거부터 고치고 circuitSetter 좀 어떻게 해봐
         if (!doBeforeShow()) {
             return;
         }        
@@ -85,7 +84,7 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
         gutMoveToMouse();
     }
 
-    protected void deshow() {
+    public void deshow() {
         objGut.SetActive(false);
 
         doAfterDeshow();

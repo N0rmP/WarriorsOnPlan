@@ -7,6 +7,7 @@ using Newtonsoft;
 using Newtonsoft.Json;
 using System.Security.Policy;
 using Cases;
+using Newtonsoft.Json.Converters;
 
 #region data_entities
 public interface IDataInsurance {
@@ -57,9 +58,9 @@ public struct dataNotFriendlyThing : IDataInsurance {
     public int HP;
     public int[] SkillParameters;
     public dataIParametable[] ToolList;
-    public int CodeSensorForMove; public int[] Parameter0;
-    public int CodeNavigatorPrioritized; public int[] Parameter1;
     public int CodeNavigatorIdle; public int[] Parameter2;
+    public int CodeSensorForMove; public int[] Parameter0;
+    public int CodeNavigatorPrioritized; public int[] Parameter1;    
     public int CodeSensorForSkill; public int[] Parameter3;
     public int CodeSelecterForSkill; public int[] Parameter4;
     public int CodeSelecterForAttack; public int[] Parameter5;
@@ -71,9 +72,9 @@ public struct dataNotFriendlyThing : IDataInsurance {
         HP = 1;
         SkillParameters = new int[0];
         ToolList = new dataIParametable[0];
-        CodeSensorForMove = 0; Parameter0 = new int[0];
-        CodeNavigatorPrioritized = 0; Parameter1 = new int[0];
         CodeNavigatorIdle = 0; Parameter2 = new int[0];
+        CodeSensorForMove = 0; Parameter0 = new int[0];
+        CodeNavigatorPrioritized = 0; Parameter1 = new int[0];        
         CodeSensorForSkill = 0; Parameter3 = new int[0];
         CodeSelecterForSkill = 0; Parameter4 = new int[0];
         CodeSelecterForAttack = 0; Parameter5 = new int[0];
@@ -126,20 +127,47 @@ public struct dataArbitraryStringArray : IDataInsurance {
         Array.Fill(SwissArmyStringArray, "dataArbitraryStringArray error");
     }
 }
+
+[System.Serializable]
+public struct dataBookBasicWords : IDataInsurance {
+    public string strMelee;
+    public string strNumber;
+    public string strReady;
+    public string strAlertNoAttackTarget;
+    public string strAlertNoSkillTarget;
+    public string strQuestionResetInitial;
+
+    public void emergencyInit() {
+        strMelee = "Melee";
+        strNumber = "(Number)";
+        strReady = "Ready";
+        strAlertNoAttackTarget = "no attack target";
+        strAlertNoSkillTarget = "no skill target";
+        strQuestionResetInitial = "All Preparation Including Tools, Circuits, Warriors' Positions Returns to the Initial State.";
+    }
+}
+
+[System.Serializable]
+public struct dataTest : IDataInsurance {
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enumSide test { get; set; }
+
+    public void emergencyInit() {
+        test = enumSide.none;
+    }
+}
 #endregion data_entities
 
 public class jsonComponent {
-    public static string strLanguage = "English";
-
     public T getJson<T>(string parHalfPath, bool isTranslationRequired = true) where T : struct, IDataInsurance {
         string tempPath = "Database/" +
-            (isTranslationRequired ? strLanguage + "/" : "") + 
+            (isTranslationRequired ? gameManager.GM.option.curTranslation.ToString() + "/" : "") + 
             parHalfPath;
 
         T tempResult;
         try {
             tempResult = JsonConvert.DeserializeObject<T>(Resources.Load<TextAsset>(tempPath).ToString());
-        } catch (Exception e) {
+        } catch (Exception) {
             tempResult = new T();
             tempResult.emergencyInit();
         }

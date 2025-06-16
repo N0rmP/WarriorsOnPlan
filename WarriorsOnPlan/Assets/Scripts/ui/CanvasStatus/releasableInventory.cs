@@ -12,6 +12,11 @@ public class releasableInventory : releasableObjectAbst {
 
     private carrierGeneric<GameObject> carrierBubble;
 
+    public new void Start(){
+        base.Start();
+        targetEnumDrag = (int)enumDrag.bubbleStorage;
+    }
+
     public void Awake() {
         contentTransform = transform.GetChild(0).GetChild(0);
 
@@ -30,7 +35,7 @@ public class releasableInventory : releasableObjectAbst {
             );
     }
 
-    protected override bool doWhenReleased(object[] parParameters) {
+    protected override bool doWhenReleased(enumDrag parCurDragging, object[] parParameters) {
         if (combatUIManager.CUM.CStatus.thisThing == null || !combatManager.CM.checkControllability(combatUIManager.CUM.CStatus.thisThing)) {
             return false;
         }

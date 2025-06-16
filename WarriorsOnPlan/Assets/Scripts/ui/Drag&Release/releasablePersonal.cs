@@ -13,10 +13,7 @@ public class releasablePersonal : releasableObjectAbst {
 
     public override void Start() {
         base.Start();
-    }
-
-    public void Update() {
-        thisThing.setCursorHovered(checkHovered());
+        targetEnumDrag = (int)enumDrag.bubbleStorage;
     }
 
     public void init(Thing parThing) {
@@ -50,7 +47,7 @@ public class releasablePersonal : releasableObjectAbst {
         return gameObject.checkHoveredWorld();
     }
 
-    protected override bool doWhenReleased(System.Object[] parParameters) {
+    protected override bool doWhenReleased(enumDrag parCurDragging, System.Object[] parParameters) {
         if (!combatManager.CM.checkControllability(thisThing)) {
             return false;
         }
@@ -58,9 +55,6 @@ public class releasablePersonal : releasableObjectAbst {
         switch (parParameters[0]) {
             case caseBase { caseType: enumCaseType.tool } tempTool:
                 return grabTool(tempTool);
-            case Thing tempThing:
-                swapPosition(tempThing);
-                return false;
             default:
                 return false;
         }        

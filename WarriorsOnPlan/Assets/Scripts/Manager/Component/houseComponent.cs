@@ -3,14 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-// DD means DamageDealt
+#region comparers    
+public class comparerHp : IComparer<Thing> {
+    public int Compare(Thing w1, Thing w2) {
+        return (w1.curHp - w2.curHp);
+    }
+}
+
+public class comparerDamageDealt : IComparer<Thing> {
+    public int Compare(Thing w1, Thing w2) {
+        return (w1.damageTotalDealt - w2.damageTotalDealt);
+    }
+}
+#endregion comparers
+
 public class houseComponent {
     #region variable
-    private comparerHp thisComparerHp;
-    private comparerDamageDealt thisComparerDD;
-    private comparerActionOrder thisComparerAO;
+    public readonly static comparerHp instComparerHp = new comparerHp();
+    public readonly static comparerDamageDealt instComparerDD = new comparerDamageDealt();
+    private readonly static comparerActionOrder instComparerAO = new comparerActionOrder();
 
     private bool isTotalDirty;
     private List<Thing> listTotalAlive;
@@ -19,18 +34,14 @@ public class houseComponent {
     private List<Thing> listEnemyAlive;
     private List<Thing> listNeutralAlive;
 
-    private List<Thing> listPlayerHpSorted;
-    private List<Thing> listEnemyHpSorted;
-    private List<Thing> listNeutralHpSorted;
-
-    private List<Thing> listPlayerDDSorted;
-    private List<Thing> listEnemyDDSorted;
-    private List<Thing> listNeutralDDSorted;
-
     private Queue<Thing> queDeadRecently;
     private List<Thing> listPlayerDead;
     private List<Thing> listEnemyDead;
     private List<Thing> listNeutralDead;
+
+    private List<pairThingActionOrder> listPlayerActionOrder;
+    private List<pairThingActionOrder> listEnemyActionOrder;
+    private List<pairThingActionOrder> listNeutralActionOrder;
 
     #region property
     public Thing[] arrTotalAlive {
@@ -41,30 +52,10 @@ public class houseComponent {
             return listTotalAlive.ToArray();
         }
     }
-
-    public Thing[] arrPlayerAlive { get { return listPlayerAlive.ToArray(); } }
-    public Thing[] arrEnemyAlive { get { return listEnemyAlive.ToArray(); } }
-    public Thing[] arrNeutralAlive { get { return listNeutralAlive.ToArray(); } }
-
-    public Thing[] arrPlayerHpSorted { get { return listPlayerHpSorted.ToArray(); } }
-    public Thing[] arrEnemyHpSorted { get { return listEnemyHpSorted.ToArray(); } }
-    public Thing[] arrNeutralHpSorted { get { return listNeutralHpSorted.ToArray(); } }
-
-    public Thing[] arrPlayerDDSorted { get { return listPlayerDDSorted.ToArray(); } }
-    public Thing[] arrEnemyDDSorted { get { return listEnemyDDSorted.ToArray(); } }
-    public Thing[] arrNeutralDDSorted { get { return listNeutralDDSorted.ToArray(); } }
-
-    public Thing[] arrPlayerDead { get { return listPlayerDead.ToArray(); } }
-    public Thing[] arrEnemyDead { get { return listEnemyDead.ToArray(); } }
-    public Thing[] arrNeutralDead { get { return listNeutralDead.ToArray(); } }
     #endregion property
     #endregion variable
 
     public houseComponent() {
-        thisComparerHp = new comparerHp();
-        thisComparerDD = new comparerDamageDealt();
-        thisComparerAO = new comparerActionOrder();
-
         isTotalDirty = false;
         listTotalAlive = new List<Thing>();
 
@@ -72,21 +63,66 @@ public class houseComponent {
         listEnemyAlive = new List<Thing>();
         listNeutralAlive = new List<Thing>();
 
-        listPlayerHpSorted = new List<Thing>();
-        listEnemyHpSorted = new List<Thing>();
-        listNeutralHpSorted = new List<Thing>();
-
-        listPlayerDDSorted = new List<Thing>();
-        listEnemyDDSorted = new List<Thing>();
-        listNeutralDDSorted = new List<Thing>();
-
         queDeadRecently = new Queue<Thing>();
         listPlayerDead = new List<Thing>();
         listEnemyDead = new List<Thing>();
         listNeutralDead = new List<Thing>();
+
+        listPlayerActionOrder = new List<pairThingActionOrder>();
+        listEnemyActionOrder = new List<pairThingActionOrder>();
+        listNeutralActionOrder = new List<pairThingActionOrder>();
     }
 
+    #region ActionOrderRelated
+    public int getPersonalActionOrder(Thing parThing) {
+        foreach (pairThingActionOrder PRAO in getArrPairThingActionOrder(parThing.thisSide)) {
+            if (PRAO.thisThing == parThing) {
+                return PRAO.thisActionOrder;
+            }
+        }
+        return -1;
+    }
+
+    public void setActionOrderNumber(enumSide parSide) {
+        foreach (Thing th in getArrActionOrder(parSide)) {
+            th.updatePanelActionOrder();
+        }
+    }
+
+    public void changeActionOrder(Thing parThing, int parActionOrder, bool parIsShow = true) {
+        List<pairThingActionOrder> tempListPTAO = parThing.thisSide switch {
+            enumSide.player => listPlayerActionOrder,
+            enumSide.enemy => listEnemyActionOrder,
+            enumSide.neutral => listNeutralActionOrder,
+            _ => null
+        };
+        int tempIndexToBeChanged = int.MinValue;
+        for (int i = 0; i < tempListPTAO.Count; i++) {
+            if (parThing == tempListPTAO[i].thisThing) {
+                tempIndexToBeChanged = i;
+                break;
+            }
+        }
+
+        // if corresponding thing doesn't exist, return
+        // if parThing already had the same ActionOrder, return        
+        if (tempIndexToBeChanged == int.MinValue || tempListPTAO[tempIndexToBeChanged].thisActionOrder == parActionOrder) {
+            return;
+        }
+
+        parActionOrder = Math.Max(0, parActionOrder);
+        tempListPTAO[tempIndexToBeChanged] = new pairThingActionOrder(parThing, parActionOrder);
+        tempListPTAO.Sort(instComparerAO);
+
+        if (parIsShow) {
+            setActionOrderNumber(parThing.thisSide);
+        }
+    }
+    #endregion ActionOrderRelated
+
+    #region memento
     public mementoHouse makeMementoHouse() {
+        // ★ 내 생각엔 죽은 Thing들도 일괄 저장했다가 꺼내면서 thisSide따라 나누는 게 좋아보임, ActionOrder 정리정돈 끝나면 이거 좀 만지자
         Queue<mementoThing> tempQueTotalAlive = new Queue<mementoThing>();
         Queue<mementoThing> tempQuePlayerDead = new Queue<mementoThing>();
         Queue<mementoThing> tempQueEnemyDead = new Queue<mementoThing>();
@@ -114,38 +150,96 @@ public class houseComponent {
         listTotalAlive.Clear();
         listPlayerAlive.Clear();
         listEnemyAlive.Clear();
-        listPlayerHpSorted.Clear();
-        listEnemyHpSorted.Clear();
-        listPlayerDDSorted.Clear();
-        listEnemyDDSorted.Clear();
+        listNeutralAlive.Clear();
         listPlayerDead.Clear();
         listEnemyDead.Clear();
+        listNeutralDead.Clear();
+        listPlayerActionOrder.Clear();
+        listEnemyActionOrder.Clear();
+        listNeutralActionOrder.Clear();
 
         // Thing's restore method include placing the Thing on the concurrent position, all nodes need to be vacant for it
         combatManager.CM.GC.vacateGraph();
 
         // add all Thing back with mementoThing-restore
-        void func(IEnumerable<mementoThing> parEMT) {
+        void addAllBack(IEnumerable<mementoThing> parEMT) {
             Thing tempThing;
             foreach (mementoThing mt in parEMT) {
                 tempThing = mt.getRestoredMe();
                 if (tempThing.curHp <= 0) {
                     addDeadThing(tempThing);
                 } else {
-                    addThing(tempThing);
+                    addThing(tempThing, mt.actionOrder);
                 }
             }
         }
 
-        func(parMemento.getTotalAlive());
-        func(parMemento.getPlayerDead());
-        func(parMemento.getEnemyDead());
-        func(parMemento.getNeutralDead());
+        addAllBack(parMemento.getTotalAlive());
+        addAllBack(parMemento.getPlayerDead());
+        addAllBack(parMemento.getEnemyDead());
+        addAllBack(parMemento.getNeutralDead());
 
-        sortAll();
+        sortByAO();
+    }
+    #endregion memento
+
+    #region getArr
+
+    public Thing[] getArrAlive(enumSide parSide) {
+        return (parSide switch {
+            enumSide.player => listPlayerAlive,
+            enumSide.enemy => listEnemyAlive,
+            enumSide.neutral => listNeutralAlive,
+            _ => new List<Thing>()
+        }).ToArray();
     }
 
-    #region listManagement
+    public Thing[] getArrDead(enumSide parSide) {
+        return (parSide switch {
+            enumSide.player => listPlayerDead,
+            enumSide.enemy => listEnemyDead,
+            enumSide.neutral => listNeutralDead,
+            _ => new List<Thing>()
+        }).ToArray();
+    }
+
+    public Thing[] getArrTotal(enumSide parSide) {
+        return (parSide switch {
+            enumSide.player => listPlayerAlive.getListSum<Thing>(listPlayerDead),
+            enumSide.enemy => listEnemyAlive.getListSum<Thing>(listEnemyDead),
+            enumSide.neutral => listNeutralAlive.getListSum<Thing>(listNeutralDead),
+            _ => new List<Thing>()
+        }).ToArray();
+    }
+
+    public Thing[] getArrTotalTotal() {
+        List<Thing> tempResult = new List<Thing>();
+        tempResult.AddRange(getArrTotal(enumSide.player));
+        tempResult.AddRange(getArrTotal(enumSide.enemy));
+        tempResult.AddRange(getArrTotal(enumSide.neutral));
+        return tempResult.ToArray();
+    }
+
+    private pairThingActionOrder[] getArrPairThingActionOrder(enumSide parSide) {
+        return (parSide switch {
+            enumSide.player => listPlayerActionOrder,
+            enumSide.enemy => listEnemyActionOrder,
+            enumSide.neutral => listNeutralActionOrder,
+            _ => new List<pairThingActionOrder>()
+        }).ToArray();
+    }
+
+    public Thing[] getArrActionOrder(enumSide parSide) {
+        pairThingActionOrder[] tempList = getArrPairThingActionOrder(parSide);
+        Thing[] tempResult = new Thing[tempList.Length];
+        for (int i = 0; i < tempList.Length; i++) {
+            tempResult[i] = tempList[i].thisThing;
+        }
+        return tempResult;
+    }
+    #endregion getArr
+
+    #region sum_sort
     // sum up all things in three listActionOrder and update listTotal with the result
     public void sumThing() {
         listTotalAlive.Clear();
@@ -154,44 +248,17 @@ public class houseComponent {
         listTotalAlive.AddRange(listNeutralAlive);
     }
 
-    public void sortByHp() {
-        listPlayerHpSorted.Sort(thisComparerHp);
-        listEnemyHpSorted.Sort(thisComparerHp);
-        listNeutralHpSorted.Sort(thisComparerHp);
-    }
-
-    // DD is Damage Dealt
-    public void sortByDD() {
-        listPlayerDDSorted.Sort(thisComparerDD);
-        listEnemyDDSorted.Sort(thisComparerDD);
-        listNeutralDDSorted.Sort(thisComparerDD);
-    }
-
-    // AO is Action Order
-    public void sortByAO(enumSide parSide) {
-        (parSide switch {
-            enumSide.player => listPlayerAlive,
-            enumSide.enemy => listEnemyAlive,
-            enumSide.neutral => listNeutralAlive,
-            _ => listPlayerAlive
-        }).Sort(thisComparerAO);
-    }
-
+    // AO is Action Order, sortByAO is not inteded to be called frequently, each list should be sorted individually when becoming dirty
     public void sortByAO() {
-        listPlayerAlive.Sort(thisComparerAO);
-        listEnemyAlive.Sort(thisComparerAO);
-        listNeutralAlive.Sort(thisComparerAO);
+        listPlayerActionOrder.Sort(instComparerAO);
+        listEnemyActionOrder.Sort(instComparerAO);
+        listNeutralActionOrder.Sort(instComparerAO);
     }
-
-    public void sortAll() {
-        sortByHp();
-        sortByDD();
-        sortByAO();
-    }
-    #endregion listManagement
+    #endregion sum_sort
 
     #region add&Remove
-    public void addThing(Thing parThing) {
+    // parActionOrderWanted is not index, it starts from 1 not 0
+    public void addThing(Thing parThing, int parActionOrderWanted = -1) {
         if (parThing == null) { return; }
         if (parThing.curHp <= 0) {
             Debug.Log("you are trying to add Thing with Hp 0 or lower, please check it again : added Thing is " + parThing);
@@ -200,26 +267,23 @@ public class houseComponent {
         switch (parThing.thisSide) {
             case enumSide.player:
                 listPlayerAlive.Add(parThing);
-                listPlayerHpSorted.Add(parThing);
-                listPlayerDDSorted.Add(parThing);
                 break;
             case enumSide.enemy:
                 listEnemyAlive.Add(parThing);
-                listEnemyHpSorted.Add(parThing);
-                listEnemyDDSorted.Add(parThing);
                 break;
             case enumSide.neutral:
                 listNeutralAlive.Add(parThing);
-                listNeutralHpSorted.Add(parThing);
-                listNeutralDDSorted.Add(parThing);
                 break;
             default:
                 return;
         }
 
+        addActionOrder(parThing, parActionOrderWanted);
+
         isTotalDirty = true;
     }
 
+    // addDeadThing add a new thing to listDead, you should use killThing to remove a thing from listAlive and add it to listDead instead
     public void addDeadThing(Thing parThing) {
         if (parThing == null) { return; }
         if (parThing.curHp > 0) {
@@ -247,20 +311,14 @@ public class houseComponent {
         switch (parThing.thisSide) {
             case enumSide.player:
                 listPlayerAlive.Remove(parThing);
-                listPlayerHpSorted.Remove(parThing);
-                listPlayerDDSorted.Remove(parThing);
                 listPlayerDead.Add(parThing);
                 break;
             case enumSide.enemy:
                 listEnemyAlive.Remove(parThing);
-                listEnemyHpSorted.Remove(parThing);
-                listEnemyDDSorted.Remove(parThing);
                 listEnemyDead.Add(parThing);
                 break;
             case enumSide.neutral:
                 listNeutralAlive.Remove(parThing);
-                listNeutralHpSorted.Remove(parThing);
-                listNeutralDDSorted.Remove(parThing);
                 listNeutralDead.Add(parThing);
                 break;
             default:
@@ -278,26 +336,20 @@ public class houseComponent {
         switch (parThing.thisSide) {
             case enumSide.player:
                 listPlayerDead.Remove(parThing);
-                listPlayerHpSorted.Add(parThing);
-                listPlayerDDSorted.Add(parThing);
                 listPlayerAlive.Add(parThing);
                 break;
             case enumSide.enemy:
                 listEnemyDead.Remove(parThing);
-                listEnemyHpSorted.Add(parThing);
-                listEnemyDDSorted.Add(parThing);
                 listEnemyAlive.Add(parThing);
                 break;
             case enumSide.neutral:
                 listNeutralDead.Remove(parThing);
-                listNeutralHpSorted.Add(parThing);
-                listNeutralDDSorted.Add(parThing);
                 listNeutralAlive.Add(parThing);
                 break;
             default:
                 return;
         }
-
+        
         isTotalDirty = true;
     }
 
@@ -308,21 +360,30 @@ public class houseComponent {
         switch (parThing.thisSide) {
             case enumSide.player:
                 listPlayerAlive.Remove(parThing);
-                listPlayerHpSorted.Remove(parThing);
-                listPlayerDDSorted.Remove(parThing);
                 listPlayerDead.Remove(parThing);
+                foreach (pairThingActionOrder PTAO in listPlayerActionOrder) {
+                    if (PTAO.thisThing == parThing) {
+                        listPlayerActionOrder.Remove(PTAO);
+                    }
+                }
                 break;
             case enumSide.enemy:
                 listEnemyAlive.Remove(parThing);
-                listEnemyHpSorted.Remove(parThing);
-                listEnemyDDSorted.Remove(parThing);
                 listEnemyDead.Remove(parThing);
+                foreach (pairThingActionOrder PTAO in listEnemyActionOrder) {
+                    if (PTAO.thisThing == parThing) {
+                        listEnemyActionOrder.Remove(PTAO);
+                    }
+                }
                 break;
             case enumSide.neutral:
                 listNeutralAlive.Remove(parThing);
-                listNeutralHpSorted.Remove(parThing);
-                listNeutralDDSorted.Remove(parThing);
                 listNeutralDead.Remove(parThing);
+                foreach (pairThingActionOrder PTAO in listNeutralActionOrder) {
+                    if (PTAO.thisThing == parThing) {
+                        listNeutralActionOrder.Remove(PTAO);
+                    }
+                }
                 break;
             default:
                 return;
@@ -330,27 +391,74 @@ public class houseComponent {
 
         isTotalDirty = true;
     }
+
+    private void addActionOrder(Thing parThing, int parActionOrderWanted = -1, bool parIsShow = true) {
+        List<pairThingActionOrder> tempList = parThing.thisSide switch {
+            enumSide.player => listPlayerActionOrder,
+            enumSide.enemy => listEnemyActionOrder,
+            enumSide.neutral => listNeutralActionOrder,
+            _ => null
+        };
+
+        // ActionOrder can't be below zero, and it's basically above zero
+        if (parActionOrderWanted < 0) {
+            parActionOrderWanted = tempList.Count + 1;
+        } else {
+            parActionOrderWanted = Math.Max(parActionOrderWanted, 1);
+        }
+
+        // insert pairThingActionOrder into the index of closest ActionOrder number
+        pairThingActionOrder tempPTAOAdded = new pairThingActionOrder(parThing, parActionOrderWanted);
+        int tempIndexToBeAdded = Math.Abs(tempList.BinarySearch(tempPTAOAdded, instComparerAO));
+        if (tempList.Count > 0 && tempIndexToBeAdded < tempList.Count) {
+            tempList.Insert(tempIndexToBeAdded, tempPTAOAdded);
+        } else {
+            tempList.Add(tempPTAOAdded);
+        }
+
+        // if two pairThingActionOrders have same ActionOrder, incrementing ActionOrders of the post ones, maybe the one added first
+        pairThingActionOrder tempPTAOIncrement;
+        for (int i = tempIndexToBeAdded; i < tempList.Count - 1; i++) {
+            if (tempList[i].thisActionOrder == tempList[i + 1].thisActionOrder) {
+                tempPTAOIncrement = tempList[i];
+                tempPTAOIncrement.thisActionOrder++;
+            }
+        }
+
+        if (parIsShow) {
+            setActionOrderNumber(parThing.thisSide);
+        }
+    }
+
+    // neutral & enemy warriors' ActionOrder is set by developer already, only player's warriors can change his ActionOrder
+    // only exception is when new neutral & enemy warriors is spawned and his ActionOrder precedes other friendly warriors'
+    public void rearrangePlayerActionOrder(IEnumerable<Thing> parThingCollection) {
+        listPlayerActionOrder.Clear();
+        foreach (Thing t in parThingCollection) {
+            addActionOrder(t, parIsShow: false);
+            t.updatePanelActionOrder();
+        }
+        setActionOrderNumber(enumSide.player);
+    }
     #endregion add&Remove
 
-    #region internalClasses    
-    private class comparerHp : IComparer<Thing> {
-        public int Compare(Thing w1, Thing w2) {
-            return (w1.curHp - w2.curHp);
+    #region internal
+    private record pairThingActionOrder {
+        public Thing thisThing;
+        public int thisActionOrder;
+
+        public pairThingActionOrder(Thing parThing, int parActionOrder) {
+            thisThing = parThing;
+            thisActionOrder = parActionOrder;
         }
     }
 
-    private class comparerDamageDealt : IComparer<Thing> {
-        public int Compare(Thing w1, Thing w2) {
-            return (w1.damageTotalDealt - w2.damageTotalDealt);
+    private class comparerActionOrder : IComparer<pairThingActionOrder> {
+        public int Compare(pairThingActionOrder r1, pairThingActionOrder r2) {
+            return (r1.thisActionOrder - r2.thisActionOrder);
         }
     }
-
-    private class comparerActionOrder : IComparer<Thing> {
-        public int Compare(Thing w1, Thing w2) {
-            return (w1.actionOrder - w2.actionOrder);
-        }
-    }
-    #endregion internalClasses
+    #endregion internal
 
     #region test
     public void testAll() {
@@ -363,86 +471,76 @@ public class houseComponent {
         }
 
         tempSB.Append("\n\narrPlayerAlive : ");
-        foreach (Thing t in arrPlayerAlive) {
+        foreach (Thing t in getArrAlive(enumSide.player)) {
             tempSB.Append(t.ToString());
             tempSB.Append(" , ");
         }
         tempSB.Append("\n\narrEnemyAlive : ");
-        foreach (Thing t in arrEnemyAlive) {
+        foreach (Thing t in getArrAlive(enumSide.enemy)) {
             tempSB.Append(t.ToString());
             tempSB.Append(" , ");
         }
         tempSB.Append("\n\narrNeutralAlive : ");
-        foreach (Thing t in arrNeutralAlive) {
-            tempSB.Append(t.ToString());
-            tempSB.Append(" , ");
-        }
-
-        tempSB.Append("\n\narrPlayerHpSorted : ");
-        foreach (Thing t in arrPlayerHpSorted) {
-            tempSB.Append(t.ToString());
-            tempSB.Append(" , ");
-        }
-        tempSB.Append("\n\narrEnemyHpSorted : ");
-        foreach (Thing t in arrEnemyHpSorted) {
-            tempSB.Append(t.ToString());
-            tempSB.Append(" , ");
-        }
-        tempSB.Append("\n\narrNeutralHpSorted : ");
-        foreach (Thing t in arrNeutralHpSorted) {
-            tempSB.Append(t.ToString());
-            tempSB.Append(" , ");
-        }
-
-        tempSB.Append("\n\narrPlayerDDSorted : ");
-        foreach (Thing t in arrPlayerDDSorted) {
-            tempSB.Append(t.ToString());
-            tempSB.Append(" , ");
-        }
-        tempSB.Append("\n\narrEnemyDDSorted : ");
-        foreach (Thing t in arrEnemyDDSorted) {
-            tempSB.Append(t.ToString());
-            tempSB.Append(" , ");
-        }
-        tempSB.Append("\n\narrNeutralDDSorted : ");
-        foreach (Thing t in arrNeutralDDSorted) {
+        foreach (Thing t in getArrAlive(enumSide.neutral)) {
             tempSB.Append(t.ToString());
             tempSB.Append(" , ");
         }
 
         tempSB.Append("\n\narrPlayerDead : ");
-        foreach (Thing t in arrPlayerDead) {
+        foreach (Thing t in getArrDead(enumSide.player)) {
             tempSB.Append(t.ToString());
             tempSB.Append(" , ");
         }
         tempSB.Append("\n\narrEnemyDead : ");
-        foreach (Thing t in arrEnemyDead) {
+        foreach (Thing t in getArrDead(enumSide.enemy)) {
             tempSB.Append(t.ToString());
             tempSB.Append(" , ");
         }
         tempSB.Append("\n\narrNeutralDead : ");
-        foreach (Thing t in arrNeutralDead) {
+        foreach (Thing t in getArrDead(enumSide.neutral)) {
             tempSB.Append(t.ToString());
             tempSB.Append(" , ");
+        }
+
+        tempSB.Append("\n\narrPlayerActionOrder : ");
+        foreach (pairThingActionOrder p in getArrPairThingActionOrder(enumSide.player)) {
+            tempSB.Append(p.thisActionOrder);
+            tempSB.Append(" - ");
+            tempSB.Append(p.thisThing.ToString());
+            tempSB.Append(", ");
+        }
+        tempSB.Append("\n\narrEnemyActionOrder : ");
+        foreach (pairThingActionOrder p in getArrPairThingActionOrder(enumSide.enemy)) {
+            tempSB.Append(p.thisActionOrder);
+            tempSB.Append(" - ");
+            tempSB.Append(p.thisThing.ToString());
+            tempSB.Append(", ");
+        }
+        tempSB.Append("\n\narrNeutralActionOrder : ");
+        foreach (pairThingActionOrder p in getArrPairThingActionOrder(enumSide.neutral)) {
+            tempSB.Append(p.thisActionOrder);
+            tempSB.Append(" - ");
+            tempSB.Append(p.thisThing.ToString());
+            tempSB.Append(", ");
         }
 
         Debug.Log(tempSB.ToString());
     }
 
     public void testPlayerAlive() {
-        foreach (Thing t in arrPlayerAlive) {
+        foreach (Thing t in getArrAlive(enumSide.player)) {
             t.testStatus();
         }
     }
 
     public void testEnemyAlive() {
-        foreach (Thing t in arrEnemyAlive) {
+        foreach (Thing t in getArrAlive(enumSide.enemy)) {
             t.testStatus();
         }
     }
 
     public void testNeutralAlive() {
-        foreach (Thing t in arrNeutralAlive) {
+        foreach (Thing t in getArrAlive(enumSide.neutral)) {
             t.testStatus();
         }
     }

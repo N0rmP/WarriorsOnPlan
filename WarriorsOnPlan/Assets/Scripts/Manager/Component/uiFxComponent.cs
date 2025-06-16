@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class uiFxComponent : MonoBehaviour
-{
+public class uiFxComponent : MonoBehaviour {
     private Dictionary<Image, (Color changePerSecond, float timerLeft)> containerColorChange;
     private Dictionary<TextMeshProUGUI, int> containerCount;
     private Dictionary<GameObject, (Vector3 destination, float multiplier)> containerMove;
+
+    private canvasSandwitch thisCanvasSandwitch;
 
     // some changes are too frequent with once in a frame, timerSlower represents their change frequency by seconds
     private float timerSlower = 0f;
@@ -20,9 +22,13 @@ public class uiFxComponent : MonoBehaviour
         containerColorChange = new Dictionary<Image, (Color, float)>();
         containerCount = new Dictionary<TextMeshProUGUI, int>();
         containerMove = new Dictionary<GameObject, (Vector3, float)>();
+
+        thisCanvasSandwitch = GameObject.Find("canvasSandwitch").GetComponent<canvasSandwitch>();
+        // gameManager.GM.doWhenSceneLoaded += prepareCanvasSandwitch;
+        SceneManager.sceneLoaded += prepareCanvasSandwitch;
     }
 
-    public void LateUpdate() {     
+    public void Update() {     
         funcColorChange(Time.deltaTime);
         funcMove(Time.deltaTime);
 
@@ -34,7 +40,21 @@ public class uiFxComponent : MonoBehaviour
     }
     #endregion callback
 
-    #region func
+    #region canvasSandwitch
+    public void prepareCanvasSandwitch(Scene parScene, LoadSceneMode parLoadSceneMode) {
+        thisCanvasSandwitch.transform.SetParent(gameManager.GM.canvasMain.transform);
+    }
+
+    public void pushUiActivatable(uiActivatable parUA) {
+        thisCanvasSandwitch.pushUiActivatable(parUA);
+    }
+
+    public uiActivatable popUiActivatable() {
+        return thisCanvasSandwitch.popUiActivatable();
+    }
+    #endregion canvasSandwitch
+
+    #region method_in_update
     void funcColorChange(float parDeltaTime) {
         (Color changePerSecond, float timerLeft) tempTup;
 
@@ -90,7 +110,7 @@ public class uiFxComponent : MonoBehaviour
             key.GetComponent<RectTransform>().localPosition += tempStick.normalized * parDeltaTime * tempVelocity.multiplier * tempStick.magnitude * 5f;
         }
     }
-    #endregion func
+    #endregion method_in_update
 
     #region addNremove
     public void addColorChange(Image parImg, Color parDestinationColor, float parTimerMax) {

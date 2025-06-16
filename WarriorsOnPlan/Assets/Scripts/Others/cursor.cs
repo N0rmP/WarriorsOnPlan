@@ -15,7 +15,9 @@ public class cursor : movableObject, IMovableSupplement {
 
     private Action delEndRun = null;
 
-    public void Awake() {
+    public new void Awake() {
+        base.Awake();
+
         isChosen = false;
         isHovered = false;
 

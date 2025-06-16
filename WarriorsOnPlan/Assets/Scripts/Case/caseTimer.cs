@@ -6,8 +6,9 @@ using UnityEngine;
 using Processes;
 
 namespace Cases {
+    // ★ 여유있으면 isTimerNeeded, timerMax, timerCur, updateTimer, resetTimer, doOnAlarmed 넣어서 타이머를 인터페이스로 만들 것, 그리고 sensor에 결합시키셈
     public abstract class caseTimer : caseBase {
-
+        public bool isTimerNeeded { get; protected set; } = true;    // isTimerNeeded can be false when certain category is subclass of caseTimer but one exception doesn't use timer
         protected bool isAutoReset = false;
         protected bool isRemovedOnAlarmed = false;
 
@@ -18,6 +19,10 @@ namespace Cases {
         public caseTimer(int[] parArrParameter, enumCaseType parEnumCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parArrParameter, parEnumCaseType, parIsVisible) { }
 
         protected virtual void updateTimer(Thing source) {
+            if (!isTimerNeeded) {
+                return;
+            }
+
             if (timerCur <= 0) {
                 doOnAlarmed(source);
 
@@ -59,8 +64,8 @@ namespace Cases {
         public override void restoreParameters(IEnumerator<int> parParameters) {
             base.restoreParameters(parParameters);
 
-            timerMax = parParameters.MoveNext() ? parParameters.Current : 0;
-            timerCur = parParameters.MoveNext() ? parParameters.Current : 0;
+            timerMax = isTimerNeeded && parParameters.MoveNext() ? parParameters.Current : 0;
+            timerCur = isTimerNeeded && parParameters.MoveNext() ? parParameters.Current : 0;
         }
     }
 }

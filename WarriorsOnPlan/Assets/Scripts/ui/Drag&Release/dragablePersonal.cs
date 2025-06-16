@@ -10,7 +10,7 @@ public class dragablePersonal : dragableObjectAbst {
 
     public new void Awake() {
         base.Awake();
-        thisDrag = enumDrag.thing;
+        thisDrag = enumDrag.thingOriginal;
     }
 
     public void init(Thing parThing) {
@@ -19,7 +19,7 @@ public class dragablePersonal : dragableObjectAbst {
         }
     }
 
-    protected override object[] getParameters() {
+    protected override object[] getDragableParameters() {
         return new System.Object[1] { thisThing };
     }
 
@@ -28,24 +28,22 @@ public class dragablePersonal : dragableObjectAbst {
 
     // dragablePersonal is only dragableObject of world-space-canvas, it needs several extra GUI process to work properly
     protected override void doWhenHoveringStart() {
-        RectTransform tempRect = GetComponent<RectTransform>();
-        tempRect.localRotation = Quaternion.Euler(0f, 0f, 0f);
-        tempRect.anchorMin = new Vector2(0.5f, 0.5f);
-        tempRect.anchorMax = new Vector2(0.5f, 0.5f);
-        tempRect.sizeDelta = new Vector2(130f, 130f);
+        thisRectTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        thisRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        thisRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        thisRectTransform.sizeDelta = new Vector2(130f, 130f);
 
         GetComponent<Image>().sprite = thisThing.portrait;
         GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.8f);
     }
 
     protected override void doWhenHoveringEnd() {
-        RectTransform tempRect = GetComponent<RectTransform>();
-        tempRect.localRotation = Quaternion.Euler(0f, 0f, 0f);
-        tempRect.localPosition = Vector3.zero;
-        tempRect.anchorMin = new Vector2(0f, 0f);
-        tempRect.anchorMax = new Vector2(1f, 1f);
-        tempRect.offsetMin = new Vector2(0f, 0f);
-        tempRect.offsetMax = new Vector2(0f, 0f);
+        thisRectTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        thisRectTransform.localPosition = Vector3.zero;
+        thisRectTransform.anchorMin = new Vector2(0f, 0f);
+        thisRectTransform.anchorMax = new Vector2(1f, 1f);
+        thisRectTransform.offsetMin = new Vector2(0f, 0f);
+        thisRectTransform.offsetMax = new Vector2(0f, 0f);
 
         GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
     }

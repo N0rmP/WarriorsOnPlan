@@ -6,13 +6,11 @@ using UnityEngine;
 
 /*
     caution
-    makerComponent creates all codableObjects whose codes to be compared when game starts
-    and regardless of their type making them is done only by Activator.createInstance and passing an array of int as arguement
+    makerComponent creates dummy objects of all codableObjects whose codes to be compared when game starts
+    making them is done only by Activator.createInstance and passing an array of int as arguement
     so concrete child class of codableObject should have int array as its parameter
-*/
-public class codableObject : IParametable, ICloneable {
-    /* 
-        caseBase code explaination
+
+    code explaination
             forth digit (count from the right lowest digit) represents case type, left three digits represents what the case truly is
             each forth digit represents each case type below
             1 : circuit
@@ -31,7 +29,8 @@ public class codableObject : IParametable, ICloneable {
             if code has fifth digit regardless of its value, the case is for test and expected not to be used in actual game
 
             lastly code is written in each creator of codableObject by programmer, so be cautious not to make a mistake
-    */
+*/
+public class codableObject : IParametable, ICloneable {
     private int code_ = -99;
     public int code {
         get {

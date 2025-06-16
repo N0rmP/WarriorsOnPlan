@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class timerComponent : MonoBehaviour
-{
+public class timerComponent : MonoBehaviour {
     private Dictionary<Action, float> dictDelegate;
 
     void Awake() {

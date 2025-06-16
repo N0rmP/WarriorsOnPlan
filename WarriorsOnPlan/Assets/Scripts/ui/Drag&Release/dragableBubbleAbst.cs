@@ -44,4 +44,13 @@ public abstract class dragableBubbleAbst : dragableObjectAbst {
             gameObject.SetActive(false);
         }
     }
+
+    protected override void doWhenHoveringStart() {
+        GetComponent<showerCase>().deshow();
+        GetComponent<showerCase>().enabled = false;
+    }
+
+    protected override void doWhenHoveringEnd() {
+        GetComponent<showerCase>().enabled = true;
+    }
 }

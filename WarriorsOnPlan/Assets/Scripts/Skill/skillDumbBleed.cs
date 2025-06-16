@@ -12,6 +12,12 @@ namespace Cases {
         private int effectTimerMax = 0;
         private int damage = 0;
 
+        #region InfoImplementation
+        public override object[] getDescriptionArgument() {
+            return new object[2] { effectTimerMax, damage };
+        }
+        #endregion InfoImplementation
+
         public override bool isReady {
             get {
                 return false;
@@ -21,7 +27,7 @@ namespace Cases {
         public skillDumbBleed(int[] parSkillParameters) : base(parSkillParameters) {
             code = 92002;
             isRangeNeeded = false;
-            isCoolTimeNeeded = false;
+            isTimerNeeded = false;
         }
 
         public override Dictionary<string, int[]> getParameters() {

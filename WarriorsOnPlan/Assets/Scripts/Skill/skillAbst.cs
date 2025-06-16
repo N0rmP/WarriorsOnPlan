@@ -5,9 +5,15 @@ using UnityEngine;
 
 namespace Cases {
     public abstract class skillAbst : caseTimerSelfishTurn {
+        // fields in region creator_customable can be changed in each creator of concrete skill class
+        #region creator_customable
         // isRangeNeeded should be true even if skill targets only nearby things, it's false only when range is literally not used at all
         public bool isRangeNeeded { get; protected set; } = true;
-        public bool isCoolTimeNeeded { get; protected set; } = true;
+        public bool isTargetNeeded { get; protected set; } = true;
+        // targetGroupDefault is preferred target group of each skillAbst
+        public int targetGroupDefault { get; protected set; } = 0b0010;
+        #endregion creator_customable
+
 
         private int rangeMin_ = 1;
         private int rangeMax_ = 1;
@@ -69,11 +75,9 @@ namespace Cases {
         }
 
         protected override void updateTimer(Thing source) {
-            if (isCoolTimeNeeded) {
-                base.updateTimer(source);
-                if (combatManager.CM.combatState == enumCombatState.reenact) {
-                    source.updatePanelSkillTimer();
-                }
+            base.updateTimer(source);
+            if (isTimerNeeded && combatManager.CM.combatState == enumCombatState.reenact) {
+                source.updatePanelSkillTimer();
             }
         }
 
@@ -85,7 +89,7 @@ namespace Cases {
 
         public void useSkill(Thing source, Thing target = null) {
             actualUseSkill(source, target);
-            if (isCoolTimeNeeded) {
+            if (isTimerNeeded) {
                 resetTimer();
                 source.updatePanelSkillTimer();
             }

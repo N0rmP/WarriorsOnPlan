@@ -9,12 +9,12 @@
             "ToolList" : [
                 {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 2, 1]}
             ],
-            "CodeSensorForMove" : 1101, "Parameter0" : [-1, -1], 
-            "CodeNavigatorPrioritized" : 1204, "Parameter1" : [], 
             "CodeNavigatorIdle" : 1202, "Parameter2" : [], 
+            "CodeSensorForMove" : 1101, "Parameter0" : [-1, -1], 
+            "CodeNavigatorPrioritized" : 1201, "Parameter1" : [],             
             "CodeSensorForSkill" : 1102, "Parameter3" : [-1, -1], 
-            "CodeSelecterForSkill" : 1301, "Parameter4" : [], 
-            "CodeSelecterForAttack" : 1301, "Parameter5" : []
+            "CodeSelecterForSkill" : 1301, "Parameter4" : [2], 
+            "CodeSelecterForAttack" : 1301, "Parameter5" : [2]
         },
         {
             "NameThing" : "testerBleeder", 
@@ -24,18 +24,18 @@
             "ToolList" : [
                 {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 2, 1]}
             ],
-            "CodeSensorForMove" : 1103, "Parameter0" : [-1, -1, 5], 
-            "CodeNavigatorPrioritized" : 1204, "Parameter1" : [], 
             "CodeNavigatorIdle" : 1202, "Parameter2" : [], 
+            "CodeSensorForMove" : 1103, "Parameter0" : [-1, -1, 5], 
+            "CodeNavigatorPrioritized" : 1203, "Parameter1" : [],             
             "CodeSensorForSkill" : 1102, "Parameter3" : [-1, -1], 
-            "CodeSelecterForSkill" : 1301, "Parameter4" : [], 
-            "CodeSelecterForAttack" : 1302, "Parameter5" : []
+            "CodeSelecterForSkill" : 1301, "Parameter4" : [2], 
+            "CodeSelecterForAttack" : 1302, "Parameter5" : [2]
         }
     ],
     "NeutralThings" : [],
     "FriendlyWarriors" : [
         {
-            "NameThing" : "tester", 
+            "NameThing" : "testerBleeder", 
             "Coordinate0" : 0, "Coordinate1" : 0, 
             "HP" : 16, 
             "SkillParameters" : [4, 4, 1, 5, 2]

@@ -9,6 +9,12 @@ namespace Cases {
     public class skillPowerShot : skillAbst {
         private int damage;
 
+        #region InfoImplementation
+        public override object[] getDescriptionArgument() {
+            return new object[1] { damage };
+        }
+        #endregion InfoImplementation
+
         public skillPowerShot(int[] parSkillParameters) : base(parSkillParameters) {
             code = 92001;
         }

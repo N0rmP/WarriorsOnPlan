@@ -10,19 +10,20 @@ namespace Circuits {
             code = 1301;
         }
 
-        public override Thing select(Thing source) {
+        protected override Thing actualSelect(Thing source, List<Thing> parTargetList) {
             float minDistance = float.MaxValue;
             float tempDistance;
             node ownerPosition = source.curPosition;
             Thing targetCur = null;
 
-            foreach (Thing th in getTargetArray(source.thisSide)) {
+            foreach (Thing th in parTargetList) {
                 tempDistance = node.getTechnicalDistance(ownerPosition, th.curPosition);
                 if (minDistance > tempDistance) {
                     minDistance = tempDistance;
                     targetCur = th;
                 }
             }
+
             return targetCur;
         }
     }
