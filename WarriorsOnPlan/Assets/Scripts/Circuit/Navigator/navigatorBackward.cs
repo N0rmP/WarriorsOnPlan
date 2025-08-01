@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Circuits {
     public class navigatorBackward : navigatorAbst {
-        public navigatorBackward(int[] parParameter) : base(parParameter) {
-            code = 1203;
+        public navigatorBackward() {
+            code = 1204;
         }
 
         /*

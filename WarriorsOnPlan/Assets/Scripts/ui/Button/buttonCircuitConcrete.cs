@@ -18,6 +18,6 @@ public class buttonCircuitConcrete : MonoBehaviour {
     }
 
     public void chooseCircuitConcrete() {
-        combatUIManager.CUM.CCS.chooseCircuitConcrete(orderCircuitConcrete);
+        combatManager.CM.CUM.CCS.chooseCircuitConcrete(orderCircuitConcrete);
     }
 }

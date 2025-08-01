@@ -29,6 +29,7 @@ public class releasablePersonal : releasableObjectAbst {
         }
 
         thisThing.addCase(parTool);
+        combatManager.CM.systemRemoveToolsProvided(parTool);
         return true;
     }
 

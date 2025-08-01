@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
+using static UnityEngine.GraphicsBuffer;
 
 namespace Processes {
+    // be aware not to confuse this with processByproductActionMove
     public class processByproductMove : processByproductAbst {
         private Thing source;
         private node departure;
@@ -20,21 +22,27 @@ namespace Processes {
 
         protected override void doBeforeActualDo() {
             base.doBeforeActualDo();
-            if (!isWillingly) {
-                foreach (ICaseBeforeForcedMove cb in source.getCaseList<ICaseBeforeForcedMove>()) {
-                    cb.onBeforeForcedMove(source, destination);
-                }
-            }
 
             departure = source.curPosition;
+
+            if (!isWillingly) {
+                // onInterferableAttack
+                isInterfered = source.observeInterferable<ICaseInterferableForcedMove>(new object[2] { source, destination });
+                if (isInterfered) {
+                    return;
+                }
+
+                // onBeforeForcedMove
+                source.observeVoid<ICaseBeforeForcedMove>(new object[2] { source, destination });
+            } 
         }
 
         protected override void doAfterActualDo() {
             base.doAfterActualDo();
+
+            // onAfterForcedMove
             if (!isWillingly) {
-                foreach (ICaseAfterForcedMove cb in source.getCaseList<ICaseAfterForcedMove>()) {
-                    cb.onAfterForcedMove(source);
-                }
+                source.observeVoid<ICaseAfterForcedMove>(new object[1] { source });
             }
         }
 
@@ -42,13 +50,18 @@ namespace Processes {
             source.curPosition.sendThing(destination);
         }
 
-        /*
-        protected override void actualUNDO() {
-            source.curPosition.sendThing(departure, true);
-        }
-        */
-
         protected override void actualSHOW() {
+            base.actualSHOW();
+
+            if (isInterfered) {
+                gameManager.GM.PC.popupBasicAlert(
+                    source.transform.position, 
+                    isWillingly ? gameManager.GM.DHouC.bookWords.strMove : gameManager.GM.DHouC.bookWords.strForcedMove + 
+                    " " + 
+                    gameManager.GM.DHouC.bookWords.strInterfere, 
+                false);
+            }
+
             Vector3 tempDestinationVector = source.curPosition.getVector3();
 
             if (isWillingly) {

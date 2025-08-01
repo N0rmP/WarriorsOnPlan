@@ -38,4 +38,8 @@ public abstract class releasableObjectAbst : MonoBehaviour {
     }
 
     protected abstract bool doWhenReleased(enumDrag parCurDragging, System.Object[] parParameters);
+
+    public void OnDestroy() {
+        gameManager.GM.DC.removeRleasableObject(this);
+    }
 }

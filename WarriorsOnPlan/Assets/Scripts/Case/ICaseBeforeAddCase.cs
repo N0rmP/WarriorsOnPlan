@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cases;
 
-namespace Cases {
-    public interface ICaseBeforeAddCase {
-        public bool onBeforeAddCase(Thing source, caseBase parCaseAdded); 
-    }
+public interface ICaseBeforeAddCase {
+    public void caseFunc(Thing source, caseBase caseAdded);
 }

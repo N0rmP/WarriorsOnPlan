@@ -13,7 +13,8 @@ public class releasableCurtainBoxInner : releasableObjectAbst {
             return false;
         }
 
-        combatUIManager.CUM.CStatus.removeTool((Cases.caseBase)parParameters[0]);
+        combatManager.CM.CUM.CStatus.removeTool((Cases.caseBase)parParameters[0]);
+        // combatManager.CM.systemAddToolsProvided((Cases.caseBase)parParameters[0]);
         return true;
     }
 }

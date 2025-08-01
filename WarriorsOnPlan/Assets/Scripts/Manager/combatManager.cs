@@ -36,6 +36,9 @@ public class combatManager : MonoBehaviour {
     public fxComponent FC { get; private set; }
     public houseComponent HouC { get; private set; }
     public historyComponent HisC { get; private set; }
+    public combatUIComponent CUM { get; private set; }    // it's not that, you lewd animal
+
+    public int curLevelCode { get; private set; }
 
     private enumCombatState combatState_;
     public enumCombatState combatState {
@@ -50,21 +53,21 @@ public class combatManager : MonoBehaviour {
 
     private List<caseBase> toolsProvided;
 
+    // countDistinguisher helps deciding where to stop restoring / reenacting, it's required because countAction can help only with processActionAbst not with processSystemCombatEnd etc.
     public int countDistinguisher { get; private set; }
+    private int countActionMax = 0;
     private int countAction_;
     public int countAction {
         get {
             return countAction_;
         }
         private set {
-            countAction_ = (value < 0) ? 0 : value;
+            countAction_ = Math.Clamp(value, 0, countActionMax);
         }
     }
 
     public enumSide sideTurn { get; private set; }
 
-    public const float fltInterval = 1.5f;
-    public const float fltBodyAnimationDuration = fltInterval / 1.5f;
     private int combatSpeed_;
     public int combatSpeed {
         get {
@@ -74,12 +77,19 @@ public class combatManager : MonoBehaviour {
             combatSpeed_ = Math.Clamp(value, 0, 3);
         }
     }
+
     private System.Object intervalYieldReturn;
 
     // members used during actual combat
     private processAbst processLast;
     private Action<processAbst> delSetNext;
     private mementoCombat mementoLast;
+    private upgradeAbst[] arrUpgradeActive_;
+    public upgradeAbst[] arrUpgradeActive{
+        get {
+            return arrUpgradeActive_.Clone() as upgradeAbst[];
+        }
+    }
 
     // members used during combat reenacting
     private processAbst processReenactedNext;
@@ -96,21 +106,18 @@ public class combatManager : MonoBehaviour {
             Destroy(this);
         }
 
+        CUM = new combatUIComponent();
         GC = new graphComponent(7, 7);
         FC = new fxComponent();
         HouC = new houseComponent();
-        HisC = new historyComponent();
+        HisC = new historyComponent();        
 
         combatState = enumCombatState.preparing;
 
         toolsProvided = new List<caseBase>();
+        arrUpgradeActive_ = null;
 
         resetInterval();
-    }
-
-    public void Start() {
-        systemLevelInitiate("jsonLevel_Test");
-        BEPREPARED(true);
     }
     #endregion callbacks
 
@@ -119,7 +126,7 @@ public class combatManager : MonoBehaviour {
         combatState = enumCombatState.preparing;
 
         restoreCombat(parIsInitiation ? HisC.mementoInitial : HisC[0]);
-        combatUIManager.CUM.doWhenPreparingStart();
+        CUM.doWhenPreparingStart();
         foreach (Thing thingFriendly in HouC.getArrTotal(enumSide.player)) {
             thingFriendly.updatePanelDragableReleasable();
         }
@@ -127,7 +134,12 @@ public class combatManager : MonoBehaviour {
     }
 
     public void startCombat() {
-        combatUIManager.CUM.doWhenCombatStart();
+        // player can't start combat while already in combat
+        if (combatState > enumCombatState.preparing) {
+            return;
+        }
+
+        CUM.doWhenCombatStart();
         COMBAT();
         foreach (Thing thingFriendly in HouC.getArrTotal(enumSide.player)) {
             thingFriendly.updatePanelDragableReleasable();
@@ -161,23 +173,23 @@ public class combatManager : MonoBehaviour {
         processAbst tempBefore = processLast;
         parProcess.DO(ref processLast, ref delSetNext);
 
-        if (parProcess is processActionAbst) {
+        if (parProcess is processAction) {
             mementoCombat tempMementoCombat = makeMementoCombat(parProcess);
             mementoLast = tempMementoCombat;
             HisC.addMemento(tempMementoCombat);
         }
 
-        // check if this combat is over after each action
+        // check if this combat is over after each execution
         if (checkCombatEnd() && processLast is not processSystemCombatEnd) {
-            //★ 게임 종료 처리
             combatState = enumCombatState.combatDone;
             processSystemCombatEnd tempProcessSCE = new processSystemCombatEnd();
             tempProcessSCE.DO(ref processLast, ref delSetNext);
             delSetNext(null);
             HisC.addMemento(makeMementoCombat(tempProcessSCE));
+            countActionMax = countAction;
         }
     }
-
+    
     public void COMBAT() {
         combatState = enumCombatState.combat;
 
@@ -192,6 +204,7 @@ public class combatManager : MonoBehaviour {
         HisC.addMemento(makeMementoCombat(null));
         mementoLast = HisC[0];
         executeProcess(new processSystemCombatStart());
+        countActionMax = int.MaxValue;
 
         while (combatState == enumCombatState.combat) {
             tempArrActors = HouC.getArrActionOrder(sideTurn);
@@ -201,23 +214,19 @@ public class combatManager : MonoBehaviour {
             executeProcess(new processSystemTurnStart(tempArrActors));
 
             foreach (Thing th in tempArrActors) {
-                if (th.stateCur <= enumStateWarrior.dead || combatState == enumCombatState.combatDone) {
-                    continue;
+                if (th.stateCur <= enumStateWarrior.dead) { 
+                    continue; 
+                }
+                if (combatState == enumCombatState.combatDone) { 
+                    break; 
                 }
 
-                // ACTUAL WARRIOR's ACTION
-                // sorting houseComponent will be done in each selecterAbst or class which requires sorting
-                // update targets, this precedes state decision because targets can affect it
-                th.updateTargets();
-                // state decision
-                th.updateState();
                 // actual ACTUAL WARRIOR's ACTION
-                executeProcess(th.makeAction());
+                executeProcess(new processAction(th));
             }
 
-            if (countAction > 999) {
-                Debug.Log("Ejection : 999 action passed, inordinary combat expected");  
-                return; 
+            if (combatState == enumCombatState.combatDone) { 
+                break; 
             }
 
             // turn end
@@ -238,27 +247,18 @@ public class combatManager : MonoBehaviour {
                     sideTurn = enumSide.player;
                     }
                 ));
-        }
 
+            // ★ 무한루프 방지용 긴급탈출버튼
+            if (countAction > 999) {
+                Debug.Log("Ejection : 999 action passed, COMBAT method escape");
+                return;
+            }
+        }        
+
+        // ★ 테스트용 프로세스 싹 출력하기
         Debug.Log("combat end (( countAction : " + countAction);
-        HisC[0].processNext.testChainAfterAll();
-
-        // combat end
-        int tempTotalDealtDamage = 0; int tempTotalTakenDamage = 0;
-        /*  ★ 데미지만 저장하지 말고 구조체 하나 따로 빼서 전투 종료 시 Thing의 정보를 담아서 전달하도록 만들 것
-        foreach (Thing t in HouC.arrPlayerAlive) {
-            tempTotalDealtDamage += t.damageTotalDealt;
-            tempTotalTakenDamage += t.damageTotalTaken;
-        }
-        */
-        curCombatResult = new combatResult(
-            HouC.getArrAlive(enumSide.enemy).Length <= 0,
-            countAction,
-            tempTotalDealtDamage,
-            tempTotalTakenDamage
-            );
+        HisC[0].processNext.testChainAfterAll();   
     }
-
     private IEnumerator REENACT() {
         while (processReenactedNext != null) {
             Debug.Log("incoming next to-be-reenacted process : " + processReenactedNext);
@@ -266,12 +266,18 @@ public class combatManager : MonoBehaviour {
                 countAction = processReenactedNext.thisCountAction;
             }
 
+            // ★ 무한루프 방지용 긴급탈출버튼
+            if (countAction > 999) {
+                Debug.Log("Ejection : 999 action passed, REENACT method escape");
+                yield break;
+            }
+
             processReenactedNext = processReenactedNext.REENACT();
-            combatUIManager.CUM.CStatus.updateTotal();
+            CUM.CStatus.updateTotal();
             yield return getInterval();
         }
 
-        yield return new WaitForSeconds(fltInterval / (float)combatSpeed);
+        yield return new WaitForSeconds(structInterValsAndDurations.fltInterval / (float)combatSpeed);
 
         Debug.Log("reenacting end");
         combatState = enumCombatState.reenactDone;
@@ -285,18 +291,17 @@ public class combatManager : MonoBehaviour {
             return;
         }
 
-        combatState = enumCombatState.reenact;
-
         restoreCombat(HisC[0]);
-        resumeREENACT();
+
+        combatState = enumCombatState.reenact;
+        StartCoroutine(REENACT());
     }
 
     public void resumeREENACT() {
-        if (combatState is not enumCombatState.reenact and not enumCombatState.reenactHalted) {
-            Debug.Log("test " + combatState);
+        if (combatState is not enumCombatState.reenactHalted) {
             return;
         }
-
+        
         combatState = enumCombatState.reenact;
         StartCoroutine(REENACT());
     }
@@ -321,7 +326,7 @@ public class combatManager : MonoBehaviour {
 
     private void resetInterval() {
         combatSpeed = 1;
-        intervalYieldReturn = new WaitForSeconds(fltInterval);
+        intervalYieldReturn = new WaitForSeconds(structInterValsAndDurations.fltInterval);
     }
 
     private System.Object getInterval(float parAdditionalInterval = 0f) {
@@ -329,14 +334,14 @@ public class combatManager : MonoBehaviour {
             // if combatSpeed == 0, combat progresses to next action only when player presses anything
             0 => new WaitUntil(() => Input.anyKeyDown),
             // if combatSpeed is 1~3, combat progresses in speed of 1~3 times of original speed automatically
-            > 0 and < 4 => new WaitForSeconds(fltInterval / (float)combatSpeed + parAdditionalInterval),
+            > 0 and < 4 => new WaitForSeconds(structInterValsAndDurations.fltInterval / (float)combatSpeed + parAdditionalInterval),
             // case combatSpeed >= 4 is only for trouble-blocking and you shouldn't go through this case
-            _ => new WaitForSeconds(fltInterval + parAdditionalInterval)
+            _ => new WaitForSeconds(structInterValsAndDurations.fltInterval + parAdditionalInterval)
         };
     }
 
     public float getBodyAnimationDuration() {
-        return fltBodyAnimationDuration / (float)combatManager.CM.combatSpeed;
+        return structInterValsAndDurations.fltBodyAnimationDuration / (float)combatManager.CM.combatSpeed;
     }
 
     public void changeSpeed() {
@@ -351,6 +356,25 @@ public class combatManager : MonoBehaviour {
     public void skipReenating() {
         intervalYieldReturn = null;
         combatSpeed = 99;
+    }
+
+    public combatResult getCombatResult() {
+        // combat end
+        if (curCombatResult == null) {
+            int tempTotalDamageDealt = 0; int tempTotalDamageTaken = 0;
+            foreach (Thing t in HouC.getArrTotal(enumSide.player)) {
+                tempTotalDamageDealt += t.thisStatus.damageDealt;
+                tempTotalDamageTaken += t.thisStatus.damageTotalTaken;
+            }
+            curCombatResult = new combatResult(
+                HouC.getArrAlive(enumSide.enemy).Length <= 0,
+                countAction,
+                tempTotalDamageDealt,
+                tempTotalDamageTaken
+                );
+        }
+
+        return curCombatResult;
     }
     #endregion utility
 
@@ -391,19 +415,30 @@ public class combatManager : MonoBehaviour {
     }
 
     public void restorePreviousAction() {
+        if (combatState < enumCombatState.reenact || combatState > enumCombatState.reenactDone) {
+            return;
+        }
+
         decrementCountAction();
         restoreCombat(HisC[countAction]);
     }
 
-    public void restoreInitial() {
-        restoreCombat(HisC.mementoInitial);
+    public void restoreNextAction() {
+        if (combatState < enumCombatState.reenact || combatState > enumCombatState.reenactDone) {
+            return;
+        }
+
+        incrementCountAction();
+        restoreCombat(HisC[countAction]);
     }
 
     private void restoreCombat(mementoCombat parMC) {
+        // clear several objects before restoring
         StopAllCoroutines();
         if (combatState is enumCombatState.reenact) {
             combatState = enumCombatState.reenactHalted;
         }
+        dragableObjectAbst.emergencyEndDrag();
         gameManager.GM.TC.clearDelegate();
         gameManager.GM.UC.clearAll();
 
@@ -413,18 +448,25 @@ public class combatManager : MonoBehaviour {
         processLast = parMC.processLast;
         processReenactedNext = parMC.processNext;
 
+        // tools provided
+        toolsProvided.Clear();
+        foreach (caseBase cb in parMC.toolsProvided) {
+            toolsProvided.Add(cb);
+        }
+        CUM.TS.updateBubbles(toolsProvided.ToArray());
+
         restoreUI();
     }
 
     private void restoreUI() {
-        // ★ if (combatUIManager.CUM.CStatus is shown)
-        // combatUIManager.CUM.CStatus.updateTotal();
+        // ★ if (CUM.CStatus is shown)
+        // CUM.CStatus.updateTotal();
 
         // this is necessary when new spawned thing has ability to change ActionOrder
-        combatUIManager.CUM.SAO.prepareBoxActionOrderBelt();
+        CUM.SAO.prepareBoxActionOrderBelt();
 
-        combatUIManager.CUM.setActionCounter(countAction, true);
-        combatUIManager.CUM.testShowTurn(); //★ 폴리싱 필요,
+        CUM.setActionCounter(countAction, true);
+        CUM.testShowTurn(); //★ 폴리싱 필요,
 
         /*
             3. boxInformation의 canvasStatistics 복구, 아마도 mementoStatistics가 필요할 것 (★ 추후 많은 구현 필요)
@@ -434,16 +476,22 @@ public class combatManager : MonoBehaviour {
     #endregion combat_methods
 
     #region system_methods
-    public void systemLevelInitiate(string parLevelName) {
-        dataLevel tempDataLevel = gameManager.GM.JC.getJson<dataLevel>(parLevelName, false);
+    public void systemLevelEnter(dataLevel parDataLevel, upgradeAbst[] parArrUpgrade) {
+        arrUpgradeActive_ = parArrUpgrade;
+        systemLevelInitiate(parDataLevel);
+        BEPREPARED(true);
+    }
 
+    // systemLevelInitiate focus on making combat-preparing state from json-level-data, it has no need to graphic it
+    private void systemLevelInitiate(dataLevel parDataLevel) {
+        curLevelCode = parDataLevel.LevelCode;
         Thing tempThing;
 
-        //spawn enemy warriors
-        foreach (dataNotFriendlyThing et in tempDataLevel.EnemyWarriors) {
+        // spawn enemy warriors
+        foreach (dataNotFriendlyThing et in parDataLevel.EnemyWarriors) {
             tempThing = systemSpawn(et.NameThing, enumSide.enemy, et.HP, (et.Coordinate0, et.Coordinate1), et.SkillParameters);
             foreach (dataIParametable dt in et.ToolList) {
-                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters));
+                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters, null));
             }
             tempThing.setCircuit(
                 et.CodeNavigatorIdle, et.Parameter2,
@@ -455,11 +503,11 @@ public class combatManager : MonoBehaviour {
                 );
         }
 
-        //spawn neutral warriors
-        foreach (dataNotFriendlyThing nt in tempDataLevel.NeutralThings) {
+        // spawn neutral warriors
+        foreach (dataNotFriendlyThing nt in parDataLevel.NeutralThings) {
             tempThing = systemSpawn(nt.NameThing, enumSide.neutral, nt.HP, (nt.Coordinate0, nt.Coordinate1), nt.SkillParameters);
             foreach (dataIParametable dt in nt.ToolList) {
-                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters));
+                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters, null));
             }
             tempThing.setCircuit(
                 nt.CodeNavigatorIdle, nt.Parameter2,
@@ -470,31 +518,61 @@ public class combatManager : MonoBehaviour {
                 nt.CodeSelecterForAttack, nt.Parameter5);
         }
 
-        //spawn friendly warriors
-        foreach (dataFriendlyThing ft in tempDataLevel.FriendlyWarriors) {
+        // spawn friendly warriors
+        foreach (dataFriendlyThing ft in parDataLevel.FriendlyWarriors) {
             tempThing = systemSpawn(ft.NameThing, enumSide.player, ft.HP, (ft.Coordinate0, ft.Coordinate1), ft.SkillParameters);
         }
 
-        //make toolsProvided
-        foreach (dataIParametable dt in tempDataLevel.ToolsProvided) {
+        // make toolsProvided
+        toolsProvided.Clear();
+        foreach (dataIParametable dt in parDataLevel.ToolsProvided) {
             toolsProvided.Add(
-                gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters)
+                gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters, null)
                 );
         }
-        combatUIManager.CUM.TS.prepareBubbles(toolsProvided.ToArray());
 
-        curCombatEnder = new enderBasic();  //★ json 파일에서 가져오도록 하기
-        //ui 준비
+        // set Ender
+        curCombatEnder = new enderBasic();  //★ json 레벨 파일에서 가져오도록 하기
+
+        // upgrade actualActivate & set boxUpgradeActive
+        foreach (upgradeAbst ua in arrUpgradeActive) {
+            ua.actualActivate();
+        }
+        CUM.CUA.prepareBoxUpgrade(arrUpgradeActive);
+
+        // ICaseSystemicBeforePrepare
+        foreach (ICaseSystemicBeforePrepare cb in from th in HouC.arrTotalAlive where th.thisSkill is ICaseSystemicBeforePrepare select th.thisSkill ) {
+            cb.caseFunc();
+        }
 
         HisC.setMementoInitial(makeMementoCombat(null));
     }
+    
+    public void systemAddToolsProvided(caseBase parTool) {
+        if (parTool.caseType != enumCaseType.tool) {
+            return;
+        }
+
+        toolsProvided.Add(parTool);
+        CUM.TS.updateBubbles(toolsProvided.ToArray());
+    }
+
+    public void systemRemoveToolsProvided(caseBase parTool) {
+        if (parTool.caseType != enumCaseType.tool) {
+            return;
+        }
+
+        toolsProvided.Remove(parTool);
+        CUM.TS.updateBubbles(toolsProvided.ToArray());
+    }
+
     public Thing systemSpawn(string parThingName, enumSide parSide, int parMaxHp, (int c0, int c1) parCoor, int[] parSkillParameters) {
         GameObject tempW = Instantiate<GameObject>(Resources.Load<GameObject>("Prefab/Warrior/" + parThingName));
 
         try {
             Thing tempThing = tempW.GetComponent<Thing>();
             tempThing.init(parSide, parMaxHp, parSkillParameters);
-            HouC.addThing(tempThing);
+            HouC.addAliveThing(tempThing);
 
             systemPlace(tempThing, parCoor);
 
@@ -505,7 +583,6 @@ public class combatManager : MonoBehaviour {
         }
     }
 
-    //processPlace 
     public void systemPlace(Thing parThing, (int c0, int c1) parCoor) {
         node tempNode = GC[parCoor.c0, parCoor.c1];
 
@@ -515,6 +592,15 @@ public class combatManager : MonoBehaviour {
         }
 
         tempNode.placeThing(parThing, true);
+    }
+
+    // caution : systemDestroyLevel destories or initiates almost all objects in combat-scene, it's recommended to be called only during loading
+    public void systemDestroyLevel() {
+        CUM.CStatus.updateNULL();
+        HouC.clearTotal(true);
+        HisC.resetHistoryTotal();
+        CUM.SAO.clearLineTotal();
+        GC.vacateGraph();
     }
     #endregion system_methods
 
@@ -532,7 +618,9 @@ public class combatManager : MonoBehaviour {
             combatManager.CM.combatState == enumCombatState.preparing
             );
     }
+    #endregion utility
 
+    #region count
     public void incrementCountAction() {
         countAction++;
     }
@@ -548,7 +636,7 @@ public class combatManager : MonoBehaviour {
     public void decrementCountDistinguisher() {
         countDistinguisher--;
     }
-    #endregion utility
+    #endregion count
 
     #region internalClasses
     private interface ICombatEnder { public bool checkIsCombatEnd(); public bool checkIsPlayerWin(); }
@@ -560,21 +648,16 @@ public class combatManager : MonoBehaviour {
             return combatManager.CM.HouC.getArrAlive(enumSide.enemy).Length <= 0;
         }
     }
-
-    // technically it's not class, anyway...
-    public record combatResult {
-        public bool isPlayerWin;
-        public int totalActionExecuted;
-        // both damage below is player side's
-        public int totalDealtDamage;
-        public int totalTakenDamage;
-
-        public combatResult(bool parIsPlayerWin, int parActionExecuted, int parTotalDealtDamage, int parTotalTakenDamage) {
-            isPlayerWin = parIsPlayerWin;
-            totalActionExecuted = parActionExecuted;
-            totalDealtDamage = parTotalDealtDamage;
-            totalTakenDamage = parTotalTakenDamage;
-        }
-    }
     #endregion internalClasses
+
+    #region test
+    public void testToolsProvided() {
+        StringBuilder tempSB = new StringBuilder("testToolsProvided : ");
+        foreach (caseBase cb in toolsProvided) {
+            tempSB.Append(cb.infoName);
+            tempSB.Append(" , ");
+        }
+        Debug.Log(tempSB.ToString());
+    }
+    #endregion test
 }

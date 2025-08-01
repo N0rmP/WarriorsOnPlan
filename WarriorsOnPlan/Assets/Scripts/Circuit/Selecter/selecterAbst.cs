@@ -28,8 +28,8 @@ namespace Circuits {
         public int targetGroup { get; private set; }
 
         // parParameter[0] = enumSide parSide, parParameter[1] = int parTargetGroup
-        public selecterAbst(int[] parParameter) : base(parParameter) {
-            targetGroup = parParameter[0];
+        public selecterAbst() {
+
         }
 
         // getTargetArray returns an array of targets only referring to targetGroup

@@ -25,6 +25,11 @@ public class cursor : movableObject, IMovableSupplement {
         SR.color = transparent;
     }
 
+    public new void Update() {
+        base.Update();
+        setIsHovered(gameObject.checkHoveredWorld());
+    }
+
     public void setDelEndRun(Action parDelEndRun) {
         if (delEndRun != null) {
             return;
@@ -50,6 +55,7 @@ public class cursor : movableObject, IMovableSupplement {
     public void whenStartMove() { }
 
     private void updateSprite() {
+        // Debug.Log(this + " of " + gameObject + " : " + (SR == null) + " / " + System.Object.ReferenceEquals(SR, null));
         SR.color = isChosen ? distinct :
             isHovered ? half :
             transparent;

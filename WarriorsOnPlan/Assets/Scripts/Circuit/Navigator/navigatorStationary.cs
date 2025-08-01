@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Circuits {
     public class navigatorStationary : navigatorAbst {
-        public navigatorStationary(int[] parParameter) : base(parParameter) {
+        public navigatorStationary() {
             code = 1201;
         }
 

@@ -15,7 +15,8 @@ public class showerCase : hoveredShowerAbst {
     caseTypeShown restricts which case-type can be shown by this showerCase
     each case-type-enum will be AND operated with caseTypeShown and should result in non-zero to be shown
     */
-    protected int caseTypeShown = 0;
+    [SerializeField]
+    protected int caseTypeShown = 0b11111;
 
     protected override void init() {
         setCase(null);
@@ -25,7 +26,6 @@ public class showerCase : hoveredShowerAbst {
         // make similar-Singleton canvasCaseShown
         if (objCaseShown == null) {
             objCaseShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Gut/canvasCaseShown"));
-            objCaseShown.transform.SetParent(gameManager.GM.canvasMain.transform);
             objCaseShown.SetActive(false);
         }
 
@@ -55,7 +55,7 @@ public class showerCase : hoveredShowerAbst {
 
     public void setCaseTypeShown(enumCaseType[] parArray) {
         if (parArray == null) {
-            caseTypeShown = 0b1111;
+            caseTypeShown = 0b11111;
             return;
         }
 
@@ -66,7 +66,7 @@ public class showerCase : hoveredShowerAbst {
     }
 
     public void setCaseTypeShown(int parCTS) {
-        Math.Clamp(parCTS, 0b0001, 0b1111);
+        Math.Clamp(parCTS, 0b00001, 0b11111);
         caseTypeShown = parCTS;
     }
 

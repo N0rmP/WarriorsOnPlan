@@ -28,6 +28,7 @@ public class node : MonoBehaviour {
 
     public node[] link { get; private set; }
     public Thing thingHere { get; private set; }
+    // private List<Thing> ★ 지역 효과 구현하기
 
     // variables below is used for various searches, it's declared public being used only by external instances
     public bool swissArmyVisited;

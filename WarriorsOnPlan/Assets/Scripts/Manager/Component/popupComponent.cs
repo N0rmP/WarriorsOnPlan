@@ -8,8 +8,7 @@ using TMPro;
 using UnityEditor;
 
 public class popupComponent {
-    private GameObject canvasPopup;
-    private Image curtainBeneathCanvasPopup;
+    private const int defaultFontSize = 20;
 
     private carrierGeneric<GameObject> carrierPopupText;
     private carrierGeneric<GameObject> carrierPopupConfirm;
@@ -18,22 +17,14 @@ public class popupComponent {
     private GameObject popupConfirm;
 
     public popupComponent() {
-        canvasPopup = new GameObject("canvasPopup");
-        GameObject.DontDestroyOnLoad(canvasPopup);
-        canvasPopup.AddComponent<Canvas>();
-        canvasPopup.AddComponent<CanvasScaler>();  // CanvasScaler is for the case when canvasPopup becomes CanvasMain
-        canvasPopup.AddComponent<GraphicRaycaster>();
-        curtainBeneathCanvasPopup = canvasPopup.AddComponent<Image>();
-        curtainBeneathCanvasPopup.sprite = Resources.Load<Sprite>("Image/tempFrame");
-        curtainBeneathCanvasPopup.color -= new Color(0f, 0f, 0f, 1f);
-        curtainBeneathCanvasPopup.enabled = false;
+        
 
         // carrier creation
         carrierGeneric<GameObject> makeCarrier(string parPrefabName) {
             return new carrierGeneric<GameObject>(
                 () => {
                     GameObject tempObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Popup/" + parPrefabName));
-                    tempObject.transform.SetParent(canvasPopup.transform);
+                    gameManager.GM.UC.setParentPopup(tempObject.transform);
                     return tempObject;
                 },
                 (x) => {
@@ -44,45 +35,22 @@ public class popupComponent {
         carrierPopupText = makeCarrier("boxPopupText");
         carrierPopupConfirm = makeCarrier("boxPopupConfirm");
         carrierPopupFloating = makeCarrier("boxPopupFloating");
-
-        // gameManager.GM.doWhenSceneLoaded += prepareCanvasPopup;
-        SceneManager.sceneLoaded += prepareCanvasPopup;
-    }
-
-    public void prepareCanvasPopup(Scene parScene, LoadSceneMode parLoadSceneMode) {
-        if (canvasPopup.GetComponent<Canvas>() == gameManager.GM.canvasMain) {
-            canvasPopup.GetComponent<RectTransform>().sizeDelta = new Vector2(gameManager.GM.option.screenWidth, gameManager.GM.option.screenHeight);
-            return;
-        }
-
-        carrierPopupText.returnTotal();
-        canvasPopup.transform.SetParent(gameManager.GM.canvasMain.transform);
-        RectTransform tempRecttransform = canvasPopup.GetComponent<RectTransform>();
-        tempRecttransform.anchorMin = new Vector2(0f, 0f);
-        tempRecttransform.anchorMax = new Vector2(1f, 1f);
-        tempRecttransform.offsetMin = new Vector2(0f, 0f);
-        tempRecttransform.offsetMax = new Vector2(1f, 1f);
-    }
-
-    public void setCurtainBeneathCanvasPopup(bool parIsEnabled) {
-        curtainBeneathCanvasPopup.enabled = parIsEnabled;
-    }
+    }    
 
     #region show
-    public void showPopupText(Vector3 parPosition, Color parTextColor, Color parBackgroundColor, string parString, bool parIsScreenVector = true, float parDuration = -1f) {
+    public void showPopupText(Vector3 parPosition, Color parTextColor, Color parBackgroundColor, string parString, bool parIsScreenVector = true, int parFonrSize = defaultFontSize, float parDuration = -1f) {
         // convert world-position to screen-position
         if (!parIsScreenVector) {
             parPosition = Camera.main.WorldToScreenPoint(parPosition);
         }
 
         GameObject tempTextPopup = carrierPopupText.getInterceptor();
+        tempTextPopup.transform.GetChild(0).GetComponent<TextMeshProUGUI>().fontSize = parFonrSize;
         tempTextPopup.GetComponent<popupText>().setPopupText(parTextColor, parBackgroundColor, parString, parDuration);
         tempTextPopup.GetComponent<RectTransform>().anchoredPosition = parPosition;
     }
 
     public void showPopupConfirm(Vector3 parScreenPosition, string parQuestion = "you forgot to set question, dumbass", Action parDelWhenYes = null, Action parDelWhenNo = null) {
-        setCurtainBeneathCanvasPopup(true);
-
         popupConfirm tempPopupConfirm = carrierPopupConfirm.getInterceptor().GetComponent<popupConfirm>();
         tempPopupConfirm.setDelWhenYes(parDelWhenYes);
         tempPopupConfirm.setDelWhenNo(parDelWhenNo);
@@ -90,7 +58,11 @@ public class popupComponent {
         tempPopupConfirm.GetComponent<RectTransform>().localPosition = parScreenPosition;
     }
 
-    
+    public void showPopupConfirm(string parQuestion = "you forgot to set question, dumbass", Action parDelWhenYes = null, Action parDelWhenNo = null) {
+        showPopupConfirm(new Vector3(0f, 0f, 0f), parQuestion, parDelWhenYes, parDelWhenNo);
+    }
+
+
     public void showPopupFloating(Vector3 parPosition, Color parTextColor, Color parBackgroundColor, string parString, bool parIsScreenVector = true, float parDuration = -1f) {
         // convert world-position to screen-position
         if (!parIsScreenVector) {
@@ -101,27 +73,23 @@ public class popupComponent {
         tempTextPopup.GetComponent<popupOutline>().setPopupOutline(parTextColor, parBackgroundColor, parString, parDuration);
         tempTextPopup.GetComponent<RectTransform>().anchoredPosition = parPosition;
     }
-
-    public void showPopupConfirm(string parQuestion = "you forgot to set question, dumbass", Action parDelWhenYes = null, Action parDelWhenNo = null) {
-        showPopupConfirm(new Vector3(0f, 0f, 0f), parQuestion, parDelWhenYes, parDelWhenNo);
-    }
     #endregion show
 
     #region Ready_to_PopupText
-    public void popupBasicAlert(Vector3 parScreenPosition, string parString, bool parIsScreenVector = true, float parDuration = -1f) {
-        showPopupText(parScreenPosition, Color.white, new Color(0f, 0f, 0f, 0.7f), parString, parIsScreenVector, parDuration);
+    public void popupBasicAlert(Vector3 parScreenPosition, string parString, bool parIsScreenVector = true, int parFonrSize = defaultFontSize, float parDuration = -1f) {
+        showPopupText(parScreenPosition, Color.white, new Color(0f, 0f, 0f, 0.7f), parString, parIsScreenVector, parFonrSize, parDuration);
     }
 
     public void popupDamage(Vector3 parScreenPosition, string parString, bool parIsScreenVector = true) {
-        showPopupFloating(parScreenPosition, Color.red, new Color(0f, 0f, 0f, 0.1f), parString, parIsScreenVector, combatManager.fltInterval / combatManager.CM.combatSpeed);
+        showPopupFloating(parScreenPosition, Color.red, new Color(0f, 0f, 0f, 0.1f), parString, parIsScreenVector, structInterValsAndDurations.fltInterval / combatManager.CM.combatSpeed);
     }
 
     public void popupDamageMagic(Vector3 parScreenPosition, string parString, bool parIsScreenVector = true) {
-        showPopupFloating(parScreenPosition, Color.white, new Color(0f, 0f, 0f, 0.1f), parString, parIsScreenVector, combatManager.fltInterval / combatManager.CM.combatSpeed);
+        showPopupFloating(parScreenPosition, Color.white, new Color(0f, 0f, 0f, 0.1f), parString, parIsScreenVector, structInterValsAndDurations.fltInterval / combatManager.CM.combatSpeed);
     }
 
     public void popupHeal(Vector3 parScreenPosition, string parString, bool parIsScreenVector = true) {
-        showPopupFloating(parScreenPosition, Color.green, new Color(0f, 0f, 0f, 0.1f), parString, parIsScreenVector, combatManager.fltInterval / combatManager.CM.combatSpeed);
+        showPopupFloating(parScreenPosition, Color.green, new Color(0f, 0f, 0f, 0.1f), parString, parIsScreenVector, structInterValsAndDurations.fltInterval / combatManager.CM.combatSpeed);
     }
     #endregion Ready_to_Popup
 

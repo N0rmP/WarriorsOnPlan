@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class buttonBePrepared : MonoBehaviour {
-    public void Start() {
-        gameManager.GM.BIC.addKeyActionPair(KeyCode.R, BePrepared);
+    public void Awake() {
+        gameManager.GM.IC.addKeyActionPair("SceneCombat", KeyCode.R, BePrepared);
     }
 
     public void BePrepared() {
-        if (combatManager.CM.combatState < enumCombatState.combat || combatManager.CM.combatState > enumCombatState.reenact) {
+        if (combatManager.CM.combatState < enumCombatState.combat) {
             return;
         }
-
+        
         combatManager.CM.BEPREPARED();
     }
 }

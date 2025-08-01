@@ -14,18 +14,10 @@ namespace Cases {
         }
         #endregion InfoImplementation
 
-        public effectTestBleed(int[] parParameter) : base(parParameter, parIsVisible: true) {
+        public effectTestBleed() : base("Image/Case/Effect/image_effectTestBleed", parIsVisible: true) {
             code = 94001;
             isRemovedOnAlarmed = true;
-        }
-
-        public void onBeforeAction(Thing source) {
-            combatManager.CM.executeProcess(new processByproductDealDamage(
-                new damageInfo[1] { new damageInfo(null, this, damagePerTurn, enumDamageType.absolute) },
-                source,
-                parIsShowInstant : true
-                ));
-        }
+        }        
 
         public override Dictionary<string, int[]> getParameters() {
             Dictionary<string, int[]> tempResult = base.getParameters();
@@ -45,5 +37,15 @@ namespace Cases {
 
             damagePerTurn = parParameters.MoveNext() ? parParameters.Current : 0;
         }
+
+        #region ICase
+        void ICaseBeforeAction.caseFunc(Thing source) {
+            combatManager.CM.executeProcess(new processByproductDealDamage(
+                new damageInfo[1] { new damageInfo(null, this, damagePerTurn, enumDamageType.absolute) },
+                source,
+                parIsShowInstant: true
+                ));
+        }
+        #endregion ICase
     }
 }

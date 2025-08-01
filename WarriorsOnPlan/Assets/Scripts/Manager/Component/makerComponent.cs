@@ -11,26 +11,8 @@ using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 
 /* 
-        code explaination
-            forth digit (count from the right lowest digit) represents case type, left three digits represents what the case truly is
-            each forth digit represents each case type below
-            1 : circuit
-            2 : skill
-            3 : tool
-            4 : effect
-
-            left three digits of caseBase identify what the case is, and it starts from 001 not 000
-
-            third digit of circuit represents each circuit type below
-            1 : sensor
-            2 : navigator
-            3 : selecter
-            left two digits of circuit identify what the circuit is, and it starts from 001 not 000
-
-            if code has fifth digit regardless of its value, the case is for test and expected not to be used in actual game
-
-            lastly code is written in each creator of codableObject by programmer, so be cautious not to make a mistake
-    */
+        please check codableObject.cs for code explanation
+*/
 
 public class makerComponent {
     // all codableObject instances in the Lists below are dummies whose code will be compared with the to-be-made codableObject
@@ -67,7 +49,12 @@ public class makerComponent {
                     continue;
                 }
 
-                tempCodableObject = Activator.CreateInstance(t, tempDummyParameter) as codableObject;
+                try {
+                    tempCodableObject = Activator.CreateInstance(t) as codableObject;
+                } catch (Exception e) {
+                    Debug.Log("makerComponent failed to CreateInstance " + t);
+                    throw e;
+                }
 
                 if (tempCodableObject == null) {
                     continue;
@@ -136,19 +123,22 @@ public class makerComponent {
 
     #region MAKE
     // pp is parParameters
-    public T makeCodableObject<T>(int parCode, IEnumerable<int> pp) where T : codableObject {
+    public T makeCodableObject<T>(int parCode, IEnumerable<int> pp, List<object> pr) where T : codableObject {
         T tempResult = getAdequateCodableObject(parCode)?.Clone() as T;
-        tempResult?.restoreParameters(pp.GetEnumerator());
 
         if (tempResult == null) {
             Debug.Log("makerComponent.makeCodableObject<T> returns null for code " + parCode + " / T was " + typeof(T));
+            return null;
         }
 
+
+        tempResult.restoreParameters(pp.GetEnumerator());
+        tempResult.restoreReferences(pr);
         return tempResult;
     }
 
-    public codableObject makeCodableObject(int parCode, IEnumerable<int> pp) {
-        return makeCodableObject<codableObject>(parCode, pp);
+    public codableObject makeCodableObject(int parCode, IEnumerable<int> pp, List<object> pr) {
+        return makeCodableObject<codableObject>(parCode, pp, pr);
     }
     #endregion MAKE
 

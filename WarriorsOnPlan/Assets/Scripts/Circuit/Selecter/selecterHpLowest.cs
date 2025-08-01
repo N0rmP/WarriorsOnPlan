@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Circuits {
     public class selecterHpLowest : selecterAbst {
 
-        public selecterHpLowest(int[] parParameter) : base(parParameter) {
+        public selecterHpLowest() {
             code = 1302;
         }
 

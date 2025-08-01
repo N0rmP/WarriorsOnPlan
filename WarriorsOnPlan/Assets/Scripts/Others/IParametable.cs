@@ -7,7 +7,7 @@ public interface IParametable {
     // so ["concrete"] index of return value of getParameters should have all values programmer wants to show to player, even if some values are already in another index
     public Dictionary<string, int[]> getParameters();
 
-    public List<object> getReference();
+    public List<object> getReferences();
 
     // restore may be implemented in the first-root parent class with other methods here, and child classes may use only the implemented method
     public void restore(mementoIParametable parmementoIParametable);
@@ -15,5 +15,7 @@ public interface IParametable {
     public void restoreParameters(Dictionary<string, int[]> parParameters);
 
     // overloaded restoreParameters is used for initiation when the object is created, because json file uses array instead of dictionary
-    public void restoreParameters(IEnumerator<int> parParameters);    
+    public void restoreParameters(IEnumerator<int> parParameters);
+
+    public void restoreReferences(List<object> parListReference);
 }

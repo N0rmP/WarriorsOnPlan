@@ -8,6 +8,6 @@ using UnityEngine;
 namespace Cases {
     public abstract class toolAbst : caseBase {
 
-        public toolAbst(int[] parToolParameters) : base(parToolParameters, enumCaseType.tool, true) { }
+        public toolAbst(string parImagePath) : base(parImagePath, enumCaseType.tool, true) { }
     }
 }

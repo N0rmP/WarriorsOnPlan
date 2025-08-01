@@ -21,14 +21,14 @@ namespace Cases {
         private selecterAbst selecterForAttack;
 
 
-        public circuitHub(int[] parParameter) : base(new int[2] { -1, -1 }, enumCaseType.circuit, false) {
+        public circuitHub(enumSide parSide, int parTargetGroupDefault) : base(null, enumCaseType.circuit, false) {
             setCircuitHub(
-                (enumSide)parParameter[0],
+                parSide,
                 1202, new int[0],
                 1101, new int[0],
                 1202, new int[0],
                 1102, new int[0],
-                1301, new int[1] { parParameter[1] },
+                1301, new int[1] { parTargetGroupDefault },
                 1301, new int[1] { 0b0010 }
                 );
         }
@@ -58,7 +58,7 @@ namespace Cases {
 
             // makeOrRestore 
             void makeOrRestore<T>(ref T parCircuit, int parCode, IEnumerable<int> parParameter) where T : circuitAbst {
-                parCircuit = gameManager.GM.MC.makeCodableObject<T>(parCode, parParameter);
+                parCircuit = gameManager.GM.MC.makeCodableObject<T>(parCode, parParameter, null);
             }
 
             makeOrRestore(ref navigatorIdle, parCodenavigatorIdle, ppNavigatorIdle);
@@ -119,17 +119,7 @@ namespace Cases {
         }
 
         #region ICaseImplementation
-        public (ICaseUpdateState updater, enumStateWarrior ESW) onUpdateState(Thing source) {
-            /* 서킷 변경이 일부에 한해 circuitHub가 총괄하도록 변경됨, 추후 필요성이 없다고 최종판단되면 삭제할 것
-            // update circuit on their own
-            navigatorIdle = navigatorIdle?.getValidCircuit(source);
-            sensorForMove = sensorForMove?.getValidCircuit(source);
-            navigatorPrioritized = navigatorPrioritized?.getValidCircuit(source);            
-            sensorForSkill = sensorForSkill?.getValidCircuit(source);
-            selecterForSkill = selecterForSkill?.getValidCircuit(source);
-            selecterForAttack = selecterForAttack?.getValidCircuit(source);
-            */
-
+        (ICaseUpdateState, enumStateWarrior) ICaseUpdateState.caseFunc(Thing source) {
             navigatorCur = sensorForMove.checkWigwagging(source) ? navigatorPrioritized : navigatorIdle;
 
             return (this,
@@ -137,6 +127,8 @@ namespace Cases {
                 navigatorCur.checkIsArrival(source) ? enumStateWarrior.idleAttack :
                 enumStateWarrior.move);
         }
+
+        public void onInterfered(Thing source) { }
 
         protected override void updateTimer(Thing source) {
             /*
@@ -148,9 +140,9 @@ namespace Cases {
         #endregion ICaseImplementation
 
         #region override
-        public override List<object> getReference() {
+        public override List<object> getReferences() {
             try {
-                List<object> tempResult = base.getReference();
+                List<object> tempResult = base.getReferences();
                 tempResult.Add(navigatorIdle.getMementoIParametable());
                 tempResult.Add(sensorForMove.getMementoIParametable());
                 tempResult.Add(navigatorPrioritized.getMementoIParametable());
@@ -164,24 +156,24 @@ namespace Cases {
                 testAllCircuits();
 
                 List<object> tempResult = new List<object>();
-                sensorNothing tempCircuit = gameManager.GM.MC.makeCodableObject<sensorNothing>(1101, new int[0]);
+                sensorNothing tempCircuit = gameManager.GM.MC.makeCodableObject<sensorNothing>(1101, new int[0], null);
                 for (int i = 0; i < 6; i++) {
-                    tempResult.Add(tempCircuit.getReference());
+                    tempResult.Add(tempCircuit.getReferences());
                 }
                 return tempResult;
             }
         }
 
-        public override void restore(mementoIParametable parMementoCase) {
-            base.restore(parMementoCase);
+        public override void restoreReferences(List<object> parListReference) {
+            base.restoreReferences(parListReference);
 
             int tempInd = 0;
-            navigatorIdle = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
-            sensorForMove = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();
-            navigatorPrioritized = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
-            sensorForSkill = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();
-            selecterForSkill = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<selecterAbst>();
-            selecterForAttack = (parMementoCase.listReference[tempInd++] as mementoIParametable)?.getRestoredIt<selecterAbst>();
+            navigatorIdle = (parListReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
+            sensorForMove = (parListReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();
+            navigatorPrioritized = (parListReference[tempInd++] as mementoIParametable)?.getRestoredIt<navigatorAbst>();
+            sensorForSkill = (parListReference[tempInd++] as mementoIParametable)?.getRestoredIt<sensorAbst>();
+            selecterForSkill = (parListReference[tempInd++] as mementoIParametable)?.getRestoredIt<selecterAbst>();
+            selecterForAttack = (parListReference[tempInd++] as mementoIParametable)?.getRestoredIt<selecterAbst>();
         }
         #endregion override
 
@@ -197,7 +189,7 @@ namespace Cases {
             temp.Append("\nselecterForSkill : " + selecterForSkill);
             temp.Append("\nselecterForAttack : " + selecterForAttack);
             Debug.Log(temp.ToString());
-        }
+        }        
         #endregion test
     }
 }

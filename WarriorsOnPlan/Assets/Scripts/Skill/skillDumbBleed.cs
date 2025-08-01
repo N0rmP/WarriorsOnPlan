@@ -24,7 +24,7 @@ namespace Cases {
             }
         }
 
-        public skillDumbBleed(int[] parSkillParameters) : base(parSkillParameters) {
+        public skillDumbBleed() : base("Image/Case/Skill/image_skillDumbBleed") {
             code = 92002;
             isRangeNeeded = false;
             isTimerNeeded = false;
@@ -54,12 +54,14 @@ namespace Cases {
 
         protected override void actualUseSkill(Thing source, Thing target) {
             combatManager.CM.executeProcess(new processByproductAddCase(source,
-                gameManager.GM.MC.makeCodableObject<caseBase>(94001, new int[3] { 3, 3, 1 })
+                gameManager.GM.MC.makeCodableObject<caseBase>(94001, new int[3] { effectTimerMax, effectTimerMax, damage }, null)
             ));
         }
 
-        public void onEngage(Thing source) {
+        #region ICase
+        void ICaseEngage.caseFunc(Thing source) {
             actualUseSkill(source, null);
         }
+        #endregion ICase
     }
 }

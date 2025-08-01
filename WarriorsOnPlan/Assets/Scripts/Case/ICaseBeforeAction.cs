@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICaseBeforeAction
-{
-    public void onBeforeAction(Thing source);
+public interface ICaseBeforeAction {
+    public void caseFunc(Thing source);
 }

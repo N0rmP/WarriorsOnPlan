@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface ICaseBeforeForcedMove {
-    public void onBeforeForcedMove(Thing source, node destination);
+    public void caseFunc(Thing source, node destination);
 }

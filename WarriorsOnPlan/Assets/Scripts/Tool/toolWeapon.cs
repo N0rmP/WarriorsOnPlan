@@ -34,8 +34,7 @@ namespace Cases {
                 rangeMax_ = Math.Max(rangeMin, value);
             }
         }
-        // ★ damageCur 방식 개선, 가능하면 Thing에 case changed를 bool 변수로 나타내게 해서 계산 빈도가 낮도록 메서드 1개 설계
-        public int damageCur { get; set; }
+        public int damageOriginal { get; protected set; }
         public virtual bool isReady {
             get {
                 return timerCur <= 0;
@@ -44,15 +43,14 @@ namespace Cases {
         public enumDamageType damageType { get; protected set; } = enumDamageType.basic;
         public enumAttackAnimation attackAnimation { get; protected set; }
 
-        public toolWeapon(int[] parWeaponParameters) : base(parWeaponParameters, enumCaseType.tool, parIsVisible: true) { }
-
-        public override void restore(mementoIParametable parMementoCase) {
-            base.restore(parMementoCase);
+        public toolWeapon(string parImagePath) : base(parImagePath, enumCaseType.tool, parIsVisible: true) { 
+        
         }
 
+        #region memento
         public override Dictionary<string, int[]> getParameters() {
             Dictionary<string, int[]> tempResult = base.getParameters();
-            tempResult["toolWeapon"] = new int[3] { rangeMin, rangeMax, damageCur };
+            tempResult["toolWeapon"] = new int[3] { rangeMin, rangeMax, damageOriginal };
             return tempResult;
         }
 
@@ -61,7 +59,7 @@ namespace Cases {
 
             rangeMin = parParameters.MoveNext() ? parParameters.Current : 1;
             rangeMax = parParameters.MoveNext() ? parParameters.Current : 1;
-            damageCur = parParameters.MoveNext() ? parParameters.Current : 1;
+            damageOriginal = parParameters.MoveNext() ? parParameters.Current : 1;
         }
 
         public override void restoreParameters(Dictionary<string, int[]> parParameters) {
@@ -69,14 +67,19 @@ namespace Cases {
 
             rangeMin = parParameters["toolWeapon"][0];
             rangeMax = parParameters["toolWeapon"][1];
-            damageCur = parParameters["toolWeapon"][2];
+            damageOriginal = parParameters["toolWeapon"][2];
+        }
+        #endregion memento
+
+        public override object[] getDescriptionArgument() {
+            return new object[1] { damageOriginal };
         }
 
         public virtual IEnumerable<damageInfo> attack(Thing parOwner) {
             doBeforeAttack();
-            damageInfo tempDI = new damageInfo(parOwner, this, damageCur, damageType);
-            tempDI.addDamage(parOwner.weaponAmplifierAdd);
-            tempDI.mulitplyDamage(parOwner.weaponAmplifierMultiply);
+            damageInfo tempDI = new damageInfo(parOwner, this, damageOriginal, damageType);
+            tempDI.addDamage(parOwner.thisStatus.weaponAmplifierAdd);
+            tempDI.mulitplyDamage(parOwner.thisStatus.weaponAmplifierMultiply - 100);
             yield return tempDI;
         }
 
@@ -85,19 +88,5 @@ namespace Cases {
         }
 
         public abstract void showEffect(Thing source, Thing parTarget);
-
-        #region basic_animation
-        protected void showBasicProjectile(Vector3 parDeparture, Vector3 parDestination) {
-            combatManager.CM.FC.callVFX(
-                        enumVFX.projectile_simple,
-                        combatManager.CM.FC.getRetrieverMoveStop(),
-                        parDeparture,
-                        parDestination,
-                        enumMoveType.linear,
-                        null,
-                        0.5f
-                    );
-        }
-        #endregion basic_animation
     }
 }

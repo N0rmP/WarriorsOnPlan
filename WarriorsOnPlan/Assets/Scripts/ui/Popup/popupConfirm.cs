@@ -5,10 +5,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class popupConfirm : MonoBehaviour {
+    private static inputContainer temporayInputContainer;
+
     private Action delWhenYes = null;
     private Action delWhenNo = null;
+
+    public void Awake() {
+        temporayInputContainer = new inputContainer();
+        temporayInputContainer.addKeyActionPair(KeyCode.Z, executeDelWhenYes);
+        temporayInputContainer.addKeyActionPair(KeyCode.X, executeDelWhenNo);
+    }
 
     public void init(string parQuestion) {
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = parQuestion;
@@ -18,21 +27,17 @@ public class popupConfirm : MonoBehaviour {
         float tempQuestionHeight = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
         GetComponent<RectTransform>().sizeDelta = new Vector2(480f, 240f + Mathf.Max(0f, transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y - 100f));
 
-        gameManager.GM.PC.setCurtainBeneathCanvasPopup(true);
-
-        gameManager.GM.BIC.addKeyActionPair(KeyCode.Space, executeDelWhenYes);
-        gameManager.GM.BIC.addKeyActionPair(KeyCode.Return, executeDelWhenYes);
+        gameManager.GM.UC.setCurtainPopup(true);
+        gameManager.GM.IC.inaugurateTemporayInputContinaer(temporayInputContainer);
     }
 
     private void doWhenConfirmComplete() {
         delWhenYes = null;
         delWhenNo = null;
 
-        gameManager.GM.BIC.removeKeyAction(KeyCode.Space, executeDelWhenYes);
-        gameManager.GM.BIC.removeKeyAction(KeyCode.Return, executeDelWhenYes);
-
         gameManager.GM.PC.returnConfirmSingle(this);
-        gameManager.GM.PC.setCurtainBeneathCanvasPopup(false);
+        gameManager.GM.UC.setCurtainPopup(false);
+        gameManager.GM.IC.dismissTemporayInputContinaer();
     }
 
     #region setDel

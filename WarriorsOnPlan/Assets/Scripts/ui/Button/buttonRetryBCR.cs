@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+// BCR is BoxCombatResult
+public class buttonRetryBCR : MonoBehaviour {
+    public void click() {
+        combatManager.CM.CUM.BCR.deactivate();
+        gameManager.GM.IC.dismissTemporayInputContinaer();
+
+        combatManager.CM.BEPREPARED();
+    }
+}

@@ -33,10 +33,6 @@ public class canvasSandwitch : MonoBehaviour {
 
     #region stack_management
     public void pushUiActivatable(uiActivatable parUA) {
-        if (stackUiAlive.Count == 0) {
-            transform.SetAsLastSibling();
-        }
-
         Transform tempTransformCurtain = carrierCurtain.getInterceptor();
         tempTransformCurtain.GetComponent<Image>().enabled = true;
         stackUiAlive.Push(tempTransformCurtain);

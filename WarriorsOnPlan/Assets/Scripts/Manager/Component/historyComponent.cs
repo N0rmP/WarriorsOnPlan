@@ -19,6 +19,11 @@ public class historyComponent : IEnumerable<mementoCombat> {
         mementoCombatStart = null;
     }
 
+    public void resetHistoryTotal() {
+        resetHistory();
+        mementoInitial = null;
+    }
+
     public void setMementoInitial(mementoCombat parMementoInitial) {
         mementoInitial = parMementoInitial;
     }
@@ -28,19 +33,18 @@ public class historyComponent : IEnumerable<mementoCombat> {
     }
 
     public void addMemento(mementoCombat parMemento) {
-        listMementoCombat.Add(parMemento);
-
         if (parMemento == null) {
             Debug.Log("historyComponent.addMemento malfunction : parMemento is null");
         }
+
+        listMementoCombat.Add(parMemento);
+        
         if (listMementoCombat.Count == 0) {
             Debug.Log("historyComponent.addMemento malfunction : listMementoCombat's count is still zero");
         }
-    }
+    }    
 
-    
-
-    #region inder
+    #region Collection
     public mementoCombat this[int i] {
         get {
             Math.Clamp(i, 0, listMementoCombat.Count - 1);
@@ -58,5 +62,5 @@ public class historyComponent : IEnumerable<mementoCombat> {
     IEnumerator IEnumerable.GetEnumerator() {
         return GetEnumerator();
     }
-    #endregion indexer
+    #endregion Collection
 }

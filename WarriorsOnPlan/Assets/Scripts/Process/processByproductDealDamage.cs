@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 namespace Processes {
     public class processByproductDealDamage : processByproductAbst {
@@ -26,16 +27,24 @@ namespace Processes {
             Thing tempSource;
             foreach (damageInfo di in arrDInfo) {
                 tempSource = di.sourceAttacker;
-                // onBeforeDealDamage (source's case)
-                if (tempSource != null) {
-                    foreach (ICaseBeforeDealDamage cb in tempSource.getCaseList<ICaseBeforeDealDamage>()) {
-                        cb.onBeforeDealDamage(tempSource, target, di);
-                    }
+
+                // onInterferableDealDamage, onInterferableDamaged
+                isInterfered =
+                    tempSource != null && (
+                    tempSource.observeInterferable<ICaseInterferableDealDamage>(new object[3] { tempSource, target, di }) ||
+                    tempSource.observeInterferable<ICaseInterferableDamaged>(new object[3] { tempSource, target, di }));
+                if (isInterfered) {
+                    return;
                 }
+
+                // onBeforeDealDamage (source's case)                
+                if (tempSource != null) {                    
+                    tempSource.observeVoid<ICaseBeforeDealDamage>(new object[3] { tempSource, target, di });
+                }
+
                 // onBeforeDamaged (targte's case)
-                foreach (ICaseBeforeDamaged cb in target.getCaseList<ICaseBeforeDamaged>()) {
-                    cb.onBeforeDamaged(tempSource, target, di);
-                }
+                target.observeVoid<ICaseBeforeDamaged>(new object[3] { tempSource, target, di });
+
             }
         }
 
@@ -47,15 +56,10 @@ namespace Processes {
             foreach (damageInfo di in arrDInfo) {
                 tempSource = di.sourceAttacker;
                 // onAfterDealDamage (source's case)
-                if (tempSource != null) {
-                    foreach (ICaseAfterDealDamage cb in tempSource.getCaseList<ICaseAfterDealDamage>()) {
-                        cb.onAfterDealDamage(tempSource, target, di);
-                    }
-                }
+                tempSource?.observeVoid<ICaseAfterDealDamage>(new object[3] { tempSource, target, di });
+
                 // onAfterDamaged (target's case)
-                foreach (ICaseAfterDamaged cb in target.getCaseList<ICaseAfterDamaged>()) {
-                    cb.onAfterDamaged(tempSource, target, di);
-                }
+                target.observeVoid<ICaseAfterDealDamage>(new object[3] { tempSource, target, di });
             }
         }
 
@@ -72,6 +76,12 @@ namespace Processes {
         }
 
         protected override void actualSHOW() {
+            base.actualSHOW();
+
+            if (isInterfered) {
+                gameManager.GM.PC.popupBasicAlert(target.transform.position, gameManager.GM.DHouC.bookWords.strDamaged + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+            }
+
             Action<Vector3> tempDelShow = null;
             HashSet<enumVFX> tempSetEnumVfx = new HashSet<enumVFX>();
             foreach (damageInfo di in arrDInfo) {
@@ -81,7 +91,7 @@ namespace Processes {
                 tempDelShow += di.SHOW;
                 tempSetEnumVfx.Add(di.vfxHit);
             }
-
+            
             if (isShowInstant) {
                 tempDelShow(target.transform.position);
                 target.animateDamaged();
@@ -90,7 +100,7 @@ namespace Processes {
                     () => {
                         tempDelShow(target.transform.position);
                         target.animateDamaged();
-                    }, 
+                    },
                     combatManager.CM.getBodyAnimationDuration()
                 );
             }

@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using Cases;
 
 public abstract class dragableBubbleAbst : dragableObjectAbst {
+    private static dragableBubbleAbst curBubbleDragged;
+
     protected showerCase thisShower;
 
     protected caseBase thisTool_;

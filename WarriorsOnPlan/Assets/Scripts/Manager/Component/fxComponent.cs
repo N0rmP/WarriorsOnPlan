@@ -126,4 +126,17 @@ public class fxComponent {
     }
     #endregion getRetriever
 
+    #region template
+    public void showBasicProjectile(Vector3 parDeparture, Vector3 parDestination) {
+        combatManager.CM.FC.callVFX(
+                    enumVFX.projectile_simple,
+                    combatManager.CM.FC.getRetrieverMoveStop(),
+                    parDeparture,
+                    parDestination,
+                    enumMoveType.linear,
+                    null,
+                    structInterValsAndDurations.getFltProjectileDuration(parDeparture, parDestination)
+                );
+    }
+    #endregion template
 }

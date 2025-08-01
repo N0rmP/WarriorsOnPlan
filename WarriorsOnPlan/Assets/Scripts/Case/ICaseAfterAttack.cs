@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICaseAfterAttack {
     //source of onAttack is owner, target is the attacked warrior
-    public void onAfterAttack(Thing source, Thing target, damageInfo[] arrDInfo);
+    public void caseFunc(Thing source, Thing target, damageInfo[] arrDInfo);
 }

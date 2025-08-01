@@ -1,0 +1,19 @@
+{
+    "ArrUpgradeTreeZero" : [
+        {
+            "code" : 95001, "parameters" : [1, 1, 1, 5, 1], "next" : [
+                {
+                    "code" : 95001, "parameters" : [1, 2, 1, 5, 2], "next" :[]
+                },
+                {
+                    "code" : 95001, "parameters" : [1, 3, 1, 5, 2], "next" :[]
+                }
+            ]
+        }
+    ]
+    
+    ,
+    "ArrUpgradeTreeOne" : []
+    ,
+    "ArrUpgradeTreeTwo" : []
+}

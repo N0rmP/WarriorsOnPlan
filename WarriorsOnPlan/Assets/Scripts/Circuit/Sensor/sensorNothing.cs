@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Circuits {
     public class sensorNothing : sensorAbst {
-        public sensorNothing(int[] parParameter) : base(parParameter) {
+        public sensorNothing() {
             code = 1101;
         }
 

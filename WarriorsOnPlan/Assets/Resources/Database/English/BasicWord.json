@@ -1,8 +1,0 @@
-{
-    "strMelee" : "Melee",
-    "strNumber" : "Number",
-    "strReady" : "Ready",
-    "strAlertNoAttackTarget" : "No Attack Target",
-    "strAlertNoSkillTarget" : "No Skill Target",
-    "strQuestionResetInitial" : "All Preparation Including Tools, Circuits, Warriors' Positions Returns to the Initial State."
-}

@@ -10,7 +10,7 @@ namespace Circuits {
         // route will be recalculated just before every movement, but can remain only when whole nodes in route have nothing on them
         protected Queue<node> route;
 
-        public navigatorAbst(int[] parParameter) : base(parParameter) {
+        public navigatorAbst() {
             route = new Queue<node>();
         }
 

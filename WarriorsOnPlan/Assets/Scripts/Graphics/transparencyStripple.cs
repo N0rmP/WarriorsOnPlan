@@ -16,7 +16,7 @@ public class transparencyStripple : MonoBehaviour, ITransparency {
             for (int i = 0; i<listMaterial.Count; i++) {
                 if ((!isAscending && listMaterial[i].GetFloat("_Transparency") >= destination) ||
                     (isAscending && listMaterial[i].GetFloat("_Transparency") <= destination)) {
-                    listMaterial[i].SetFloat("_Transparency", listMaterial[i].GetFloat("_Transparency") + arrChangePerLoop[i]);
+                    listMaterial[i].SetFloat("_Transparency", listMaterial[i].GetFloat("_Transparency") + arrChangePerLoop[i] * Time.deltaTime);
                 }
             }
         }
@@ -31,7 +31,7 @@ public class transparencyStripple : MonoBehaviour, ITransparency {
     public void fadeIn(float parTimer = 1f, float parDestination = 1f) {
         destination = parDestination;
         for (int i = 0; i < arrChangePerLoop.Length; i++) {
-            arrChangePerLoop[i] = Mathf.Max(0, (parDestination - listMaterial[i].GetFloat("_Transparency")) / (counterPerSec.countPerSec * parTimer));
+            arrChangePerLoop[i] = Mathf.Max(0, (parDestination - listMaterial[i].GetFloat("_Transparency")) / parTimer);
         }
         isAscending = true;
         isWorking = true;
@@ -40,7 +40,7 @@ public class transparencyStripple : MonoBehaviour, ITransparency {
     public void fadeOut(float parTimer = 1f, float parDestination = 0f) {
         destination = parDestination;
         for (int i = 0; i < arrChangePerLoop.Length; i++) {
-            arrChangePerLoop[i] = Mathf.Min(0, (parDestination - listMaterial[i].GetFloat("_Transparency")) / (counterPerSec.countPerSec) * parTimer);
+            arrChangePerLoop[i] = Mathf.Min(0, (parDestination - listMaterial[i].GetFloat("_Transparency")) / parTimer);
         }
         isAscending = false;
         isWorking = true;

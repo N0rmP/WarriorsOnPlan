@@ -8,6 +8,7 @@ using System.Text;
 using System;
 
 public class dragableBubbleStorage : dragableBubbleAbst {
+
     public new void Awake() {
         base.Awake();
         thisDrag = enumDrag.bubbleStorage;
@@ -18,6 +19,6 @@ public class dragableBubbleStorage : dragableBubbleAbst {
     }
 
     protected override void leave() {
-        combatUIManager.CUM.TS.removeBubble(gameObject);
+        combatManager.CM.CUM.TS.removeBubble(this);
     }    
 }

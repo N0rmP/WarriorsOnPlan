@@ -16,7 +16,7 @@ public class comparerHp : IComparer<Thing> {
 
 public class comparerDamageDealt : IComparer<Thing> {
     public int Compare(Thing w1, Thing w2) {
-        return (w1.damageTotalDealt - w2.damageTotalDealt);
+        return (w1.thisStatus.damageDealt - w2.thisStatus.damageDealt);
     }
 }
 #endregion comparers
@@ -26,6 +26,12 @@ public class houseComponent {
     public readonly static comparerHp instComparerHp = new comparerHp();
     public readonly static comparerDamageDealt instComparerDD = new comparerDamageDealt();
     private readonly static comparerActionOrder instComparerAO = new comparerActionOrder();
+    
+    // transcendent's caseBase is regared as caseBase added to all adequate Thing, please check transcendent.cs for more information
+    public transcendent transcendentTotal { get; private set; }
+    private transcendent transcendentPlayer;
+    private transcendent transcendentEnemy;
+    private transcendent transcendentNeutral;
 
     private bool isTotalDirty;
     private List<Thing> listTotalAlive;
@@ -56,6 +62,11 @@ public class houseComponent {
     #endregion variable
 
     public houseComponent() {
+        transcendentTotal = new transcendent();
+        transcendentPlayer = new transcendent();
+        transcendentEnemy = new transcendent();
+        transcendentNeutral = new transcendent();
+
         isTotalDirty = false;
         listTotalAlive = new List<Thing>();
 
@@ -146,34 +157,23 @@ public class houseComponent {
     }
 
     public void restore(mementoHouse parMemento) {
-        // remove all Thing first
-        listTotalAlive.Clear();
-        listPlayerAlive.Clear();
-        listEnemyAlive.Clear();
-        listNeutralAlive.Clear();
-        listPlayerDead.Clear();
-        listEnemyDead.Clear();
-        listNeutralDead.Clear();
-        listPlayerActionOrder.Clear();
-        listEnemyActionOrder.Clear();
-        listNeutralActionOrder.Clear();
-
         // Thing's restore method include placing the Thing on the concurrent position, all nodes need to be vacant for it
         combatManager.CM.GC.vacateGraph();
 
         // add all Thing back with mementoThing-restore
+        Thing tempThing;
         void addAllBack(IEnumerable<mementoThing> parEMT) {
-            Thing tempThing;
             foreach (mementoThing mt in parEMT) {
                 tempThing = mt.getRestoredMe();
                 if (tempThing.curHp <= 0) {
                     addDeadThing(tempThing);
                 } else {
-                    addThing(tempThing, mt.actionOrder);
+                    addAliveThing(tempThing, mt.actionOrder);
                 }
             }
         }
 
+        clearTotal(false);
         addAllBack(parMemento.getTotalAlive());
         addAllBack(parMemento.getPlayerDead());
         addAllBack(parMemento.getEnemyDead());
@@ -183,8 +183,7 @@ public class houseComponent {
     }
     #endregion memento
 
-    #region getArr
-
+    #region get
     public Thing[] getArrAlive(enumSide parSide) {
         return (parSide switch {
             enumSide.player => listPlayerAlive,
@@ -237,7 +236,16 @@ public class houseComponent {
         }
         return tempResult;
     }
-    #endregion getArr
+
+    public transcendent getTranscendent(enumSide parSide) {
+        return parSide switch {
+            enumSide.player => combatManager.CM.HouC.transcendentPlayer,
+            enumSide.enemy => combatManager.CM.HouC.transcendentEnemy,
+            enumSide.neutral => combatManager.CM.HouC.transcendentNeutral,
+            _ => new transcendent()
+        };
+    }
+    #endregion get
 
     #region sum_sort
     // sum up all things in three listActionOrder and update listTotal with the result
@@ -256,9 +264,9 @@ public class houseComponent {
     }
     #endregion sum_sort
 
-    #region add&Remove
+    #region add_Remove_clear
     // parActionOrderWanted is not index, it starts from 1 not 0
-    public void addThing(Thing parThing, int parActionOrderWanted = -1) {
+    public void addAliveThing(Thing parThing, int parActionOrderWanted = -1) {
         if (parThing == null) { return; }
         if (parThing.curHp <= 0) {
             Debug.Log("you are trying to add Thing with Hp 0 or lower, please check it again : added Thing is " + parThing);
@@ -353,7 +361,7 @@ public class houseComponent {
         isTotalDirty = true;
     }
 
-    // removeThing remove a not-dead thing from the game dryly, it doesn't do any post-process and may be rarely called
+    // removeThing remove a thing from the game dryly, it doesn't do any post-process and may be rarely called
     public void removeThing(Thing parThing) {
         if (parThing == null) { return; }
 
@@ -361,7 +369,7 @@ public class houseComponent {
             case enumSide.player:
                 listPlayerAlive.Remove(parThing);
                 listPlayerDead.Remove(parThing);
-                foreach (pairThingActionOrder PTAO in listPlayerActionOrder) {
+                foreach (pairThingActionOrder PTAO in listPlayerActionOrder.ToArray()) {
                     if (PTAO.thisThing == parThing) {
                         listPlayerActionOrder.Remove(PTAO);
                     }
@@ -370,7 +378,7 @@ public class houseComponent {
             case enumSide.enemy:
                 listEnemyAlive.Remove(parThing);
                 listEnemyDead.Remove(parThing);
-                foreach (pairThingActionOrder PTAO in listEnemyActionOrder) {
+                foreach (pairThingActionOrder PTAO in listEnemyActionOrder.ToArray()) {
                     if (PTAO.thisThing == parThing) {
                         listEnemyActionOrder.Remove(PTAO);
                     }
@@ -379,7 +387,7 @@ public class houseComponent {
             case enumSide.neutral:
                 listNeutralAlive.Remove(parThing);
                 listNeutralDead.Remove(parThing);
-                foreach (pairThingActionOrder PTAO in listNeutralActionOrder) {
+                foreach (pairThingActionOrder PTAO in listNeutralActionOrder.ToArray()) {
                     if (PTAO.thisThing == parThing) {
                         listNeutralActionOrder.Remove(PTAO);
                     }
@@ -392,6 +400,31 @@ public class houseComponent {
         isTotalDirty = true;
     }
 
+    // caution : clearTotal includes destroying thing-gameobject
+    public void clearTotal(bool parIsDestroy = false) {
+        foreach (Thing t in getArrTotalTotal()) {
+            removeThing(t);
+            if (parIsDestroy) {
+                GameObject.Destroy(t.gameObject);
+            }
+        }
+
+        // remove all Thing manually, just in case...
+        listTotalAlive.Clear();
+        listPlayerAlive.Clear();
+        listEnemyAlive.Clear();
+        listNeutralAlive.Clear();
+        listPlayerDead.Clear();
+        listEnemyDead.Clear();
+        listNeutralDead.Clear();
+        listPlayerActionOrder.Clear();
+        listEnemyActionOrder.Clear();
+        listNeutralActionOrder.Clear();
+        isTotalDirty = true;    // jjust in case...
+    }
+
+    // listActionOrder 
+    #region ActionOrder
     private void addActionOrder(Thing parThing, int parActionOrderWanted = -1, bool parIsShow = true) {
         List<pairThingActionOrder> tempList = parThing.thisSide switch {
             enumSide.player => listPlayerActionOrder,
@@ -440,7 +473,9 @@ public class houseComponent {
         }
         setActionOrderNumber(enumSide.player);
     }
-    #endregion add&Remove
+    #endregion ActionOrder
+
+    #endregion add_Remove
 
     #region internal
     private record pairThingActionOrder {

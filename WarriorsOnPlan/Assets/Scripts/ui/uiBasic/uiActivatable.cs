@@ -16,7 +16,8 @@ public class uiActivatable : uiMovable {
     private Coroutine coroutineDeactivate = null;
 
     public enumUiActivatableState thisEnumUiActivatableState { get; protected set; }   
-    public bool isOutClickDeactivate = true;
+    [SerializeField]
+    private bool isOutClickDeactivate = true;
     private Vector3 originalLocalPosition;
 
     public void Start() {
@@ -54,7 +55,8 @@ public class uiActivatable : uiMovable {
             gameManager.GM.UC.pushUiActivatable(this);
         }
 
-        if (this is IUIActivate tempIUIActivate) {
+        IUIActivate tempIUIActivate;
+        if (TryGetComponent<IUIActivate>(out tempIUIActivate)) {
             tempIUIActivate.doWhenUIActovate();
         }
 
@@ -76,7 +78,8 @@ public class uiActivatable : uiMovable {
             gameManager.GM.UC.popUiActivatable();
         }
 
-        if (this is IUIDeactivate tempIUIDeactivate) {
+        IUIDeactivate tempIUIDeactivate;
+        if (TryGetComponent<IUIDeactivate>(out tempIUIDeactivate)) {
             tempIUIDeactivate.doWhenUIDeactivate();
         }
 

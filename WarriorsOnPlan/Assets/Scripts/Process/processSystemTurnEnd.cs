@@ -10,9 +10,14 @@ namespace Processes {
         private Thing[] arrActors;
         private Action delTurnChange;
 
+        // turn doesn't change if isExtraTurn is true
+        // unlike HearthStone ExtraTurn can't be stored many during one turn, player should achieve ExtraTurn every turn for eternal ExtraTurn
+        private bool isExtraTurn;
+
         public processSystemTurnEnd(Thing[] parArrActors, Action parDelTurnChange, bool parIsSHOW = true) : base(parIsSHOW) {
             arrActors = parArrActors;
             delTurnChange = parDelTurnChange;
+            isExtraTurn = false;
         }
 
         protected override void doBeforeActualDo() {
@@ -20,9 +25,8 @@ namespace Processes {
 
             // onTurnEnd
             foreach (Thing th in arrActors) {
-                foreach (ICaseTurnEnd cb in th.getCaseList<ICaseTurnEnd>()) {
-                    cb.onTurnEnd(th);
-                }
+                foreach(bool tempIsExtraTurn in th.observeReturnEnumerate<ICaseTurnEnd, bool>(new object[1] { th }))
+                isExtraTurn = isExtraTurn || tempIsExtraTurn;
             }            
         }
 
@@ -34,8 +38,11 @@ namespace Processes {
                 }
             }
 
-            // ★ 턴 스킵 효과를 구현하고 싶다면 조건문을 추가해야 함
-            delTurnChange();
+            if (isExtraTurn) {
+                // ★ 추가 턴 그래릭 효과, 대충 끼얏호우한 효과 넣으셈
+            } else {
+                delTurnChange();
+            }
         }
     }
 }

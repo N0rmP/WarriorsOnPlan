@@ -9,12 +9,10 @@ namespace Processes {
         public processSystemCombatStart(bool parIsSHOW = true) : base(parIsSHOW) { }
 
         protected override void doAfterActualDo() {
+            // onEngage
+
             foreach (Thing th in combatManager.CM.HouC.arrTotalAlive) {
-                // onEngage
-                // 
-                foreach (ICaseEngage cb in th.getCaseList<ICaseEngage>()) {
-                    cb.onEngage(th);
-                }
+                th.observeVoid<ICaseEngage>(new object[1] { th });
             }
         }
 
@@ -22,9 +20,9 @@ namespace Processes {
             foreach (Thing th in combatManager.CM.HouC.arrTotalAlive) {
                 // warrior without any weapon can get a weaponBareKnuckle
                 // adding weaponBareKnuckle is treated as system procedure, it doesn't trigger processByproductAddCase or ICaseBeforeAddCase
-                if (th.getCaseList<toolWeapon>(false).Count == 0) {
-                    th.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(3001, new int[4] { 1, 1, 1, 1 }));
-                }                
+                if (th.getCaseList<toolWeapon>().Count == 0) {
+                    th.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(3001, new int[4] { 1, 1, 1, 1 }, null));
+                }
             }
         }
 

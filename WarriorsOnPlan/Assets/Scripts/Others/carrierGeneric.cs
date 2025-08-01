@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// carrierGeneric supports object-pooling
 public class carrierGeneric<T> {
     // hanger is °Ý³³°í... IM POOR AT ENGLISH SO I FORGOT IT ONCE SRY
     private Stack<T> hangerAvailable;
@@ -11,11 +12,15 @@ public class carrierGeneric<T> {
     private Func<T> delCreate;
     private Action<T> delReturn;
 
-    public carrierGeneric(Func<T> parDelCreate, Action<T> pardelReturn = null) {
+    /*
+        parDelCreate : delegate creating new pooled-object
+        parDelReturn : delegate retrieving pooled-object that runs out of its use
+    */
+    public carrierGeneric(Func<T> parDelCreate, Action<T> parDelReturn = null) {
         hangerAvailable = new Stack<T>();
         spaceOperating = new List<T>();
         delCreate = parDelCreate;
-        delReturn = pardelReturn ?? ((item) => { });
+        delReturn = parDelReturn ?? ((item) => { });
     }
 
     public T getInterceptor() {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -8,21 +9,31 @@ using Processes;
 namespace Cases {
     // ★ 여유있으면 isTimerNeeded, timerMax, timerCur, updateTimer, resetTimer, doOnAlarmed 넣어서 타이머를 인터페이스로 만들 것, 그리고 sensor에 결합시키셈
     public abstract class caseTimer : caseBase {
-        public bool isTimerNeeded { get; protected set; } = true;    // isTimerNeeded can be false when certain category is subclass of caseTimer but one exception doesn't use timer
+        // isTimerNeeded can be false when certain category is subclass of caseTimer but one exception doesn't use timer
+        public bool isTimerNeeded { get; protected set; } = true;    
         protected bool isAutoReset = false;
         protected bool isRemovedOnAlarmed = false;
 
         // timerMax isn't restricted to be above 0, it can be used to show some skills don't need timer but programmer should be aware of this
         public int timerMax { get; protected set; }
-        public int timerCur { get; protected set; }
+        private int timerCur_;
+        public int timerCur {
+            get {
+                return timerCur_;
+            }
+            protected set {
+                timerCur_ = Math.Max(value, 0);
+            }
+        }
 
-        public caseTimer(int[] parArrParameter, enumCaseType parEnumCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parArrParameter, parEnumCaseType, parIsVisible) { }
+        public caseTimer(string parImagePath, enumCaseType parEnumCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parImagePath, parEnumCaseType, parIsVisible) { }
 
         protected virtual void updateTimer(Thing source) {
             if (!isTimerNeeded) {
                 return;
             }
 
+            timerCur--;
             if (timerCur <= 0) {
                 doOnAlarmed(source);
 
@@ -33,8 +44,6 @@ namespace Cases {
                 if (isRemovedOnAlarmed) {
                     combatManager.CM.executeProcess(new processByproductRemoveCase(source, this));
                 }
-            } else {
-                timerCur--;
             }
         }
 
@@ -43,10 +52,6 @@ namespace Cases {
         }
 
         protected virtual void doOnAlarmed(Thing source) { }
-
-        public override void restore(mementoIParametable parMementoCase) {
-            base.restore(parMementoCase);
-        }
 
         public override Dictionary<string, int[]> getParameters() {
             Dictionary<string, int[]> tempResult = base.getParameters();
@@ -64,8 +69,13 @@ namespace Cases {
         public override void restoreParameters(IEnumerator<int> parParameters) {
             base.restoreParameters(parParameters);
 
-            timerMax = isTimerNeeded && parParameters.MoveNext() ? parParameters.Current : 0;
-            timerCur = isTimerNeeded && parParameters.MoveNext() ? parParameters.Current : 0;
+            if (isTimerNeeded) {
+                timerMax = parParameters.MoveNext() ? parParameters.Current : 0;
+                timerCur = parParameters.MoveNext() ? parParameters.Current : 0;
+            } else {
+                parParameters.MoveNext();
+                parParameters.MoveNext();
+            }
         }
     }
 }

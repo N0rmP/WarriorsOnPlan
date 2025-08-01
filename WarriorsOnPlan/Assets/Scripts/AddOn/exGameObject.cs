@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class exGameObject {
     public static bool checkHoveredWorld(this GameObject parObj) {
         Vector2 tempVec = Camera.main.WorldToScreenPoint(parObj.transform.position) - Input.mousePosition;
         return (
             Mathf.Abs(tempVec.x) <= gameManager.GM.option.stick &&
-            Mathf.Abs(tempVec.y) <= gameManager.GM.option.stick * 0.86     // 0.87 is sqrt(3) / 2, the ratio of length when we see the object from 60 degree
+            Mathf.Abs(tempVec.y) <= gameManager.GM.option.stick * 0.86     // 0.86 is sqrt(3) / 2, the ratio of length when we see the object from 60 degree
             );
     }
 
@@ -46,5 +47,33 @@ public static class exGameObject {
         tempRakeMaterials(parObj.transform);
 
         return tempListMaterial;
+    }
+
+    // FindThoroughly only finds object from active scene regardless of its isActive
+    public static GameObject FindThoroughly(this GameObject parObj, string parName) {
+        GameObject tempResult = null;
+
+        // FindThorouglySmall only searches parObj's children, you should check parObj on your own before starting the first recursive call
+        void FindThoroughlySmall(GameObject parObj) {
+            if (parObj.name == parName) {
+                tempResult = parObj;
+            } else {
+                foreach (Transform tr in parObj.transform) {
+                    FindThoroughlySmall(tr.gameObject);
+                    if (tempResult != null) {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        foreach (GameObject obj in SceneManager.GetActiveScene().GetRootGameObjects()) {
+            FindThoroughlySmall(obj);
+            if (tempResult != null) {
+                break;
+            }
+        }
+
+        return tempResult;
     }
 }

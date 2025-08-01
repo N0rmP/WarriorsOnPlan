@@ -16,7 +16,7 @@ namespace Circuits {
         private List<(int min, int max)> listRange = new List<(int min, int max)>();
         private node prevTargetPos = null;
 
-        public navigatorAttackOneWeapon(int[] parParameter) : base(parParameter) {
+        public navigatorAttackOneWeapon() {
             code = 1202;
         }
 
@@ -27,7 +27,7 @@ namespace Circuits {
 
             listRange.Clear();
 
-            foreach (toolWeapon tw in owner.copyWeapons) {
+            foreach (toolWeapon tw in owner.getCaseList<toolWeapon>()) {
                 if (listRange.Count == 0) {
                     listRange.Add((tw.rangeMin, tw.rangeMax));
                     continue;

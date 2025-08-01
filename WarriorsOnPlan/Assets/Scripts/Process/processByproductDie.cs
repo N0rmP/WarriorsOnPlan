@@ -1,31 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 namespace Processes {
     public class processByproductDie : processByproductAbst {
         private Thing dead;
-        private Thing destoryer;
+        private Thing destroyer;
 
         public processByproductDie(Thing parDead, Thing parDestroyer, bool parIsSHOW = true) : base(parIsSHOW) {
             dead = parDead;
-            destoryer = parDestroyer;
+            destroyer = parDestroyer;
+        }
+
+        protected override void doBeforeActualDo() {
+            base.doBeforeActualDo();
+
+            // onInterferableDestroied, onInterferable
+            isInterfered = 
+                dead.observeInterferable<ICaseInterferableDestroied>(new object[2] { dead, destroyer }) ||
+                destroyer.observeInterferable<ICaseInterferableDestroy>(new object[2] { destroyer, dead });
+            if (isInterfered) {
+                return;
+            }
+
+            // onBeforeDestroied
+            dead.observeVoid<ICaseBeforeDestroied>(new object[2] { dead, destroyer });
+
+            // onBeforeDestroy
+            destroyer.observeVoid<ICaseBeforeDestroy>(new object[2] { destroyer, dead });
         }
 
         protected override void doAfterActualDo() {
             base.doBeforeActualDo();
 
-            // onDestroied
-            foreach (ICaseDestroied cb in dead.getCaseList<ICaseDestroied>()) {
-                cb.onDestroied(dead, destoryer);
-            }
+            // onAfterDestroied
+            dead.observeVoid<ICaseAfterDestroied>(new object[2] { dead, destroyer });
 
             // onDestroy
-            if (destoryer != null) {
-                foreach (ICaseDestroy cb in destoryer.getCaseList<ICaseDestroy>()) {
-                    cb.onDestroy(destoryer, dead);
-                }
-            }
+            destroyer.observeVoid<ICaseAfterDestroy>(new object[2] { destroyer, dead });
         }
 
         protected override void actualDO() {
@@ -34,6 +47,10 @@ namespace Processes {
 
         protected override void actualSHOW() {
             base.actualSHOW();
+
+            if (isInterfered) {
+                gameManager.GM.PC.popupBasicAlert(dead.transform.position, "Dead, But It Refused", false);
+            }
 
             gameManager.GM.TC.addDelegate(
                 () => dead.animateDead(),

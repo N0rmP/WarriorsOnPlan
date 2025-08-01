@@ -13,9 +13,8 @@ namespace Circuits {
         }
         #endregion InfoImplementation
 
-        public sensorHpBelow(int[] parParameter) : base(parParameter) {
+        public sensorHpBelow() {
             code = 1103;
-            threshold = parParameter[0];
         }
 
         public override bool checkWigwagging(Thing source) {

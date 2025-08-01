@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,7 +13,9 @@ public class uiFxComponent : MonoBehaviour {
     private Dictionary<TextMeshProUGUI, int> containerCount;
     private Dictionary<GameObject, (Vector3 destination, float multiplier)> containerMove;
 
-    private canvasSandwitch thisCanvasSandwitch;
+    private canvasSandwitch thisCanvasSandwitch = null;
+    private Transform thisCanvasPopup = null;
+    private Transform thisCanvasHoveredShown = null;
 
     // some changes are too frequent with once in a frame, timerSlower represents their change frequency by seconds
     private float timerSlower = 0f;
@@ -22,10 +25,9 @@ public class uiFxComponent : MonoBehaviour {
         containerColorChange = new Dictionary<Image, (Color, float)>();
         containerCount = new Dictionary<TextMeshProUGUI, int>();
         containerMove = new Dictionary<GameObject, (Vector3, float)>();
-
-        thisCanvasSandwitch = GameObject.Find("canvasSandwitch").GetComponent<canvasSandwitch>();
-        // gameManager.GM.doWhenSceneLoaded += prepareCanvasSandwitch;
-        SceneManager.sceneLoaded += prepareCanvasSandwitch;
+        
+        gameManager.GM.SceC.eventAfterActiveSceneChanged += prepareCanvases;
+        prepareCanvases(SceneManager.GetActiveScene());
     }
 
     public void Update() {     
@@ -40,9 +42,43 @@ public class uiFxComponent : MonoBehaviour {
     }
     #endregion callback
 
-    #region canvasSandwitch
-    public void prepareCanvasSandwitch(Scene parScene, LoadSceneMode parLoadSceneMode) {
+    #region canvas
+    public void prepareCanvases(Scene parScene) {
+        GameObject makeCanvas(string parGameObjectName) {
+            GameObject tempGameObject = new GameObject(parGameObjectName);
+            tempGameObject.AddComponent<Canvas>();
+            tempGameObject.AddComponent<GraphicRaycaster>();
+            tempGameObject.transform.SetParent(gameManager.GM.canvasMain.transform);
+            tempGameObject.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 0f);
+            tempGameObject.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 1f);
+            tempGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
+            tempGameObject.GetComponent<RectTransform>().offsetMax = new Vector2(0f, 0f);
+            return tempGameObject;
+        }
+
+        // canvasSandwitch
+        if (thisCanvasSandwitch == null) {
+            thisCanvasSandwitch = makeCanvas("canvasSandwitch").AddComponent<canvasSandwitch>();
+        }        
         thisCanvasSandwitch.transform.SetParent(gameManager.GM.canvasMain.transform);
+        thisCanvasSandwitch.transform.SetAsLastSibling();
+
+        // canvasPopup
+        if (thisCanvasPopup == null) {
+            thisCanvasPopup = makeCanvas("canvasPopup").transform;
+            thisCanvasPopup.AddComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+            thisCanvasPopup.GetComponent<Image>().enabled = false;
+        }        
+        thisCanvasPopup.SetParent(gameManager.GM.canvasMain.transform);
+        thisCanvasPopup.transform.SetAsLastSibling();
+
+        // canvasHoveredShown
+        if (thisCanvasHoveredShown == null) {
+            thisCanvasHoveredShown = makeCanvas("canvasHoveredShown").transform;
+        }        
+        thisCanvasHoveredShown.SetParent(gameManager.GM.canvasMain.transform);
+        thisCanvasHoveredShown.transform.SetAsLastSibling();
+
     }
 
     public void pushUiActivatable(uiActivatable parUA) {
@@ -52,7 +88,19 @@ public class uiFxComponent : MonoBehaviour {
     public uiActivatable popUiActivatable() {
         return thisCanvasSandwitch.popUiActivatable();
     }
-    #endregion canvasSandwitch
+
+    public void setParentHoveredShown(Transform parTransformHoveredShown) {
+        parTransformHoveredShown.SetParent(thisCanvasHoveredShown);
+    }
+
+    public void setParentPopup(Transform parTransformPopup) {
+        parTransformPopup.SetParent(thisCanvasPopup);
+    }
+
+    public void setCurtainPopup(bool parIsEnabled) {
+        thisCanvasPopup.GetComponent<Image>().enabled = parIsEnabled;
+    }
+    #endregion canvas
 
     #region method_in_update
     void funcColorChange(float parDeltaTime) {
@@ -154,3 +202,4 @@ public class uiFxComponent : MonoBehaviour {
     }
     #endregion addNremove
 }
+

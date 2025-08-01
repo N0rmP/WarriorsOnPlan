@@ -21,19 +21,24 @@ namespace Processes {
         protected override void doBeforeActualDo() {
             base.doBeforeActualDo();
 
-            // onBeforeHpDecrease
-            foreach (ICaseBeforeHpDecrease cb in source.getCaseList<ICaseBeforeHpDecrease>()) {
-                cb.onBeforeHpDecrease(source, ref value);
+            // onInterferableAttack
+            object[] tempParameters = new object[2] { source, value };
+            isInterfered = source.observeInterferable<ICaseInterferableHpDecrease>(tempParameters);
+            value = (int)tempParameters[1];
+            if (isInterfered) {
+                return;
             }
+
+            // onBeforeHpDecrease            
+            source.observeVoid<ICaseBeforeHpDecrease>(tempParameters);
+            value = (int)tempParameters[1];
         }
 
         protected override void doAfterActualDo() {
             base.doAfterActualDo();
 
             // onAfterHpDecrease
-            foreach (ICaseAfterHpDecrease cb in source.getCaseList<ICaseAfterHpDecrease>()) {
-                cb.onAfterHpDecrease(source, value);
-            }
+            source.observeVoid<ICaseAfterHpDecrease>(new object[2] { source, value });
         }
 
         protected override void actualDO() {
@@ -46,6 +51,12 @@ namespace Processes {
         }
 
         protected override void actualSHOW() {
+            base.actualSHOW();
+
+            if (isInterfered) {
+                gameManager.GM.PC.popupBasicAlert(source.transform.position, gameManager.GM.DHouC.bookWords.strHpDecrease + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+            }
+
             void showHpDecrease() {
                 source.updatePanelHp();
                 gameManager.GM.PC.popupDamage(source.transform.position + new Vector3(Random.Range(-0.25f, 0.25f), 0f, 1f), value.ToString(), false);

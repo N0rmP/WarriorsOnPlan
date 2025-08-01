@@ -15,7 +15,6 @@ public class showerText : hoveredShowerAbst {
         // make similar-Singleton canvasTextShown
         if (objTextShown == null) {
             objTextShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Gut/canvasTextShown"));
-            objTextShown.transform.SetParent(gameManager.GM.canvasMain.transform);
             objTextShown.SetActive(false);
         }
 

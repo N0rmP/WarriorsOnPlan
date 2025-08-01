@@ -40,10 +40,10 @@ public class releasableNode : releasableObjectAbst {
 
         // arrage ActionOrder-Line, doWhenReleased should be assured to be called only when enumCombatState.preparing
         if (tempThingGuest is not null) {
-            combatUIManager.CUM.SAO.arrangeLineSingle(tempThingGuest);
+            combatManager.CM.CUM.SAO.arrangeLineSingle(tempThingGuest);
         }
         if (tempThingHost is not null) {
-            combatUIManager.CUM.SAO.arrangeLineSingle(tempThingHost);
+            combatManager.CM.CUM.SAO.arrangeLineSingle(tempThingHost);
         }
 
         // canvasPersonal will be used constantly while preparing stop, it should not leave until combat starts

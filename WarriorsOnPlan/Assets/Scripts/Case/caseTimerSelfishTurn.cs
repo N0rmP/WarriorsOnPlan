@@ -9,7 +9,7 @@ namespace Cases {
     public abstract class caseTimerSelfishTurn : caseTimer {
         private bool isActionStartPassed;
 
-        public caseTimerSelfishTurn(int[] parArrParameter, enumCaseType parEnumCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parArrParameter, parEnumCaseType, parIsVisible) {
+        public caseTimerSelfishTurn(string parImagePath, enumCaseType parEnumCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parImagePath, parEnumCaseType, parIsVisible) {
             isActionStartPassed = false;
         }
 

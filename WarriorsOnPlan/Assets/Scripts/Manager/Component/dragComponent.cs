@@ -33,8 +33,18 @@ public class dragComponent : MonoBehaviour {
     public void Awake() {
         listReleasableObjects = new List<releasableObjectAbst>();
 
-        // gameManager.GM.doWhenSceneLoaded += (x,y) => clearListReleasableObjects();
-        SceneManager.sceneLoaded += (x, y) => clearListReleasableObjects();
+        /* ★ 
+        이론적으로 releasableObject를 dragComponent에 추가하다가 씬이 전환될 때 dragComponent를 초기화하고,
+        새로운 씬에서 새로이 releasableObject를 추가하는 게 이상적이다.
+        
+        그러나 releasableObject는 자기자신이 생성될 때에만 dragComponent에 추가되기 때문에 씬이 전환됐다가 다시 전환되어 돌아오면 작동하지 않을 것이며,
+        releasableObject는 제각기 생성/사용되는 타이밍이 다르므로 씬이 다시 전환된 이후 어떻게 다시 dragComponent에 추가시킬지가 난감하다.
+        
+        ISceneTransitioner를 사용해 자기자신이 사용될 씬이 활성화되면 추가할 수 있지만 둘 이상의 씬에서 사용될지도 모르는 releasableObject도 있어 완벽하지 않다.
+
+        임의로 아래 주석처리된 dragComponent 정리정돈을 생략하고 개발해본 다음, 오버헤드가 클 경우 위 문제를 생각해보는 게 좋겠다.
+        */
+        //SceneManager.activeSceneChanged += (x, y) => clearListReleasableObjects();
     }
 
     public bool relayRelease(enumDrag parCurDragging, System.Object[] parParameters) {
@@ -63,6 +73,11 @@ public class dragComponent : MonoBehaviour {
     }
 
     public void clearListReleasableObjects() {
+        foreach (releasableObjectAbst roa in listReleasableObjects.ToArray()) {
+            if (roa != null) {
+                Destroy(roa);
+            }
+        }
         listReleasableObjects.Clear();
     }
     #endregion listManagement

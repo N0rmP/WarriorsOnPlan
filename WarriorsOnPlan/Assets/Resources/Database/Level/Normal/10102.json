@@ -1,0 +1,43 @@
+{
+    "MapPosition" : [0.2, 0.15],
+    "LevelCode" : 10102,
+    "IsBossLevel" : false,
+    "NextLevelCode" : [],
+    "EnemyWarriors" : [
+        {
+            "NameThing" : "tester", 
+            "Coordinate0" : 6, "Coordinate1" : 6, 
+            "HP" : 10, 
+            "SkillParameters" : [5, 5, 1, 5, 2],
+            "ToolList" : [
+                {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 2, 1]}
+            ],
+            "CodeNavigatorIdle" : 1202, "Parameter2" : [], 
+            "CodeSensorForMove" : 1101, "Parameter0" : [-1, -1], 
+            "CodeNavigatorPrioritized" : 1201, "Parameter1" : [],             
+            "CodeSensorForSkill" : 1102, "Parameter3" : [-1, -1], 
+            "CodeSelecterForSkill" : 1301, "Parameter4" : [2], 
+            "CodeSelecterForAttack" : 1301, "Parameter5" : [2]
+        }
+    ],
+    "NeutralThings" : [],
+    "FriendlyWarriors" : [
+        {
+            "NameThing" : "testerBleeder", 
+            "Coordinate0" : 0, "Coordinate1" : 0, 
+            "HP" : 16, 
+            "SkillParameters" : [4, 4, 1, 5, 2]
+        },
+        {
+            "NameThing" : "testerFocusser",
+            "Coordinate0" : 1, "Coordinate1" : 1,
+            "HP" : 12,
+            "SkillParameters" : [4, 4, 1, 4, 2, 5]
+        }
+    ],
+    "ToolsProvided" : [
+        {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 4, 1]}
+    ]
+}

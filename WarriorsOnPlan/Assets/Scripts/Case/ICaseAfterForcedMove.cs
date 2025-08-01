@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface ICaseAfterForcedMove {
-    public void onAfterForcedMove(Thing source);
+    public void caseFunc(Thing source);
 }

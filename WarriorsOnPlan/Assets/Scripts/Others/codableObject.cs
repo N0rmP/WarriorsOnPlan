@@ -17,6 +17,7 @@ using UnityEngine;
             2 : skill
             3 : tool
             4 : effect
+            5 : upgrade
 
             left three digits of caseBase identify what the case is, and it starts from 001 not 000
 
@@ -24,7 +25,7 @@ using UnityEngine;
             1 : sensor
             2 : navigator
             3 : selecter
-            left two digits of circuit identify what the circuit is, and it starts from 001 not 000
+            left two digits of circuit identify what the circuit is, and it starts from 01 not 00
 
             if code has fifth digit regardless of its value, the case is for test and expected not to be used in actual game
 
@@ -44,30 +45,29 @@ public class codableObject : IParametable, ICloneable {
         }
     }
 
-    public codableObject(IEnumerable<int> parArrParameter) {
-        restoreParameters(parArrParameter.GetEnumerator());
-    }
-
     public mementoIParametable getMementoIParametable() {
-        return new mementoIParametable(this, getParameters(), getReference());
+        return new mementoIParametable(this, getParameters(), getReferences());
     }
 
+    #region IParametable
     public virtual Dictionary<string, int[]> getParameters() {
         Dictionary<string, int[]> tempResult = new Dictionary<string, int[]>();
 
         // every last-leaf IParametable uses "concrete" as a key, adding the "concrete" key here blocks an error the last-leaf makes due to absense of key
         // other IParametables uses its class name as keys, and each restoreParameters methods of them contains preservation for absense of keys
-        tempResult["concrete"] = null;
+        tempResult["concrete"] = new int[0];
 
         return tempResult;
     }
 
-    public virtual List<object> getReference() {
+    public virtual List<object> getReferences() {
         return new List<object>();
     }
 
+    // most codableObject can restore itself only with dicParameter, you should implement special codableObject's restore to use listReference
     public virtual void restore(mementoIParametable parmementoIParametable) {
         restoreParameters(parmementoIParametable.dicParameter);
+        restoreReferences(parmementoIParametable.listReference);
     }
 
     public virtual void restoreParameters(IEnumerator<int> parParameters) {
@@ -76,6 +76,9 @@ public class codableObject : IParametable, ICloneable {
 
     public virtual void restoreParameters(Dictionary<string, int[]> parParameters) { }
 
+    public virtual void restoreReferences(List<object> parRefernce) { }
+    #endregion IParametable
+
     public virtual object Clone() {
         return MemberwiseClone();
     }
@@ -83,9 +86,6 @@ public class codableObject : IParametable, ICloneable {
     /*
         ★ 현재 deepCopy 관련 메서드는 필요없으리라고 생각되지만, 만약 필요해진다면 deepcopy 관련 메서드를 구현하고 Clone 메서드를 보강할 것
         다만 당장 예상하기로 codableObject가 객체를 필드로 가진다면 작동에 필요한 컴포넌트가 아니라 보통은 특정 warrior를 지정하는 것이므로 깊은 복사가 불필요함
-        아래는 예상되는 deepcopy가 필요해지는 경우들
-        1. caseBase의 Sprite를 공유할 수 없을 때
-        2. circuitAbst 계열에서 특정 warrior를 지정하는 것을 MemberwiseClone이 복사하지 못 할 때
 
     protected virtual void deepCopyTo() { }
     public virtual void deepCopyFrom() { }

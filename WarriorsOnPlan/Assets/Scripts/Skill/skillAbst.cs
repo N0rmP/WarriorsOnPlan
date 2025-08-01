@@ -40,11 +40,7 @@ namespace Cases {
             }
         }
 
-        public skillAbst(int[] parSkillParameters) : base(parSkillParameters, enumCaseType.skill, parIsVisible: true) { }
-
-        public override void restore(mementoIParametable parMementoCase) {
-            base.restore(parMementoCase);
-        }
+        public skillAbst(string parImagePath) : base(parImagePath, enumCaseType.skill, parIsVisible: true) { }
 
         public override Dictionary<string, int[]> getParameters() {
             Dictionary<string, int[]> tempResult = base.getParameters();
@@ -54,7 +50,7 @@ namespace Cases {
 
         public override void restoreParameters(IEnumerator<int> parParameters) {
             base.restoreParameters(parParameters);
-
+            
             if (isRangeNeeded) {
                 rangeMin = parParameters.MoveNext() ? parParameters.Current : 1;
                 rangeMax = parParameters.MoveNext() ? parParameters.Current : 1;
@@ -82,9 +78,7 @@ namespace Cases {
         }
 
         protected override void doOnAlarmed(Thing source) {
-            foreach (ICaseSkillReady cb in source.getCaseList<ICaseSkillReady>()) {
-                cb.onSkillReady(source);
-            }
+            source.observeVoid<ICaseSkillReady>(new object[1] { source });
         }
 
         public void useSkill(Thing source, Thing target = null) {
@@ -95,7 +89,7 @@ namespace Cases {
             }
         }
 
-        protected abstract void actualUseSkill(Thing sourcem, Thing target);
+        protected abstract void actualUseSkill(Thing source, Thing target);
 
         public virtual void SHOW(Thing source, Thing target) { }
     }

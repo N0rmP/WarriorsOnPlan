@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Circuits {
     public class selecterClosest : selecterAbst {
 
-        public selecterClosest(int[] parParameter) : base(parParameter) {
+        public selecterClosest() {
             code = 1301;
         }
 

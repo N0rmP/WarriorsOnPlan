@@ -18,9 +18,7 @@ namespace Processes {
 
             // onTurnStart
             foreach (Thing th in arrActors) {
-                foreach (ICaseTurnStart cb in th.getCaseList<ICaseTurnStart>()) {
-                    cb.onTurnStart(th);
-                }
+                th.observeVoid<ICaseTurnStart>(new object[1] { th });
             }
         }
 
@@ -36,7 +34,7 @@ namespace Processes {
         protected override void actualSHOW() {
             base.actualSHOW();
 
-            combatUIManager.CUM.testShowTurn();
+            combatManager.CM.CUM.testShowTurn();
         }
     }
 }

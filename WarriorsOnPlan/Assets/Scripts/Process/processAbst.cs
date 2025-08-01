@@ -5,11 +5,15 @@ using UnityEngine;
 
 namespace Processes {
     public abstract class processAbst {
+        /*
+            thisCountAction represents the number of actions passed, thisCountDistinguisher represents the boundary to stop reenacting temporarily
+            the timings when thisCountAction & thisCountDistinguisher changes are usually same, but exception is when turn starts & combat ends
+        */
         public int thisCountAction { get; private set; }
         public int thisCountDistinguisher { get; private set; }
 
         private bool isSHOW = true;
-        private bool isExecusable = true;
+        protected bool isInterfered = false;
 
         public processAbst processPrev { get; private set; }
         public processAbst processNext { get; private set; }
@@ -23,7 +27,7 @@ namespace Processes {
 
         // DO makes the process do its job during the actual combat, it won't be used while replaying at all
         // calling DO saves the combat in the chained processAbst, it will be used for replaying after the combat
-        public void DO(ref processAbst parPrev, ref Action<processAbst> parDelSetNext) {           
+        public void DO(ref processAbst parPrev, ref Action<processAbst> parDelSetNext) {
             doBeforeActualDo();
 
             // set processPrev of this class after doBeforeActualDo & before actualDo, because onBefore~ methods can create and execute new processes
@@ -41,6 +45,10 @@ namespace Processes {
             parPrev = this;
             parDelSetNext = delSetNext;
 
+            if (isInterfered) {
+                return;
+            }
+
             actualDO();
 
             doAfterActualDo();
@@ -48,7 +56,10 @@ namespace Processes {
 
         // REENACT reenacts chained processes before next action, the next action will be returned and used for next REENACT
         public processAbst REENACT() {
-            actualDO();
+            // interfered process ignores actualDo but do SHOW
+            if (!isInterfered) {
+                actualDO();
+            }
 
             if (combatManager.CM.combatSpeed > 0) {
                 SHOW();
@@ -89,14 +100,13 @@ namespace Processes {
         }
 
         protected virtual void doBeforeActualDo() {
-            if (this is processSystemTurnStart or processSystemCombatEnd or processActionAbst) {
+            if (this is processSystemTurnStart or processSystemCombatEnd or processAction) {
                 combatManager.CM.incrementCountDistinguisher();
             }
             thisCountDistinguisher = combatManager.CM.countDistinguisher;
         }
         protected virtual void doAfterActualDo() { }
         protected abstract void actualDO();
-        // protected abstract void actualUNDO();
         protected virtual void actualSHOW() { }
 
         #region test
@@ -107,11 +117,11 @@ namespace Processes {
         public string testChainAfterAll(int parOrder = 0) {
             if (parOrder == 0) {
                 Debug.Log(
-                    (this is processActionAbst or processSystemTurnEnd ? "\n" : "") + this + " - " + processNext?.testChainAfterAll(parOrder + 1)
+                    (this is processAction or processSystemTurnEnd ? "\n" : "") + this + " - " + processNext?.testChainAfterAll(parOrder + 1)
                     );
                 return "test message is already logged dumbass";
             } else {
-                return (this is processActionAbst or processSystemTurnEnd ? "\n" : "") + this + " - " + processNext?.testChainAfterAll(parOrder + 1);
+                return (this is processAction or processSystemTurnEnd ? "\n" : "") + this + " - " + processNext?.testChainAfterAll(parOrder + 1);
             }
         }
         #endregion test

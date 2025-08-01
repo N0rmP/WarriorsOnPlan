@@ -13,10 +13,12 @@ using System.Text;
 using Cases;
 using Processes;
 using static Unity.VisualScripting.Member;
+using Unity.VisualScripting;
 public enum enumStateWarrior {
     dead = 0,
     //deadRecently = 1,
     controlled = 10,
+    focussingEnd = 15,
     focussing = 20,
     skill = 30,
     move = 40,
@@ -24,7 +26,7 @@ public enum enumStateWarrior {
     none = 9999
 }
 
-public abstract class Thing : MonoBehaviour {
+public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
     #region variable
     private int curHp_;
 
@@ -32,15 +34,15 @@ public abstract class Thing : MonoBehaviour {
 
     protected int codeSkill = 92001;
 
-    private int actionOrder_ = 999;
-
-    private ICaseUpdateState semaphoreState;
+    // ★ private ICaseUpdateState semaphoreState;
 
     protected canvasPersonal thisCanvasPersonal;
     protected cursor thisCursor;
 
-    protected List<caseBase> listCaseBaseAll;
-    protected List<toolWeapon> listToolWeapon;
+    protected caseContainer thisCaseContainer;
+
+    private bool isStatusDirty;
+    protected structWarriorStatus thisStatus_;
 
     private SortedSet<string> setAttackTriggerName;
     protected Animator thisAnimController;
@@ -52,17 +54,6 @@ public abstract class Thing : MonoBehaviour {
     public enumStateWarrior stateCur { get; private set; }
     public enumSide thisSide { get; protected set; }
     public Vector3 vecMeshCenter { get; protected set; }
-    public int actionOrder { 
-        get {
-            return actionOrder_;
-        }
-        set {
-            if (combatManager.CM.combatState != enumCombatState.preparing) {
-                return;
-            }
-            actionOrder_ = value;
-        }
-    }
     protected int maxHpOriginal { get; set; }
     public int maxHp { get; protected set; }
     public int curHp {
@@ -73,17 +64,20 @@ public abstract class Thing : MonoBehaviour {
             curHp_ = Math.Clamp(value, 0, maxHp);
         }
     }
-    public int weaponAmplifierAdd { get; private set; }
-    public int weaponAmplifierMultiply { get; private set; }
-    public int skillAmplifierAdd { get; private set; }
-    public int skillAmplifierMultiply { get; private set; }
-    public int armorAdd { get; private set; }
-    public int armorMultiply { get; private set; }
-    public int damageTotalDealt { get; private set; }
-    public int damageTotalTaken { get; private set; }
+    public structWarriorStatus thisStatus {
+        get {
+            if (isStatusDirty) {
+                recalculateStatus();
+                isStatusDirty = false;
+            }
+            
+            return thisStatus_;
+        }
+    }
     public skillAbst thisSkill { get; protected set; }
     public Thing whatToAttack { get; private set; }
     public Thing whatToUseSkill { get; private set; }
+    public string nameThing { get; private set; }
     public Sprite portrait { get; protected set; }
     public node curPosition {
         get {
@@ -98,9 +92,6 @@ public abstract class Thing : MonoBehaviour {
             curCoor = value?.getCoor() ?? (-1, -1);
         }
     }
-    public toolWeapon[] copyWeapons {
-        get { return listToolWeapon.ToArray(); }
-    }
     public int thisActionOrder {
         get {
             return combatManager.CM.HouC.getPersonalActionOrder(this);
@@ -112,7 +103,6 @@ public abstract class Thing : MonoBehaviour {
     #region callbacks
     public void Update() {
         // ★ 메터리얼 페이드 인아웃 구현
-        setCursorHovered(thisCanvasPersonal.gameObject.checkHoveredWorld());
     }
     #endregion callbacks
 
@@ -121,22 +111,17 @@ public abstract class Thing : MonoBehaviour {
         vecMeshCenter = gameObject.getTotalBounds().center;
         thisAnimController = gameObject.GetComponent<Animator>();
 
-        listCaseBaseAll = new List<caseBase>();
-        listToolWeapon = new List<toolWeapon>();
+        thisCaseContainer = new caseContainer();
+
         setAttackTriggerName = new SortedSet<string>();
 
         thisSide = parSide;
-        semaphoreState = null;
+        // ★ semaphoreState = null;
         stateCur = enumStateWarrior.idleAttack;
-        weaponAmplifierAdd = 0;
-        weaponAmplifierMultiply = 0;
-        skillAmplifierAdd = 0;
-        skillAmplifierMultiply = 0;
-        armorAdd = 0;
-        armorMultiply = 0;
-        damageTotalDealt = 0;
-        damageTotalTaken = 0;
+        thisStatus_ = new structWarriorStatus(0);
 
+        // ★ 이거 ThingName json 파일 만들어다가 코드 넣고 make 가능케 만들자, 아마 level json 파일도 일부 변경해야 할 것
+        nameThing = "TempThingName";
         portrait = Resources.Load<Sprite>("Image/Portrait/Portrait_" + GetType()) ??
                    Resources.Load<Sprite>("Image/Portrait/Portrait_tester");
 
@@ -166,14 +151,14 @@ public abstract class Thing : MonoBehaviour {
         // skill making
         thisSkill = null;
         try {
-            addCase(gameManager.GM.MC.makeCodableObject<skillAbst>(codeSkill, parSkillParameters));
+            addCase(gameManager.GM.MC.makeCodableObject<skillAbst>(codeSkill, parSkillParameters, null));
         } catch (Exception e) {
             string temp = GetType() + " results in a error while making skill with code " + codeSkill + " / parameters ";
             foreach (int i in from n in parSkillParameters select n) {
                 temp += i.ToString() + ", ";
             }
             Debug.Log(temp + " ((" + e.Message);
-            addCase(gameManager.GM.MC.makeCodableObject<skillAbst>(92001, new int[5] { 3, 3, 1, 5, 1 }));
+            addCase(gameManager.GM.MC.makeCodableObject<skillAbst>(92001, new int[5] { 3, 3, 1, 5, 1 }, null));
         }
 
         // initiate canvasPersonal with skill
@@ -181,7 +166,7 @@ public abstract class Thing : MonoBehaviour {
         updatePanelSkillTimer();
 
         // prepare circuits, be aware that this is the only creation of circuitHub in total script of Thing class
-        thisCircuitHub = new circuitHub(new int[2] { (int)parSide, thisSkill.targetGroupDefault});
+        thisCircuitHub = new circuitHub(parSide, thisSkill.targetGroupDefault);
         addCase(thisCircuitHub);
 
         // ★ 만약 다른 shader를 사용하는 Thing이 존재한다면 아래 내용을 변경해야 함
@@ -208,28 +193,19 @@ public abstract class Thing : MonoBehaviour {
         stopMoving();
         combatManager.CM.systemPlace(this, parMementoThing.coordinates);
 
-        foreach (caseBase cb in listCaseBaseAll.ToArray()) {
+        foreach (caseBase cb in thisCaseContainer) {
             if (cb is skillAbst || cb is circuitHub) {
                 continue;
             }
             removeCase(cb); 
         }
-        foreach (toolWeapon tw in listToolWeapon.ToArray()) {
-            removeCase(tw);
-        }
+        
         thisCircuitHub.restore(parMementoThing.mCircuitHub);
 
-        semaphoreState = null;
+        // ★semaphoreState = null;
         stateCur = enumStateWarrior.idleAttack;
 
-        weaponAmplifierAdd = 0;
-        weaponAmplifierMultiply = 0;
-        skillAmplifierAdd = 0;
-        skillAmplifierMultiply = 0;
-        armorAdd = 0;
-        armorMultiply = 0;
-        damageTotalDealt = 0;
-        damageTotalTaken = 0;
+        thisStatus_.reset();
 
         thisSkill.restore(parMementoThing.mSkill);
         foreach (mementoIParametable mc in parMementoThing.listCase) {
@@ -295,7 +271,7 @@ public abstract class Thing : MonoBehaviour {
 
     public void updatePanelImageEff() {
         thisCanvasPersonal.clearImgEffect();
-        foreach (caseBase cb in getCaseList(enumCaseType.effect, false)) {
+        foreach (caseBase cb in getCaseList(enumCaseType.effect)) {
             if (cb.isVisible) {
                 thisCanvasPersonal.addImgEffect(cb);
             }
@@ -331,38 +307,19 @@ public abstract class Thing : MonoBehaviour {
     }
 
     public void updateState() {
-        if (stateCur <= enumStateWarrior.dead) { return; }
-        /*
-        although technically updateState could be processed with onBeforeAction, it's separated due to algorithm below
-        
-        change of stateCur require to check all ICaseUpdateState, so it can't be done in only one method
-        1. change to lower-value-state by any updater : change instantly, update semaphoreState
-        2. change to higher-value-state by semaphoreState : change instantly
-        3. change to higher-value-state by none-semaphoreState : save it temporarily and use it when proper
-        
-        main problem is when case 2 and 3 occur at the same time, case 3 should be applied although case 2 holds the semaphore and blocks it
-        so the saved data of case 3 could be applied if it has lower-value-state than stateCur after all onUpdateState is called
-        */
+        if (stateCur <= enumStateWarrior.dead) { 
+            return; 
+        }
 
-        (ICaseUpdateState updater, enumStateWarrior ESW) tempMemory = (null, enumStateWarrior.idleAttack);
-        (ICaseUpdateState updater, enumStateWarrior ESW) tempBuffer;
-        foreach (ICaseUpdateState cb in getCaseList<ICaseUpdateState>()) {
-            tempBuffer = cb.onUpdateState(this);
-            if (tempBuffer.ESW < stateCur) {
-                semaphoreState?.onIntefered(this);
-                stateCur = tempBuffer.ESW;
-                semaphoreState = tempBuffer.updater;
-            } else if (semaphoreState == tempBuffer.updater) {
-                stateCur = tempBuffer.ESW;
-            } else if (tempBuffer.ESW < tempMemory.ESW) {
-                tempMemory = tempBuffer;
+        (ICaseUpdateState updater, enumStateWarrior ESW) tempBuffer = (null, enumStateWarrior.idleAttack);
+        foreach ((ICaseUpdateState updater, enumStateWarrior ESW) cur in observeReturnEnumerate<ICaseUpdateState, (ICaseUpdateState , enumStateWarrior)>(new object[1] { this })) {
+            if (cur.ESW < tempBuffer.ESW) {
+                tempBuffer.updater?.onInterfered(this);
+                tempBuffer = cur;
             }
         }
 
-        if (tempMemory.ESW < stateCur) {
-            stateCur = tempMemory.ESW;
-            semaphoreState = tempMemory.updater;
-        }
+        stateCur = tempBuffer.ESW;
     }
 
     // isPlus ain't asking is value positive or negative, it's asking is newly-setting curHp or adding value to the origial curHp
@@ -456,128 +413,49 @@ public abstract class Thing : MonoBehaviour {
 
     #region case
     public virtual void addCase(caseBase parCase) {
-        if (parCase == null) {
-            return;
+        thisCaseContainer.addCase(parCase);
+
+        // if parCase is skill, set is as thisSkill
+        if (parCase.caseType == enumCaseType.skill && thisSkill == null) {
+            thisSkill = (skillAbst)parCase;
         }
 
-        listCaseBaseAll.Add(parCase);
-        switch (parCase.caseType) {
-            case enumCaseType.tool:
-                if (parCase is toolWeapon tempToolWeapon) {
-                    listToolWeapon.Add(tempToolWeapon);
-                }
-                break;
-            case enumCaseType.circuit:
-                break;
-            case enumCaseType.effect:
-                break;
-            case enumCaseType.skill:
-                if (thisSkill == null) {
-                    thisSkill = (skillAbst)parCase;
-                }
-                break;
-            default:
-                break;
+        // if ICaseCalculateStatus is added or removed, prepare to recalculate status
+        if (parCase is ICaseSystemicCalculateStatus) {
+            isStatusDirty = true;
         }
 
         updateCaseResult();
     }
 
     public virtual void removeCase(caseBase parCase) {
-        listCaseBaseAll.Remove(parCase);
-        switch (parCase.caseType) {
-            case enumCaseType.tool:
-                if (parCase is toolWeapon tempToolWeapon) {
-                    listToolWeapon.Remove(tempToolWeapon);
-                }
-                break;
-            case enumCaseType.circuit:
-                break;
-            case enumCaseType.effect:
-                thisCanvasPersonal.removeImgEffect(parCase);
-                break;
-            case enumCaseType.skill:
-                thisSkill = null;
-                break;
-            default:
-                break;
+        thisCaseContainer.removeCase(parCase);
+
+        // if parCase is skill, remove thisSkill
+        if (parCase.caseType == enumCaseType.skill) {
+            thisSkill = null;
+        }
+
+        // if ICaseCalculateStatus is added or removed, prepare to recalculate status
+        if (parCase is ICaseSystemicCalculateStatus) {
+            isStatusDirty = true;
         }
 
         updateCaseResult();
     }
 
     public void updateCaseResult() {
-        // ★ 각 능력치 재계산
-        if (combatUIManager.CUM.CStatus.thisThing == this) {
-            combatUIManager.CUM.CStatus.updateTotal();
+        if (combatManager.CM.CUM.CStatus.thisThing == this) {
+            combatManager.CM.CUM.CStatus.updateTotal();
         }
-    }
-
-    public List<T> getCaseList<T>(bool parIsForObserving = true) {
-        // to prevent on~ methods to be called during prearing step getCaseList doesn't work by returning only empty list
-        // you can use it anyway by setting parIsForObserving to false
-        if (parIsForObserving && combatManager.CM.combatState != enumCombatState.combat) {
-            return new List<T> { };
-        }
-
-        List<T> tempResult = null;
-
-        foreach (caseBase cb in listCaseBaseAll) {
-            if (tempResult == null) {
-                tempResult = new List<T>();
-            }
-            if (cb is T tempCA)
-                tempResult.Add(tempCA);
-        }
-
-        return tempResult;
-    }
-
-    public List<caseBase> getCaseList(enumCaseType parCaseType, bool parIsForObserving = true) {
-        // to prevent on~ methods to be called during prearing step getCaseList doesn't work by returning only empty list
-        // you can use it anyway by setting parIsForObserving to false
-        if (parIsForObserving && combatManager.CM.combatState == enumCombatState.combat) {
-            return new List<caseBase> { };
-        }
-
-        List<caseBase> tempResult = null;
-
-        foreach (caseBase cb in listCaseBaseAll) {
-            if (tempResult == null) {
-                tempResult = new List<caseBase>();
-            }
-            if (cb.caseType == parCaseType) {
-                tempResult.Add(cb);
-            }
-        }
-
-        return tempResult;
-    }
-
-    public bool checkContainCase(caseBase parCase) {
-        foreach (caseBase cb in listCaseBaseAll) {
-            if (cb.GetType() == parCase.GetType()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool checkContainConcreteCase(caseBase parCase) {
-        foreach (caseBase cb in listCaseBaseAll) {
-            if (cb == parCase) {
-                return true;
-            }
-        }
-        return false;
-    }
+    }    
 
     public List<toolWeapon> getListAvailableWeapon(Thing parTarget = null) {
         List<toolWeapon> tempResult = new List<toolWeapon>();
 
         if (parTarget != null) {    // if parTarget is null, all weapons are useless
             int tempDistanceToTarget = node.getDistance(curPosition, parTarget.curPosition);
-            foreach (toolWeapon tw in getCaseList<toolWeapon>(false).ToArray()) {
+            foreach (toolWeapon tw in getCaseList<toolWeapon>().ToArray()) {
                 // skip when target is out of the weapon's range
                 if (tempDistanceToTarget > tw.rangeMax || tempDistanceToTarget < tw.rangeMin || !tw.isReady) {
                     continue;
@@ -589,6 +467,44 @@ public abstract class Thing : MonoBehaviour {
 
         return tempResult;
     }
+
+    #region relay_caseConatiner
+    public List<T> getCaseList<T>() {
+        return thisCaseContainer.getCaseList<T>();
+    }
+
+    public List<caseBase> getCaseList(enumCaseType parCaseType) {
+        return thisCaseContainer.getCaseList(parCaseType);
+    }
+
+    public bool checkContainCaseType(caseBase parCase) {
+        return thisCaseContainer.checkContainCaseType(parCase);
+    }
+
+    public bool checkContainConcreteCase(caseBase parCase) {
+        return thisCaseContainer.checkContainCaseConcrete(parCase);
+    }
+
+    public void observeVoid<A>(object[] parParameters) {
+        combatManager.CM.HouC.transcendentTotal.observeVoid<A>(parParameters);
+        combatManager.CM.HouC.getTranscendent(thisSide).observeVoid<A>(parParameters);
+        thisCaseContainer.observeVoid<A>(parParameters);
+    }
+
+    public IEnumerable<B> observeReturnEnumerate<A, B>(object[] parParameters){
+        List<B> tempListResult = new List<B>();
+        tempListResult.AddRange(combatManager.CM.HouC.transcendentTotal.observeReturnEnumerate<A, B>(parParameters));
+        tempListResult.AddRange(combatManager.CM.HouC.getTranscendent(thisSide).observeReturnEnumerate<A, B>(parParameters));
+        tempListResult.AddRange(thisCaseContainer.observeReturnEnumerate<A, B>(parParameters));
+        return tempListResult;
+    }
+
+    public bool observeInterferable<A>(object[] parParameters) {
+        return combatManager.CM.HouC.transcendentTotal.observeInterferable<A>(parParameters) ||
+               combatManager.CM.HouC.getTranscendent(thisSide).observeInterferable<A>(parParameters) ||
+               thisCaseContainer.observeInterferable<A>(parParameters);
+    }
+    #endregion relay_caseConatiner
     #endregion case
 
     #region animation
@@ -601,6 +517,8 @@ public abstract class Thing : MonoBehaviour {
     private void doBeforeAnimate() {
         setAnimationSpeed();
         thisAnimController.ResetTrigger("trigDamaged");
+        thisAnimController.SetBool("isControlled", false);
+        thisAnimController.SetBool("isFocussing", false);
     }
 
     private void setAnimationSpeed() {
@@ -663,41 +581,10 @@ public abstract class Thing : MonoBehaviour {
         thisAnimController.SetTrigger("trigDead");
     }
 
-    /*
-    public virtual void animate() {
-        thisAnimController.SetBool("isFocussing", false);
-        thisAnimController.SetBool("isControlled", false);
-        switch (stateCur) {
-            case enumStateWarrior.deadRecently:
-                thisAnimController.SetTrigger("trigDead");
-                //★ 페이드 아웃
-                break;
-            case enumStateWarrior.controlled:
-                thisAnimController.SetBool("isControlled", true);
-                break;
-            case enumStateWarrior.focussing:
-                thisAnimController.SetBool("isFocussing", true);
-                break;
-            case enumStateWarrior.move:                
-                break;
-            case enumStateWarrior.idleAttack:
-                animateAttack();
-                break;
-            case enumStateWarrior.skill:
-                thisAnimController.SetTrigger("trigUseSkill");
-                break;
-            default:
-                break;
-        }
-
-        현재 state가 업데이트되고 있지 않은 것으로 추정됨, 또한 이동 애니메이션을 processByproductMove가 담당하고 있어 이에 대한 정리정돈이 요구됨
+    public void animateFocuss() {
+        doBeforeAnimate();
+        thisAnimController.SetBool("isFocussing", true);
     }
-
-    public void animate(Vector3 parLookDirection) {
-        Look(parLookDirection);
-        animate();
-    }
-    */
 
     // reset all parameters, and play the idle animation state
     public void resetAnimator() {
@@ -739,52 +626,13 @@ public abstract class Thing : MonoBehaviour {
     }
     #endregion cursor
 
-    #region numberManagement
-    // most numbers can be negative, damageTotal-Delat & Taken can't be negative
-    public void addWeaponAmplifierAdd(int par) {
-        weaponAmplifierAdd += par;
-    }
-
-    public void addWeaponAmplifierMultiply(int par) {
-        weaponAmplifierMultiply += par;
-    }
-
-    public void addSkillAmplifierAdd(int par) {
-        skillAmplifierAdd += par;
-    }
-
-    public void addSkillAmplifierMultiply(int par) {
-        skillAmplifierMultiply += par;
-    }
-
-    public void addArmorAdd(int par) {
-        armorAdd += par;
-    }
-
-    public void addArmorMultiply(int par) {
-        armorMultiply += par;
-    }
-
-    public void addDamageTotalDealt(int par) {
-        if (par > 0) {
-            damageTotalDealt += par;
-        }
-    }
-
-    public void addDamageTotalTaken(int par) {
-        if (par > 0) {
-            damageTotalTaken += par;
-        }
-    }
-    #endregion numberManagement
-
     #region memento
     public mementoThing freezeDry() {
         List<mementoIParametable> tempList = new List<mementoIParametable>();
-        foreach (caseBase c in listCaseBaseAll) {
+        foreach (caseBase c in thisCaseContainer) {
             if (c is not circuitHub and not skillAbst) {
                 tempList.Add(c.getMementoIParametable());
-            }            
+            }
         }
 
         return new mementoThing(
@@ -795,56 +643,71 @@ public abstract class Thing : MonoBehaviour {
             thisSkill.getMementoIParametable(),
             tempList,
             thisCircuitHub.getMementoIParametable()
-            );
+        );
     }    
     #endregion memento
 
     #region processMaking
-    public processAbst makeAction() {
-        switch (stateCur) {
-            // ★ 각각의 warrior 행동 시작 시 효과 발동
-            case enumStateWarrior.controlled:
-                return makeActionSkip();
-            case enumStateWarrior.focussing:
-                return makeActionFocuss();
-            case enumStateWarrior.skill:
-                return makeActionSkill();
-            case enumStateWarrior.move:
-                return makeActionMove();
-            case enumStateWarrior.idleAttack:
-                return makeActionAttack();
-            default:
-                // thing's state can't have lower priority below idleAttack, so this part shouldn't be executed
-                Debug.Log(this.GetType() + " has inproper state now : " + stateCur);
-                return makeActionAttack();
-        }
+    public processByproductActionAbst makeAction() {
+        return stateCur switch {
+            enumStateWarrior.controlled => makeActionSkip(),
+            enumStateWarrior.focussingEnd => makeActionFocussEnd(),
+            enumStateWarrior.focussing => makeActionFocuss(),
+            enumStateWarrior.skill => makeActionSkill(),
+            enumStateWarrior.move => makeActionMove(),
+            enumStateWarrior.idleAttack => makeActionAttack(),
+            _ => null   // state can't be below idelAttack, it means something's wrong that processAction has null as thisPBA
+        };
     }
 
-    private processActionSkip makeActionSkip() {
-        return new processActionSkip();
+    private processByproductActionSkip makeActionSkip() {
+        return new processByproductActionSkip(this);
+    }
+    
+    private processByproductActionFocussEnd makeActionFocussEnd() {
+        if (thisCaseContainer.thisCaseFocussing != null) {
+            return new processByproductActionFocussEnd(this, thisCaseContainer.thisCaseFocussing);
+        } else {
+            Debug.Log(GetType().Name + " failed to makeActionFocussEnd because thisCaseContainer.thisCaseFocussing is null");
+            return null;
+        }        
     }
 
-    private processAbst makeActionFocuss() {
-        return new processActionFocuss(this);
+    private processByproductActionFocuss makeActionFocuss() {
+        return new processByproductActionFocuss(this);
     }
 
-    private processActionSkill makeActionSkill() {
-        return new processActionSkill(this, whatToUseSkill);
+    private processByproductActionSkill makeActionSkill() {
+        return new processByproductActionSkill(this, whatToUseSkill);
     }
 
-    private processActionMove makeActionMove() {
-        return new processActionMove(this, thisCircuitHub.getNextRoute(this));
+    private processByproductActionMove makeActionMove() {
+        return new processByproductActionMove(this, thisCircuitHub.getNextRoute(this));
     }
 
-    private processActionAttack makeActionAttack() {
-        return new processActionAttack(this);
+    private processByproductActionAttack makeActionAttack() {
+        return new processByproductActionAttack(this);
     }
     #endregion processMaking
+
+    #region others
+    private void recalculateStatus() {
+        thisStatus_.reset();
+
+        // calculating status exceptionally ain't as observing, because it should work normally on total situation not only combat
+        thisCaseContainer.observeVoid<ICaseSystemicCalculateStatus>(new object[1] { thisStatus_ }, true);
+    }
+
+    public void OnDestroy() {
+        Destroy(thisCursor.gameObject);
+        Destroy(thisCanvasPersonal.gameObject);
+    }
+    #endregion others
 
     #region test
     public void testAllTools() {
         string temp = "TOOL CHECK " + this + " : ";
-        foreach (caseBase ta in getCaseList(enumCaseType.tool, false)) {
+        foreach (caseBase ta in getCaseList(enumCaseType.tool)) {
             temp += ta + ", ";
         }
         Debug.Log(temp);
@@ -861,14 +724,14 @@ public abstract class Thing : MonoBehaviour {
         tempSB.Append(" / ");
         tempSB.Append(maxHp);
 
-        tempSB.Append("\nweaponAmplifierAdd : ");   tempSB.Append(weaponAmplifierAdd);
-        tempSB.Append("\nweaponamplifierMultiply : "); tempSB.Append(weaponAmplifierMultiply);
-        tempSB.Append("\nskillAmplifierAdd : "); tempSB.Append(skillAmplifierAdd);
-        tempSB.Append("\nskillAmplifierMultiply : "); tempSB.Append(skillAmplifierMultiply);
-        tempSB.Append("\narmorAdd : "); tempSB.Append(armorAdd);
-        tempSB.Append("\narmorMultiply : "); tempSB.Append(armorMultiply);
-        tempSB.Append("\ndamageTotalDealt : "); tempSB.Append(damageTotalDealt);
-        tempSB.Append("\ndamageTotalTaken : "); tempSB.Append(damageTotalTaken);
+        tempSB.Append("\nweaponAmplifierAdd : ");   tempSB.Append(thisStatus.weaponAmplifierAdd);
+        tempSB.Append("\nweaponamplifierMultiply : "); tempSB.Append(thisStatus.weaponAmplifierMultiply);
+        tempSB.Append("\nskillAmplifierAdd : "); tempSB.Append(thisStatus.skillAmplifierAdd);
+        tempSB.Append("\nskillAmplifierMultiply : "); tempSB.Append(thisStatus.skillAmplifierMultiply);
+        tempSB.Append("\narmorAdd : "); tempSB.Append(thisStatus.armorAdd);
+        tempSB.Append("\narmorMultiply : "); tempSB.Append(thisStatus.armorMultiply);
+        tempSB.Append("\ndamageDealt : "); tempSB.Append(thisStatus.damageDealt);
+        tempSB.Append("\ndamageTotalTaken : "); tempSB.Append(thisStatus.damageTotalTaken);
 
 
         tempSB.Append("\nPosition : ");
@@ -887,13 +750,13 @@ public abstract class Thing : MonoBehaviour {
         tempSB.Append(thisSkill.timerMax);
 
         tempSB.Append("\nTools : ");
-        foreach (caseBase cb in getCaseList(enumCaseType.tool, false)) {
+        foreach (caseBase cb in getCaseList(enumCaseType.tool)) {
             tempSB.Append(cb.ToString());
             tempSB.Append(", ");
         }
 
         tempSB.Append("\nEffects : ");
-        foreach (caseBase cb in getCaseList(enumCaseType.effect, false)){
+        foreach (caseBase cb in getCaseList(enumCaseType.effect)){
             tempSB.Append(cb.ToString());
             tempSB.Append(", ");
         }

@@ -24,7 +24,7 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
         init();
     }
 
-    public void Start(){        
+    public void Start(){
         objGut = makeGut();
     }
 
@@ -66,22 +66,35 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
     protected void gutInterpolatePivot() {
         RectTransform tempRect = objGut.GetComponent<RectTransform>();
         tempRect.pivot = new Vector2(
-            (Input.mousePosition.x + tempRect.rect.width > gameManager.GM.option.screenWidth) ? 1f : 0f,
-            (Input.mousePosition.y - tempRect.rect.height > 0f) ? 1f : 0f
+            (Input.mousePosition.x + tempRect.rect.width > gameManager.GM.option.screenWidth) ? 1.02f : -0.02f,
+            (Input.mousePosition.y - tempRect.rect.height > 0f) ? 1.02f : -0.02f
             );
     }
 
     protected void show() {
         if (!doBeforeShow()) {
             return;
-        }        
+        }
+
+        gameManager.GM.UC.setParentHoveredShown(objGut.transform);
 
         objGut.GetComponent<RectTransform>().localPosition = new Vector3(9999f, 9999f);
         objGut.SetActive(true);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(objGut.GetComponent<RectTransform>());
 
+        /* force-update LayoutGroups
+        recursiveForceUpdate updates layout groups in children objects' layout groups first
+        void recursiveForceUpdate(RectTransform parRectTransform) {
+            foreach (Transform tr in parRectTransform.transform) {
+                recursiveForceUpdate(tr.GetComponent<RectTransform>());
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(parRectTransform);
+        }
+        recursiveForceUpdate(objGut.GetComponent<RectTransform>());
+        */
+        LayoutRebuilder.ForceRebuildLayoutImmediate(objGut.GetComponent<RectTransform>());
+        
         gutInterpolatePivot();
-        gutMoveToMouse();
+        gutMoveToMouse();        
     }
 
     public void deshow() {

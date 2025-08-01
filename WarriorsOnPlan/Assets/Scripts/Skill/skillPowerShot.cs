@@ -15,7 +15,7 @@ namespace Cases {
         }
         #endregion InfoImplementation
 
-        public skillPowerShot(int[] parSkillParameters) : base(parSkillParameters) {
+        public skillPowerShot() : base("Image/Case/Skill/image_skillPowerShot") {
             code = 92001;
         }
 

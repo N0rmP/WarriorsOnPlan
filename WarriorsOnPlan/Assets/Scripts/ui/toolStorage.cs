@@ -5,30 +5,26 @@ using UnityEngine.UI;
 
 using Cases;
 
-public class toolStorage : MonoBehaviour
-{
+public class toolStorage : MonoBehaviour {
     private Transform transformContent;
 
-    private carrierGeneric<GameObject> carrierBubble;
-
-    //private List<uiBubbleTool> listBubble;
+    private carrierGeneric<dragableBubbleStorage> carrierBubble;
 
     public void Awake() {
-        carrierBubble = new carrierGeneric<GameObject>(
+        transformContent = transform.GetChild(0).GetChild(0);
+        carrierBubble = new carrierGeneric<dragableBubbleStorage>(
             () => {
-                GameObject tempResult = Instantiate(combatUIManager.CUM.prefabBubble);
-                tempResult.AddComponent<dragableBubbleStorage>();
-                return tempResult;
-                },
+                return Instantiate(combatManager.CM.CUM.prefabBubble).AddComponent<dragableBubbleStorage>();
+            },
             (x) => {
-                x.transform.SetParent(null);
+                x.gameObject.SetActive(false);
             }
             );
-
-        transformContent = transform.GetChild(0).GetChild(0);
     }
 
-    public void prepareBubbles(caseBase[] parToolArray) {
+    #region bubble
+    public void updateBubbles(caseBase[] parToolArray) {
+        clearBubble();
         foreach (caseBase CB in parToolArray) {
             addBubble(CB);
         }
@@ -36,19 +32,27 @@ public class toolStorage : MonoBehaviour
 
     public void addBubble(caseBase parTool) {
         // get bubble through carrierBubble
-        GameObject tempBubble = carrierBubble.getInterceptor();
-        tempBubble.transform.SetParent(transformContent.transform);
+        dragableBubbleStorage tempBubble = carrierBubble.getInterceptor();
+        tempBubble.transform.SetParent(transformContent);
+        tempBubble.transform.SetAsLastSibling();
+        tempBubble.gameObject.SetActive(true);
 
         // set Tool
         tempBubble.GetComponent<dragableBubbleStorage>().thisTool = parTool;
     }
 
-    public void retrieveBubble(GameObject parBubble) {
-        parBubble.transform.SetParent(transformContent.transform);
-    }
-
-    public void removeBubble(GameObject parBubble) {
-        // return bubble to carrierBubble
+    public void removeBubble(dragableBubbleStorage parBubble) {
         carrierBubble.returnSingle(parBubble);
     }
+
+    public void clearBubble() {
+        dragableBubbleStorage tempDBS;
+        // remove all bubbles from content-transform
+        foreach (Transform tr in transform.GetChild(0).GetChild(0)) {
+            if (tr.TryGetComponent<dragableBubbleStorage>(out tempDBS)) {
+                removeBubble(tempDBS);
+            }            
+        }
+    }
+    #endregion bubble
 }

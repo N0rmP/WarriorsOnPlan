@@ -23,7 +23,7 @@ public class optionAIO {
         set {
             // ★ 게임 재시작 동반할 것, 안 그러면 게임 도중에 UI들 텍스트 갱신이 어려울테니
             curTranslation_ = value;
-            gameManager.GM.setBook(value);
+            gameManager.GM.DHouC.prepareBook();
         }
     }
 

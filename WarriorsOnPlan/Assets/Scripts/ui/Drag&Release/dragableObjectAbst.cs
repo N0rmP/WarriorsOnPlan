@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler {
+    private static PointerEventData curPointerEventData = null;
+
     protected enumDrag thisDrag = enumDrag.none;
 
     protected RectTransform thisRectTransform;
@@ -43,6 +46,7 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
 
     public virtual void OnBeginDrag(PointerEventData eventData) {
         gameManager.GM.DC.curDragging = thisDrag;
+        curPointerEventData = eventData;
 
         if (isReturnWhenReleased) {
             parentToReturn = transform.parent;
@@ -55,11 +59,23 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
     }
 
     public virtual void OnEndDrag(PointerEventData eventData) {
+        curPointerEventData = null;
+
         doAfterReleased(
             gameManager.GM.DC.relayRelease(thisDrag, getDragableParameters())
         );
 
         doWhenHoveringEnd();
+    }
+
+    // emergencyLeave is used to stop dragging forcefully
+    public static void emergencyEndDrag() {
+        if (curPointerEventData != null) {
+            dragableObjectAbst tempDOA = curPointerEventData.pointerDrag.GetComponent<dragableObjectAbst>();
+            curPointerEventData.dragging = false;
+            curPointerEventData.pointerDrag = null;
+            tempDOA.OnEndDrag(curPointerEventData);
+        }
     }
 
     protected virtual void doWhenHoveringStart() { }

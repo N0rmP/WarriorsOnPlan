@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICaseAfterHpDecrease
 {
-    public void onAfterHpDecrease(Thing source, int value);
+    public void caseFunc(Thing source, int value);
 }
