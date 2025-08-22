@@ -12,8 +12,15 @@ public enum enumAttackAnimation {
     trigAttackPunch
 }
 
+public enum enumAttackAudio { 
+    audioSword,
+    audioHammer,
+    audioBow,
+    audioMagic
+}
+
 namespace Cases {
-    public abstract class toolWeapon : caseTimerSelfishTurn {
+    public abstract class toolWeapon : caseTimerSelfishTurn, ICaseSystemicAdded {
         //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
         //min range can't be below 1, max range can't be below min range
         private int rangeMin_ = 1;
@@ -42,6 +49,7 @@ namespace Cases {
         }
         public enumDamageType damageType { get; protected set; } = enumDamageType.basic;
         public enumAttackAnimation attackAnimation { get; protected set; }
+        public enumAttackAudio attackAudio { get; protected set; }
 
         public toolWeapon(string parImagePath) : base(parImagePath, enumCaseType.tool, parIsVisible: true) { 
         
@@ -88,5 +96,9 @@ namespace Cases {
         }
 
         public abstract void showEffect(Thing source, Thing parTarget);
+
+        public void caseFunc(ICaseContainerContainer source) {
+            // ★ 무기라면 무기 모델링 양손, 등뒤에 추가하기            
+        }
     }
 }

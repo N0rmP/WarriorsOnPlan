@@ -114,6 +114,8 @@ public class mementoThing {
     public mementoIParametable mSkill { get; private set; }
     public List<mementoIParametable> listCase;
     public mementoIParametable mCircuitHub { get; private set; }
+    public int damageDealt;
+    public int damageTaken;
 
     // most circuits don't require to be saved but few using timer need to be (maybe only two of them is contained here)
     // ★ 전투 시작 n번째 턴부터 M 동안 이동 circuit
@@ -126,7 +128,9 @@ public class mementoThing {
         (int, int) parCoordinates,
         mementoIParametable parMSkill,
         List<mementoIParametable> parListCase,
-        mementoIParametable parMCircuitHub
+        mementoIParametable parMCircuitHub,
+        int parDamageDealt,
+        int parDamageTaken
         ) {
         me = parMe;
         actionOrder = combatManager.CM.HouC.getPersonalActionOrder(me);
@@ -137,6 +141,8 @@ public class mementoThing {
         mSkill = parMSkill;
         listCase = parListCase;
         mCircuitHub = parMCircuitHub;
+        damageDealt = parDamageDealt;
+        damageTaken = parDamageTaken;
     }
 
     public Thing getRestoredMe() {

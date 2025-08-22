@@ -19,13 +19,14 @@ public class skillFocussShot : skillAbst {
         code = 92003;
     }
 
+    // ★ caseFocussing tutorial, 집중 구현할 때마다 여기 오세용
     protected override void actualUseSkill(Thing source, Thing target) {
         combatManager.CM.executeProcess(
             new processByproductAddCase(
                 source,
                 gameManager.GM.MC.makeCodableObject<caseFocussing>(4100, new int[2] { timerFocussing, timerFocussing }, new List<object>() {
                     (Action)(() => {
-                        combatManager.CM.executeProcess(new processByproductDealDamage(new damageInfo[1]{ new damageInfo(source, this, damage) }, target));
+                        combatManager.CM.executeProcess(new processByproductDealDamage(new damageInfo[1]{ new damageInfo(source, this, damage) }, source.whatToUseSkill));
                     }),
                     (Action)(() => {
                         source.resetAnimator();
@@ -38,10 +39,15 @@ public class skillFocussShot : skillAbst {
                                     enumVFX.projectile_simple,
                                     combatManager.CM.FC.getRetrieverMoveStop(),
                                     source.transform.position,
-                                    target.transform.position,
+                                    source.whatToUseSkill.transform.position,
                                     enumMoveType.linear,
                                     Color.blue,
                                     0.5f
+                                );
+                                gameManager.GM.AC.playSE(
+                                    SwissArmyStaticMethod.selectRandom<AudioClip>(
+                                        gameManager.GM.AHouC.arrClipMagicBasic
+                                    )
                                 );
                             },
                             combatManager.CM.getBodyAnimationDuration()

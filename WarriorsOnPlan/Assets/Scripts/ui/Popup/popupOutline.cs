@@ -19,4 +19,8 @@ public class popupOutline : popupText {
         thisText.font = (parTextColor.r * 0.2f + parTextColor.g * 0.7f + parTextColor.b * 0.1f < 128) ? fontassetOutlineWhite : fontassetOutlineBlack;
         setPopupText(parTextColor, parBackgroundColor, parString, parDuration);
     }
+
+    protected override void returnThis() {
+        gameManager.GM.PC.returnFloatingSingle(this);
+    }
 }

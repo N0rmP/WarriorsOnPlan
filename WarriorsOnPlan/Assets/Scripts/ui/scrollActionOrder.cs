@@ -77,9 +77,12 @@ public class scrollActionOrder : MonoBehaviour {
         }
 
         parRAO.thisLine = gameManager.GM.LC.placeLine(
-            transform.parent.GetComponent<RectTransform>(),
-            parRAO.GetComponent<RectTransform>().position + new Vector3(0f, parRAO.GetComponent<RectTransform>().sizeDelta.y / 2f, 0f),
-            Camera.main.WorldToScreenPoint(parRAO.thisThing.transform.position)
+            (RectTransform)transform.parent,
+            parRAO.GetComponent<RectTransform>().convertAcrossRect((RectTransform)transform.parent, new Vector3(0f, 70f, 0f)),
+            gameManager.GM.canvasMain.GetComponent<RectTransform>().convertAcrossRect(
+                (RectTransform)transform.parent,
+                parRAO.thisThing.gameObject.getCanvasMainLocalPosition()
+            )
         );
     }
 

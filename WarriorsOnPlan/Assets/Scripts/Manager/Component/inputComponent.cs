@@ -16,8 +16,10 @@ public class inputComponent : MonoBehaviour{
 
     public void Awake() {
         dictSceneInputContainer = new Dictionary<string, inputContainer>();
-        foreach (Scene sc in gameManager.GM.SceC.enumerateLoadedScene()) {
-            dictSceneInputContainer.Add(sc.name, new inputContainer());
+        Scene tempScene;
+        for (int i=0; i<SceneManager.sceneCount; i++) {
+            tempScene = SceneManager.GetSceneAt(i);
+            dictSceneInputContainer.Add(tempScene.name, new inputContainer());
         }
 
         gameManager.GM.SceC.eventAfterActiveSceneChanged += (x) => {

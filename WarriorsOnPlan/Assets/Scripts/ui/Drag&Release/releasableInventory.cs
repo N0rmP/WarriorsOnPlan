@@ -30,7 +30,7 @@ public class releasableInventory : releasableObjectAbst {
                 return tempResult;
             },
             (x) => {
-                x.transform.SetParent(null);
+                x.GetComponent<showerCase>().deshow();
             }
             );
     }
@@ -56,6 +56,13 @@ public class releasableInventory : releasableObjectAbst {
         // add bubble to the target-thing, inventory ui update will be done there
         combatManager.CM.CUM.CStatus.thisThing.addCase((caseBase)parParameters[0]);
         combatManager.CM.systemRemoveToolsProvided((caseBase)parParameters[0]);
+
+        // show
+        gameManager.GM.AC.playSE(
+            SwissArmyStaticMethod.selectRandom<AudioClip>(
+                gameManager.GM.AHouC.arrClipToolEquip
+            )
+        );
 
         // ★ inventory 이미지 갱신, 기능 대부분을 구현한 뒤 필요한지 재고
         return true;
@@ -83,6 +90,7 @@ public class releasableInventory : releasableObjectAbst {
         GameObject tempBubble = carrierBubble.getInterceptor();
         tempBubble.GetComponent<dragableBubbleInventory>().thisTool = parTool;
         tempBubble.transform.SetParent(contentTransform);
+        tempBubble.transform.localScale = Vector3.one;
     }
 
     public void addTool(caseBase[] parArr) {

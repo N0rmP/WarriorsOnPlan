@@ -18,6 +18,7 @@ public class canvasSandwitch : MonoBehaviour {
             () => {
                 Transform tempTransform = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/curtain")).transform;
                 tempTransform.SetParent(transform);
+                tempTransform.transform.localScale = Vector3.one;
                 tempTransform.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 0f);
                 tempTransform.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 1f);
                 tempTransform.GetComponent<RectTransform>().offsetMin = new Vector2(0f, 0f);
@@ -38,6 +39,7 @@ public class canvasSandwitch : MonoBehaviour {
         stackUiAlive.Push(tempTransformCurtain);
 
         parUA.transform.SetParent(tempTransformCurtain);
+        parUA.transform.localScale = Vector3.one;
     }
 
     public uiActivatable popUiActivatable() {

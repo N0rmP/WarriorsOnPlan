@@ -42,17 +42,17 @@ public class carrierGeneric<T> {
             return;
         }
 
+        if (delReturn != null) {
+            delReturn(parInterceptor);
+        }
+
         // if parInterceptor is GameObject, deactivate it
         if (parInterceptor is GameObject tempObj) {
             tempObj.SetActive(false);
         }
 
         hangerAvailable.Push(parInterceptor);
-        spaceOperating.Remove(parInterceptor);
-
-        if (delReturn != null) {
-            delReturn(parInterceptor);
-        }
+        spaceOperating.Remove(parInterceptor);        
     }
 
     public void returnTotal() {

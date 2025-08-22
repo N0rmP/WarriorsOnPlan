@@ -5,7 +5,8 @@ using UnityEngine;
 namespace Circuits {
     public class navigatorBackward : navigatorAbst {
         public navigatorBackward() {
-            code = 1204;
+            // ★ 나중에 navigatorAttackAllWeapon 만들고 1204로 코드 옮기기
+            code = 1203;
         }
 
         /*
@@ -22,10 +23,18 @@ namespace Circuits {
             node tempDestination = combatManager.CM.GC[owner.curPosition.coor0, owner.thisSide == enumSide.player ? 0 : combatManager.CM.GC.size1 - 1];
             combatManager.CM.GC.BFS(owner.curPosition,
                 (x) => {
-                    return x == tempDestination;
+                    return x.coor1 == owner.thisSide switch { 
+                        enumSide.player => 0,
+                        enumSide.enemy or enumSide.neutral => 6,
+                        _ => 6
+                    };
                 },
                 tempStack,
-                new Vector2(owner.curPosition.coor0 - tempDestination.coor0, owner.curPosition.coor1 - tempDestination.coor1)
+                new Vector2(0, owner.thisSide switch {
+                    enumSide.player => -1,
+                    enumSide.enemy or enumSide.neutral => 1,
+                    _ => 1
+                })
                 );
 
             polishEDirStackToRouteQueue(owner.curPosition, tempStack, route);

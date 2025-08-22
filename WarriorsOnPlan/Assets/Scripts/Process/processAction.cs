@@ -69,7 +69,7 @@ namespace Processes {
             base.actualSHOW();
 
             if (isInterfered) {
-                gameManager.GM.PC.popupBasicAlert(source.transform.position, gameManager.GM.DHouC.bookWords.strAction + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+                gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookWords.strAction + " " + gameManager.GM.DHouC.bookWords.strInterfere);
             }
 
             combatManager.CM.CUM.setActionCounter(thisCountAction);

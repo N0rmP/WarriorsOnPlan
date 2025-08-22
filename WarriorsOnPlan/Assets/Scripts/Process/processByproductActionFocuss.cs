@@ -15,7 +15,7 @@ namespace Processes {
         protected override void actualSHOW() {
             base.actualSHOW();
 
-            gameManager.GM.PC.popupBasicAlert(source.transform.position, gameManager.GM.DHouC.bookWords.strFocussing + "...", false);
+            gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookWords.strFocussing + "...");
 
             source.animateFocuss();
         }

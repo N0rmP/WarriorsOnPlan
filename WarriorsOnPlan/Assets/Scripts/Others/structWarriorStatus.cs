@@ -38,10 +38,6 @@ public class structWarriorStatus {
         }
     }
 
-    // ★ 장비를 통해 증감시킬 수 없는 능력치는 능력치로 분류하지 않아야 함
-    public int damageDealt;
-    public int damageTotalTaken;
-
     public structWarriorStatus(int parDummy) {
         weaponAmplifierAdd = 0;
         weaponAmplifierMultiply_ = 100;
@@ -49,8 +45,6 @@ public class structWarriorStatus {
         skillAmplifierMultiply_ = 100;
         armorAdd = 0;
         armorMultiply_ = 100;
-        damageDealt = 0;
-        damageTotalTaken = 0;
     }
 
     public void reset() {
@@ -60,7 +54,5 @@ public class structWarriorStatus {
         skillAmplifierMultiply_ = 100;
         armorAdd = 0;
         armorMultiply_ = 100;
-        damageDealt = 0;
-        damageTotalTaken = 0;
     }
 }

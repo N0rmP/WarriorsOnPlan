@@ -9,6 +9,10 @@ namespace Processes {
         private Thing destroyer;
 
         public processByproductDie(Thing parDead, Thing parDestroyer, bool parIsSHOW = true) : base(parIsSHOW) {
+            if (parDead == null) {
+                Debug.Log("processByproductDie results in error because parDead is null - parDestroyer : " + parDestroyer);
+            }
+
             dead = parDead;
             destroyer = parDestroyer;
         }
@@ -19,7 +23,7 @@ namespace Processes {
             // onInterferableDestroied, onInterferable
             isInterfered = 
                 dead.observeInterferable<ICaseInterferableDestroied>(new object[2] { dead, destroyer }) ||
-                destroyer.observeInterferable<ICaseInterferableDestroy>(new object[2] { destroyer, dead });
+                (destroyer != null && destroyer.observeInterferable<ICaseInterferableDestroy>(new object[2] { destroyer, dead }));
             if (isInterfered) {
                 return;
             }
@@ -28,7 +32,7 @@ namespace Processes {
             dead.observeVoid<ICaseBeforeDestroied>(new object[2] { dead, destroyer });
 
             // onBeforeDestroy
-            destroyer.observeVoid<ICaseBeforeDestroy>(new object[2] { destroyer, dead });
+            destroyer?.observeVoid<ICaseBeforeDestroy>(new object[2] { destroyer, dead });
         }
 
         protected override void doAfterActualDo() {
@@ -38,7 +42,7 @@ namespace Processes {
             dead.observeVoid<ICaseAfterDestroied>(new object[2] { dead, destroyer });
 
             // onDestroy
-            destroyer.observeVoid<ICaseAfterDestroy>(new object[2] { destroyer, dead });
+            destroyer?.observeVoid<ICaseAfterDestroy>(new object[2] { destroyer, dead });
         }
 
         protected override void actualDO() {
@@ -48,8 +52,9 @@ namespace Processes {
         protected override void actualSHOW() {
             base.actualSHOW();
 
+            // ★ 문자열 대체
             if (isInterfered) {
-                gameManager.GM.PC.popupBasicAlert(dead.transform.position, "Dead, But It Refused", false);
+                gameManager.GM.PC.popupBasicAlert(dead.gameObject.getCanvasMainLocalPosition() + new Vector2(0, gameManager.GM.option.stick), "Dead, But It Refused");
             }
 
             gameManager.GM.TC.addDelegate(
@@ -61,7 +66,7 @@ namespace Processes {
                 combatManager.CM.getBodyAnimationDuration() + 1f
             );
             gameManager.GM.TC.addDelegate(
-                () => dead.setPosition(new Vector3(50f, 0f, 50f)),
+                () => dead.setPosition(new Vector3(20f, 0f, 20f)),
                 combatManager.CM.getBodyAnimationDuration() + 2f
             );
         }

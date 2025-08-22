@@ -79,9 +79,10 @@ namespace Processes {
             base.actualSHOW();
 
             if (isInterfered) {
-                gameManager.GM.PC.popupBasicAlert(target.transform.position, gameManager.GM.DHouC.bookWords.strDamaged + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+                gameManager.GM.PC.popupBasicAlert(target.gameObject.getCanvasMainLocalPosition() + new Vector2(0, gameManager.GM.option.stick), gameManager.GM.DHouC.bookWords.strDamaged + " " + gameManager.GM.DHouC.bookWords.strInterfere);
             }
 
+            // vfx
             Action<Vector3> tempDelShow = null;
             HashSet<enumVFX> tempSetEnumVfx = new HashSet<enumVFX>();
             foreach (damageInfo di in arrDInfo) {
@@ -92,6 +93,7 @@ namespace Processes {
                 tempSetEnumVfx.Add(di.vfxHit);
             }
             
+            // animation
             if (isShowInstant) {
                 tempDelShow(target.transform.position);
                 target.animateDamaged();
@@ -103,6 +105,14 @@ namespace Processes {
                     },
                     combatManager.CM.getBodyAnimationDuration()
                 );
+            }
+
+            // damageDealt & damageTaken
+            target.damageTaken += damageTotal;
+            foreach (damageInfo di in arrDInfo) {
+                if (di.sourceAttacker != null) {
+                    di.sourceAttacker.damageDealt += di.damageDealt;
+                }
             }
         }
     }

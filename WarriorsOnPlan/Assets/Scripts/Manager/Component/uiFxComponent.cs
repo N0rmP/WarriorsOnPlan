@@ -25,7 +25,8 @@ public class uiFxComponent : MonoBehaviour {
         containerColorChange = new Dictionary<Image, (Color, float)>();
         containerCount = new Dictionary<TextMeshProUGUI, int>();
         containerMove = new Dictionary<GameObject, (Vector3, float)>();
-        
+
+        gameManager.GM.SceC.eventAfterActiveSceneChanged += (x) => uiActivatable.offAll();
         gameManager.GM.SceC.eventAfterActiveSceneChanged += prepareCanvases;
         prepareCanvases(SceneManager.GetActiveScene());
     }
@@ -61,6 +62,7 @@ public class uiFxComponent : MonoBehaviour {
             thisCanvasSandwitch = makeCanvas("canvasSandwitch").AddComponent<canvasSandwitch>();
         }        
         thisCanvasSandwitch.transform.SetParent(gameManager.GM.canvasMain.transform);
+        thisCanvasSandwitch.transform.localScale = Vector3.one;
         thisCanvasSandwitch.transform.SetAsLastSibling();
 
         // canvasPopup
@@ -70,6 +72,7 @@ public class uiFxComponent : MonoBehaviour {
             thisCanvasPopup.GetComponent<Image>().enabled = false;
         }        
         thisCanvasPopup.SetParent(gameManager.GM.canvasMain.transform);
+        thisCanvasPopup.transform.localScale = Vector3.one;
         thisCanvasPopup.transform.SetAsLastSibling();
 
         // canvasHoveredShown
@@ -77,6 +80,7 @@ public class uiFxComponent : MonoBehaviour {
             thisCanvasHoveredShown = makeCanvas("canvasHoveredShown").transform;
         }        
         thisCanvasHoveredShown.SetParent(gameManager.GM.canvasMain.transform);
+        thisCanvasHoveredShown.transform.localScale = Vector3.one;
         thisCanvasHoveredShown.transform.SetAsLastSibling();
 
     }
@@ -91,10 +95,12 @@ public class uiFxComponent : MonoBehaviour {
 
     public void setParentHoveredShown(Transform parTransformHoveredShown) {
         parTransformHoveredShown.SetParent(thisCanvasHoveredShown);
+        parTransformHoveredShown.localScale = Vector3.one;
     }
 
     public void setParentPopup(Transform parTransformPopup) {
         parTransformPopup.SetParent(thisCanvasPopup);
+        parTransformPopup.localScale = Vector3.one;
     }
 
     public void setCurtainPopup(bool parIsEnabled) {

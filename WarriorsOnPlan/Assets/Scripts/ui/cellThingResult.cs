@@ -45,9 +45,9 @@ public class cellThingResult : MonoBehaviour {
         transform.GetChild(2).GetChild(0).GetChild(1).GetComponent<Slider>().value = parThing.curHp / (float)parThing.maxHp;
         transform.GetChild(2).GetChild(0).GetChild(1).GetChild(2).GetComponent<TextMeshProUGUI>().text = parThing.curHp + " / " + parThing.maxHp;
         // DD
-        transform.GetChild(2).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = parThing.thisStatus.damageDealt.ToString();
+        transform.GetChild(2).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = parThing.damageDealt.ToString();
         // DT
-        transform.GetChild(2).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>().text = parThing.thisStatus.damageTotalTaken.ToString();
+        transform.GetChild(2).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>().text = parThing.damageTaken.ToString();
 
         // scrollTool
         GameObject tempRRTool = null;

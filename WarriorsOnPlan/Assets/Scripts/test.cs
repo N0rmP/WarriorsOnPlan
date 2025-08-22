@@ -6,16 +6,24 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEditor;
-using UnityEditor.UI;
-using Unity.VisualScripting;
-using UnityEngine.SceneManagement;
+//using UnityEngine.SceneManagement;
 using Cases;
 
 // [CustomEditor(typeof(Button))]
 public class test : MonoBehaviour {
 
     public void Start() {
-        GetComponent<showerCase>().setCase(gameManager.GM.MC.makeCodableObject<weaponTester>(93001, new int[5] { 1, 0, 1, 3, 1 }, null));
+        Debug.Log(true.ToInteger());
+        Debug.Log(false.ToInteger());
+        Debug.Log(0.ToBoolean());
+        Debug.Log(1.ToBoolean());
+        Debug.Log((-1).ToBoolean());
+    }
+
+    public void Update() {
+        if (Input.GetKeyDown(KeyCode.Z)) {
+            Debug.Log(gameObject + " : " + transform.localPosition + " / " + (transform as RectTransform).anchoredPosition);
+        }
     }
 
     public void testShout() {

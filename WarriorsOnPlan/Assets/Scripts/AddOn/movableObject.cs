@@ -89,18 +89,22 @@ public class movableObject : MonoBehaviour {
 
     public void endMove(bool isArrival = true) {
         if (isArrival) { transform.position = destination; }
-        resetMovableObject();        
+        resetMovableObject();
 
-        if (this is IMovableSupplement) { ((IMovableSupplement)this).whenEndMove(); }
+        IMovableSupplement tempIMS;
+        if (TryGetComponent<IMovableSupplement>(out tempIMS)) { tempIMS.whenEndMove(); }
     }
 
     public void startLinearMove(Vector3 parDestination, float parTime = 1f) {
-        if (this is IMovableSupplement) { ((IMovableSupplement)this).whenStartMove(); }
+        // if (this is IMovableSupplement) { ((IMovableSupplement)this).whenStartMove(); }
 
         departure = transform.position;
         destination = parDestination;
         multiplier = getMultiplier(parDestination, transform.position, parTime);
         stateMove = enumMoveType.linear;
+
+        IMovableSupplement tempIMS;
+        if (TryGetComponent<IMovableSupplement>(out tempIMS)) { tempIMS.whenStartMove(); }
     }
 
     public void startParabolaMove(Vector3 parDestination, float parTime = 1) {
@@ -110,7 +114,8 @@ public class movableObject : MonoBehaviour {
         ratio = 0f;
         stateMove = enumMoveType.parabola;
 
-        if (this is IMovableSupplement) { ((IMovableSupplement)this).whenStartMove(); }
+        IMovableSupplement tempIMS;
+        if (TryGetComponent<IMovableSupplement>(out tempIMS)) { tempIMS.whenStartMove(); }
     }
 
     public void startParabolaMove(Vector3 parDestination, float parTime = 1, float parHeight = 4) {

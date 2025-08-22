@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,12 @@ using static UnityEngine.GraphicsBuffer;
 
 namespace Processes {
     public class processByproductHpDecrease : processByproductAbst {
+        // tupCounter helps several damage-number-texts to popup in order, not at once
+        private static (int distinguisher, float delay) tupCounter = (-1, 0f);
+
         private Thing source;
         private Thing attackerThing;
+        // value & valueFinal are positive
         private int value;
         public int valueFinal { get; private set; }
         private bool isShowInstant;
@@ -14,7 +19,7 @@ namespace Processes {
         public processByproductHpDecrease(Thing parSource, Thing parAttacker, int parValue, bool parIsShow = true, bool parIsShowInstant = false) : base(parIsShow) {
             source = parSource;
             attackerThing = parAttacker;
-            value = parValue;
+            value = Math.Max(0, parValue);
             isShowInstant = parIsShowInstant;
         }
 
@@ -42,10 +47,9 @@ namespace Processes {
         }
 
         protected override void actualDO() {
-            valueFinal = source.setCurHp(-value, true);
+            valueFinal = Math.Abs(source.setCurHp(-value, true));
 
-            //★ 가능하면 이 코드를 combatManager에서 모든 process 실행 직후에 모든 warrior에 대하여 status 갱신과 함께 시행하도록 변경하기
-            if (source.curHp <= 0) {
+            if (source.stateCur > enumStateWarrior.dead && source.curHp <= 0) {
                 combatManager.CM.executeProcess(new processByproductDie(source, attackerThing));
             }
         }
@@ -54,12 +58,20 @@ namespace Processes {
             base.actualSHOW();
 
             if (isInterfered) {
-                gameManager.GM.PC.popupBasicAlert(source.transform.position, gameManager.GM.DHouC.bookWords.strHpDecrease + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+                gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookWords.strHpDecrease + " " + gameManager.GM.DHouC.bookWords.strInterfere);
             }
 
             void showHpDecrease() {
                 source.updatePanelHp();
-                gameManager.GM.PC.popupDamage(source.transform.position + new Vector3(Random.Range(-0.25f, 0.25f), 0f, 1f), value.ToString(), false);
+                gameManager.GM.PC.popupDamage(source.gameObject.getCanvasMainLocalPosition() + new Vector2(gameManager.GM.option.stick * UnityEngine.Random.Range(-0.5f, 0.5f), gameManager.GM.option.stickDegreed), value.ToString());
+            }
+
+            // update counter
+            if (tupCounter.distinguisher == thisCountDistinguisher) {
+                tupCounter.delay += 0.1f;
+            } else {
+                tupCounter.distinguisher = thisCountDistinguisher;
+                tupCounter.delay = 0f;
             }
 
             if (isShowInstant) {
@@ -69,7 +81,7 @@ namespace Processes {
                     () => {
                         showHpDecrease();
                     },
-                    combatManager.CM.getBodyAnimationDuration()
+                    combatManager.CM.getBodyAnimationDuration() + tupCounter.delay
                 );
             }
         }

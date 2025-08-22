@@ -10,50 +10,46 @@ public class sceneComponent {
     private Scene sceneMap;
     private Scene sceneCombat;
 
-    private GameObject cameraCombat;
-
     public event Action<Scene> eventAfterActiveSceneChanged;
+    private Action<enumMapType> delSetCurMapType;
 
-    public sceneComponent() {
-        cameraCombat = GameObject.Find("CAMERA_Combat");
-        cameraCombat.SetActive(false);
+    public sceneComponent(Action<enumMapType> parDelSetCurMapType) {
+        // SceneInn is shell-scene for player to go into exile while unloading & reloading all other scenes
+        if (!SceneManager.GetSceneByName("SceneInn").isLoaded) {
+            SceneManager.LoadScene("SceneInn", LoadSceneMode.Additive);
+        }
+
+        delSetCurMapType = parDelSetCurMapType;
     }
 
     // sceneComponent's initiation requires each scene adds its delegate to eventAfterActiveSceneChanged, so it can't be done in creator
     public void init() {
-        // scene load, SceneMenu is the first scene and already loaded, so you need to load other scens here
+        // scene load
+            // SceneComponent should be created in gameManager, and gameManager should be created in SceneMenu, so SceneMenu's loading skipped
         SceneManager.LoadScene("SceneMap", LoadSceneMode.Additive);
         SceneManager.LoadScene("SceneCombat", LoadSceneMode.Additive);
 
         sceneMenu = SceneManager.GetSceneByName("SceneMenu");
         sceneMap = SceneManager.GetSceneByName("SceneMap");
         sceneCombat = SceneManager.GetSceneByName("SceneCombat");
-
+        
         SceneManager.activeSceneChanged += (x, y) => {
             gameManager.GM.TC.clearDelegate();
             gameManager.GM.UC.clearAll();
         };
     }
 
-    public IEnumerable<Scene> enumerateLoadedScene() {
-        yield return sceneMenu;
-        yield return sceneMap;
-        yield return sceneCombat;
-    }
-
     #region transition
     public void transitionSceneMenu() {
-        cameraCombat.SetActive(false);
         SceneManager.SetActiveScene(sceneMenu);
+
         eventAfterActiveSceneChanged(sceneMenu);
     }
 
     public void transitionSceneMap() {
-        cameraCombat.SetActive(false);
         SceneManager.SetActiveScene(sceneMap);
-
+                
         eventAfterActiveSceneChanged(sceneMap);
-        mapManager.MM.prepareMap(gameManager.GM.curMapType);
     }
 
     public void transitionSceneCombat(int parLevelCode, upgradeAbst[] parArrUpgrade) {
@@ -68,7 +64,6 @@ public class sceneComponent {
     }
 
     public void transitionSceneCombat(dataLevel parDataLevel, upgradeAbst[] parArrUpgrade) {
-        cameraCombat.SetActive(true);
         SceneManager.SetActiveScene(sceneCombat);
         eventAfterActiveSceneChanged(sceneCombat);
         combatManager.CM.systemLevelEnter(parDataLevel, parArrUpgrade);

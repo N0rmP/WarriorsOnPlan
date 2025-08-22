@@ -49,7 +49,6 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
                 fltTimerCur = fltTimerMax;
             }
         } else if (!thisRectTransform.checkHovered()) {
-            isEntered = false;
             deshow();
         }
     }
@@ -58,7 +57,7 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
         RectTransform tempRect = objGut.GetComponent<RectTransform>();
         tempRect.anchorMin = new Vector2(0f, 0f);
         tempRect.anchorMax = new Vector2(0f, 0f);
-        tempRect.anchoredPosition = Input.mousePosition;
+        tempRect.anchoredPosition = (Vector2)(Input.mousePosition) / gameManager.GM.canvasMain.transform.localScale;
     }
 
     // change pivot of parObj when mouse position is near the edges of screen, it assures that popped GUI to be fully inside the screen
@@ -66,7 +65,7 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
     protected void gutInterpolatePivot() {
         RectTransform tempRect = objGut.GetComponent<RectTransform>();
         tempRect.pivot = new Vector2(
-            (Input.mousePosition.x + tempRect.rect.width > gameManager.GM.option.screenWidth) ? 1.02f : -0.02f,
+            (Input.mousePosition.x + tempRect.rect.width > Screen.width) ? 1.02f : -0.02f,
             (Input.mousePosition.y - tempRect.rect.height > 0f) ? 1.02f : -0.02f
             );
     }
@@ -98,7 +97,8 @@ public abstract class hoveredShowerAbst : MonoBehaviour {
     }
 
     public void deshow() {
-        objGut.SetActive(false);
+        isEntered = false;
+        objGut?.SetActive(false);
 
         doAfterDeshow();
     }

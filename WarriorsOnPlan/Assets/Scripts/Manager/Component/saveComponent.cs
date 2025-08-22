@@ -1,9 +1,11 @@
+using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Linq;
 
 public class saveComponent {
     public dataSaveBasicMap dataSaveBasicNormal { get; private set; }
@@ -11,45 +13,50 @@ public class saveComponent {
     public dataSaveBasicMap dataSaveBasicElite { get; private set; }
 
     public saveComponent(){
-        dataSaveBasicMap importDataSaveBasicMap(enumMapType parEnumMapType) {
-            // if Save directory doesn't exist, create it
-            if (!Directory.Exists(Application.persistentDataPath + "/Save")) {                
-                Directory.CreateDirectory(Application.persistentDataPath + "/Save");
-            }
+        dataSaveBasicNormal = LOAD<dataSaveBasicMap>("/Save/SaveBasic" + enumMapType.Normal.ToString() + ".json"); 
+        dataSaveBasicHard = LOAD<dataSaveBasicMap>("/Save/SaveBasic" + enumMapType.Hard.ToString() + ".json");
+        dataSaveBasicElite = LOAD<dataSaveBasicMap>("/Save/SaveBasic" + enumMapType.Elite.ToString() + ".json");
+    }
 
-            // if Save json file doesn't exist, create it
-            if (!File.Exists(Application.persistentDataPath + getSavePath(parEnumMapType) + ".json")) {
-                dataSaveBasicMap tempNew = new dataSaveBasicMap();
-                tempNew.emergencyInit();
-                File.WriteAllText(
-                    Application.persistentDataPath + getSavePath(parEnumMapType) + ".json", JsonConvert.SerializeObject(tempNew, Formatting.Indented)
-                );
-                return tempNew;
-            } else {
-                return gameManager.GM.FC.importPersistentJson<dataSaveBasicMap>(getSavePath(parEnumMapType));
-            }
+    #region Save&Load
+    // generic is not necessary but used to ensure parData has only json-convertable fields
+    public void SAVE<T>(string parPath, T parData) where T : struct, IDataInsurance {
+        fileComponent.ensurePersistentPath(ref parPath);
+
+        File.WriteAllText(parPath, JsonConvert.SerializeObject(parData, Formatting.Indented));
+    }
+
+    public T LOAD<T>(string parPath) where T : struct, IDataInsurance {
+        fileComponent.ensurePersistentPath(ref parPath);
+
+        // if Save json file doesn't exist, create it
+        if (!File.Exists(parPath)) {
+            T tempNew = default;
+            tempNew.emergencyInit();
+            File.WriteAllText(
+                parPath, JsonConvert.SerializeObject(tempNew, Formatting.Indented)
+            );
+            return tempNew;
+        } else {
+            return gameManager.GM.FC.importPersistentJson<T>(parPath);
         }
-        
-        dataSaveBasicNormal = importDataSaveBasicMap(enumMapType.Normal);        
-        dataSaveBasicHard = importDataSaveBasicMap(enumMapType.Hard);
-        dataSaveBasicElite = importDataSaveBasicMap(enumMapType.Elite);
     }
+    #endregion Save&Load
 
-    public dataSaveBasicMap loadBasicMap(enumMapType parEnumMapType) {
-        return gameManager.GM.FC.importPersistentJson<dataSaveBasicMap>(getSavePath(parEnumMapType));
-    }
-
-    public void SAVE() {
-        // save dataSaveBasicMap 
-        File.WriteAllText(Application.persistentDataPath + getSavePath(enumMapType.Normal) + ".json", JsonConvert.SerializeObject(dataSaveBasicNormal, Formatting.Indented));
-        File.WriteAllText(Application.persistentDataPath + getSavePath(enumMapType.Hard) + ".json", JsonConvert.SerializeObject(dataSaveBasicHard, Formatting.Indented));
-        File.WriteAllText(Application.persistentDataPath + getSavePath(enumMapType.Elite) + ".json", JsonConvert.SerializeObject(dataSaveBasicElite, Formatting.Indented));
-        
-        
-    }
-
-    private string getSavePath(enumMapType parEnumMapType) {
-        return "/Save/SaveBasic" + parEnumMapType.ToString();
+    public void saveMap(enumMapType parEnumMapType) {
+        switch (parEnumMapType) {
+            case enumMapType.Normal:
+                SAVE<dataSaveBasicMap>("/Save/SaveBasic" + parEnumMapType.ToString() + ".json", dataSaveBasicNormal);
+                break;
+            case enumMapType.Hard:
+                SAVE<dataSaveBasicMap>("/Save/SaveBasic" + parEnumMapType.ToString() + ".json", dataSaveBasicHard);
+                break;
+            case enumMapType.Elite:
+                SAVE<dataSaveBasicMap>("/Save/SaveBasic" + parEnumMapType.ToString() + ".json", dataSaveBasicElite);
+                break;
+            default:
+                break;
+        }
     }
 
     public dataSaveBasicMap getDataSaveBasicMap(enumMapType parEnumMapType) {

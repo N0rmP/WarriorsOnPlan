@@ -1,14 +1,15 @@
-using System.IO;
+using System;
+//using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
 public class dataHouseComponent {
-    private List<dataLevel> listLevelNormal;
-    private List<dataLevel> listLevelHard;
-    private List<dataLevel> listLevelElite;
-    private List<dataLevel> listLevelTest;
+    private Dictionary<int, dataLevel> dictLevelNormal;
+    private Dictionary<int, dataLevel> dictLevelHard;
+    private Dictionary<int, dataLevel> dictLevelElite;
+    private Dictionary<int, dataLevel> dictLevelTest;
 
     private dataUpgradeTree dataUpgradeTreeNormal;
     private dataUpgradeTree dataUpgradeTreeHard;
@@ -27,10 +28,20 @@ public class dataHouseComponent {
 
     #region prepare
     private void prepareDataLevel() {
-        listLevelNormal = gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Normal", false).ToList<dataLevel>();
-        listLevelHard = gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Hard", false).ToList<dataLevel>();
-        listLevelElite = gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Elite", false).ToList<dataLevel>();
-        listLevelTest = gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Test", false).ToList<dataLevel>();
+        Dictionary<int, dataLevel> makeInDictionary(IEnumerable<dataLevel> parCol) {
+            Dictionary<int, dataLevel> tempResult = new Dictionary<int, dataLevel>();
+            foreach (dataLevel dl in parCol) {
+                if (!tempResult.ContainsKey(dl.LevelCode)) {
+                    tempResult.Add(dl.LevelCode, dl);
+                }
+            }
+            return tempResult;
+        }
+
+        dictLevelNormal = makeInDictionary(gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Normal", false).ToList<dataLevel>());
+        dictLevelHard = makeInDictionary(gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Hard", false).ToList<dataLevel>());
+        dictLevelElite = makeInDictionary(gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Elite", false).ToList<dataLevel>());
+        dictLevelTest = makeInDictionary(gameManager.GM.FC.importResourcesJsonArr<dataLevel>("Level/Test", false).ToList<dataLevel>());
     }
 
     private void prepareDataUpgradeTree() {
@@ -49,32 +60,30 @@ public class dataHouseComponent {
     #endregion prepare
 
     #region dataLevel_Managemenet
-    public dataLevel[] getArrLevel(enumMapType parMapType) {
-        return (parMapType switch {
-            enumMapType.Normal => listLevelNormal,
-            enumMapType.Hard => listLevelHard,
-            enumMapType.Elite => listLevelElite,
-            enumMapType.Test => listLevelTest,
-            _ => new List<dataLevel>()
-        }).ToArray();
+    public Dictionary<int, dataLevel> getDictLevel(enumMapType parMapType) {
+        return parMapType switch {
+            enumMapType.Normal => dictLevelNormal,
+            enumMapType.Hard => dictLevelHard,
+            enumMapType.Elite => dictLevelElite,
+            enumMapType.Test => dictLevelTest,
+            _ => new Dictionary<int, dataLevel>()
+        };
     }
 
-    public dataLevel getDataLevel(int parMapCode) {
-        enumMapType tempEnumMapType = (parMapCode / 10000) switch {
+    public dataLevel getDataLevel(int parLevelCode) {
+        enumMapType tempEnumMapType = (parLevelCode / 10000) switch {
             1 => enumMapType.Normal,
             2 => enumMapType.Hard,
             3 => enumMapType.Elite,
             9 or _ => enumMapType.Test
         };
-
-        foreach (dataLevel dl in getArrLevel(tempEnumMapType)) {
-            if (parMapCode == dl.LevelCode) {
-                return dl;
-            }
+        
+        Dictionary<int, dataLevel> tempDict = getDictLevel(tempEnumMapType);
+        if (tempDict.ContainsKey(parLevelCode)) {
+            return tempDict[parLevelCode];
+        } else {
+            return dictLevelTest[90101];
         }
-
-        Debug.Log("there is no level data of MapCode \'" + parMapCode + "\'");
-        return listLevelTest[0];
     }
     #endregion dataLevel_Managemenet
 

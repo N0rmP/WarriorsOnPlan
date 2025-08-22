@@ -30,6 +30,13 @@ public class releasablePersonal : releasableObjectAbst {
 
         thisThing.addCase(parTool);
         combatManager.CM.systemRemoveToolsProvided(parTool);
+
+        gameManager.GM.AC.playSE(
+            SwissArmyStaticMethod.selectRandom<AudioClip>(
+                gameManager.GM.AHouC.arrClipToolEquip
+            )
+        );
+
         return true;
     }
 
@@ -54,7 +61,7 @@ public class releasablePersonal : releasableObjectAbst {
         }
 
         switch (parParameters[0]) {
-            case caseBase { caseType: enumCaseType.tool } tempTool:
+            case caseBase { caseType: enumCaseType.tool } tempTool:                
                 return grabTool(tempTool);
             default:
                 return false;

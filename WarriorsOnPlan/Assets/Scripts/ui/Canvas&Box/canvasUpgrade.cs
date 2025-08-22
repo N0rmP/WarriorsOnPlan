@@ -25,6 +25,8 @@ public class canvasUpgrade : MonoBehaviour {
                 return Instantiate(tempPrefabButtonUpgradeLeaf).GetComponent<buttonUpgradeLeaf>();
             },
             (x) => {
+                x.clearPrev();
+                x.clearNext();
                 x.transform.SetParent(null);
                 x.gameObject.SetActive(false);
             }
@@ -32,12 +34,12 @@ public class canvasUpgrade : MonoBehaviour {
     }
 
     public void addButtonUpgradeLeaf(buttonUpgradeLeaf parBUL) {
-        if (dictCodeButtonUpgradeLeaf.ContainsKey(parBUL.thisBulCode)) {
-            Debug.Log("canvasUpgrade.addButtonUpgradeLeaf results in an error due to parBUL.thisBulCode fold : " + parBUL.thisBulCode);
+        if (dictCodeButtonUpgradeLeaf.ContainsKey(parBUL.thisLeafCode)) {
+            Debug.Log("canvasUpgrade.addButtonUpgradeLeaf results in an error due to parBUL.thisBulCode fold : " + parBUL.thisLeafCode);
             return;
         }
 
-        dictCodeButtonUpgradeLeaf.Add(parBUL.thisBulCode, parBUL);
+        dictCodeButtonUpgradeLeaf.Add(parBUL.thisLeafCode, parBUL);
     }
 
     public void undoAllUpgrade() {
@@ -50,9 +52,21 @@ public class canvasUpgrade : MonoBehaviour {
         textStarCounter.text = parStarAmount.ToString();
     }
 
+    public void setAllUnvisited() {
+        foreach (buttonUpgradeLeaf bul in dictCodeButtonUpgradeLeaf.Values) {
+            bul.isVisited = false;
+        }
+    }
+
+    #region carrier-relay
     public buttonUpgradeLeaf createBUL() {
         return carrierBUL.getInterceptor();
     }
+
+    public void returnBUL(buttonUpgradeLeaf parBUL) {
+        carrierBUL.returnSingle(parBUL);
+    }
+    #endregion carrier-relay
 
     #region get
     public boxUpgradeTree getBoxUpgradeTree(int parCategory) {

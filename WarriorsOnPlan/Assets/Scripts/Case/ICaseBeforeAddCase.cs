@@ -4,5 +4,5 @@ using UnityEngine;
 using Cases;
 
 public interface ICaseBeforeAddCase {
-    public void caseFunc(Thing source, caseBase caseAdded);
+    public void caseFunc(ICaseContainerContainer source, caseBase caseAdded);
 }

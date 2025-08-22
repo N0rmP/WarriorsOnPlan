@@ -16,21 +16,8 @@ namespace Cases {
         // actualActivate executed right after level-systemmInitiating (before the mementoInitial created)
         public abstract void actualActivate();
 
-        public virtual void reset() { }
-        #endregion combat        
-
-        #region do_undo
-        public bool doUpgrade() {
-            isUpgraded = true;
-            mapManager.MM.UC.doUpgrade(this);
-            return true;
-        }
-
-        public void undoUpgrade() {
-            isUpgraded = false;
-            mapManager.MM.UC.undoUpgrade(this);
-        }
-        #endregion do_undo
+        // public virtual void reset() { }
+        #endregion combat
 
         #region IParametable
         public override Dictionary<string, int[]> getParameters() {

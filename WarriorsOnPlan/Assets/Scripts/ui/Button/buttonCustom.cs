@@ -53,7 +53,7 @@ public class buttonCustom : Button, IPointerDownHandler, IPointerUpHandler, IPoi
     public new void OnPointerDown(PointerEventData eventData) {
         base.OnPointerDown(eventData);
 
-        if (thisEnumButtonTiming == enumButtonTiming.pointerDown) {
+        if (IsInteractable() && thisEnumButtonTiming == enumButtonTiming.pointerDown) {
             switch (eventData.button){
                 case PointerEventData.InputButton.Left:
                     onClick.Invoke();
@@ -68,7 +68,7 @@ public class buttonCustom : Button, IPointerDownHandler, IPointerUpHandler, IPoi
     public new void OnPointerUp(PointerEventData eventData) {
         base.OnPointerUp(eventData);
 
-        if (thisEnumButtonTiming == enumButtonTiming.pointerUp) {
+        if (IsInteractable() && (thisEnumButtonTiming == enumButtonTiming.pointerUp)) {
             switch (eventData.button) {
                 case PointerEventData.InputButton.Left:
                     onClick.Invoke();
@@ -82,7 +82,7 @@ public class buttonCustom : Button, IPointerDownHandler, IPointerUpHandler, IPoi
 
     // this OnPointerClick blocks parent work ignoring PointerUp or Pointer Down
     public new void OnPointerClick(PointerEventData eventData) {
-        if (thisEnumButtonTiming == enumButtonTiming.pointerClick) {
+        if (IsInteractable() && thisEnumButtonTiming == enumButtonTiming.pointerClick) {
             // checking left mouse button is skipped to be done in parent
             base.OnPointerClick(eventData);
             if(eventData.button == PointerEventData.InputButton.Right)

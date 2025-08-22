@@ -14,8 +14,8 @@ public class inputContainer {
 
     public inputContainer() {
         delOnAnyKeyDown = null;
-        delOnScrollUp = null;
-        delOnScrollDown = null;
+        delOnScrollUp = () => { };
+        delOnScrollDown = () => { };
         dictKeyAction = new Dictionary<KeyCode, Action>();
     }
 
@@ -135,6 +135,14 @@ public class inputContainer {
         }
 
         Debug.Log(tempSB.ToString());
+    }
+
+    public void testCallDelScroll() {
+        Debug.Log("- testCallDelScroll -");
+        Debug.Log("delOnScrollUp : ");
+        delOnScrollUp();
+        Debug.Log("delOnScrollDown : ");
+        delOnScrollDown();
     }
     #endregion test
 }

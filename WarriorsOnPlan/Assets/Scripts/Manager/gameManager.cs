@@ -23,13 +23,14 @@ public class gameManager : MonoBehaviour {
     public saveComponent SaveC { get; private set; }
     public sceneComponent SceC { get; private set; }
     public linerComponent LC { get; private set; }
+    public audioComponent AC { get; private set; }
+    public audioHouseComponent AHouC { get; private set; }
 
     // ★ 랜덤 함수 필요해지면 (그래픽 말고 실제 처리 과정에서) xoshiro 만들었던 거 가져와서 randomComponenet 만드셈
 
     public Canvas canvasMain { get; private set; }    
 
-    [NonSerialized]
-    public enumMapType curMapType;
+    public enumMapType curMapType { get; private set; }
 
     public void Awake() {
         if (GM == null) {
@@ -41,7 +42,7 @@ public class gameManager : MonoBehaviour {
 
         //★ 세이브 파일 / 설정 모음집 참조하여 어떤 번역 쓸지 결정, 해상도 등 기본 초기화
 
-        SceC = new sceneComponent();
+        SceC = new sceneComponent((x) => curMapType = x);
         // findCanvasMain should be the first delegate in eventAfterActiveSceneChanged because most UI methods should reference it
         SceC.eventAfterActiveSceneChanged += findCanvasMain;
         // SceC.init includes each scene's main canvas activating, without it several works regarding canvas may fail
@@ -53,38 +54,30 @@ public class gameManager : MonoBehaviour {
         DC = gameObject.AddComponent<dragComponent>();
         IC = gameObject.AddComponent<inputComponent>();
         PC = new popupComponent();
-        option = new optionAIO();
         FC = new fileComponent();
+        SaveC = new saveComponent();
+        AC = new audioComponent();
+        option = new optionAIO();
         MC = new makerComponent();
         DHouC = new dataHouseComponent();
-        SaveC = new saveComponent();
         LC = new linerComponent();
+        AHouC = new audioHouseComponent();
 
-        curMapType = enumMapType.Normal;    //★ 테스트를 위해 임의로 normal로 설정함, 추후 none으로 변경하고 난이도 선택 시 수정케할 것
+        // in case player executes game and just turn it off instantly
+        curMapType = enumMapType.Normal;
     }
 
     private void findCanvasMain(Scene parScene) {
         this.canvasMain = gameObject.FindThoroughly("CANVAS_" + SceneManager.GetActiveScene().name).GetComponent<Canvas>();
     }
-}
 
-/*
-public readonly struct bookBasicWords {
-    public readonly string strMelee;
-    public readonly string strNumber;
-    public readonly string strReady;
-    public readonly string strAlertNoAttackTarget;
-    public readonly string strAlertNoSkillTarget;
-    public readonly string strQuestionResetInitial;
+    public void Start() {
+        option?.init();
+    }
 
-    public bookBasicWords(enumTranslation parEnumTranslation) {
-        dataBookBasicWords tempDataBasicWord = gameManager.GM.FC.importResourcesJson<dataBookBasicWords>("BasicWord");
-        strMelee = tempDataBasicWord.strMelee;
-        strNumber = "(" + tempDataBasicWord.strNumber + ")";
-        strReady = tempDataBasicWord.strReady;
-        strAlertNoAttackTarget = tempDataBasicWord.strAlertNoAttackTarget;
-        strAlertNoSkillTarget = tempDataBasicWord.strAlertNoSkillTarget;
-        strQuestionResetInitial = tempDataBasicWord.strQuestionResetInitial;
+    public void setCurMapType(enumMapType parEnumMapType) {
+        if (SceneManager.GetActiveScene().name != "SceneMenu") {
+            curMapType = parEnumMapType;
+        }
     }
 }
-*/

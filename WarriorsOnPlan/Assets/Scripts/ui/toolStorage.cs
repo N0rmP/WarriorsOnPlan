@@ -34,6 +34,7 @@ public class toolStorage : MonoBehaviour {
         // get bubble through carrierBubble
         dragableBubbleStorage tempBubble = carrierBubble.getInterceptor();
         tempBubble.transform.SetParent(transformContent);
+        tempBubble.transform.localScale = Vector3.one;
         tempBubble.transform.SetAsLastSibling();
         tempBubble.gameObject.SetActive(true);
 

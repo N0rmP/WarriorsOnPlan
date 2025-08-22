@@ -32,7 +32,7 @@ namespace Cases {
             if (!isTimerNeeded) {
                 return;
             }
-
+            
             timerCur--;
             if (timerCur <= 0) {
                 doOnAlarmed(source);

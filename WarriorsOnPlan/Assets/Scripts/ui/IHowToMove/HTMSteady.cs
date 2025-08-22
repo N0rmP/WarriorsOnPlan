@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class HTMSteady : IHowToMove {
     public void move(RectTransform parRect, Vector3 parDestination, float parSpeed, float parDeltaTime) {
-        parRect.localPosition += (parDestination - parRect.localPosition).normalized * parDeltaTime * parSpeed * 4f;
+        parRect.localPosition += (parDestination - parRect.localPosition).normalized * parDeltaTime * parSpeed * 100f;
     }
 }

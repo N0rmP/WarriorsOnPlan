@@ -1,19 +1,18 @@
 {
     "ArrUpgradeTreeZero" : [
-        {
-            "code" : 95001, "parameters" : [1, 1, 1, 5, 1], "next" : [
-                {
-                    "code" : 95001, "parameters" : [1, 2, 1, 5, 2], "next" :[]
-                },
-                {
-                    "code" : 95001, "parameters" : [1, 3, 1, 5, 2], "next" :[]
-                }
-            ]
-        }
-    ]
-    
-    ,
-    "ArrUpgradeTreeOne" : []
-    ,
-    "ArrUpgradeTreeTwo" : []
+        {"LeafCode" : 1101, "UpgradeCode" : 95001, "Parameters" : [1, 0, 0, 0, 1, 4, 1]},
+        {"LeafCode" : 1201, "UpgradeCode" : 95001, "Parameters" : [2, 0, 0, 0, 1, 5, 1]},
+        {"LeafCode" : 1202, "UpgradeCode" : 95001, "Parameters" : [2, 0, 0, 0, 1, 5, 1]},
+        {"LeafCode" : 1301, "UpgradeCode" : 95001, "Parameters" : [3, 0, 0, 0, 1, 4, 3]}
+    ],
+    "ArrUpgradeTreeOne" : [],
+    "ArrUpgradeTreeTwo" : [],
+    "ArrUpgradeTreeEdgeZero" : [
+        {"parent" : 1101, "child" : 1201},
+        {"parent" : 1101, "child" : 1202},
+        {"parent" : 1201, "child" : 1301},
+        {"parent" : 1202, "child" : 1301}
+    ],
+    "ArrUpgradeTreeEdgeOne" : [],
+    "ArrUpgradeTreeEdgeTwo" : []
 }

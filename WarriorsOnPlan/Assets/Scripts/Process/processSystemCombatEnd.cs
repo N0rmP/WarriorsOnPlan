@@ -16,8 +16,7 @@ namespace Processes {
                 curCombatResult = combatManager.CM.getCombatResult();
                 // mark this level as cleared if player won and the cleared level isn't already added
                 if (curCombatResult.isPlayerWin){
-                    gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).addLevelCleared(combatManager.CM.curLevelCode);
-                    gameManager.GM.SaveC.SAVE();
+                    mapManager.MM.doWhenCombatVictory();
                 }
             }
         }

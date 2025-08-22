@@ -56,12 +56,11 @@ namespace Processes {
             base.actualSHOW();
 
             if (isInterfered) {
-                gameManager.GM.PC.popupBasicAlert(source.transform.position, gameManager.GM.DHouC.bookWords.strSkill + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+                gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookWords.strSkill + " " + gameManager.GM.DHouC.bookWords.strInterfere);
             }
 
             if (target is null && source.thisSkill.isTargetNeeded) {
-                // ★ 데이터 가져와서 문장 바꾸게 만들기
-                gameManager.GM.PC.popupBasicAlert(source.transform.position + new Vector3(0f, 0f, 1f), "no skill target", false);
+                gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookPopupAlert.strAlertNoSkillTarget);
                 return;
             }
 

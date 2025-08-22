@@ -14,7 +14,7 @@ using System.ComponentModel;
 using static Unity.VisualScripting.Member;
 
 public class canvasCircuitSetter : MonoBehaviour {
-    private GameObject boxCircuitConcrete;
+    private GameObject curCanvasCircuitConcrete;
     private GameObject[] arrButtonCircuitType;
     private UnityEngine.UI.Toggle[,] arrToggleTargetGroup;
 
@@ -40,7 +40,7 @@ public class canvasCircuitSetter : MonoBehaviour {
 
     // public TextMeshProUGUI tempTMProU;
     public void Start() {
-        boxCircuitConcrete = GameObject.Find("boxCircuitConcrete");
+        curCanvasCircuitConcrete = GameObject.Find("canvasCircuitConcrete");
 
         arrToggleTargetGroup = new UnityEngine.UI.Toggle[2,4];
         for (int i = 4; i < 6; i++) {
@@ -257,7 +257,7 @@ public class canvasCircuitSetter : MonoBehaviour {
             }
         }
         
-        boxCircuitConcrete.GetComponent<boxCircuitConcrete>().activateBoxCircuitConcrete(parCurCircuitTypeBeingChosen);
+        curCanvasCircuitConcrete.GetComponent<boxCircuitConcrete>().activateBoxCircuitConcrete(parCurCircuitTypeBeingChosen);
     }
 
     public void chooseCircuitConcrete(int parCircuitConcreteChosen) {
@@ -266,7 +266,7 @@ public class canvasCircuitSetter : MonoBehaviour {
         arrButtonCircuitType[curCircuitTypeBeingChosen].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
             gameManager.GM.MC.sneakISingleInfo(convertNumToCode(curCircuitTypeBeingChosen, parCircuitConcreteChosen + 1)).infoDescription;
         setInputfieldSingle(curCircuitTypeBeingChosen);
-        boxCircuitConcrete.GetComponent<uiActivatable>().deactivatePanel();
+        curCanvasCircuitConcrete.GetComponent<uiActivatable>().deactivatePanel();
     }    
     #endregion circuit_concrete    
 }

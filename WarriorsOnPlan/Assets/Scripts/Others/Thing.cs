@@ -3,17 +3,14 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-//using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
-//using Unity.VisualScripting;
 using System.Text;
 
 using Cases;
 using Processes;
-using static Unity.VisualScripting.Member;
-using Unity.VisualScripting;
+
 public enum enumStateWarrior {
     dead = 0,
     //deadRecently = 1,
@@ -43,10 +40,13 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
 
     private bool isStatusDirty;
     protected structWarriorStatus thisStatus_;
+    protected int damageDealt_;
+    protected int damageTaken_;
 
     private SortedSet<string> setAttackTriggerName;
     protected Animator thisAnimController;
     private ITransparency thisITransparency;
+    private enablerOUTLINE thisEnablerOUTLINE;
 
     protected circuitHub thisCircuitHub;
 
@@ -97,12 +97,38 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
             return combatManager.CM.HouC.getPersonalActionOrder(this);
         }
     }
+    public int damageDealt {
+        get {
+            return damageDealt_;
+        }
+        set {
+            damageDealt_ = Math.Max(damageDealt_, value);
+            if (combatManager.CM.CUM.CStatus.thisThing == this) {
+                combatManager.CM.CUM.CStatus.updateNumber();
+            }
+        }
+    }
+    public int damageTaken {
+        get {
+            return damageTaken_;
+        }
+        set {
+            damageTaken_ = Math.Max(damageTaken_, value);
+            if (combatManager.CM.CUM.CStatus.thisThing == this) {
+                combatManager.CM.CUM.CStatus.updateNumber();
+            }
+        }
+    }
     #endregion property
     #endregion variable
 
     #region callbacks
     public void Update() {
-        // ★ 메터리얼 페이드 인아웃 구현
+        if (thisCanvasPersonal.gameObject.checkHoveredWorld() || combatManager.CM.CUM.CStatus.thisThing == this) {
+            thisEnablerOUTLINE.enableOUTLINE();
+        } else {
+            thisEnablerOUTLINE.disableOUTLINE();
+        }
     }
     #endregion callbacks
 
@@ -119,6 +145,8 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         // ★ semaphoreState = null;
         stateCur = enumStateWarrior.idleAttack;
         thisStatus_ = new structWarriorStatus(0);
+        damageDealt_ = 0;
+        damageTaken_ = 0;
 
         // ★ 이거 ThingName json 파일 만들어다가 코드 넣고 make 가능케 만들자, 아마 level json 파일도 일부 변경해야 할 것
         nameThing = "TempThingName";
@@ -128,7 +156,7 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         GameObject tempObj;
 
         maxHpOriginal = parMaxHp;
-        setMaxHp(maxHpOriginal, false);
+        setMaxHp(maxHpOriginal);
         setCurHp(maxHp, false);
 
         // initiate canvasPersonal
@@ -146,6 +174,7 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         tempObj = Instantiate(Resources.Load<GameObject>("Prefab/Cursor"));
         transform.SetParent(tempObj.transform);
         thisCursor = tempObj.GetComponent<cursor>();
+        thisCursor.setColorOriginal(thisSide);
         thisCursor.setDelEndRun(() => thisAnimController.SetBool("isRun", false));
 
         // skill making
@@ -173,12 +202,14 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         thisITransparency = gameObject.AddComponent<transparencyStripple>();
         thisITransparency.init();
         thisITransparency.fadeStrict(1f);
+        thisEnablerOUTLINE = gameObject.AddComponent<enablerOUTLINE>();
+        thisEnablerOUTLINE.setColor(SwissArmyStaticMethod.getSideColor(thisSide));
     }
 
     public void restore(mementoThing parMementoThing) {
         // ★ Thing이 사망하여 제거된 상태였을 경우, 원래대로 되돌리기
 
-        setMaxHp(parMementoThing.maxHp, false);
+        setMaxHp(parMementoThing.maxHp);
         setCurHp(parMementoThing.curHp, false);
 
         if (curHp <= 0) {
@@ -206,6 +237,9 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         stateCur = enumStateWarrior.idleAttack;
 
         thisStatus_.reset();
+        isStatusDirty = true;
+        damageDealt_ = parMementoThing.damageDealt;
+        damageTaken_ = parMementoThing.damageTaken;
 
         thisSkill.restore(parMementoThing.mSkill);
         foreach (mementoIParametable mc in parMementoThing.listCase) {
@@ -234,19 +268,27 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
     #region Move
     // Thing is child of cursor, it's meaningless to set position of Thing only and you should call these methods to move Thing by moving cursor
     public void setPosition(Vector3 parPosition) {
+        /*
+        // if cursor's y coor is 0 or less its color can be affected by Node object
+        if (parPosition.y <= 0f) {
+            Debug.Log(parPosition);
+            parPosition = new Vector3(parPosition.x, 0f, parPosition.z);
+        }
+        */
+
         thisCursor.transform.position = parPosition;
     }
 
     public void stopMoving() {
-        thisCursor.stop();
+        thisCursor.GetComponent<movableObject>().stop();
     }
 
     public void moveLinear(Vector3 parDestination) {
-        thisCursor.GetComponent<cursor>().startLinearMove(parDestination, 1f / (float)combatManager.CM.combatSpeed);
+        thisCursor.GetComponent<movableObject>().startLinearMove(parDestination, 1f / (float)combatManager.CM.combatSpeed);
     }
 
     public void moveParabola(Vector3 parDestination) {
-        thisCursor.GetComponent<cursor>().startParabolaMove(parDestination, 1f / (float)combatManager.CM.combatSpeed);
+        thisCursor.GetComponent<movableObject>().startParabolaMove(parDestination, 1f / (float)combatManager.CM.combatSpeed);
     }
     #endregion Move
 
@@ -279,24 +321,11 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
     }
 
     public void updatePanelActionOrder() {
-        thisCanvasPersonal.updateActionOrder(combatManager.CM.HouC.getPersonalActionOrder(this));
+        thisCanvasPersonal.updateActionOrder(combatManager.CM.HouC.getPersonalActionOrder(this), thisSide);
     }
 
     public void updatePanelDragableReleasable() {
         thisCanvasPersonal.updateDragableReleasable();
-    }
-
-    public void addPanelImgEffect(caseBase parCB) {
-        // if parCB is not visible or Effect, skip it
-        if (!parCB.isVisible || parCB.caseType != enumCaseType.effect) {
-            return;
-        }
-
-        thisCanvasPersonal.addImgEffect(parCB);
-    }
-
-    public void removePanelImgEffect(caseBase parCB) {
-        thisCanvasPersonal.removeImgEffect(parCB);
     }
     #endregion panel
 
@@ -345,8 +374,8 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         return tempResultChange;
     }
 
-    public void setMaxHp(int parValue, bool isPlus = true) {
-        maxHp = Math.Max(isPlus ? maxHp + parValue : parValue, 1);
+    public void setMaxHp(int parValue) {
+        maxHp = Math.Max(parValue, 1);
     }
 
     /*
@@ -425,7 +454,12 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
             isStatusDirty = true;
         }
 
-        updateCaseResult();
+        // ICaseSystemicAdded be executed in any situation
+        if (parCase is ICaseSystemicAdded tempCSA) {
+            tempCSA.caseFunc(this);
+        }
+
+        updateCaseResult(parCase.caseType);
     }
 
     public virtual void removeCase(caseBase parCase) {
@@ -441,10 +475,24 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
             isStatusDirty = true;
         }
 
-        updateCaseResult();
+        // ICaseSystemicRemoved be executed in any situation
+        if (parCase is ICaseSystemicRemoved tempCSR) {
+            tempCSR.caseFunc(this);
+        }
+
+        updateCaseResult(parCase.caseType);
     }
 
-    public void updateCaseResult() {
+    public void updateCaseResult(enumCaseType parCaseType) {
+        switch (parCaseType) {
+            case enumCaseType.skill:
+                updatePanelSkillTimer();
+                break;
+            case enumCaseType.effect:
+                updatePanelImageEff();
+                break;
+        }
+
         if (combatManager.CM.CUM.CStatus.thisThing == this) {
             combatManager.CM.CUM.CStatus.updateTotal();
         }
@@ -586,6 +634,11 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         thisAnimController.SetBool("isFocussing", true);
     }
 
+    public void animateControlled() {
+        doBeforeAnimate();
+        thisAnimController.SetBool("isControlled", true);
+    }
+
     // reset all parameters, and play the idle animation state
     public void resetAnimator() {
         foreach (AnimatorControllerParameter ACP in thisAnimController.parameters) {
@@ -617,6 +670,7 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
     #endregion animation
 
     #region cursor
+    /*
     public void setCursorChosen(bool par) {
         thisCursor.setIsChosen(par);
     }
@@ -624,6 +678,7 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
     public void setCursorHovered(bool par) {
         thisCursor.setIsHovered(par);
     }
+    */
     #endregion cursor
 
     #region memento
@@ -642,7 +697,9 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
             stateCur != enumStateWarrior.dead ? curPosition.getCoor() : (0, 0),
             thisSkill.getMementoIParametable(),
             tempList,
-            thisCircuitHub.getMementoIParametable()
+            thisCircuitHub.getMementoIParametable(),
+            damageDealt_,
+            damageTaken_
         );
     }    
     #endregion memento
@@ -730,8 +787,8 @@ public abstract class Thing : MonoBehaviour, ICaseContainerContainer {
         tempSB.Append("\nskillAmplifierMultiply : "); tempSB.Append(thisStatus.skillAmplifierMultiply);
         tempSB.Append("\narmorAdd : "); tempSB.Append(thisStatus.armorAdd);
         tempSB.Append("\narmorMultiply : "); tempSB.Append(thisStatus.armorMultiply);
-        tempSB.Append("\ndamageDealt : "); tempSB.Append(thisStatus.damageDealt);
-        tempSB.Append("\ndamageTotalTaken : "); tempSB.Append(thisStatus.damageTotalTaken);
+        tempSB.Append("\ndamageDealt : "); tempSB.Append(damageDealt);
+        tempSB.Append("\ndamageTotalTaken : "); tempSB.Append(damageTaken);
 
 
         tempSB.Append("\nPosition : ");

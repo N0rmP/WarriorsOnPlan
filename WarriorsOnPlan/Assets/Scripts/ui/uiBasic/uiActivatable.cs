@@ -13,14 +13,17 @@ public enum enumUiActivatableState {
 
 // uiActivatable should be with RectTransform & exRectTransform
 public class uiActivatable : uiMovable {
+    private static List<uiActivatable> listActivatedUA;
+
     private Coroutine coroutineDeactivate = null;
 
-    public enumUiActivatableState thisEnumUiActivatableState { get; protected set; }   
+    public enumUiActivatableState thisEnumUiActivatableState { get; protected set; }
     [SerializeField]
     private bool isOutClickDeactivate = true;
     private Vector3 originalLocalPosition;
 
     public void Start() {
+        listActivatedUA = new List<uiActivatable>();
         thisEnumUiActivatableState = enumUiActivatableState.inactive;
         originalLocalPosition = thisRectTransform.localPosition;
     }
@@ -36,7 +39,7 @@ public class uiActivatable : uiMovable {
             deactivatePanel();
         }
 
-        // change state, update stackUI
+        // change state
         if (!isMove && thisEnumUiActivatableState is enumUiActivatableState.activating or enumUiActivatableState.deactivating) {
             thisEnumUiActivatableState++;
         }
@@ -61,6 +64,7 @@ public class uiActivatable : uiMovable {
         }
 
         thisEnumUiActivatableState = enumUiActivatableState.activating;
+        listActivatedUA.Add(this);
         setMove(parDestination);
     }
 
@@ -73,7 +77,7 @@ public class uiActivatable : uiMovable {
     #endregion activate
 
     #region deactivate
-    public void deactivatePanel(Vector3 parDestination) {
+    public void deactivatePanel(Vector3 parDestination, bool parIsInstant = false) {
         if (isOutClickDeactivate) {
             gameManager.GM.UC.popUiActivatable();
         }
@@ -84,12 +88,16 @@ public class uiActivatable : uiMovable {
         }
 
         thisEnumUiActivatableState = enumUiActivatableState.deactivating;
-        setMove(parDestination);
-        // coroutineDeactivate = StartCoroutine(delayedInactive(thisRectTransform.localPosition));
+        listActivatedUA.Remove(this);
+        if (parIsInstant) {
+            GetComponent<RectTransform>().localPosition = parDestination;
+        } else {
+            setMove(parDestination);
+        }
     }
 
     // make gameObject fly away out of right side of screen
-    public void deactivatePanel() {
+    public void deactivatePanel(bool parIsInstant = false) {
         deactivatePanel(new Vector3(3000f, thisRectTransform.localPosition.y, thisRectTransform.localPosition.z));
     }
 
@@ -97,6 +105,12 @@ public class uiActivatable : uiMovable {
         yield return new WaitForSeconds(3f);
         thisRectTransform.localPosition = parDestination;
         gameObject.SetActive(false);
+    }
+
+    public static void offAll() {
+        foreach (uiActivatable ua in listActivatedUA.ToArray()) {
+            ua.deactivatePanel(true);
+        }
     }
     #endregion deactivate
 }

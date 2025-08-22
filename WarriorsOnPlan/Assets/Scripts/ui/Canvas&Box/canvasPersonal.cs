@@ -91,8 +91,10 @@ public class canvasPersonal : MonoBehaviour {
         sliderSkill.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (parTimerCur > 0) ? parTimerCur.ToString() : "";
     }
 
-    public void updateActionOrder(int parActionOrder) {
+    public void updateActionOrder(int parActionOrder, enumSide parSide) {
         transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = parActionOrder.ToString();
+
+        transform.GetChild(3).GetComponent<TextMeshProUGUI>().color = SwissArmyStaticMethod.getSideColor(parSide);
     }
 
     // if skill doesn't require timer, you can make the skill icon fully open always by openSkillTimer

@@ -33,7 +33,8 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
         }else{
             if (isReturnWhenReleased) {
                 transform.SetParent(parentToReturn);
-                thisRectTransform.localPosition = posReturn;
+                transform.localScale = Vector3.one;
+                transform.localPosition = posReturn;
             } else {
                 gameObject.SetActive(false);
             }
@@ -41,7 +42,7 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
     }
 
     public void OnDrag(PointerEventData eventData) {
-        thisRectTransform.localPosition = Input.mousePosition - new Vector3(gameManager.GM.option.screenWidth / 2.0f, gameManager.GM.option.screenHeight / 2.0f, 0f);
+        thisRectTransform.localPosition = (Vector2)(Input.mousePosition) / gameManager.GM.canvasMain.transform.localScale - (gameManager.GM.canvasMain.GetComponent<RectTransform>().sizeDelta * 0.5f);
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData) {
@@ -54,6 +55,7 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
         }
 
         transform.SetParent(transformCanvasDragableWandering);
+        transform.localScale = Vector3.one;
 
         doWhenHoveringStart();
     }

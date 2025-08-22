@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 public interface IDataInsurance {
     public void emergencyInit();
@@ -141,14 +142,16 @@ public struct dataBookWords : IDataInsurance {
     public string strAction;
     public string strAdd;
     public string strAttack;
+    public string strConrolled;
     public string strDamaged;
     public string strDealDamage;
     public string strDeath;
+    public string strFocussing;
     public string strForcedMove;
     public string strHpDecrease;
     public string strHpIncrease;
     public string strMove;
-    public string strFocussing;
+    public string strRemoving;
 
     public void emergencyInit() {
         strMelee = "Melee";
@@ -166,22 +169,26 @@ public struct dataBookWords : IDataInsurance {
         strAction = "Action";
         strAdd = "Adding";
         strAttack = "Attack";
+        strConrolled = "Controlled";
         strDamaged = "Taking Damage";
         strDealDamage = "Dealing Damage";
         strDeath = "Death";
+        strFocussing = "Focussing";
         strForcedMove = "Forced Move";
         strHpDecrease = "Hp Decrease";
         strHpIncrease = "Hp Increase";
         strMove = "Move";
-        strFocussing = "Focussing";
+        strRemoving = "Removing";
     }
 }
 
 public struct dataBookConfirmQuestion : IDataInsurance {
     public string strQuestionResetInitial;
+    public string strQuestionChangeTranslation;
 
     public void emergencyInit() {
-        strQuestionResetInitial = "All Preparation Including Tools, Circuits, Warriors' Positions Returns to the Initial State.";
+        strQuestionResetInitial = "All preparation including tools, circuits, warriors' positions returns to the initial state.";
+        strQuestionChangeTranslation = "Changing traslation requires restarting the game.";
     }
 }
 
@@ -209,18 +216,21 @@ public struct dataBookCombatResult : IDataInsurance {
 #endregion book
 
 #region save
+
 public struct dataSaveBasicMap : IDataInsurance {
     [JsonProperty]
     private List<int> upgradeDone;
     [JsonProperty]
     private List<int> levelCleared;
+    public int stars { get; set; }
 
-    public dataSaveBasicMap(List<int> parUpgrades, List<int> parLevelsCleared) {
+    public dataSaveBasicMap(List<int> parUpgrades, List<int> parLevelsCleared, int parStars) {
         upgradeDone = parUpgrades;
         levelCleared = parLevelsCleared;
+        stars = parStars;
     }
 
-    #region management
+    #region field_control
     public void addLevelCleared(int parLevelCode) {
         if (!levelCleared.Contains(parLevelCode)) {
             levelCleared.Add(parLevelCode);
@@ -230,6 +240,12 @@ public struct dataSaveBasicMap : IDataInsurance {
     public void addUpgradeDone(int parBulCode) {
         if (!upgradeDone.Contains(parBulCode)) {
             upgradeDone.Add(parBulCode);
+        }
+    }
+
+    public void addUpgradeDoneRange(IEnumerable<int> parBulCodeCol) {
+        foreach (int i in parBulCodeCol) {
+            addUpgradeDone(i);
         }
     }
 
@@ -244,8 +260,7 @@ public struct dataSaveBasicMap : IDataInsurance {
     public void clearUpgradeDone() {
         upgradeDone.Clear();
     }
-    #endregion management
-
+    
     public int[] getLevelCleared() {
         return levelCleared.ToArray();
     }
@@ -254,16 +269,26 @@ public struct dataSaveBasicMap : IDataInsurance {
         return upgradeDone.ToArray();
     }
 
+    public void addStars(int parValue) {
+        stars += Math.Max(0, parValue);
+    }
+
+    public void setStars(int parValue) { 
+        stars = Math.Max(0, parValue);
+    }
+    #endregion field_control
+
     public void emergencyInit() {
         upgradeDone = new List<int>();
         levelCleared = new List<int>();
+        stars = 0;
     }
 }
 
 public struct dataSaveLevel : IDataInsurance {
     public int LevelCode;
     public bool IsClear;
-    // ★ 이거 나중에 동적 생성이랑 연결시키려면 뭐 저장시켜야 할지 살펴보기
+    // ★ 이거 나중에 플레이어 분석-동적 생성이랑 연결시키려면 뭐 저장시켜야 할지 살펴보기
 
     public void emergencyInit() {
         LevelCode = 90101;
@@ -277,23 +302,75 @@ public struct dataUpgradeTree : IDataInsurance {
     public dataUpgradeLeaf[] ArrUpgradeTreeZero;
     public dataUpgradeLeaf[] ArrUpgradeTreeOne;
     public dataUpgradeLeaf[] ArrUpgradeTreeTwo;
+    public dataUpgradeTreeEdge[] ArrUpgradeTreeEdgeZero;
+    public dataUpgradeTreeEdge[] ArrUpgradeTreeEdgeOne;
+    public dataUpgradeTreeEdge[] ArrUpgradeTreeEdgeTwo;
 
     public void emergencyInit() {
         ArrUpgradeTreeZero = new dataUpgradeLeaf[0];
         ArrUpgradeTreeOne = new dataUpgradeLeaf[0];
         ArrUpgradeTreeTwo = new dataUpgradeLeaf[0];
+        ArrUpgradeTreeEdgeZero = new dataUpgradeTreeEdge[0];
+        ArrUpgradeTreeEdgeOne = new dataUpgradeTreeEdge[0];
+        ArrUpgradeTreeEdgeTwo = new dataUpgradeTreeEdge[0];
     }
+}
+public record dataUpgradeTreeEdge {
+    public int parent;
+    public int child;
 }
 
 public struct dataUpgradeLeaf : IDataInsurance {
-    public int code;
-    public int[] parameters;
-    public dataUpgradeLeaf[] next;
+    public int LeafCode;
+    public int UpgradeCode;
+    public int[] Parameters;
 
     public void emergencyInit() {
-        code = 5101;
-        parameters = new int[0];
-        next = new dataUpgradeLeaf[0];
+        LeafCode = 1109;
+        UpgradeCode = 5001;
+        Parameters = new int[7] { 1, 0, 0, 0, 1, 3, 1 };
+    }
+}
+
+public struct dataOption : IDataInsurance {
+    public float MasterVolume;
+    public float BgmVolume;
+    public float SeVolume;
+    public FullScreenMode ScreenMode;
+    public int ResolutionIndex;
+    public enumTranslation Translation;
+
+    public dataOption(float parMasterVolume, float parBgmVolume, float parSeVolume, FullScreenMode parScreenMode, int parResolutionIndex, enumTranslation parTranslation) {
+        MasterVolume = parMasterVolume;
+        BgmVolume = parBgmVolume;
+        SeVolume = parSeVolume;
+        ScreenMode = parScreenMode;
+        ResolutionIndex = parResolutionIndex;
+        Translation = parTranslation;
+    }
+
+    public void emergencyInit() {
+        MasterVolume = 0.7f;
+        BgmVolume = 0.7f;
+        SeVolume = 0.7f;
+        ScreenMode = FullScreenMode.ExclusiveFullScreen;
+        ResolutionIndex = Screen.resolutions.Length - 1;
+        Translation = enumTranslation.English;
+    }
+    public void testDataOption() {
+        StringBuilder tempSB = new StringBuilder("testDataOption\nMasterVolume : ");
+        tempSB.Append(MasterVolume);
+        tempSB.Append("\nBgmVolume : ");
+        tempSB.Append(BgmVolume);
+        tempSB.Append("\nSeVolume : ");
+        tempSB.Append(SeVolume);
+        tempSB.Append("\nScreenMode : ");
+        tempSB.Append(ScreenMode);
+        tempSB.Append("\nResolutionIndex : ");
+        tempSB.Append(ResolutionIndex);
+        tempSB.Append("\nTranslation : ");
+        tempSB.Append(Translation);
+        Debug.Log(tempSB.ToString());
     }
 }
 

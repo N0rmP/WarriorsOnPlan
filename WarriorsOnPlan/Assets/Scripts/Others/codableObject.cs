@@ -79,15 +79,16 @@ public class codableObject : IParametable, ICloneable {
     public virtual void restoreReferences(List<object> parRefernce) { }
     #endregion IParametable
 
+    #region Clone
     public virtual object Clone() {
-        return MemberwiseClone();
+        codableObject tempResult = (codableObject)MemberwiseClone();
+        ClonePrepare();
+        tempResult.restoreReferences(getReferences());
+        tempResult.restoreParameters(getParameters());
+        return tempResult;
     }
 
-    /*
-        ★ 현재 deepCopy 관련 메서드는 필요없으리라고 생각되지만, 만약 필요해진다면 deepcopy 관련 메서드를 구현하고 Clone 메서드를 보강할 것
-        다만 당장 예상하기로 codableObject가 객체를 필드로 가진다면 작동에 필요한 컴포넌트가 아니라 보통은 특정 warrior를 지정하는 것이므로 깊은 복사가 불필요함
-
-    protected virtual void deepCopyTo() { }
-    public virtual void deepCopyFrom() { }
-    */
+    // ClonePrepare only creates and prepares new object of each reference-type variable, true cloning is included in Clone()'s resotre methods
+    protected virtual void ClonePrepare() { }
+    #endregion Clone
 }

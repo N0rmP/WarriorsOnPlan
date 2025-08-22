@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TT_RTS_Units
-  m_Shader: {fileID: 4800000, guid: 02fe8f632106e431e9dd405f02a23289, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5adc8468e6fab454d8cf46a3a84e3253, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -91,6 +91,7 @@ Material:
     - _Metallic: 0
     - _Mode: 2
     - _OcclusionStrength: 1
+    - _OutlineVolume: 7.5
     - _Parallax: 0.02
     - _Shininess: 0.078125
     - _SmoothnessTextureChannel: 0
@@ -106,6 +107,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_BuildTextureStacks: []

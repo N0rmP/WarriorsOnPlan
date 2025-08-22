@@ -7,10 +7,10 @@
         {
             "NameThing" : "tester", 
             "Coordinate0" : 6, "Coordinate1" : 6, 
-            "HP" : 10, 
+            "HP" : 15, 
             "SkillParameters" : [5, 5, 1, 5, 2],
             "ToolList" : [
-                {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 2, 1]}
+                {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 2, 1]}
             ],
             "CodeNavigatorIdle" : 1202, "Parameter2" : [], 
             "CodeSensorForMove" : 1101, "Parameter0" : [-1, -1], 
@@ -26,13 +26,13 @@
             "NameThing" : "testerBleeder", 
             "Coordinate0" : 0, "Coordinate1" : 0, 
             "HP" : 20, 
-            "SkillParameters" : [1, 1, 1, 1, 3, 2]
+            "SkillParameters" : [0, 0, 1, 1, 3, 2]
         }
     ],
     "ToolsProvided" : [
-        {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 4, 1]},
-        {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 4, 1]},
-        {"CodeIParametable" : 93001, "Parameters" : [1, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 4, 1]},
         {"CodeIParametable" : 93002, "Parameters" : [1]}
     ]
 }

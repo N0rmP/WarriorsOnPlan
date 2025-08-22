@@ -55,14 +55,12 @@ namespace Processes {
 
             if (isInterfered) {
                 gameManager.GM.PC.popupBasicAlert(
-                    source.transform.position, 
-                    isWillingly ? gameManager.GM.DHouC.bookWords.strMove : gameManager.GM.DHouC.bookWords.strForcedMove + 
-                    " " + 
-                    gameManager.GM.DHouC.bookWords.strInterfere, 
-                false);
+                    source.gameObject.getCanvasMainLocalPosition(), 
+                    isWillingly ? gameManager.GM.DHouC.bookWords.strMove : gameManager.GM.DHouC.bookWords.strForcedMove +  " " + gameManager.GM.DHouC.bookWords.strInterfere
+                );
             }
 
-            Vector3 tempDestinationVector = source.curPosition.getVector3();
+            Vector3 tempDestinationVector = source.curPosition.getVector3() ;
 
             if (isWillingly) {
                 source.transform.rotation = Quaternion.LookRotation(tempDestinationVector - source.transform.position);

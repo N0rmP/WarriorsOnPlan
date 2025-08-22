@@ -14,6 +14,7 @@ using Processes;
 using System.Text;
 
 public enum enumCombatState {
+    initiating = -1,
     preparing = 0,
     combat = 1,
     combatDone = 2,
@@ -38,7 +39,7 @@ public class combatManager : MonoBehaviour {
     public historyComponent HisC { get; private set; }
     public combatUIComponent CUM { get; private set; }    // it's not that, you lewd animal
 
-    public int curLevelCode { get; private set; }
+    public dataLevel curDataLevel { get; private set; }
 
     private enumCombatState combatState_;
     public enumCombatState combatState {
@@ -147,7 +148,7 @@ public class combatManager : MonoBehaviour {
         startREENACT();
     }
 
-    public void executeProcess(processAbst parProcess) {
+    public void executeProcess(processAbst parProcess) {        
         if (parProcess == null) {
             Debug.Log("null is tried to be executed as process");
             return;
@@ -157,10 +158,8 @@ public class combatManager : MonoBehaviour {
             return;
         }
 
-        if (parProcess is processByproductDelecate && processLast is processByproductDelecate tempProcessLast) {
-            foreach (Action del in parProcess as processByproductDelecate) {
-                tempProcessLast.addDel(del);
-            }
+        if (parProcess is processByproductDelecate tempParProcess && processLast is processByproductDelecate tempProcessLast) {
+            tempProcessLast.addDel(tempParProcess);
             return;
         }
 
@@ -171,7 +170,12 @@ public class combatManager : MonoBehaviour {
         }
 
         processAbst tempBefore = processLast;
-        parProcess.DO(ref processLast, ref delSetNext);
+        try {
+            parProcess.DO(ref processLast, ref delSetNext);
+        } catch (Exception e) {
+            Debug.Log("error occured in " + countAction + " process " + parProcess.GetType().Name);
+            parProcess.testChainAfterAll();
+        }
 
         if (parProcess is processAction) {
             mementoCombat tempMementoCombat = makeMementoCombat(parProcess);
@@ -273,7 +277,7 @@ public class combatManager : MonoBehaviour {
             }
 
             processReenactedNext = processReenactedNext.REENACT();
-            CUM.CStatus.updateTotal();
+            // CUM.CStatus.updateTotal();
             yield return getInterval();
         }
 
@@ -327,6 +331,7 @@ public class combatManager : MonoBehaviour {
     private void resetInterval() {
         combatSpeed = 1;
         intervalYieldReturn = new WaitForSeconds(structInterValsAndDurations.fltInterval);
+        CUM.setCombatSpeedText();
     }
 
     private System.Object getInterval(float parAdditionalInterval = 0f) {
@@ -350,7 +355,7 @@ public class combatManager : MonoBehaviour {
         } else {
             combatSpeed++;
         }
-        
+        CUM.setCombatSpeedText();
     }
 
     public void skipReenating() {
@@ -363,8 +368,8 @@ public class combatManager : MonoBehaviour {
         if (curCombatResult == null) {
             int tempTotalDamageDealt = 0; int tempTotalDamageTaken = 0;
             foreach (Thing t in HouC.getArrTotal(enumSide.player)) {
-                tempTotalDamageDealt += t.thisStatus.damageDealt;
-                tempTotalDamageTaken += t.thisStatus.damageTotalTaken;
+                tempTotalDamageDealt += t.damageDealt;
+                tempTotalDamageTaken += t.damageTaken;
             }
             curCombatResult = new combatResult(
                 HouC.getArrAlive(enumSide.enemy).Length <= 0,
@@ -468,23 +473,24 @@ public class combatManager : MonoBehaviour {
         CUM.setActionCounter(countAction, true);
         CUM.testShowTurn(); //★ 폴리싱 필요,
 
-        /*
-            3. boxInformation의 canvasStatistics 복구, 아마도 mementoStatistics가 필요할 것 (★ 추후 많은 구현 필요)
-        */
+        gameManager.GM.PC.returnTotal();
     }
     #endregion memento
     #endregion combat_methods
 
     #region system_methods
     public void systemLevelEnter(dataLevel parDataLevel, upgradeAbst[] parArrUpgrade) {
+        combatState = enumCombatState.initiating;
+        resetInterval();
         arrUpgradeActive_ = parArrUpgrade;
+
         systemLevelInitiate(parDataLevel);
         BEPREPARED(true);
     }
 
     // systemLevelInitiate focus on making combat-preparing state from json-level-data, it has no need to graphic it
     private void systemLevelInitiate(dataLevel parDataLevel) {
-        curLevelCode = parDataLevel.LevelCode;
+        curDataLevel = parDataLevel;
         Thing tempThing;
 
         // spawn enemy warriors

@@ -16,7 +16,7 @@ public class boxEffect : MonoBehaviour {
             (x) => {
                 x.transform.SetParent(null);
             }
-            );
+        );
     }
 
     public void openEffect(Thing parThing) {
@@ -40,6 +40,7 @@ public class boxEffect : MonoBehaviour {
         imgEffect tempIE = carrierIE.getInterceptor();
         tempIE.setCase(parCase);
         tempIE.transform.SetParent(transform);
+        tempIE.transform.localScale = Vector3.one;
     }
 
     public void removeEffect(caseBase parCasee) {

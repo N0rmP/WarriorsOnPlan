@@ -12,11 +12,13 @@ public enum enumMapType {
 }
 
 public class mapManager : MonoBehaviour {
-    public static mapManager MM = null;    
+    public static mapManager MM = null;
 
     public mapUIComponent MUC { get; private set; }
     public upgradeComponent UC { get; private set; }
 
+    private IMapper curMapper;
+    private Dictionary<enumMapType, IMapper> dictMapper;
 
     public void Awake() {
         if (MM == null) {
@@ -27,47 +29,31 @@ public class mapManager : MonoBehaviour {
         
         MUC = new mapUIComponent();
         UC = new upgradeComponent();
+
+        dictMapper = new Dictionary<enumMapType, IMapper>();
+        mapperBasic tempMapperBasic = new mapperBasic();
+        dictMapper.Add(enumMapType.Normal, tempMapperBasic);
+        dictMapper.Add(enumMapType.Hard, tempMapperBasic);
+        dictMapper.Add(enumMapType.Elite, tempMapperBasic);
     }
 
-    // prepareMap uses enumMapType by argument not by gameManager.GM.curMapType, it ensures some flexible call
-    public void prepareMap(enumMapType parEnumMapType) {
-        restoreMap(parEnumMapType);
-
-        // ★ 테스트용 임시 호출, 추후 메인메뉴에서 게임시작 버튼 누를 때 난이도에 따라 호출하게 하기
-        UC.prepareUpgrade(parEnumMapType);
+    #region relay
+    public void prepareMap() {
+        curMapper = dictMapper[gameManager.GM.curMapType];
+        curMapper.prepareMap();
     }
 
-    #region restore
-    private void restoreMap(enumMapType parEnumMapType) {
-        dataSaveBasicMap tempDSBM = gameManager.GM.SaveC.getDataSaveBasicMap(parEnumMapType);
-        restoreLevel(parEnumMapType, tempDSBM);
+    public void doWhenCombatVictory() {
+        curMapper.doWhenCombatVictory();
     }
 
-    private void restoreLevel(enumMapType parEnumMapType, dataSaveBasicMap parDataSaveBasicMap) {
-        // tempSetUncleared contains the next uncleared Levels
-        List<int> tempListUncleared = new List<int>();
-
-        // restore cleared levels, and find the front-end levels
-        MUC.clearButtonLevel();
-        foreach (int cleared in parDataSaveBasicMap.getLevelCleared()) {
-            tempListUncleared.Remove(cleared);
-            foreach (int next in gameManager.GM.DHouC.getDataLevel(cleared).NextLevelCode) {
-                if (tempListUncleared.Contains(next)) { 
-                    continue; 
-                }
-                tempListUncleared.Add(next);
-            }
-            MUC.prepareButtonLevel(cleared, true);
-        }
-        
-        // restore the next uncleared levels
-        if (parDataSaveBasicMap.getLevelCleared().Length == 0) {
-            MUC.prepareButtonLevel((int)parEnumMapType * 10000 + 0101, false);
-        } else {
-            foreach (int frontline in tempListUncleared) {
-                MUC.prepareButtonLevel(frontline, false);
-            }
-        }
+    public void doWhenCombatDefeated() {
+        curMapper.doWhenCombatDefeated();
     }
-    #endregion restore
+
+    // load might be included in prepareMap
+    public void save() {
+        curMapper.save();
+    }
+    #endregion relay
 }

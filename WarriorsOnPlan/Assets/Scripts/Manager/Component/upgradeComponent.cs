@@ -6,122 +6,129 @@ using Cases;
 using System.Text;
 
 public class upgradeComponent {
-    private int stars_ = 0;
-    public int stars {
+    private List<upgradeAbst> listUpgradeDoneTrue;
+    public upgradeAbst[] arrUpgradeDoneTrue {
         get {
-            return stars_;
+            return listUpgradeDoneTrue.ToArray();
+        }
+    }
+
+    private int starTemporary_ = 0;
+    public int starTemporary {
+        get {
+            return starTemporary_;
         }
         private set {
-            stars_ = Math.Max(0, value);
-            mapManager.MM.MUC.CU.setTextStarCounter(stars_);
-        } 
-    }
-
-    private List<upgradeAbst> listUpgradeUndone;
-    private List<upgradeAbst> listUpgradeDone;
-    public upgradeAbst[] arrUpgradeDone {
-        get {
-            return listUpgradeDone.ToArray();
+            starTemporary_ = Math.Max(0, value);
+            mapManager.MM.MUC.CU.setTextStarCounter(starTemporary_);
         }
     }
+    private Dictionary<int, upgradeAbst> dictUpgradeDoneTemporary;
 
     public upgradeComponent() {
-        listUpgradeUndone = new List<upgradeAbst>();
-        listUpgradeDone = new List<upgradeAbst>();
-    }
-
-    #region preparation_initiation
-    public void prepareUpgrade(enumMapType parEnumMapType) {
-        prepareUpgradeTree(parEnumMapType);
-        restoreUpgrade(parEnumMapType);
+        listUpgradeDoneTrue = new List<upgradeAbst>();
+        dictUpgradeDoneTemporary = new Dictionary<int, upgradeAbst>();
     }
 
     // draw total upgrade tree and set all upgrades
-    private void prepareUpgradeTree(enumMapType parEnumMapType) {
-        dataUpgradeTree tempDataUpgradeTree = gameManager.GM.DHouC.getDataUpgradeTree(parEnumMapType);
-
+    public void prepareUpgradeTree(dataUpgradeTree parDUT) {
         // prepare upgradetree
-        foreach (dataUpgradeLeaf dul in tempDataUpgradeTree.ArrUpgradeTreeZero) {
-            mapManager.MM.MUC.CU.getBoxUpgradeTree(0).recursiveAddLeaf(dul, 0);
-        }
-        foreach (dataUpgradeLeaf dul in tempDataUpgradeTree.ArrUpgradeTreeOne) {
-            mapManager.MM.MUC.CU.getBoxUpgradeTree(1).recursiveAddLeaf(dul, 0);
-        }
-        foreach (dataUpgradeLeaf dul in tempDataUpgradeTree.ArrUpgradeTreeTwo) {
-            mapManager.MM.MUC.CU.getBoxUpgradeTree(2).recursiveAddLeaf(dul, 0);
-        }
+        mapManager.MM.MUC.CU.getBoxUpgradeTree(0).prepareUpgradeTree(
+            parDUT.ArrUpgradeTreeZero,
+            parDUT.ArrUpgradeTreeEdgeZero
+        );
+        mapManager.MM.MUC.CU.getBoxUpgradeTree(1).prepareUpgradeTree(
+            parDUT.ArrUpgradeTreeOne,
+            parDUT.ArrUpgradeTreeEdgeOne
+        );
+        mapManager.MM.MUC.CU.getBoxUpgradeTree(2).prepareUpgradeTree(
+            parDUT.ArrUpgradeTreeTwo,
+            parDUT.ArrUpgradeTreeEdgeTwo
+        );
     }
 
-    private void restoreUpgrade(enumMapType parEnumMapType) {
-        dataSaveBasicMap tempDSBM = gameManager.GM.SaveC.getDataSaveBasicMap(enumMapType.Normal);
-
-        // update reward stars
-        int tempStars = 0;
-        foreach (int cleared in tempDSBM.getLevelCleared()) {
-            tempStars += gameManager.GM.DHouC.getDataLevel(cleared).IsBossLevel ? 2 : 1;
-        }
-        stars = tempStars;
-        stars = 99;     // ★ 테스트용 왕창 별 주기
-
-        // restore upgrade tree, technically it's just restoring UI with dataUpgradeTree
+    public void restoreUpgrade(dataSaveBasicMap parDSBM) {
         // all first layer upgrades be frontlined regardless how many upgrades are done
         for (int i = 0; i < 3; i++) {
             mapManager.MM.MUC.CU.getBoxUpgradeTree(i).frontlineFirstUpgrade();
         }
+
         // actual restore upgrade tree
-        foreach (int codeDone in tempDSBM.getUpgradeDone()) {
-            mapManager.MM.MUC.CU.getButtonUpgradeLeaf(codeDone).systemDoUpgrade();
+        dictUpgradeDoneTemporary.Clear();
+        foreach (int codeDone in parDSBM.getUpgradeDone()) {
+            mapManager.MM.MUC.CU.getButtonUpgradeLeaf(codeDone).systemDoUpgradeTemporary();
         }
-    }
-    #endregion preparation_initiation
 
-    #region do_undo
-    // calling doUpgrade directly can cause UI missing, please call it via buttonUpgradeLeaf
-    public void doUpgrade(upgradeAbst parUpgrade, bool parIsSystemic = false) {
+        // update stars
+        starTemporary = parDSBM.stars;
+        starTemporary = 99;     // ★ 테스트용 왕창 별 주기, 추후 이 코드 삭제하기
+    }
+
+    // save all upgrades in listUpgradeDoneTemporary in listUpgradeDoneTrue and dataSaveBasic~, also save starTemporary in dataSaveBasic~
+    public void confirmUpgrade() {
+        // listUpgradeDoneTrue에는 실제 업그레이드가 저장되어야 하고, dataSaveBasicMap에는 LeafCode가 저장되어야 함
+        listUpgradeDoneTrue.Clear();
+        listUpgradeDoneTrue.AddRange(dictUpgradeDoneTemporary.Values);
+
+        gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).clearUpgradeDone();
+        gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).addUpgradeDoneRange(dictUpgradeDoneTemporary.Keys);
+        gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).setStars(starTemporary);
+
+        gameManager.GM.SaveC.saveMap(gameManager.GM.curMapType);
+    }
+
+    #region true_do
+    public void doUpgradeTrue(upgradeAbst parUpgrade) {
+        listUpgradeDoneTrue.Add(parUpgrade);
+    }
+
+    public void undoUpgradeTrue(upgradeAbst parUpgrade) {
+        listUpgradeDoneTrue.Remove(parUpgrade);
+    }
+    #endregion true_do
+
+    #region temporary_do
+    // calling doUpgradeTemporary directly can cause UI missing, please call it via buttonUpgradeLeaf
+    public void doUpgradeTemporay(int parLeafCode, upgradeAbst parUpgrade, bool parIsSystemic = false) {
         if (!parIsSystemic) {
-            if (stars < parUpgrade.starRequired || !listUpgradeUndone.Contains(parUpgrade)) {
+            if (starTemporary < parUpgrade.starRequired || dictUpgradeDoneTemporary.ContainsKey(parLeafCode)) {
                 return;
             }
-            stars -= parUpgrade.starRequired;
+            starTemporary -= parUpgrade.starRequired;
         }
-
-        listUpgradeUndone.Remove(parUpgrade);
-        listUpgradeDone.Add(parUpgrade);
+        dictUpgradeDoneTemporary.Add(parLeafCode, parUpgrade);
     }
 
-    // calling undoUpgrade directly can cause UI missing, please call it via buttonUpgradeLeaf
-    public void undoUpgrade(upgradeAbst parUpgrade, bool parIsSystemic = false) {
+    // calling undoUpgradeTemporary directly can cause UI missing, please call it via buttonUpgradeLeaf
+    public void undoUpgradeTemporary(int parLeafCode, bool parIsSystemic = false) {
         if (!parIsSystemic) {
-            if (!listUpgradeDone.Contains(parUpgrade)) {
+            if (!dictUpgradeDoneTemporary.ContainsKey(parLeafCode)) {
                 return;
             }
-            stars += parUpgrade.starRequired;
+            starTemporary += dictUpgradeDoneTemporary[parLeafCode].starRequired;
         }
-
-        listUpgradeDone.Remove(parUpgrade);
-        listUpgradeUndone.Add(parUpgrade);        
+        dictUpgradeDoneTemporary.Remove(parLeafCode);     
     }
-
-    public void clear() {
-        listUpgradeDone.Clear();
-        listUpgradeUndone.Clear();
-    }
-    #endregion do_undo
+    #endregion temporary
 
     #region test
-    public void testListUpgradeUndone() {
-        StringBuilder tempResult = new StringBuilder("test listUpgradeUndone : ");
-        foreach (upgradeAbst ua in listUpgradeUndone) {
+    public void testListUpgradeDoneTrue() {
+        StringBuilder tempResult = new StringBuilder("test listUpgradeDoneTrue : ");
+        foreach (upgradeAbst ua in listUpgradeDoneTrue) {
             tempResult.Append(ua);
-            tempResult.Append(" , ");
+            tempResult.Append(", ");
         }
         Debug.Log(tempResult);
     }
-    public void testListUpgradeDone() {
-        StringBuilder tempResult = new StringBuilder("test listUpgradeDone : ");
-        foreach (upgradeAbst ua in listUpgradeDone) {
-            tempResult.Append(ua);
-            tempResult.Append(" , ");
+
+    public void testListUpgradeDoneTemporary() {
+        StringBuilder tempResult = new StringBuilder("test listUpgradeDoneTemporary : ");
+        foreach (int leafcode in dictUpgradeDoneTemporary.Keys) {
+            tempResult.Append("(");
+            tempResult.Append(leafcode);
+            tempResult.Append(",");
+            tempResult.Append(dictUpgradeDoneTemporary[leafcode]);
+            tempResult.Append("), ");
         }
         Debug.Log(tempResult);
     }

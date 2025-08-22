@@ -4,15 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Processes {
-    public class processByproductDelecate : processByproductAbst, IEnumerable {
-        private List<Action> listDel;
+    public class processByproductDelecate : processByproductAbst {
+        private Action del;
 
         public processByproductDelecate(Action parDel) {
-            listDel = new List<Action>() { parDel };            
-        }
-
-        public processByproductDelecate(IEnumerable<Action> parEDel) {
-            listDel.AddRange(parEDel);
+            del = parDel;
         }
 
         public void addDel(Action parDel) {
@@ -22,23 +18,16 @@ namespace Processes {
             }
 
             parDel();
-            listDel.Add(parDel);
+            del += parDel;
         }
 
-        public void addDel(IEnumerable<Action> parEnumerable) {
-            foreach (Action a in parEnumerable) {
-                addDel(a);
-            }
-        }
-
-        public IEnumerator GetEnumerator() {
-            return listDel.GetEnumerator();
+        public void addDel(processByproductDelecate parPBD) {
+            parPBD.del();
+            del += parPBD.del;
         }
 
         protected override void actualDO() {
-            foreach (Action a in listDel) {
-                a();
-            }
+            del();
         }
     }
 }

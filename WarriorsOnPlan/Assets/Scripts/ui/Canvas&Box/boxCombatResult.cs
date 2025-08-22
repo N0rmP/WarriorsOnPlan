@@ -62,6 +62,7 @@ public class boxCombatResult : MonoBehaviour {
         // set Thing result
         combatManager.CM.HouC.sortByAO();
         GameObject tempPrefabCellThingResult = Resources.Load<GameObject>("Prefab/UI/cellThingResult");
+        combatManager.CM.HouC.testEnemyAlive();
         for (int i = 0; i < 3; i++) {
             carrierCrude.updateCarrierCrude<cellThingResult, Thing>(
                 arrListCellTingResult[i].ToArray(),

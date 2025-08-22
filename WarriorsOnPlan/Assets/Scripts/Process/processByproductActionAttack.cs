@@ -37,9 +37,7 @@ namespace Processes {
             source.observeVoid<ICaseBeforeAttack>(new object[2] { source, target });
 
             // rake available weapons
-            foreach (toolWeapon tw in source.getListAvailableWeapon(target)) {
-                listWeapon.Add(tw);
-            }
+            listWeapon = source.getListAvailableWeapon(target);
         }
 
         protected override void doAfterActualDo() {
@@ -51,19 +49,19 @@ namespace Processes {
 
         protected override void actualDO() {
             base.actualDO();
-
+            
             // if target is null, invalidate all other execution as processActionAttack
             if (target is null) {
                 return;
             }
-
+            
             List<damageInfo> listDInfo = new List<damageInfo>();               
             foreach (toolWeapon tw in listWeapon){
                 foreach (damageInfo di in tw.attack(source)) {
                     listDInfo.Add(di);
                 }
             }
-
+            
             if (target is not null && listDInfo.Count > 0) {
                 combatManager.CM.executeProcess(
                         new processByproductDealDamage(listDInfo.ToArray(), target)
@@ -75,11 +73,11 @@ namespace Processes {
             base.actualSHOW();
 
             if (isInterfered) {
-                gameManager.GM.PC.popupBasicAlert(source.transform.position, gameManager.GM.DHouC.bookWords.strAttack + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+                gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookWords.strAttack + " " + gameManager.GM.DHouC.bookWords.strInterfere);
             }
 
             if (target is null) {
-                gameManager.GM.PC.popupBasicAlert(source.transform.position + new Vector3(0f, 0f, 1f), gameManager.GM.DHouC.bookPopupAlert.strAlertNoAttackTarget, false);
+                gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookPopupAlert.strAlertNoAttackTarget);
                 return;
             }
 

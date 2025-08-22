@@ -4,12 +4,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class exGameObject {
+    // checkHoveredWorld technically doesn't check actual hovering, it checks if mouse hovers in the radius of approximately 1 around this GameObject
     public static bool checkHoveredWorld(this GameObject parObj) {
-        Vector2 tempVec = Camera.main.WorldToScreenPoint(parObj.transform.position) - Input.mousePosition;
+        Vector2 tempVec = (Camera.main.WorldToScreenPoint(parObj.transform.position) - Input.mousePosition) / (Vector2)gameManager.GM.canvasMain.transform.localScale;
         return (
             Mathf.Abs(tempVec.x) <= gameManager.GM.option.stick &&
-            Mathf.Abs(tempVec.y) <= gameManager.GM.option.stick * 0.86     // 0.86 is sqrt(3) / 2, the ratio of length when we see the object from 60 degree
+            Mathf.Abs(tempVec.y) <= gameManager.GM.option.stickDegreed
             );
+    }
+
+    public static Vector2 getCanvasMainLocalPosition(this GameObject parObj) {
+        // Debug.Log("getCanvasMainLocalPosition : " + parObj + " / " + ((Vector2)(Camera.main.WorldToScreenPoint(parObj.transform.position)) / gameManager.GM.canvasMain.transform.localScale - gameManager.GM.canvasMain.GetComponent<RectTransform>().sizeDelta * 0.5f));
+        return (Vector2)(Camera.main.WorldToScreenPoint(parObj.transform.position)) / gameManager.GM.canvasMain.transform.localScale - gameManager.GM.canvasMain.GetComponent<RectTransform>().sizeDelta * 0.5f;
     }
 
     public static Bounds getTotalBounds(this GameObject parObj) {

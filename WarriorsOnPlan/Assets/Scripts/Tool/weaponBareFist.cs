@@ -10,6 +10,12 @@ namespace Cases {
             attackAnimation = enumAttackAnimation.trigAttackPunch;
         }
 
-        public override void showEffect(Thing source, Thing parTarget) { }
+        public override void showEffect(Thing source, Thing parTarget) {
+            gameManager.GM.AC.playSE(
+                SwissArmyStaticMethod.selectRandom<AudioClip>(
+                    gameManager.GM.AHouC.arrClipPunch
+                )
+            );
+        }
     }
 }

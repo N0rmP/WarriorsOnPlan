@@ -36,6 +36,7 @@ public class boxCircuitConcrete : MonoBehaviour, IUIDeactivate {
                 tempObject = makeNewButtonCircuitConcrete(tempButtonIndex);
                 listButtonCircuitConcrete.Add(tempObject);
                 tempObject.transform.SetParent(transform);
+                tempObject.transform.localScale = Vector3.one;
             } else {
                 tempObject = listButtonCircuitConcrete[tempButtonIndex];
             }

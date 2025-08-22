@@ -1,3 +1,4 @@
 {
-    "strQuestionResetInitial" : "All Preparation Including Tools, Circuits, Warriors' Positions Returns to the Initial State."
+    "strQuestionResetInitial" : "All Preparation Including Tools, Circuits, Warriors' Positions Returns to the Initial State.",
+    "strQuestionChangeTranslation" : "Changing traslation requires restarting the game."
 }

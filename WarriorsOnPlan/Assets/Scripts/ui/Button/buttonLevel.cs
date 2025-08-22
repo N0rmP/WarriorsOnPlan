@@ -12,7 +12,7 @@ public class buttonLevel : MonoBehaviour {
     private bool isBossLevel;
 
     public void enterLevel() {
-        gameManager.GM.SceC.transitionSceneCombat(thisLevelCode, mapManager.MM.UC.arrUpgradeDone);
+        gameManager.GM.SceC.transitionSceneCombat(thisLevelCode, mapManager.MM.UC.arrUpgradeDoneTrue);
     }
 
     public void prepareButton(dataLevel parThisLevel, bool parIsClear) {

@@ -23,7 +23,7 @@ namespace Cases {
             base.restoreParameters(parParameters);
 
             parToolParameter.Clear();
-            parToolParameter.AddRange(parParameters["concrete"]);
+            parToolParameter.AddRange(parParameters["concrete"]);            
         }
 
         public override void restoreParameters(IEnumerator<int> parParameters) {
@@ -32,6 +32,12 @@ namespace Cases {
             while (parParameters.MoveNext()) {
                 parToolParameter.Add(parParameters.Current);
             }
+        }
+
+        protected override void ClonePrepare() {
+            base.ClonePrepare();
+
+            parToolParameter = new List<int>();
         }
     }
 }

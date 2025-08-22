@@ -46,12 +46,12 @@ namespace Processes {
             base.actualSHOW();
 
             if (isInterfered) {
-                gameManager.GM.PC.popupBasicAlert(source.transform.position, gameManager.GM.DHouC.bookWords.strHpIncrease + " " + gameManager.GM.DHouC.bookWords.strInterfere, false);
+                gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition(), gameManager.GM.DHouC.bookWords.strHpIncrease + " " + gameManager.GM.DHouC.bookWords.strInterfere);
             }
 
             void showHpDecrease() {
                 source.updatePanelHp();
-                gameManager.GM.PC.popupHeal(source.transform.position + new Vector3(0f, 0f, 1f), value.ToString(), false);
+                gameManager.GM.PC.popupHeal(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0, gameManager.GM.option.stick), value.ToString());
             }
 
             if (isShowInstant) {

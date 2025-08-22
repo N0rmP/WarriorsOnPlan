@@ -5,5 +5,5 @@ using Cases;
 
 public interface ICaseInterferableAddCase {
     // ICaseInterferableAddCase can interfere
-    public bool caseFunc(Thing source, caseBase caseAdded);
+    public bool caseFunc(ICaseContainerContainer source, caseBase caseAdded);
 }

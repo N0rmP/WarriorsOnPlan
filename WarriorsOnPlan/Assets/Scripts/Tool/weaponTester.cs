@@ -12,6 +12,11 @@ namespace Cases {
 
         public override void showEffect(Thing source, Thing parTarget) {
             combatManager.CM.FC.showBasicProjectile(source.transform.position, parTarget.transform.position);
+            gameManager.GM.AC.playSE(
+                SwissArmyStaticMethod.selectRandom<AudioClip>(
+                    gameManager.GM.AHouC.arrClipSwing
+                )
+            );
         }        
     }
 }

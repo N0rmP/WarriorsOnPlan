@@ -46,6 +46,10 @@ public class combatUIComponent{
         }
     }
 
+    public void setCombatSpeedText() {
+        GameObject.Find("textButtonChangeSpeed").GetComponent<TextMeshProUGUI>().text = "X" + combatManager.CM.combatSpeed;
+    }
+
     #region doWhen
     public void doWhenCombatStart() {
         setActionCounter(0, true);

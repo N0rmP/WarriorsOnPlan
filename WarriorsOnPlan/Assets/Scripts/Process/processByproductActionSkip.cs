@@ -7,5 +7,13 @@ namespace Processes {
         public processByproductActionSkip(Thing parSource, bool parIsSHOW = true) : base(parSource, parIsSHOW) { }
 
         protected override void actualDO() { }
+
+        protected override void actualSHOW() {
+            base.actualSHOW();
+
+            gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition(), gameManager.GM.DHouC.bookWords.strConrolled);
+
+            source.animateControlled();
+        }
     }
 }

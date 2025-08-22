@@ -19,8 +19,7 @@ public class popupText : MonoBehaviour {
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().richText = false;
     }
 
-    public void Update() {       
-
+    public void Update() {
         if (duration > 0f) {
             duration -= Time.deltaTime;
 
@@ -30,7 +29,7 @@ public class popupText : MonoBehaviour {
             }
 
             if (duration <= 0f) {
-                gameManager.GM.PC.returnTextSingle(this);
+                returnThis();
             }
         }
     }
@@ -41,16 +40,20 @@ public class popupText : MonoBehaviour {
         thisBackground.color = parBackgroundColor;
 
         transform.GetChild(0).GetComponent<ContentSizeFitter>().SetLayoutHorizontal();
-        transform.GetChild(0).GetComponent<ContentSizeFitter>().SetLayoutVertical();        
+        transform.GetChild(0).GetComponent<ContentSizeFitter>().SetLayoutVertical();
         GetComponent<RectTransform>().sizeDelta = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta;
 
         duration = Mathf.Max(1.01f, (parDuration > 0f) ? parDuration : 1f + (parString.Length *
-            gameManager.GM.option.curTranslation switch { 
+            gameManager.GM.option.curTranslation switch {
                 enumTranslation.English => 0.08f,
                 enumTranslation.Korean => 0.4f,
                 _ => 1f
             }));
         speedBackgroundFade = thisBackground.color.a;
         speedTextFade = thisText.color.a;
+    }
+
+    protected virtual void returnThis(){
+        gameManager.GM.PC.returnTextSingle(this);
     }
 }

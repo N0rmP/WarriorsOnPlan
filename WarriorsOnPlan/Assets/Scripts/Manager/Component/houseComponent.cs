@@ -16,7 +16,7 @@ public class comparerHp : IComparer<Thing> {
 
 public class comparerDamageDealt : IComparer<Thing> {
     public int Compare(Thing w1, Thing w2) {
-        return (w1.thisStatus.damageDealt - w2.thisStatus.damageDealt);
+        return (w1.damageDealt - w2.damageDealt);
     }
 }
 #endregion comparers
@@ -563,18 +563,21 @@ public class houseComponent {
     }
 
     public void testPlayerAlive() {
+        Debug.Log("- - - houseComponent.testPlayerAlive - - -");
         foreach (Thing t in getArrAlive(enumSide.player)) {
             t.testStatus();
         }
     }
 
     public void testEnemyAlive() {
+        Debug.Log("- - - houseComponent.testEnemyAlive - - -");
         foreach (Thing t in getArrAlive(enumSide.enemy)) {
             t.testStatus();
         }
     }
 
     public void testNeutralAlive() {
+        Debug.Log("- - - houseComponent.testNeutralAlive - - -");
         foreach (Thing t in getArrAlive(enumSide.neutral)) {
             t.testStatus();
         }

@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface ICaseAddedThis {
-    public void caseFunc(Thing source);
+    public void caseFunc(ICaseContainerContainer source);
 }

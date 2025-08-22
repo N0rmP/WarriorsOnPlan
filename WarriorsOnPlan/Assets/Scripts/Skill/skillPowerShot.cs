@@ -57,14 +57,22 @@ namespace Cases {
             source.animateAttack(false);
 
             gameManager.GM.TC.addDelegate(
-                () => combatManager.CM.FC.callVFX(
-                    enumVFX.projectile_simple, 
-                    combatManager.CM.FC.getRetrieverMoveStop(),
-                    source.transform.position,
-                    target.transform.position,
-                    enumMoveType.linear,                    
-                    Color.red,
-                    0.5f),
+                () => {
+                    combatManager.CM.FC.callVFX(
+                        enumVFX.projectile_simple,
+                        combatManager.CM.FC.getRetrieverMoveStop(),
+                        source.transform.position,
+                        target.transform.position,
+                        enumMoveType.linear,
+                        Color.red,
+                        0.5f
+                    );
+                    gameManager.GM.AC.playSE(
+                        SwissArmyStaticMethod.selectRandom<AudioClip>(
+                            gameManager.GM.AHouC.arrClipSwing
+                        )
+                    );
+                },
                 combatManager.CM.getBodyAnimationDuration() / 2f
             );
             

@@ -3,31 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cursor : movableObject, IMovableSupplement {
-    private readonly static Color distinct = new Color(0f, 1f, 0f, 1f);
-    private readonly static Color half = new Color(1f, 1f, 0f, 0.6f);
-    private readonly static Color transparent = new Color(0f, 0f, 0f, 0f);
+public class cursor : MonoBehaviour, IMovableSupplement {
+    /*
+    private readonly static Color colorSelected = new Color(0f, 1f, 0f, 1f);
+    private readonly static Color colorHovered = new Color(0.25f, 0.25f, 0.25f, 1f);
+    private readonly static Color colorTransparent = new Color(0f, 0f, 0f, 0f);
 
     private bool isChosen;
     private bool isHovered;
-
+    
     private SpriteRenderer SR;
+    */
+    private Color colorOriginal = Color.white;
 
     private Action delEndRun = null;
 
-    public new void Awake() {
-        base.Awake();
-
+    /*
+    public void Awake() {
         isChosen = false;
         isHovered = false;
 
         SR = GetComponent<SpriteRenderer>();
-        SR.color = transparent;
     }
+    */
 
-    public new void Update() {
-        base.Update();
-        setIsHovered(gameObject.checkHoveredWorld());
+    public void setColorOriginal(enumSide parSide) {
+        if (colorOriginal != Color.white) {
+            return;
+        }
+
+        colorOriginal = SwissArmyStaticMethod.getSideColor(parSide);
+
+        GetComponent<SpriteRenderer>().color = colorOriginal;
     }
 
     public void setDelEndRun(Action parDelEndRun) {
@@ -38,6 +45,13 @@ public class cursor : movableObject, IMovableSupplement {
         delEndRun = parDelEndRun;
     }
 
+    public void whenEndMove() {
+        delEndRun();
+    }
+
+    public void whenStartMove() { }
+
+    /*
     public void setIsChosen(bool par) {
         isChosen = par;
         updateSprite();
@@ -48,16 +62,11 @@ public class cursor : movableObject, IMovableSupplement {
         updateSprite();
     }
 
-    public void whenEndMove() {
-        delEndRun();
-    }
-
-    public void whenStartMove() { }
-
     private void updateSprite() {
         // Debug.Log(this + " of " + gameObject + " : " + (SR == null) + " / " + System.Object.ReferenceEquals(SR, null));
-        SR.color = isChosen ? distinct :
-            isHovered ? half :
-            transparent;
+        SR.color = isChosen ? colorSelected :
+            isHovered ? colorHovered :
+            colorOriginal;
     }
+    */
 }

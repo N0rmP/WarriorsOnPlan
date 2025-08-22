@@ -23,9 +23,9 @@ public class canvasStatus : MonoBehaviour
             return;
         }
 
-        thisThing?.setCursorChosen(false);
+        // thisThing?.setCursorChosen(false);
         thisThing = parThing;
-        parThing.setCursorChosen(true);
+        // parThing.setCursorChosen(true);
 
         updateTotal();
     }
@@ -39,14 +39,15 @@ public class canvasStatus : MonoBehaviour
 
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = thisThing.name;
         updateHP(thisThing.curHp, thisThing.maxHp);
-        transform.GetChild(2).GetComponent<showerCase>().setCase(thisThing?.thisSkill);
-        RI.openInventory(thisThing);
+        updateSkill();
+        updateTool();
         updateNumber();
         updateEffect();
 
         // curtainInventory is controlled by canvasStatus not combatUIComponent.doWhenCombatStart,
         // because it should be closed not only when combat starts but also when non-player thing is selected
         RI.setInteractivity(combatManager.CM.checkControllability(thisThing));
+        transform.GetChild(6).GetComponent<Button>().interactable = true;
     }
 
     public void updateHP(int parCurHp, int parMaxHp) {
@@ -63,6 +64,18 @@ public class canvasStatus : MonoBehaviour
         tempSlider.GetChild(2).GetComponent<TextMeshProUGUI>().text = parCurHp + " / " + parMaxHp;
     }
 
+    public void updateSkill() {
+        transform.GetChild(2).GetComponent<showerCase>().setCase(thisThing?.thisSkill);
+    }
+
+    public void updateTool() {
+        if (thisThing == null) {
+            RI.clear();
+        } else {
+            RI.openInventory(thisThing);
+        }
+    }
+
     public void updateNumber() {
         Transform transformBoxNumbers = transform.GetChild(4);
         if (thisThing == null) {
@@ -76,8 +89,8 @@ public class canvasStatus : MonoBehaviour
         transformBoxNumbers.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = "+" + tempSWS.weaponAmplifierAdd + " / " + tempSWS.weaponAmplifierMultiply + "%";
         transformBoxNumbers.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = "+" + tempSWS.skillAmplifierAdd + " / " + tempSWS.skillAmplifierMultiply + "%";
         transformBoxNumbers.GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>().text = tempSWS.armorAdd + " / " + tempSWS.armorMultiply + "%";
-        transformBoxNumbers.GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>().text = tempSWS.damageDealt.ToString();
-        transformBoxNumbers.GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>().text = tempSWS.damageTotalTaken.ToString();
+        transformBoxNumbers.GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>().text = thisThing.damageDealt.ToString();
+        transformBoxNumbers.GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>().text = thisThing.damageTaken.ToString();
     }
 
     public void updateEffect() {
@@ -92,8 +105,8 @@ public class canvasStatus : MonoBehaviour
 
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
         updateHP(0, 0);
-        transform.GetChild(2).GetComponent<showerCase>().setCase(null);
-        RI.clear();
+        updateSkill();// transform.GetChild(2).GetComponent<showerCase>().setCase(null);
+        updateTool();
         updateNumber();
         updateEffect();
 

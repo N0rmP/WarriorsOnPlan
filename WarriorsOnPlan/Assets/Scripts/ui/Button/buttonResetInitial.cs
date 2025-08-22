@@ -8,9 +8,8 @@ public class buttonResetInitial : MonoBehaviour {
     }
 
     public void askResetInitial() {
-        // ★ 에휴... 문장 데이터로 가져와서 바꾸기
         gameManager.GM.PC.showPopupConfirm(
-                "All State Returns to the Initial State.",
+                gameManager.GM.DHouC.bookConfirmQuestion.strQuestionResetInitial,
                 () => combatManager.CM.BEPREPARED(true)
             );
     }

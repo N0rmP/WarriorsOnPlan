@@ -21,8 +21,7 @@ public class mapUIComponent {
         GameObject tempPrefabButtonLevel = Resources.Load<GameObject>("Prefab/UI/buttonLevel");
         carrierButtonLevel = new carrierGeneric<buttonLevel>(
             () => {
-                buttonLevel tempResult = GameObject.Instantiate(tempPrefabButtonLevel).GetComponent<buttonLevel>();
-                tempResult.transform.SetParent(contentMap.transform.GetChild(0).transform);
+                buttonLevel tempResult = GameObject.Instantiate(tempPrefabButtonLevel, contentMap.GetChild(0).transform).GetComponent<buttonLevel>();
                 return tempResult;
             },
             (x) => {
@@ -37,19 +36,8 @@ public class mapUIComponent {
 
         CU = GameObject.Find("canvasUpgrade").GetComponent<canvasUpgrade>();
 
-        /*
-        // initiation when scene changes for key
-        gameManager.GM.SceC.eventAfterActiveSceneChanged += (x) => {
-            if (x.name != "SceneCombat") {
-                return;
-            }
-            setZoom(1f, false);
-            gameManager.GM.BIC.addScrollUp(() => setZoom(0.1f));
-            gameManager.GM.BIC.addScrollDown(() => setZoom(-0.1f));
-        };
-        */
-        gameManager.GM.IC.addScrollUp("SceneCombat", () => setZoom(0.1f));
-        gameManager.GM.IC.addScrollDown("SceneCombat", () => setZoom(-0.1f));
+        gameManager.GM.IC.addScrollUp("SceneMap", () => setZoom(0.1f));
+        gameManager.GM.IC.addScrollDown("SceneMap", () => setZoom(-0.1f));
     }
 
     private void setZoom(float parValue, bool parIsPlus = true) {
