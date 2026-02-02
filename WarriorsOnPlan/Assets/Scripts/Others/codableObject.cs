@@ -13,6 +13,7 @@ using UnityEngine;
     code explaination
             forth digit (count from the right lowest digit) represents case type, left three digits represents what the case truly is
             each forth digit represents each case type below
+            0 : Thing (not used with codableObject)
             1 : circuit
             2 : skill
             3 : tool
@@ -70,9 +71,7 @@ public class codableObject : IParametable, ICloneable {
         restoreReferences(parmementoIParametable.listReference);
     }
 
-    public virtual void restoreParameters(IEnumerator<int> parParameters) {
-        parParameters.Reset();
-    }
+    public virtual void restoreParameters(IEnumerator<int> parParameters) { }
 
     public virtual void restoreParameters(Dictionary<string, int[]> parParameters) { }
 
@@ -82,7 +81,7 @@ public class codableObject : IParametable, ICloneable {
     #region Clone
     public virtual object Clone() {
         codableObject tempResult = (codableObject)MemberwiseClone();
-        ClonePrepare();
+        tempResult.ClonePrepare();
         tempResult.restoreReferences(getReferences());
         tempResult.restoreParameters(getParameters());
         return tempResult;

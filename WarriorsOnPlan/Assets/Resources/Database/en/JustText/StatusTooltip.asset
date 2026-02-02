@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433fb042730afa4468160f6dfb4f363b, type: 3}
+  m_Name: StatusTooltip
+  m_EditorClassIdentifier: 
+  SwissArmyStringArray:
+  - Weapon Amplifier
+  - Increase Damage of Weapons. Addition Precedes Multiplication. Low Weapon Amplifier
+    can Weaken Weapons, but can't Heal the Attack Target.
+  - Skill Amplifier
+  - Incrase Damage / Shield / Heal of Skill. Addition Precedes Multiplication. Low
+    Skill Amplifier can Weaken Skill, but can't Reverse the Skill Result.
+  - Defense
+  - Decrease Damage toward this Warrior. Multiplication Precedes Addition. Low Armor
+    can Increase Damage towraed this Warrior.
+  - Damage Dealt
+  - Damage this Warrior Has Dealt in this Combat.
+  - Damage Taken
+  - Damage this Warrior Has Taken in this Combat.

@@ -11,7 +11,6 @@ using UnityEngine.UI;
 public class uiFxComponent : MonoBehaviour {
     private Dictionary<Image, (Color changePerSecond, float timerLeft)> containerColorChange;
     private Dictionary<TextMeshProUGUI, int> containerCount;
-    private Dictionary<GameObject, (Vector3 destination, float multiplier)> containerMove;
 
     private canvasSandwitch thisCanvasSandwitch = null;
     private Transform thisCanvasPopup = null;
@@ -24,7 +23,6 @@ public class uiFxComponent : MonoBehaviour {
     public void Awake() {
         containerColorChange = new Dictionary<Image, (Color, float)>();
         containerCount = new Dictionary<TextMeshProUGUI, int>();
-        containerMove = new Dictionary<GameObject, (Vector3, float)>();
 
         gameManager.GM.SceC.eventAfterActiveSceneChanged += (x) => uiActivatable.offAll();
         gameManager.GM.SceC.eventAfterActiveSceneChanged += prepareCanvases;
@@ -33,7 +31,6 @@ public class uiFxComponent : MonoBehaviour {
 
     public void Update() {     
         funcColorChange(Time.deltaTime);
-        funcMove(Time.deltaTime);
 
         timerSlower -= Time.deltaTime;
         if (timerSlower < 0f) {
@@ -145,25 +142,6 @@ public class uiFxComponent : MonoBehaviour {
             key.text = tempResult.ToString();
         }
     }
-
-    void funcMove(float parDeltaTime) {
-        (Vector3 destination, float multiplier) tempVelocity;
-        Vector3 tempStick;
-
-        foreach (GameObject key in containerMove.Keys.ToArray()) {
-            tempVelocity = containerMove[key];
-            tempStick = tempVelocity.destination - key.GetComponent<RectTransform>().localPosition;
-
-            //if the gameobject approaches destination enough, remove it
-            if (tempStick.magnitude < 3f) {
-                key.GetComponent<RectTransform>().localPosition = tempVelocity.destination;
-                containerMove.Remove(key);
-                continue;
-            }
-            //...move
-            key.GetComponent<RectTransform>().localPosition += tempStick.normalized * parDeltaTime * tempVelocity.multiplier * tempStick.magnitude * 5f;
-        }
-    }
     #endregion method_in_update
 
     #region addNremove
@@ -191,20 +169,9 @@ public class uiFxComponent : MonoBehaviour {
         }
     }
 
-    public void addMove(GameObject parGameObject, Vector3 parDestination, float parMultiplier = 1f) {
-        if (containerMove.ContainsKey(parGameObject)) {
-            //if key is already added, update its value
-            containerMove[parGameObject] = (parDestination, parMultiplier);
-        } else {
-            //else add key and value
-            containerMove.Add(parGameObject, (parDestination, parMultiplier));
-        }
-    }
-
     public void clearAll() {
         containerColorChange.Clear();
         containerCount.Clear();
-        containerMove.Clear();
     }
     #endregion addNremove
 }

@@ -44,9 +44,9 @@ public class cellThingResult : MonoBehaviour {
         // Hp
         transform.GetChild(2).GetChild(0).GetChild(1).GetComponent<Slider>().value = parThing.curHp / (float)parThing.maxHp;
         transform.GetChild(2).GetChild(0).GetChild(1).GetChild(2).GetComponent<TextMeshProUGUI>().text = parThing.curHp + " / " + parThing.maxHp;
-        // DD
+        // DamageDealt
         transform.GetChild(2).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = parThing.damageDealt.ToString();
-        // DT
+        // DamageTaken
         transform.GetChild(2).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>().text = parThing.damageTaken.ToString();
 
         // scrollTool
@@ -56,6 +56,7 @@ public class cellThingResult : MonoBehaviour {
             tempRRTool.GetComponent<imgRoundRectangle>().setCase(cb);
             tempRRTool.GetComponent<showerCase>().setCase(cb);
             tempRRTool.transform.SetParent(transform.GetChild(3).GetChild(0).GetChild(0));
+            tempRRTool.GetComponent<RectTransform>().localScale = Vector3.one;
         }
 
         // frame

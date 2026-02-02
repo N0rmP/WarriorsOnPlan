@@ -47,6 +47,11 @@ public class canvasPersonal : MonoBehaviour {
     }
 
     public void setSkill(skillAbst parSkill) {
+        if (parSkill == null) {
+            sliderSkill.gameObject.SetActive(false);
+            return;
+        }
+
         sliderSkill.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = parSkill.caseImage;
     }
 

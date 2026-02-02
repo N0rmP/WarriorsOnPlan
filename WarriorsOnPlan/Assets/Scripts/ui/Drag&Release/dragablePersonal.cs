@@ -35,6 +35,10 @@ public class dragablePersonal : dragableObjectAbst {
 
         GetComponent<Image>().sprite = thisThing.portrait;
         GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.8f);
+
+        if (thisThing.thisPlacabler != null) {
+            combatManager.CM.GC.setPlacableNode(thisThing.thisPlacabler);
+        }       
     }
 
     protected override void doWhenHoveringEnd() {
@@ -46,5 +50,9 @@ public class dragablePersonal : dragableObjectAbst {
         thisRectTransform.offsetMax = new Vector2(0f, 0f);
 
         GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
+
+        if (thisThing.thisPlacabler != null) {
+            combatManager.CM.GC.setPlacableNode(combatManager.CM.PC.curPlacabler);
+        }
     }
 }

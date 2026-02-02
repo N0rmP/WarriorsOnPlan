@@ -65,9 +65,10 @@ public class scrollActionOrder : MonoBehaviour {
 
     #region line
     public void arrangeLineSingle(releasableActionOrder parRAO) {
+        // scrollActionOrder object can be inactive for tutorial
         // first of all placing line with ActionOrder works only during preparing
         // do not place line with unenabled RAO
-        if (combatManager.CM.combatState != enumCombatState.preparing || !parRAO.isActiveAndEnabled) {
+        if (!isActiveAndEnabled || combatManager.CM.combatState != enumCombatState.preparing || !parRAO.isActiveAndEnabled) {
             return;
         }
 

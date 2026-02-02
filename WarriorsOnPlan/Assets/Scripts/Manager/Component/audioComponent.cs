@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -44,8 +45,8 @@ public class audioComponent {
             }
         }
 
-        // ★ 테스트용 파이널뽈 재생, 이 코드뿐 아니라 파이널뽈 mp3 파일 자체도 절대 실제 출시 빌드에 포함되지 않게 조심하기
-        // playBGM(Resources.Load<AudioClip>("Audio/Fall Guys-Final Fall"));
+        // ★ 정식 출시 이전에 아래 테스트용 배경음악 실행문과 테스트용 뽈가이즈, 배드 피기즈 BGM mp3 파일들 삭제
+        playBGM(Resources.Load<AudioClip>("Audio/BGM/Building Contraptions"));
     }
 
     #region Source & Mixer
@@ -53,6 +54,11 @@ public class audioComponent {
         mixer.SetFloat("volumeMaster", convertNormToDecibel(parVolumerMaster));
         mixer.SetFloat("volumeBGM", convertNormToDecibel(parVolumerBGM));
         mixer.SetFloat("volumeSE", convertNormToDecibel(parVolumeSE));
+
+        float f1, f2, f3;
+        mixer.GetFloat("volumeMaster", out f1);
+        mixer.GetFloat("volumeMaster", out f2);
+        mixer.GetFloat("volumeMaster", out f3);
     }
 
     // playBGM also set ptichBGM to 1f, you should set it again to change BGM speed

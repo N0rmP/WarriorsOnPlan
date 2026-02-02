@@ -15,7 +15,7 @@ public class skillFocussShot : skillAbst {
     }
     #endregion InfoImplementation
 
-    public skillFocussShot() : base("Image/Case/Effect/image_caseFocussing") {
+    public skillFocussShot() : base("Image/Case/Effect/Image_effectFocussing") {
         code = 92003;
     }
 
@@ -24,15 +24,15 @@ public class skillFocussShot : skillAbst {
         combatManager.CM.executeProcess(
             new processByproductAddCase(
                 source,
-                gameManager.GM.MC.makeCodableObject<caseFocussing>(4100, new int[2] { timerFocussing, timerFocussing }, new List<object>() {
+                gameManager.GM.MC.makeCodableObject<effectFocussing>(4100, new int[2] { timerFocussing, timerFocussing }, new List<object>() {
                     (Action)(() => {
                         combatManager.CM.executeProcess(new processByproductDealDamage(new damageInfo[1]{ new damageInfo(source, this, damage) }, source.whatToUseSkill));
                     }),
+                    //  ★ animationTracker 쓰도록 변경
                     (Action)(() => {
-                        source.resetAnimator();
-                        source.clearAttackAnimation();
-                        source.addAttackAnimation(enumAttackAnimation.trigAttackCast);
-                        source.animateAttack();
+                        source.thisOrganAnimation.clearAttackAnimation();
+                        source.thisOrganAnimation.addAttackAnimation(enumAttackAnimation.trigAttackCast);
+                        source.thisOrganAnimation.animateAttack();
                         gameManager.GM.TC.addDelegate(
                             () => {
                                 combatManager.CM.FC.callVFX(
@@ -44,11 +44,7 @@ public class skillFocussShot : skillAbst {
                                     Color.blue,
                                     0.5f
                                 );
-                                gameManager.GM.AC.playSE(
-                                    SwissArmyStaticMethod.selectRandom<AudioClip>(
-                                        gameManager.GM.AHouC.arrClipMagicBasic
-                                    )
-                                );
+                                gameManager.GM.AC.playSE(gameManager.GM.AHouC.arrClipMagicBasic.selectRandom());
                             },
                             combatManager.CM.getBodyAnimationDuration()
                         );
@@ -61,7 +57,7 @@ public class skillFocussShot : skillAbst {
     public override void SHOW(Thing source, Thing target) {
         base.SHOW(source, target);
 
-        source.animateFocuss();
+        source.thisOrganAnimation.animateFocuss();
     }
 
     #region IParametable

@@ -37,7 +37,7 @@ public class canvasStatus : MonoBehaviour
             return;
         }
 
-        transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = thisThing.name;
+        transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = thisThing.nameThing;
         updateHP(thisThing.curHp, thisThing.maxHp);
         updateSkill();
         updateTool();
@@ -99,13 +99,11 @@ public class canvasStatus : MonoBehaviour
 
     // make canvasStatus to show nothing, it works like init method
     public void updateNULL() {
-        if (thisThing != null) { 
-            thisThing = null;
-        }
+        thisThing = null;
 
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
         updateHP(0, 0);
-        updateSkill();// transform.GetChild(2).GetComponent<showerCase>().setCase(null);
+        updateSkill();
         updateTool();
         updateNumber();
         updateEffect();

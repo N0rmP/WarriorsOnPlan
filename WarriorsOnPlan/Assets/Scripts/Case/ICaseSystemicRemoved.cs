@@ -4,5 +4,5 @@ using UnityEngine;
 
 // Systemic case can't be ignored
 public interface ICaseSystemicRemoved {
-    public void caseFunc(Thing source);
+    public void caseFunc(ICaseContainerContainer source);
 }

@@ -21,6 +21,6 @@ public class popupOutline : popupText {
     }
 
     protected override void returnThis() {
-        gameManager.GM.PC.returnFloatingSingle(this);
+        gameManager.GM.PC.returnNumberSingle(this);
     }
 }

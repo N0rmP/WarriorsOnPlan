@@ -65,7 +65,6 @@ public class buttonUpgradeLeaf : MonoBehaviour, IReadyToBeSearched {
         tempQueBUL.Enqueue(this);
 
         mapManager.MM.MUC.CU.setAllUnvisited();
-        buttonUpgradeLeaf tempCurBUL;
         while (tempQueBUL.Count > 0) {
             tempQueBUL.Dequeue().updateChain(tempQueBUL);
         }
@@ -99,7 +98,7 @@ public class buttonUpgradeLeaf : MonoBehaviour, IReadyToBeSearched {
         GetComponent<showerCase>().deshow();        
     }
 
-    // undoUpgrade all next upgrades, please call it with argument-true to frontline the first buttonUpgradeLeaf
+    // update this and the child-BUL painting
     private void updateChain(Queue<buttonUpgradeLeaf> parQueue) {
         // this buttonUpgradeLeaf keeps its isUpgraded true if at least one prev-buttonUpgradeLeaf is still done
         bool tempIsParentDone = listPrev.Count == 0;
@@ -129,11 +128,14 @@ public class buttonUpgradeLeaf : MonoBehaviour, IReadyToBeSearched {
         }
     }
 
+    // used for initiating upgrade tree
     public void systemDoUpgradeTemporary() {
         mapManager.MM.UC.doUpgradeTemporay(thisLeafCode, thisUpgrade, true);
         paintDone();
         foreach (buttonUpgradeLeaf bul in listNext) {
-            bul.paintFrontline();
+            if (!bul.isUpgraded) {
+                bul.paintFrontline();
+            }
         }
     }
     #endregion including_do

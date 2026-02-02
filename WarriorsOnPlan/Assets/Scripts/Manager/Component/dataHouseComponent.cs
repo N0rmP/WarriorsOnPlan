@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Newtonsoft.Json;
 
 public class dataHouseComponent {
     private Dictionary<int, dataLevel> dictLevelNormal;
@@ -15,18 +16,21 @@ public class dataHouseComponent {
     private dataUpgradeTree dataUpgradeTreeHard;
     private dataUpgradeTree dataUpgradeTreeElite;
 
-    public dataBookWords bookWords { get; private set; }
-    public dataBookConfirmQuestion bookConfirmQuestion { get; private set; }
-    public dataBookPopupAlert bookPopupAlert { get; private set; }
+    public soBookWords bookWords { get; private set; }
+    public soBookConfirmQuestion bookConfirmQuestion { get; private set; }
+    public soBookPopupAlert bookPopupAlert { get; private set; }
     public dataBookCombatResult bookCombatResult { get; private set; }
+    public soArbitraryStringArray bookStatusTooltip { get; private set; } // it's ancient book, so its type is not book
+    public soBookUI bookUI { get; private set; }
+    public soBookThingName bookThingName { get; private set; }
 
-    public dataHouseComponent() {
+    #region prepare
+    public void prepareAll() {
         prepareDataLevel();
         prepareDataUpgradeTree();
         prepareBook();
     }
 
-    #region prepare
     private void prepareDataLevel() {
         Dictionary<int, dataLevel> makeInDictionary(IEnumerable<dataLevel> parCol) {
             Dictionary<int, dataLevel> tempResult = new Dictionary<int, dataLevel>();
@@ -52,10 +56,13 @@ public class dataHouseComponent {
 
     // prepareBook could be called outside when translation changes
     public void prepareBook() { 
-        bookWords = gameManager.GM.FC.importResourcesJson<dataBookWords>("JustText/BasicWord");
-        bookConfirmQuestion = gameManager.GM.FC.importResourcesJson<dataBookConfirmQuestion>("JustText/ConfirmQuestion");
-        bookPopupAlert = gameManager.GM.FC.importResourcesJson<dataBookPopupAlert>("JustText/PopupAlert");
+        bookWords = gameManager.GM.FC.importResourcesSO<soBookWords>("JustText/BasicWords");
+        bookConfirmQuestion = gameManager.GM.FC.importResourcesSO<soBookConfirmQuestion>("JustText/ConfirmQuestion");
+        bookPopupAlert = gameManager.GM.FC.importResourcesSO<soBookPopupAlert>("JustText/PopupAlert");
         bookCombatResult = gameManager.GM.FC.importResourcesJson<dataBookCombatResult>("JustText/CombatResult");
+        bookStatusTooltip = gameManager.GM.FC.importResourcesSO<soArbitraryStringArray>("JustText/statusTooltip");
+        bookUI = gameManager.GM.FC.importResourcesSO<soBookUI>("JustText/UI");
+        bookThingName = gameManager.GM.FC.importResourcesSO<soBookThingName>("JustText/ThingName");
     }
     #endregion prepare
 

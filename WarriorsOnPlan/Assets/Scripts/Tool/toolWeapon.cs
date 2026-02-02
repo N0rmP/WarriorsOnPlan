@@ -9,7 +9,8 @@ public enum enumAttackAnimation {
     trigAttackBow,
     trigAttackCrossbow,
     trigAttackCast,
-    trigAttackPunch
+    trigAttackPunch,
+    max
 }
 
 public enum enumAttackAudio { 
@@ -20,7 +21,10 @@ public enum enumAttackAudio {
 }
 
 namespace Cases {
-    public abstract class toolWeapon : caseTimerSelfishTurn, ICaseSystemicAdded {
+    public abstract class toolWeapon : caseTimerSelfishTurn, ICaseSystemicAdded, ICaseSystemicRemoved {
+        // delay between each showEffect when same attack-animation folded
+        protected const float intervalFolded = 0.05f;
+
         //range of toolWeapon consists of two int nums. each index represents minimum range and maximum range
         //min range can't be below 1, max range can't be below min range
         private int rangeMin_ = 1;
@@ -49,11 +53,28 @@ namespace Cases {
         }
         public enumDamageType damageType { get; protected set; } = enumDamageType.basic;
         public enumAttackAnimation attackAnimation { get; protected set; }
-        public enumAttackAudio attackAudio { get; protected set; }
 
-        public toolWeapon(string parImagePath) : base(parImagePath, enumCaseType.tool, parIsVisible: true) { 
-        
+        protected string thisObjPath = null;
+        private GameObject thisObj_ = null;
+        private GameObject thisObj {
+            get {
+                if (thisObjPath == null) {
+                    return null;
+                }
+                if (thisObj_ == null) {
+                    GameObject tempToBeInstantiated = Resources.Load<GameObject>(thisObjPath);
+                    if (tempToBeInstantiated == null) {
+                        thisObjPath = null;
+                        return null;
+                    }
+                    thisObj_ = GameObject.Instantiate(tempToBeInstantiated);
+                    thisObj_.transform.position = new Vector3(-20f, 0f, -20f);
+                }
+                return thisObj_;
+            }
         }
+
+        public toolWeapon(string parImagePath) : base(parImagePath, enumCaseType.tool, parIsVisible: true) { }
 
         #region memento
         public override Dictionary<string, int[]> getParameters() {
@@ -95,10 +116,24 @@ namespace Cases {
             resetTimer();
         }
 
-        public abstract void showEffect(Thing source, Thing parTarget);
+        // weapon's showEffect basically animates body animation & sound according to enumAttackType
+        public virtual void showEffect(Thing source, Thing parTarget, int parCountFolded) {
+            (cashStateHash csh, float time) tempTup = animationTracker.dictEaaTrackerInformation[attackAnimation];
+            source.thisAnimationTracker.Enqueue(tempTup.csh, (tempTup.time + intervalFolded * parCountFolded,
+                () => gameManager.GM.AC.playSE(gameManager.GM.AHouC.selectAttackSound(attackAnimation))
+            ));
+        }
 
-        public void caseFunc(ICaseContainerContainer source) {
-            // ★ 무기라면 무기 모델링 양손, 등뒤에 추가하기            
+        void ICaseSystemicAdded.caseFunc(ICaseContainerContainer source) {
+            if (thisObj != null && source is Thing tempThing) {
+                tempThing.grabWeapon(thisObj.transform);
+            }
+        }
+
+        void ICaseSystemicRemoved.caseFunc(ICaseContainerContainer source) {
+            if (thisObj != null && source is Thing tempThing) {
+                tempThing.dropWeapon(thisObj.transform);
+            }
         }
     }
 }

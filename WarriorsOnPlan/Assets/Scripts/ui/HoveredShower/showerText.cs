@@ -14,7 +14,7 @@ public class showerText : hoveredShowerAbst {
     protected override GameObject makeGut() {
         // make similar-Singleton canvasTextShown
         if (objTextShown == null) {
-            objTextShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Gut/canvasTextShown"));
+            objTextShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Gut/boxTextShown"));
             objTextShown.SetActive(false);
         }
 

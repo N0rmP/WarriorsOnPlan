@@ -56,23 +56,22 @@ public class gameManager : MonoBehaviour {
         PC = new popupComponent();
         FC = new fileComponent();
         SaveC = new saveComponent();
-        AC = new audioComponent();
         option = new optionAIO();
+        AC = new audioComponent();
         MC = new makerComponent();
         DHouC = new dataHouseComponent();
         LC = new linerComponent();
         AHouC = new audioHouseComponent();
 
+        option?.init();
+        DHouC.prepareAll();
+        MC.init();
         // in case player executes game and just turn it off instantly
         curMapType = enumMapType.Normal;
     }
 
     private void findCanvasMain(Scene parScene) {
         this.canvasMain = gameObject.FindThoroughly("CANVAS_" + SceneManager.GetActiveScene().name).GetComponent<Canvas>();
-    }
-
-    public void Start() {
-        option?.init();
     }
 
     public void setCurMapType(enumMapType parEnumMapType) {

@@ -54,7 +54,7 @@ public class mapUIComponent {
         dataLevel tempDataLevel = gameManager.GM.DHouC.getDataLevel(parCode);
 
         tempRectTransform.gameObject.name += "_" + tempDataLevel.LevelCode.ToString();
-        tempRectTransform.anchorMin = tempRectTransform.anchorMax = new Vector2(tempDataLevel.MapPosition[0], tempDataLevel.MapPosition[0]);
+        tempRectTransform.anchorMin = tempRectTransform.anchorMax = new Vector2(tempDataLevel.MapPosition[0], tempDataLevel.MapPosition[1]);
         tempRectTransform.anchoredPosition = new Vector2(0f, 0f);
 
         tempButtonLevel.gameObject.SetActive(true);

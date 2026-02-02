@@ -27,19 +27,16 @@ public class node : MonoBehaviour {
     public bool isPlrPlacable { get; private set; }
 
     public node[] link { get; private set; }
-    public Thing thingHere { get; private set; }
-    // private List<Thing> ★ 지역 효과 구현하기
+    public IPlacableOccupier occupierHere { get; private set; }
+    private List<IPlacableSharer> listSharerHere;
 
     // variables below is used for various searches, it's declared public being used only by external instances
     public bool swissArmyVisited;
     public EDirection swissArmyEDirection;
 
     public void Start() {
-        // Plr can place warriors on half of total nodes near Plr
-        isPlrPlacable = (coor1 < combatManager.CM.GC.size1 / 2);
-        if (isPlrPlacable) {
-            gameObject.AddComponent<releasableNode>().init(this);
-        }
+        gameObject.AddComponent<releasableNode>().init(this);
+        GetComponent<releasableNode>().enabled = false;
     }
 
     public node init(int parCoor0, int parCoor1) {
@@ -47,6 +44,7 @@ public class node : MonoBehaviour {
         coor1 = parCoor1;
         swissArmyVisited = false;
         link = new node[8];
+        listSharerHere = new List<IPlacableSharer>();
 
         transform.position = getVector3();
 
@@ -61,95 +59,144 @@ public class node : MonoBehaviour {
         return (coor0 , coor1);
     }
 
-    /*
-    public (int c0, int c1) getlink_Coordinates(EDirection parEDir) {
-        return (
-            coor0 + directionConverter[(int)parEDir],
-            coor1 + directionConverter[((int)parEDir + 6) % 8]
-        );
-    }*/
-
     // setLink set not only this node's link_ but also the target node's link_
     public void setLink(node parNode, EDirection parDir) {
         link[(int)parDir] = parNode;
         parNode.link[((int)parDir + 4) % 8] = this;
     }
 
-    #region thingManagement
-    public bool placeThing(Thing parThing, bool parIsTeleport = false) {
-        if (thingHere != null) { 
+    #region place
+    public bool placeHere(IPlacableOccupier parOccupier, bool parIsTeleport = false) {
+        if (occupierHere != null || parOccupier == null) { 
             return false;
         }
-
-        parThing.curPosition = this;
-        this.thingHere = parThing;
+        
+        parOccupier.curPosition = this;
+        occupierHere = parOccupier;
         if (parIsTeleport) {
-            parThing.setPosition(getVector3());
+            parOccupier.setPosition(getVector3());
         }
 
         return true;
     }
 
-    public bool sendThing(EDirection parDir) {
+    public bool placeHere(IPlacableSharer parSharer, bool parIsTeleport = false) {
+        if (parSharer == null || listSharerHere.Contains(parSharer)) {
+            return false;
+        }
+
+        parSharer.curPosition = this;
+        listSharerHere.Add(parSharer);
+        if (parIsTeleport) {
+            parSharer.setPosition(getVector3());
+        }
+
+        return true;
+    }
+
+    public bool placeHere(IPlacable parPlacable, bool parIsTeleport = false) {
+        switch (parPlacable) {
+            case IPlacableOccupier tempIPO:
+                return placeHere(tempIPO, parIsTeleport);
+            case IPlacableSharer tempIPS:
+                return placeHere(tempIPS, parIsTeleport);
+            default:
+                return false;
+        }
+    }
+    #endregion place
+
+    #region expel
+    // expelHere only make occupierHere not to be on this node, animation ain't included
+    public void expelHere(bool parIsPositionChange = true) {
+        if (occupierHere == null) {
+            return;
+        }
+
+        occupierHere.curPosition = null;
+        if (parIsPositionChange) {
+            occupierHere.setPosition(new Vector3(50f, 0f, 50f));
+        }
+        occupierHere = null;
+    }
+
+    public void expelHere(IPlacableSharer parSharer, bool parIsPositionChange = true) {
+        if (parSharer == null) {
+            return;
+        }
+
+        parSharer.curPosition = null;
+        if (parIsPositionChange) {
+            parSharer.setPosition(new Vector3(50f, 0f, 50f));
+        }
+        listSharerHere.Remove(parSharer);
+    }
+    #endregion expel
+
+    #region send
+    /*
+    public bool sendThere(EDirection parDir) {
         //check if its not boundary, and if there is something on destination
-        if ((link[(int)parDir] == null) && (link[(int)parDir].thingHere != null)) {
+        if ((link[(int)parDir] == null) && (link[(int)parDir].occupierHere != null)) {
             return false;
         }
 
-        thingHere.curPosition = link[(int)parDir];
-        link[(int)parDir].thingHere = thingHere;
-        this.thingHere = null;
+        occupierHere.curPosition = link[(int)parDir];
+        link[(int)parDir].occupierHere = occupierHere;
+        this.occupierHere = null;
+
+        return true;
+    }
+    */
+
+    public bool sendThere(node there, bool parIsTeleport = false) {
+        if (there == null || there.occupierHere != null) {
+            return false;
+        }
+
+        if (!there.placeHere(occupierHere, parIsTeleport)) {
+            return false;
+        }
+        this.occupierHere = null;
 
         return true;
     }
 
-    public bool sendThing(node parNode, bool parIsTeleport = false) {
-        //check if it's out of boundary, and if there is something on destination
-        if ((parNode == null) || (parNode.thingHere != null)) {
+    public bool sendThere(IPlacableSharer parSharer, node there, bool parIsTeleport = false) {
+        // sendSharer checks invalidity same as sendOccupier, and also if parSharer is contained here and not there
+        if (there == null || 
+            parSharer == null || 
+            !listSharerHere.Contains(parSharer) || 
+            there.listSharerHere.Contains(parSharer)) {
             return false;
         }
 
-        thingHere.curPosition = parNode;
-        parNode.thingHere = thingHere;
-        this.thingHere = null;
-
-        if (parIsTeleport) {
-            parNode.thingHere.setPosition(parNode.getVector3());
+        if (!there.placeHere(parSharer, parIsTeleport)) {
+            return false;
         }
+        this.listSharerHere.Remove(parSharer);
 
         return true;
     }
+    #endregion send
 
+    #region swap
     // swapThing basically sends thing to parNode, if some-Thing is on parNode then change positions of two
-    public bool swapThing(node parNode, bool parIsTeleport = false) {
+    public bool swapOccupier(node parNode, bool parIsTeleport = false) {
         if (parNode == null || parNode == this) {
             return false;
         }
 
-        Thing tempThingbuffer = parNode.thingHere;
-        parNode.expelThing(false);
-        sendThing(parNode, parIsTeleport);
-        if (tempThingbuffer != null) {            
-            placeThing(tempThingbuffer, parIsTeleport);
-        }
+        IPlacableOccupier tempOccupierBuffer = parNode.occupierHere;
+        parNode.expelHere(false);
+        sendThere(parNode, parIsTeleport);
+        placeHere(tempOccupierBuffer, parIsTeleport);
 
         return true;
     }
+    #endregion swap    
 
-    // expelThing only make thingHere not to be on this node, other processes like animation or position change ain't included
-    public void expelThing(bool parIsPositionChange = true) {
-        if (thingHere == null) {
-            return;
-        }
-
-        thingHere.curPosition = null;
-        if (parIsPositionChange) {
-            thingHere.setPosition(new Vector3(50f, 0f, 50f));
-        }
-        thingHere = null;        
-    }
-    #endregion thingManagement
-
+    #region paint
     public void setColor(Color parColor) {
         GetComponent<SpriteRenderer>().color = parColor;
     }
@@ -159,10 +206,17 @@ public class node : MonoBehaviour {
             (combatManager.CM.combatState != enumCombatState.preparing) ? new Color(1f, 1f, 1f, 0.25f) : 
             (isPlrPlacable ? new Color(0.5f, 1f, 0.5f, 1f) : new Color(1f, 1f, 1f, 1f));
     }
+    #endregion paint
 
     public override string ToString() {
         return "(" + coor0 + "," + coor1 + ")";
     }
+
+    public void setIsPlrPlacable(Placablers.IPlacabler parPlacabler) {
+        isPlrPlacable = parPlacabler.checkPlacable(this);
+        GetComponent<releasableNode>().enabled = isPlrPlacable;
+        autoColor();
+    } 
 
     #region StaticMethods
     // getDistance returns only the larger one between each coordinates difference, it's for distance calculation in weapon (or skill) range
@@ -198,6 +252,7 @@ public class node : MonoBehaviour {
         return (EDirection)tempResult;
     }
 
+    // getDirectionClosestSorted returns collection of 8 EDirection in cloest order to parVectorToDestination
     public static IEnumerable<EDirection> getDirectionClosestSorted(Vector2 parVectorToDestination) {
         List<(EDirection edir, float dist)> tempPriorityList = new List<(EDirection edir, float dist)>();
         float tempCurDistance;

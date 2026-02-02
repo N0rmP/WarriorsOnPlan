@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace Processes {
@@ -19,5 +20,13 @@ namespace Processes {
                 combatManager.CM.executeProcess(new processByproductDie(source, null));
             }
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append("\'s max hp is set to ");
+            parSB.Append(value.ToString());
+        }
+        #endregion test
     }
 }

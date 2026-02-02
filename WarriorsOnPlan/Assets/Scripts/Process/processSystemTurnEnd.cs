@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Cases;
+using System.Text;
 
 namespace Processes {
     public class processSystemTurnEnd : processAbst {
@@ -14,6 +15,9 @@ namespace Processes {
         // unlike HearthStone ExtraTurn can't be stored many during one turn, player should achieve ExtraTurn every turn for eternal ExtraTurn
         private bool isExtraTurn;
 
+        // endedTurnSide only exists for debugging
+        private enumSide endedTurnSide;
+
         public processSystemTurnEnd(Thing[] parArrActors, Action parDelTurnChange, bool parIsSHOW = true) : base(parIsSHOW) {
             arrActors = parArrActors;
             delTurnChange = parDelTurnChange;
@@ -22,12 +26,14 @@ namespace Processes {
 
         protected override void doBeforeActualDo() {
             base.doBeforeActualDo();
+            endedTurnSide = combatManager.CM.sideTurn;
 
             // onTurnEnd
             foreach (Thing th in arrActors) {
-                foreach(bool tempIsExtraTurn in th.observeReturnEnumerate<ICaseTurnEnd, bool>(new object[1] { th }))
-                isExtraTurn = isExtraTurn || tempIsExtraTurn;
-            }            
+                foreach (bool tempIsExtraTurn in th.observeReturnEnumerate<ICaseTurnEnd, bool>(new object[1] { th })) {
+                    isExtraTurn = isExtraTurn || tempIsExtraTurn;
+                }
+            }
         }
 
         protected override void actualDO() {
@@ -39,10 +45,19 @@ namespace Processes {
             }
 
             if (isExtraTurn) {
-                // ★ 추가 턴 그래릭 효과, 대충 끼얏호우한 효과 넣으셈
+                // ★ 
             } else {
                 delTurnChange();
             }
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(endedTurnSide);
+            parSB.Append(" turn end, extra turn ");
+            parSB.Append(isExtraTurn);
+            parSB.Append("\n");
+        }
+        #endregion test
     }
 }

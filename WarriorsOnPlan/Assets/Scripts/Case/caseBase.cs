@@ -72,9 +72,13 @@ namespace Cases {
         }
 
         protected void prepareInfo() {
-            dataArbitraryStringArray tempASA = gameManager.GM.FC.importResourcesJson<dataArbitraryStringArray>(pathCategory + GetType().Name);
+            soArbitraryStringArray tempASA = gameManager.GM.FC.importResourcesSO<soArbitraryStringArray>(pathCategory + GetType().Name);
             infoName = tempASA.SwissArmyStringArray[0];
             infoDescription_ = tempASA.SwissArmyStringArray[1];
+        }
+
+        public override string ToString() {
+            return GetType().Name;
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class exRectTransform {
     public static bool checkHovered(this RectTransform parRT) {
@@ -114,5 +115,11 @@ public static class exRectTransform {
         }
 
         return new Vector2(parCanvasMainLocalPosition.x, parCanvasMainLocalPosition.y);
+    }
+
+    public static void resizeToChildSize(this RectTransform parRectTransform, int parChildIndex = 0) {
+        parRectTransform.GetChild(parChildIndex).GetComponent<ContentSizeFitter>().SetLayoutHorizontal();
+        parRectTransform.GetChild(parChildIndex).GetComponent<ContentSizeFitter>().SetLayoutVertical();
+        parRectTransform.sizeDelta = parRectTransform.GetChild(parChildIndex).GetComponent<RectTransform>().sizeDelta;
     }
 }

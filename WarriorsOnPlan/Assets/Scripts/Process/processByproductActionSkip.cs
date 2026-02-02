@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace Processes {
@@ -13,7 +14,14 @@ namespace Processes {
 
             gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition(), gameManager.GM.DHouC.bookWords.strConrolled);
 
-            source.animateControlled();
+            source.thisOrganAnimation.animateControlled();
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append("\'s action skipped");
+        }
+        #endregion test
     }
 }

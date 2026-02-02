@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 using Cases;
+using System.Text;
 
 namespace Processes {
     public class processByproductActionAttack : processByproductActionAbst {
@@ -81,23 +82,28 @@ namespace Processes {
                 return;
             }
 
-            // source body animation
+            // attack animation, including source-body-animation & each weapon SHOW
             source.Look(target.transform.position);
-            source.clearAttackAnimation();
+            int[] tempArrCountAttackAnimation = new int[(int)enumAttackAnimation.max];
             foreach (toolWeapon tw in listWeapon) {
-                source.addAttackAnimation(tw.attackAnimation);
+                source.thisOrganAnimation.addAttackAnimation(tw.attackAnimation);
+                tw.showEffect(source, target, tempArrCountAttackAnimation[(int)tw.attackAnimation]);
             }
-            source.animateAttack();
-
-            // each weapon vfx animation
-            int tempI = 0;
-            foreach (toolWeapon tw in listWeapon) {
-                gameManager.GM.TC.addDelegate(
-                    () => tw.showEffect(source, target),
-                    combatManager.CM.getBodyAnimationDuration() * (tempI + 1) / (float)(listWeapon.Count + 1)
-                );
-                tempI++;
-            }
+            source.thisOrganAnimation.animateAttack();
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append(" attacked ");
+            parSB.Append(target?.ToString());
+            parSB.Append(", used weapons list {");
+            foreach (toolWeapon tw in listWeapon) {
+                parSB.Append(tw?.ToString());
+                parSB.Append(',');
+            }
+            parSB.Append('}');
+        }
+        #endregion test
     }
 }

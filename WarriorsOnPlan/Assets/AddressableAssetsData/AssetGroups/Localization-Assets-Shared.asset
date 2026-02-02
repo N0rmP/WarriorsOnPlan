@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Shared
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-Assets-Shared
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 11118b607def86b478ac50c36bf0bd82
+  m_SerializeEntries:
+  - m_GUID: 15561eca50c7f2248baefad958b55769
+    m_Address: Assets/Localization/Font Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a39bf7722de7ac4da1c72d98f4188c8
+    m_Address: NEXON Lv2 Gothic SDF test
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Locale-ko-KR
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6df8b254d88d8434db3508ea4638db67
+    m_Address: NEXON Lv2 Gothic Bold SDF
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Locale-ko-KR
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ae8638bdb1924e488e8ba2e1d967a7b
+    m_Address: NEXON Lv2 Gothic Light SDF
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Locale-ko-KR
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 645a4394d2285434e909a6d02556c9cf, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 39cb01c7491051440954acca4e0ec49d, type: 2}
+    - {fileID: 11400000, guid: adcc3a326e269c745922b32e9b9751f5, type: 2}

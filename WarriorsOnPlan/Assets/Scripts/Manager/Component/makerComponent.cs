@@ -27,8 +27,8 @@ public class makerComponent {
     // setTotalDummies contains all codableObject whose code can't be identified such as codableObjects for test, whose code is written wrong, or plastic snack bag right in front of me I forgot to throw away etc.
     private List<codableObject> listTotalDummies;
 
-    // ★ 만약 makerComponent의 생성이 너무 오래 걸린다면 생성자 내에서 Coroutine으로 병렬처리 돌려버릴 것
-    public makerComponent() {
+    // ★ 만약 makerComponent의 생성이 너무 오래 걸린다면 Coroutine으로 병렬처리 돌려버릴 것
+    public void init() {
         listTotalSensors = new List<codableObject>();
         listTotalNavigators = new List<codableObject>();
         listTotalSelecters = new List<codableObject>();
@@ -38,7 +38,6 @@ public class makerComponent {
         listTotalDummies = new List<codableObject>();
 
         // create total dummy-instances of each codableObject
-        int[] tempDummyParameter = new int[10] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
         codableObject tempCodableObject;
 
         // addIEnumerable take IEnumerable<Type> as argument and ignores non-codableObject indice in it
@@ -52,7 +51,7 @@ public class makerComponent {
                 try {
                     tempCodableObject = Activator.CreateInstance(t) as codableObject;
                 } catch (Exception e) {
-                    Debug.Log("makerComponent failed to CreateInstance " + t);
+                    Debug.Log("makerComponent failed to CreateInstance " + t + "\n" + e.ToString());
                     throw e;
                 }
 
@@ -66,7 +65,7 @@ public class makerComponent {
 
         // rake all codableObject
         addIEnumerable(
-            typeof(caseBase).Assembly.GetTypes().Where(
+            typeof(codableObject).Assembly.GetTypes().Where(
                 (x) => x.IsSubclassOf(typeof(codableObject))
             )
         );
@@ -109,7 +108,7 @@ public class makerComponent {
     }
 
     private codableObject getAdequateCodableObject(int parCode) {
-        // ★ 여유날 때 이거 이진탐색으로 바꿔볼 것... 근데 시간 없지 않을까
+        // ★ 나중에 이진탐색으로 바꿀 것
         foreach (codableObject co in getAdequateSet(parCode)) {
             if (co.code == parCode) {
                 return co;
@@ -123,7 +122,7 @@ public class makerComponent {
 
     #region MAKE
     // pp is parParameters
-    public T makeCodableObject<T>(int parCode, IEnumerable<int> pp, List<object> pr) where T : codableObject {
+    public T makeCodableObject<T>(int parCode, IEnumerator<int> pp, List<object> pr) where T : codableObject {
         T tempResult = getAdequateCodableObject(parCode)?.Clone() as T;
 
         if (tempResult == null) {
@@ -132,13 +131,13 @@ public class makerComponent {
         }
 
 
-        tempResult.restoreParameters(pp.GetEnumerator());
+        tempResult.restoreParameters(pp);
         tempResult.restoreReferences(pr);
         return tempResult;
     }
 
-    public codableObject makeCodableObject(int parCode, IEnumerable<int> pp, List<object> pr) {
-        return makeCodableObject<codableObject>(parCode, pp, pr);
+    public T makeCodableObject<T>(int parCode, IEnumerable<int> pp, List<object> pr) where T : codableObject {
+        return makeCodableObject<T>(parCode, pp.GetEnumerator(), pr);
     }
     #endregion MAKE
 

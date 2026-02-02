@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace Processes {
@@ -66,5 +67,13 @@ namespace Processes {
 
             source.thisSkill.SHOW(source, target);
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append(" used skill to ");
+            parSB.Append(target?.ToString());
+        }
+        #endregion test
     }
 }

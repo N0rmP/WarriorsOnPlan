@@ -18,6 +18,7 @@ public static class exGameObject {
         return (Vector2)(Camera.main.WorldToScreenPoint(parObj.transform.position)) / gameManager.GM.canvasMain.transform.localScale - gameManager.GM.canvasMain.GetComponent<RectTransform>().sizeDelta * 0.5f;
     }
 
+    /*
     public static Bounds getTotalBounds(this GameObject parObj) {
         Renderer[] tempMR = parObj.transform.GetComponentsInChildren<Renderer>();
         Bounds tempResult = new Bounds();
@@ -36,6 +37,7 @@ public static class exGameObject {
 
         return tempResult;        
     }
+    */
 
     public static List<Material> rakeMaterials(this GameObject parObj) {
         Renderer tempRenderer;

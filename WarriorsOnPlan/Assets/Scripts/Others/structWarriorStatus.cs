@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// it can't be passed if it's struct... ffffffffff
 public class structWarriorStatus {
     public int weaponAmplifierAdd;
     private int weaponAmplifierMultiply_;

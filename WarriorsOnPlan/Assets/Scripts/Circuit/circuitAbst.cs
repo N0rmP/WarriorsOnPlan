@@ -15,7 +15,7 @@ namespace Circuits {
         public string infoDescription {
             get {
                 if (infoDescription_ == "E") {
-                    infoDescription_ = gameManager.GM.FC.importResourcesJson<dataArbitraryString>("Circuit/" + this.GetType().Name).SwissArmyString;
+                    infoDescription_ = gameManager.GM.FC.importResourcesJson<soArbitraryString>("Circuit/" + this.GetType().Name).SwissArmyString;
                 }
                 return string.Format(infoDescription_, getDescriptionArgument());
             }

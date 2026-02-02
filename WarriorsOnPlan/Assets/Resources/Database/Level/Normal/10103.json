@@ -1,0 +1,41 @@
+{
+    "MapPosition" : [0.25, 0.15],
+    "LevelCode" : 10103,
+    "IsBossLevel" : false,
+    "NextLevelCode" : [10104],
+    "Differentiater" : "",
+    "Placabler" : "RowCol",
+    "PlacablerParameter" : [0, 6, 0, 0],
+    "EnemyWarriors" : [
+        {
+            "NameThing" : "tester", 
+            "Coordinate0" : 6, "Coordinate1" : 6, 
+            "HP" : 15, 
+            "SkillParameters" : [5, 5, 1, 5, 2],
+            "ToolList" : [
+                {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 2, 1]}
+            ],
+            "CodeNavigatorIdle" : 1202, "Parameter2" : [], 
+            "CodeSensorForMove" : 1101, "Parameter0" : [-1, -1], 
+            "CodeNavigatorPrioritized" : 1201, "Parameter1" : [],             
+            "CodeSensorForSkill" : 1102, "Parameter3" : [-1, -1], 
+            "CodeSelecterForSkill" : 1301, "Parameter4" : [2], 
+            "CodeSelecterForAttack" : 1301, "Parameter5" : [2]
+        }
+    ],
+    "NeutralThings" : [],
+    "FriendlyWarriors" : [
+        {
+            "NameThing" : "testerFreeDeployee", 
+            "Coordinate0" : 0, "Coordinate1" : 0, 
+            "HP" : 20, 
+            "SkillParameters" : []
+        }
+    ],
+    "ToolsProvided" : [
+        {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93001, "Parameters" : [0, 0, 1, 4, 1]},
+        {"CodeIParametable" : 93002, "Parameters" : [1]}
+    ]
+}

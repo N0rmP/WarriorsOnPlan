@@ -9,6 +9,7 @@ public class buttonUpgradeQuit : MonoBehaviour {
     public void click() {
         if (isSave) {
             mapManager.MM.UC.confirmUpgrade();
+            mapManager.MM.UC.saveUpgrade();
         }
         mapManager.MM.MUC.CU.GetComponent<uiActivatable>().deactivatePanel();
     }

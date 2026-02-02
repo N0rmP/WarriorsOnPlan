@@ -31,11 +31,7 @@ public class releasablePersonal : releasableObjectAbst {
         thisThing.addCase(parTool);
         combatManager.CM.systemRemoveToolsProvided(parTool);
 
-        gameManager.GM.AC.playSE(
-            SwissArmyStaticMethod.selectRandom<AudioClip>(
-                gameManager.GM.AHouC.arrClipToolEquip
-            )
-        );
+        gameManager.GM.AC.playSE(gameManager.GM.AHouC.arrClipToolEquip.selectRandom());
 
         return true;
     }
@@ -44,10 +40,10 @@ public class releasablePersonal : releasableObjectAbst {
         node tempThisThingPosition = thisThing.curPosition;
         node tempParThingPosition = parThing.curPosition;
 
-        tempParThingPosition.expelThing();
-        thisThing.curPosition.sendThing(tempParThingPosition, true);
+        tempParThingPosition.expelHere();
+        thisThing.curPosition.sendThere(tempParThingPosition, true);
 
-        tempThisThingPosition.placeThing(parThing);
+        tempThisThingPosition.placeHere(parThing);
     }
 
     // releasablePersonal is in worldspace, it needs its own checkHovered method

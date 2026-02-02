@@ -1,0 +1,26 @@
+{
+    "strMelee" : "근접",
+    "strNumber" : "(숫자))",
+    "strReady" : "준비됨",
+    "strVictory" : "승리",
+    "strDefeated" : "패배",
+
+    "strTool" : "장비",
+    "strEffect" : "효과",
+    "strSkill" : "스킬",
+    "strUpgrade" : "업그레이드",
+
+    "strAction" : "행동",
+    "strAdd" : "추가", 
+    "strAttack" : "공격",
+    "strConrolled" : "상태이상",
+    "strFocussing" : "집중",
+    "strForcedMove" : "강제 이동",
+    "strDealDamage" : "피해 주기",
+    "strDamaged" : "피해 받기",
+    "strDeath" : "처치",
+    "strHpIncrease" : "HP 증가",
+    "strHpDecrease" : "HP 감소",
+    "strInterfere" : "방해받음",
+    "strMove" : "이동"    
+}

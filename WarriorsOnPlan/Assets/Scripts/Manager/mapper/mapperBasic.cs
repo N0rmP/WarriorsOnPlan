@@ -9,6 +9,7 @@ public class mapperBasic : IMapper {
     public void prepareMap() {
         restoreMap(gameManager.GM.curMapType);
         mapManager.MM.UC.prepareUpgradeTree(gameManager.GM.DHouC.getDataUpgradeTree(gameManager.GM.curMapType));
+        mapManager.MM.UC.restoreUpgrade(gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType));
     }
 
     public void doWhenCombatVictory() {

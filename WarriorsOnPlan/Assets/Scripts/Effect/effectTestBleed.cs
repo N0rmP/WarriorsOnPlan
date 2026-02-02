@@ -14,7 +14,7 @@ namespace Cases {
         }
         #endregion InfoImplementation
 
-        public effectTestBleed() : base("Image/Case/Effect/image_effectTestBleed", parIsVisible: true) {
+        public effectTestBleed() : base("Image/Case/Effect/Image_effectTestBleed", parIsVisible: true) {
             code = 94001;
             isRemovedOnAlarmed = true;
         }        

@@ -17,7 +17,7 @@ namespace Processes {
 
             gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), gameManager.GM.DHouC.bookWords.strFocussing + "...");
 
-            source.animateFocuss();
+            source.thisOrganAnimation.animateFocuss();
         }
     }
 }

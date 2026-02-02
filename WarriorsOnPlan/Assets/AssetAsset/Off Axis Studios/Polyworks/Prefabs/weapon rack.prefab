@@ -1,0 +1,333 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7025458184185433784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3486749788123266598}
+  m_Layer: 0
+  m_Name: weapon rack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3486749788123266598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7025458184185433784}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.51429033, z: -0, w: 0.8576162}
+  m_LocalPosition: {x: -5, y: 0, z: 11}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 675934005380368134}
+  - {fileID: 5211110180184239636}
+  - {fileID: 5639364674067760046}
+  - {fileID: 6194687605483447135}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 61.9, z: 0}
+--- !u!1001 &218219571595884572
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3486749788123266598}
+    m_Modifications:
+    - target: {fileID: 5048422401105256712, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_Name
+      value: Tribal_Plains_Log_Bench_Wood_Timber_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 270
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 48263b2f5d8ffe44cb5fb031ca8c456b, type: 3}
+--- !u!4 &5639364674067760046 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+    type: 3}
+  m_PrefabInstance: {fileID: 218219571595884572}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &366441768930842022
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3486749788123266598}
+    m_Modifications:
+    - target: {fileID: 5048422401105256712, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_Name
+      value: Tribal_Plains_Log_Bench_Wood_Timber_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 48263b2f5d8ffe44cb5fb031ca8c456b, type: 3}
+--- !u!4 &5211110180184239636 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+    type: 3}
+  m_PrefabInstance: {fileID: 366441768930842022}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1779971130097637613
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3486749788123266598}
+    m_Modifications:
+    - target: {fileID: 5048422401105256712, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_Name
+      value: Tribal_Plains_Log_Bench_Wood_Timber_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 270
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 48263b2f5d8ffe44cb5fb031ca8c456b, type: 3}
+--- !u!4 &6194687605483447135 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1779971130097637613}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4910383350255811764
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3486749788123266598}
+    m_Modifications:
+    - target: {fileID: 5048422401105256712, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_Name
+      value: Tribal_Plains_Log_Bench_Wood_Timber_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 48263b2f5d8ffe44cb5fb031ca8c456b, type: 3}
+--- !u!4 &675934005380368134 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5567656134974684082, guid: 48263b2f5d8ffe44cb5fb031ca8c456b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4910383350255811764}
+  m_PrefabAsset: {fileID: 0}

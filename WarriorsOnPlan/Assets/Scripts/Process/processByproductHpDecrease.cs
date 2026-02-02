@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -11,6 +12,7 @@ namespace Processes {
 
         private Thing source;
         private Thing attackerThing;
+
         // value & valueFinal are positive
         private int value;
         public int valueFinal { get; private set; }
@@ -19,7 +21,7 @@ namespace Processes {
         public processByproductHpDecrease(Thing parSource, Thing parAttacker, int parValue, bool parIsShow = true, bool parIsShowInstant = false) : base(parIsShow) {
             source = parSource;
             attackerThing = parAttacker;
-            value = Math.Max(0, parValue);
+            value = parValue;
             isShowInstant = parIsShowInstant;
         }
 
@@ -85,5 +87,13 @@ namespace Processes {
                 );
             }
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append("\'s hp decreases by ");
+            parSB.Append(value.ToString());
+        }
+        #endregion test
     }
 }

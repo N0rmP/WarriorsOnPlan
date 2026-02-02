@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5809469319987735643}
   - component: {fileID: 5446700461763636567}
   - component: {fileID: 535587945096009257}
+  - component: {fileID: 7791073166914893096}
   m_Layer: 5
   m_Name: boxPopupText
   m_TagString: Untagged
@@ -89,8 +90,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0c34f89b7eea8844b6eb3f6520a8669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisBackground: {fileID: 5446700461763636567}
-  thisText: {fileID: 3601269616874590127}
+--- !u!225 &7791073166914893096
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842698913884090792}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7410917842551448311
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +114,7 @@ GameObject:
   - component: {fileID: 5714201458399812983}
   - component: {fileID: 3601269616874590127}
   - component: {fileID: 8542471876735517802}
-  - component: {fileID: 7191744250171147903}
+  - component: {fileID: 7591751683316679036}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -161,8 +172,8 @@ MonoBehaviour:
   m_text: "\uD14C\uC2A4\uD2B8 \uD14C\uC2A4\uD2B8 \uD14C\uC2A4\uD2B8 \uD14C\uC2A4\uD2B8
     \uD14C\uC2A4\uD2B8 "
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1ae8638bdb1924e488e8ba2e1d967a7b, type: 2}
-  m_sharedMaterial: {fileID: 2511765595149350623, guid: 1ae8638bdb1924e488e8ba2e1d967a7b,
+  m_fontAsset: {fileID: 11400000, guid: 7a39bf7722de7ac4da1c72d98f4188c8, type: 2}
+  m_sharedMaterial: {fileID: -1282363010748072804, guid: 7a39bf7722de7ac4da1c72d98f4188c8,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -243,7 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!114 &7191744250171147903
+--- !u!114 &7591751683316679036
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -252,9 +263,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7410917842551448311}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Script: {fileID: 11500000, guid: ad3f3237b1ea658418a63b53d8752c37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
+  thisFontTableKey: 2

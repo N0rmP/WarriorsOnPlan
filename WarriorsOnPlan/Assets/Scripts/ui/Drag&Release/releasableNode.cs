@@ -35,14 +35,14 @@ public class releasableNode : releasableObjectAbst {
             return false;
         }
 
-        Thing tempThingHost = thisNode.thingHere;
-        tempThingGuest.curPosition.swapThing(thisNode, true);
+        IPlacableOccupier tempOccupierHost = thisNode.occupierHere;
+        tempThingGuest.curPosition.swapOccupier(thisNode, true);
 
-        // arrage ActionOrder-Line, doWhenReleased should be assured to be called only when enumCombatState.preparing
+        // arrage ActionOrder-Line, doWhenReleased should be assured to be called only when enumCombatState.preparing        
         if (tempThingGuest is not null) {
             combatManager.CM.CUM.SAO.arrangeLineSingle(tempThingGuest);
         }
-        if (tempThingHost is not null) {
+        if (tempOccupierHost is Thing tempThingHost) {
             combatManager.CM.CUM.SAO.arrangeLineSingle(tempThingHost);
         }
 

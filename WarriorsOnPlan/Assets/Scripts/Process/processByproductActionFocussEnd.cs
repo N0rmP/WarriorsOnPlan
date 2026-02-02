@@ -6,22 +6,22 @@ using Cases;
 
 namespace Processes {
     public class processByproductActionFocussEnd : processByproductActionAbst {
-        private caseFocussing thisCaseFocussing;
+        private effectFocussing thisEffectFocussing;
 
-        public processByproductActionFocussEnd(Thing parSource, caseFocussing parCaseFocussing, bool parIsSHOW = true) : base(parSource, parIsSHOW) {
-            thisCaseFocussing = parCaseFocussing;    
+        public processByproductActionFocussEnd(Thing parSource, effectFocussing parCaseFocussing, bool parIsSHOW = true) : base(parSource, parIsSHOW) {
+            thisEffectFocussing = parCaseFocussing;    
         }
 
         protected override void actualDO() {
             base.actualDO();
 
-            thisCaseFocussing.delActivate();
+            thisEffectFocussing.delActualDo();
         }
 
         protected override void actualSHOW() {
             base.actualSHOW();
 
-            thisCaseFocussing.delShow();
+            thisEffectFocussing.delShow();
         }
     }
 }

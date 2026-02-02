@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -49,21 +50,29 @@ namespace Processes {
                 gameManager.GM.PC.popupBasicAlert(source.gameObject.getCanvasMainLocalPosition(), gameManager.GM.DHouC.bookWords.strHpIncrease + " " + gameManager.GM.DHouC.bookWords.strInterfere);
             }
 
-            void showHpDecrease() {
+            void showHpIncrease() {
                 source.updatePanelHp();
                 gameManager.GM.PC.popupHeal(source.gameObject.getCanvasMainLocalPosition() + new Vector2(0, gameManager.GM.option.stick), value.ToString());
             }
 
             if (isShowInstant) {
-                showHpDecrease();
+                showHpIncrease();
             } else {
                 gameManager.GM.TC.addDelegate(
                     () => {
-                        showHpDecrease();
+                        showHpIncrease();
                     },
                     combatManager.CM.getBodyAnimationDuration()
                 );
             }
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append("\'s hp increases by ");
+            parSB.Append(value.ToString());
+        }
+        #endregion test
     }
 }

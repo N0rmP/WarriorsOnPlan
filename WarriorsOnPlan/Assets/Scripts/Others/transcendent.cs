@@ -31,12 +31,20 @@ public class transcendent : ICaseContainerContainer {
         return thisCaseContainer.checkContainCaseConcrete(parCase);
     }
 
-    public List<T> getCaseList<T>() {
+    public IEnumerable<T> getCaseList<T>() {
         return thisCaseContainer.getCaseList<T>();
     }
 
-    public List<caseBase> getCaseList(enumCaseType parCaseType) {
+    public IEnumerable<caseBase> getCaseList(enumCaseType parCaseType) {
         return thisCaseContainer.getCaseList(parCaseType);
+    }
+
+    public int getCaseCount<T>() {
+        return thisCaseContainer.getCaseCount<T>();
+    }
+
+    public int getCaseCount(enumCaseType parCaseType) {
+        return thisCaseContainer.getCaseCount(parCaseType);
     }
 
     public bool observeInterferable<A>(object[] parParameters) {

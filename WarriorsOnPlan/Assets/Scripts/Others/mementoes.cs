@@ -14,6 +14,7 @@ public class mementoCombat {
     public int countAction { get; private set; }
     public enumSide turn { get; private set; }
     public mementoHouse house { get; private set; }
+    // each mementoCombat is made just after processLast done
     public processAbst processLast { get; private set; }
     private processAbst processNext_;
     public processAbst processNext {

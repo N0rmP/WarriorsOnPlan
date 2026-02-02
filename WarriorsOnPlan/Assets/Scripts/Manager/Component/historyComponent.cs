@@ -7,29 +7,46 @@ public class historyComponent : IEnumerable<mementoCombat> {
     private List<mementoCombat> listMementoCombat;
 
     // mementoInitial represents when player first opened the level, not the state when combat started
-    public mementoCombat mementoInitial { get; private set; }
-    public mementoCombat mementoCombatStart { get; private set; }
+    private mementoCombat mementoInitial_;
+    private mementoCombat mementoPrepareDone_;
+    public mementoCombat mementoInitial {
+        get {
+            return mementoInitial_;
+        }
+        set {
+            if (mementoInitial_ != null) {
+                return;
+            }
+            mementoInitial_ = value;
+        }
+    }
+    public mementoCombat mementoPrepareDone {
+        get {
+            return mementoPrepareDone_;
+        }
+        set {
+            if (mementoPrepareDone_ != null) {
+                return;
+            }
+            mementoPrepareDone_ = value;
+        }
+    }
 
     public historyComponent() {
         listMementoCombat = new List<mementoCombat>();
     }
 
+    // reset history for restarting combat
     public void resetHistory() {
         listMementoCombat.Clear();
-        mementoCombatStart = null;
+
+        mementoPrepareDone_ = null;
     }
 
+    // reset history for reloading level
     public void resetHistoryTotal() {
         resetHistory();
-        mementoInitial = null;
-    }
-
-    public void setMementoInitial(mementoCombat parMementoInitial) {
-        mementoInitial = parMementoInitial;
-    }
-
-    public void setMementoCombatStart(mementoCombat parMementoCombatStart) {
-        mementoCombatStart = parMementoCombatStart;
+        mementoInitial_ = null;
     }
 
     public void addMemento(mementoCombat parMemento) {
@@ -44,7 +61,7 @@ public class historyComponent : IEnumerable<mementoCombat> {
         }
     }    
 
-    #region Collection
+    #region Seqeunce
     public mementoCombat this[int i] {
         get {
             Math.Clamp(i, 0, listMementoCombat.Count - 1);
@@ -53,14 +70,11 @@ public class historyComponent : IEnumerable<mementoCombat> {
     }
 
     public IEnumerator<mementoCombat> GetEnumerator() {
-        foreach (mementoCombat mc in listMementoCombat) {
-            yield return mc;
-        }
+        return listMementoCombat.GetEnumerator();
     }
-
 
     IEnumerator IEnumerable.GetEnumerator() {
         return GetEnumerator();
     }
-    #endregion Collection
+    #endregion Sequence
 }

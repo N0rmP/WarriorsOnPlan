@@ -1,13 +1,19 @@
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
+/*
 public enum enumTranslation { 
+    None = -1,
     English = 0,
     Korean = 1
 }
+*/
 
 public class optionAIO {
     private static canvasOption CO;
@@ -23,62 +29,98 @@ public class optionAIO {
         }
     }
 
-    private List<(int, int)> listResolution;
-
-    #region options
+    #region field_of_option
     public float volumeMaster { get { return curDataOption.MasterVolume; } }
     public float volumeBgm { get { return curDataOption.BgmVolume; } }
     public float volumeSe { get { return curDataOption.SeVolume; } }
 
-    private enumTranslation curTranslation_ = enumTranslation.English;
-    public enumTranslation curTranslation { get { return curTranslation_; } }
-    #endregion options
-    public void init() {
-        // initiating option should be done after audioMixer's snapshot-initiation (after Awake(), during or after Start())
-        CO = GameObject.Find("canvasOption").GetComponent<canvasOption>();
-        trueSetOption(gameManager.GM.SaveC.LOAD<dataOption>("/Save/SaveOption"));
-
-        // rake resolution
-        listResolution = new List<(int, int)>();
-        foreach (Resolution rr in Screen.resolutions) {
-            // ★ if(rr.width)
+    private List<Resolution> listResolution_;
+    public IReadOnlyList<Resolution> listResolution {
+        get {
+            return listResolution_;
         }
     }
 
+    private string[] arrLocaleCode;
+    private int indexLocale = -1;
+    public string curLocalization { 
+        get {
+            if (indexLocale < 0 || indexLocale >= arrLocaleCode.Length) {
+                return arrLocaleCode[0];
+            }
+            return arrLocaleCode[indexLocale];
+        } 
+    }
+    #endregion field_of_option
+    public void init() {
+        // initiating option should be done after audioMixer's snapshot-initiation (after Awake(), during or after Start())
+        CO = GameObject.Find("canvasOption").GetComponent<canvasOption>();
+        // ★ dataOption에 변조된 값이 입력된 경우 유효한 값으로 제한하는 코드 넣기, dataSaveBasicMap 참조
+
+        // rake Locale code
+        List<Locale> tempListLocale = LocalizationSettings.AvailableLocales.Locales;
+        arrLocaleCode = new string[tempListLocale.Count];
+        for (int i = 0; i < tempListLocale.Count; i++) {
+            arrLocaleCode[i] = tempListLocale[i].Identifier.Code;
+        }
+
+        /*
+            rake resolution that satisfies the conditions below
+            1. 16:9 or 16:10 or 21:9 
+            2. highest refresh rate among the same screen ratios
+        */
+        listResolution_ = (from res in Screen.resolutions
+                          where (Mathf.Approximately(res.height / (float)res.width, 9f / 16f) ||
+                                Mathf.Approximately(res.height / (float)res.width, 10f / 16f) ||
+                                Mathf.Approximately(res.height / (float)res.width, 9f / 21f))
+                          group res by res.width * res.height into grp
+                          select (from rres in grp
+                                  orderby rres.refreshRateRatio.value descending
+                                  select rres).First()
+                         ).OrderByDescending(x => x.width * x.height).ToList<Resolution>();
+
+
+        trueSetOption(gameManager.GM.SaveC.LOAD<dataOption>("/Save/SaveOption"));
+    }
+
     private void setOption(dataOption parDataOption, bool parIsDeactivateCO = false) {
-        if (parDataOption.Translation != curTranslation) {
+        if (parDataOption.Localization != indexLocale) {
             gameManager.GM.PC.showPopupConfirm(
                 gameManager.GM.DHouC.bookConfirmQuestion.strQuestionChangeTranslation,
-                () => trueSetOption(parDataOption, parIsDeactivateCO)
+                () => {
+                    trueSetOption(parDataOption, parIsDeactivateCO);
+                    gameManager.GM.SaveC.SAVE<dataOption>("SaveOption.json", curDataOption);
+                }
             );
         } else {
             trueSetOption(parDataOption, parIsDeactivateCO);
+            gameManager.GM.SaveC.SAVE<dataOption>("SaveOption.json", curDataOption);
         }
     }
 
     private void trueSetOption(dataOption parDataOption, bool parIsDeactivateCO = false) {
-        // set curDataOption and save it
         curDataOption = parDataOption;
-        gameManager.GM.SaveC.SAVE<dataOption>("SaveOption.json", curDataOption);
 
         // set audio volume
         gameManager.GM.AC.setVolume(curDataOption.MasterVolume, curDataOption.BgmVolume, curDataOption.SeVolume);
 
         // set Resolution
-        Resolution tempResolution = Screen.resolutions[curDataOption.ResolutionIndex];
         Screen.SetResolution(
-            tempResolution.width,
-            tempResolution.height,
+            listResolution[curDataOption.ResolutionIndex].width,
+            listResolution[curDataOption.ResolutionIndex].height,
             curDataOption.ScreenMode,
-            tempResolution.refreshRateRatio
+            listResolution[curDataOption.ResolutionIndex].refreshRateRatio
         );
         setStick();
 
         // set Translation, it can also restart the total game if translation is changed
-        if (parDataOption.Translation != curTranslation_) {
-            RESTARTER.RRR.reloadAllScene();
-            curTranslation_ = parDataOption.Translation;
-            gameManager.GM.DHouC.prepareBook();
+        int tempBufferIndexLocale = indexLocale;
+        if (parDataOption.Localization != indexLocale) {
+            indexLocale = parDataOption.Localization;
+            if (tempBufferIndexLocale >= 0) {
+                RESTARTER.RRR.reloadAllScene();
+                gameManager.GM.DHouC.prepareBook();
+            }
         }
 
         if (parIsDeactivateCO) {

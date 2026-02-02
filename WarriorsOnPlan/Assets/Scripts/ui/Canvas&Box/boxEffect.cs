@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Cases;
+using System.Linq;
 
 public class boxEffect : MonoBehaviour {
     private carrierGeneric<imgEffect> carrierIE;
@@ -11,6 +12,7 @@ public class boxEffect : MonoBehaviour {
         GameObject tempIE = Resources.Load<GameObject>("Prefab/UI/imgRoundRectangle");
         carrierIE = new carrierGeneric<imgEffect>(
             () => {
+                Debug.Log(tempIE + " : " + Instantiate(tempIE));
                 return Instantiate(tempIE).AddComponent<imgEffect>();
             },
             (x) => {
@@ -26,7 +28,7 @@ public class boxEffect : MonoBehaviour {
             return;
         }
 
-        foreach (caseBase cb in parThing.getCaseList(enumCaseType.effect).ToArray()) {
+        foreach (caseBase cb in parThing.getCaseList(enumCaseType.effect)) {
             addEffect(cb);
         }
     }

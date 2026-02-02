@@ -18,8 +18,7 @@ public class uiActivatable : uiMovable {
     private Coroutine coroutineDeactivate = null;
 
     public enumUiActivatableState thisEnumUiActivatableState { get; protected set; }
-    [SerializeField]
-    private bool isOutClickDeactivate = true;
+    public bool isOutClickDeactivate = true;
     private Vector3 originalLocalPosition;
 
     public void Start() {

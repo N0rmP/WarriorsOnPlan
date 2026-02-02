@@ -61,8 +61,8 @@ public class graphComponent {
     public void vacateGraph() {
         for (int i = 0; i < size0; i++) {
             for (int j = 0; j < size1; j++) {
-                if (graph[i, j].thingHere != null) {
-                    graph[i, j].expelThing();
+                if (graph[i, j].occupierHere != null) {
+                    graph[i, j].expelHere();
                 }
             }
         }
@@ -110,7 +110,7 @@ public class graphComponent {
             // enqueue non-visited nodes around
             foreach (EDirection edir in tempFirstDirection) {
                 tempLinkIndex = (int)edir;
-                if (tempNode.link[tempLinkIndex] == null || tempNode.link[tempLinkIndex].swissArmyVisited || tempNode.link[tempLinkIndex].thingHere != null) {
+                if (tempNode.link[tempLinkIndex] == null || tempNode.link[tempLinkIndex].swissArmyVisited || tempNode.link[tempLinkIndex].occupierHere != null) {
                     continue; 
                 }
                 tempNode.link[tempLinkIndex].swissArmyVisited = true;
@@ -127,7 +127,6 @@ public class graphComponent {
         }
     }
 
-
     #region collection
     public node this[int ind0, int ind1] {
         get {
@@ -143,6 +142,14 @@ public class graphComponent {
         for (int i = 0; i < size0; i++) {
             for (int j = 0; j < size1; j++) {
                 parDel(graph[i, j]);
+            }
+        }
+    }
+
+    public void setPlacableNode(Placablers.IPlacabler parPlacabler) {
+        for (int i = 0; i < size0; i++) {
+            for (int j = 0; j < size1; j++) {
+                graph[i, j].setIsPlrPlacable(parPlacabler);
             }
         }
     }

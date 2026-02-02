@@ -47,7 +47,7 @@ namespace Circuits {
             }
 
             foreach (node nd in route) {
-                if (nd.thingHere != null) {
+                if (nd.occupierHere != null) {
                     return false;
                 }
             }

@@ -1,22 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 [InitializeOnLoad]
 public static class editorGlobalReviser {
-    static editorGlobalReviser() {
-        EditorApplication.hierarchyChanged += REVISE;
-    }
-
+    [MenuItem("Tools/REVISE ONCE")]
     public static void REVISE() {
-        ScrollRect[] tempOBJ = GameObject.FindObjectsOfType<ScrollRect>();
+        Debug.Log("test");
+        TextMeshProUGUI[] tempOBJ = GameObject.FindObjectsOfType<TextMeshProUGUI>();
 
-        foreach (ScrollRect sr in tempOBJ) {
-            sr.movementType = ScrollRect.MovementType.Clamped;
-            sr.inertia = false;
-            sr.scrollSensitivity = 20;
+        foreach (TextMeshProUGUI obj in tempOBJ) {
+            obj.gameObject.AddComponent<localizerFont>().thisFontTableKey = enumFontTableKey.MainFont;
         }
     }
 }

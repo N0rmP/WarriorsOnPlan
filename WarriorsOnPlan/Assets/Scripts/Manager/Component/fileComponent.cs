@@ -2,20 +2,30 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-// using Newtonsoft;
-using Newtonsoft.Json;
 using System.Security.Policy;
-using Cases;
+using System.Text.Json;
+using UnityEngine;
+/*
+using Newtonsoft;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Cases;
+using System.Text.Json.Serialization.Metadata;
+using System.Drawing.Drawing2D;
+*/
 
 public class fileComponent {
-    #region Resources
+    private static JsonSerializerOptions thisJSOption = new JsonSerializerOptions {
+        IncludeFields = true,
+        WriteIndented = true
+    };
+
+    #region Resources_Json
     // parHalfPath is detailed path after Resources/Database
     public T importResourcesJson<T>(string parHalfPath, bool isTranslationRequired = true) where T : IDataInsurance {
         T tempResult;
         try {
-            tempResult = JsonConvert.DeserializeObject<T>(Resources.Load<TextAsset>(getResourcesPath(parHalfPath, isTranslationRequired)).ToString());
+            tempResult = JsonSerializer.Deserialize<T>(Resources.Load<TextAsset>(getResourcesPath(parHalfPath, isTranslationRequired)).ToString(), thisJSOption);
         } catch (Exception e) {
             Debug.Log("importResourcesJson failed to deserialize " + getResourcesPath(parHalfPath, isTranslationRequired) + " ((" + e);
             tempResult = default;
@@ -25,12 +35,12 @@ public class fileComponent {
         return tempResult;
     }
 
-    public T[] importResourcesJsonArr<T>(string parPath, bool isTranslationRequired = true) where T : struct, IDataInsurance {
+    public T[] importResourcesJsonArr<T>(string parPath, bool isTranslationRequired = true) where T : IDataInsurance {
         TextAsset[] tempTextAssetArr = Resources.LoadAll<TextAsset>(getResourcesPath(parPath, isTranslationRequired));
         T[] tempResult = new T[tempTextAssetArr.Length];
         for (int i = 0; i < tempResult.Length; i++) {
             try {
-                tempResult[i] = JsonConvert.DeserializeObject<T>(tempTextAssetArr[i].ToString());
+                tempResult[i] = JsonSerializer.Deserialize<T>(tempTextAssetArr[i].ToString(), thisJSOption);
             } catch (Exception e) {
                 Debug.Log("importResourcesJsonArr failed to deserialize " + tempTextAssetArr[i].name + " from " + getResourcesPath(parPath, isTranslationRequired) + " ((" + e);
                 tempResult[i] = default(T);
@@ -39,32 +49,48 @@ public class fileComponent {
         }
 
         return tempResult;
+    }    
+    #endregion Resources_Json
+
+    #region Resources_ScriptabbleObject
+    public T importResourcesSO<T>(string parHalfPath, bool isTranslationRequired = true) where T : ScriptableObject, IDataInsurance {
+        T tempResult;
+        try {
+            tempResult = Resources.Load<T>(getResourcesPath(parHalfPath, isTranslationRequired));
+        } catch (Exception e) {
+            Debug.Log("fileComponent.getResourcesSO error : tried to import \"" + parHalfPath + "\"\n" + e.ToString());
+            tempResult = ScriptableObject.CreateInstance<T>();
+            tempResult.emergencyInit();
+        }
+
+        return tempResult;
     }
+    #endregion Resources_ScriptabbleObject
 
     private string getResourcesPath(string parHalfPath, bool isTranslationRequired = true) {
-        return "Database/" + (isTranslationRequired ? gameManager.GM.option.curTranslation.ToString() + "/" : "") + parHalfPath;
+        return "Database/" + (isTranslationRequired ? gameManager.GM.option.curLocalization.ToString() + "/" : "") + parHalfPath;
     }
-    #endregion Resources
 
     #region persistentDataPath
     // parPath should include file-extension
-    public T importPersistentJson<T>(string parPath) where T : struct, IDataInsurance {
+    public T importPersistentJson<T>(string parPath) where T : IDataInsurance {
         ensurePersistentPath(ref parPath);
         if (!File.Exists(parPath)) {
             Debug.Log("fileComponent.importPersistentJson results in error with path " + parPath);
             T tempResult = default;
             tempResult.emergencyInit();
-            File.WriteAllText(parPath, JsonConvert.SerializeObject(tempResult, Formatting.Indented));
+            File.WriteAllText(parPath, JsonSerializer.Serialize(tempResult, tempResult.GetType(), thisJSOption));
             return tempResult;
         }
 
-        return JsonConvert.DeserializeObject<T>(File.ReadAllText(parPath));
+        return JsonSerializer.Deserialize<T>(File.ReadAllText(parPath), thisJSOption);
     }
 
     // exportJson exports only IDataInsurance object, only to Application.persistent
     public void exportPersistentJson(string parPath, IDataInsurance parData) {
         ensurePersistentPath(ref parPath);
-        File.WriteAllText(parPath, JsonConvert.SerializeObject(parData, Formatting.Indented));
+
+        File.WriteAllText(parPath, JsonSerializer.Serialize(parData, parData.GetType(), thisJSOption));
     }
 
     // ensureSavePath ensures the argument-path to have the necessary directory & file-extension, and Save-directory to exist

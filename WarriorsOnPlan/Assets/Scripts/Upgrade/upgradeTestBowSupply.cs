@@ -15,7 +15,7 @@ namespace Cases {
 
         public override void actualActivate() {
             combatManager.CM.systemAddToolsProvided(
-                gameManager.GM.MC.makeCodableObject<caseBase>(93001, parToolParameter, null)
+                gameManager.GM.MC.makeCodableObject<caseBase>(93001, parToolParameter.GetEnumerator(), null)
             );
         }
 

@@ -5,15 +5,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public interface IDataInsurance {
     public void emergencyInit();
 }
-public struct dataLevel : IDataInsurance {
+
+#region InGame
+public class dataLevel : IDataInsurance {
     public float[] MapPosition; // MapPosition represents the position of button on the map with anchors
     public int LevelCode;
     public bool IsBossLevel;
     public int[] NextLevelCode;
+    public string Differentiater;
+    public string Placabler;
+    public int[] PlacablerParameter;
     public dataNotFriendlyThing[] EnemyWarriors;
     public dataNotFriendlyThing[] NeutralThings;
     public dataFriendlyThing[] FriendlyWarriors;
@@ -23,6 +30,9 @@ public struct dataLevel : IDataInsurance {
         MapPosition = new float[2] { 0.1f, 0.1f };
         LevelCode = 90101;
         IsBossLevel = false;
+        Differentiater = "Tutorial00";
+        Placabler = "RowCol";
+        PlacablerParameter = new int[4] { 0, 6, 0, 2 };
         EnemyWarriors = new dataNotFriendlyThing[0];
         NeutralThings = new dataNotFriendlyThing[0];
         FriendlyWarriors = new dataFriendlyThing[0];
@@ -30,26 +40,7 @@ public struct dataLevel : IDataInsurance {
     }
 }
 
-public struct dataWeapon : IDataInsurance {
-    public string name;
-    public int rangeMin;
-    public int rangeMax;
-    public int timerMax;
-    public enumDamageType thisEnumDamageType;
-    public enumAttackAnimation thisEnumAnimationType;
-
-    public void emergencyInit() {
-        name = "dataWeapon name error";
-        rangeMin = 0;
-        rangeMax = 1;
-        timerMax = 0;
-        thisEnumDamageType = enumDamageType.basic;
-        thisEnumAnimationType = enumAttackAnimation.trigAttackPunch;
-    }
-}
-
-#region dataThing
-public struct dataNotFriendlyThing : IDataInsurance {
+public class dataNotFriendlyThing : IDataInsurance {
     public string NameThing;
     public int Coordinate0;
     public int Coordinate1;
@@ -79,7 +70,7 @@ public struct dataNotFriendlyThing : IDataInsurance {
     }
 }
 
-public struct dataFriendlyThing : IDataInsurance {
+public class dataFriendlyThing : IDataInsurance {
     public string NameThing;
     public int Coordinate0;
     public int Coordinate1;
@@ -94,114 +85,27 @@ public struct dataFriendlyThing : IDataInsurance {
         SkillParameters = new int[0];
     }
 }
-#endregion dataThing
 
-public struct dataIParametable : IDataInsurance {
+public class dataIParametable : IDataInsurance {
     public int CodeIParametable;
-    public int[] Parameters;
+    [JsonInclude]
+    private int[] Parameters { get; set; }
+
+    public IEnumerator<int> getParametersEnumerator() {
+        return Parameters.GetEnumerator<int>();
+
+    }
 
     public void emergencyInit() {
         CodeIParametable = 92001;
         Parameters = new int[2] { 2, 1 };
     }
 }
-
-#region dataArbitrary
-public struct dataArbitraryString : IDataInsurance {
-    public string SwissArmyString;
-
-    public void emergencyInit() {
-        SwissArmyString = "dataArbitraryString error";
-    }
-}
-
-public struct dataArbitraryStringArray : IDataInsurance {
-    public string[] SwissArmyStringArray;
-
-    public void emergencyInit() {
-        SwissArmyStringArray = new string[10];
-        Array.Fill(SwissArmyStringArray, "dataArbitraryStringArray error");
-    }
-}
-#endregion dataArbitrary
+#endregion InGame
 
 #region book
-public struct dataBookWords : IDataInsurance {
-    public string strMelee;
-    public string strNumber;
-    public string strReady;
-    public string strVictory;
-    public string strDefeated;
-
-    public string strTool;
-    public string strEffect;
-    public string strSkill;
-    public string strUpgrade;
-
-    public string strInterfere;
-    public string strAction;
-    public string strAdd;
-    public string strAttack;
-    public string strConrolled;
-    public string strDamaged;
-    public string strDealDamage;
-    public string strDeath;
-    public string strFocussing;
-    public string strForcedMove;
-    public string strHpDecrease;
-    public string strHpIncrease;
-    public string strMove;
-    public string strRemoving;
-
-    public void emergencyInit() {
-        strMelee = "Melee";
-        strNumber = "(Number)";
-        strReady = "Ready";
-        strVictory = "Victory";
-        strDefeated = "Defeated";
-
-        strTool = "Tool";
-        strEffect = "Effect";
-        strSkill = "Skill";
-        strUpgrade = "Upgrade";
-
-        strInterfere = "Denied";
-        strAction = "Action";
-        strAdd = "Adding";
-        strAttack = "Attack";
-        strConrolled = "Controlled";
-        strDamaged = "Taking Damage";
-        strDealDamage = "Dealing Damage";
-        strDeath = "Death";
-        strFocussing = "Focussing";
-        strForcedMove = "Forced Move";
-        strHpDecrease = "Hp Decrease";
-        strHpIncrease = "Hp Increase";
-        strMove = "Move";
-        strRemoving = "Removing";
-    }
-}
-
-public struct dataBookConfirmQuestion : IDataInsurance {
-    public string strQuestionResetInitial;
-    public string strQuestionChangeTranslation;
-
-    public void emergencyInit() {
-        strQuestionResetInitial = "All preparation including tools, circuits, warriors' positions returns to the initial state.";
-        strQuestionChangeTranslation = "Changing traslation requires restarting the game.";
-    }
-}
-
-public struct dataBookPopupAlert : IDataInsurance {
-    public string strAlertNoAttackTarget;
-    public string strAlertNoSkillTarget;
-
-    public void emergencyInit() {
-        strAlertNoAttackTarget = "No Attack Target";
-        strAlertNoSkillTarget = "No Skill Target";
-    }
-}
-
+// ★ 보류, 추후 전투 완료 화면에 무엇이 추가될지 모르기 때문에 이걸 차라리 dataBookWords에 이관하는 게 나을 수 있음
+// [CreateAssetMenu(fileName = "dataBookCombatResult_default", menuName = "ScriptabbleObject/dataBookCombatResult", order = 5)]
 public struct dataBookCombatResult : IDataInsurance {
     public string strActionElapsed;
     public string strTotalDamageDealt;
@@ -216,13 +120,16 @@ public struct dataBookCombatResult : IDataInsurance {
 #endregion book
 
 #region save
-
-public struct dataSaveBasicMap : IDataInsurance {
-    [JsonProperty]
+public class dataSaveBasicMap : IDataInsurance {
+    [JsonInclude]
     private List<int> upgradeDone;
-    [JsonProperty]
+    [JsonInclude]
     private List<int> levelCleared;
-    public int stars { get; set; }
+    public int stars { get; private set; }
+
+    public dataSaveBasicMap() {
+        emergencyInit();
+    }
 
     public dataSaveBasicMap(List<int> parUpgrades, List<int> parLevelsCleared, int parStars) {
         upgradeDone = parUpgrades;
@@ -278,10 +185,26 @@ public struct dataSaveBasicMap : IDataInsurance {
     }
     #endregion field_control
 
+    public void ensureSaveBasicValid() {
+        if (upgradeDone == null || levelCleared == null) {
+            emergencyInit();
+        }
+    }
+
     public void emergencyInit() {
         upgradeDone = new List<int>();
         levelCleared = new List<int>();
         stars = 0;
+    }
+
+    public void testDataSaveBasicMap() {
+        StringBuilder tempSB = new StringBuilder("testDataSaveBasicMap\nupgradeDone : ");
+        tempSB.Append(upgradeDone);
+        tempSB.Append("\nlevelCleared : ");
+        tempSB.Append(levelCleared);
+        tempSB.Append("\nstars : ");
+        tempSB.Append(stars);
+        Debug.Log(tempSB.ToString());
     }
 }
 
@@ -297,9 +220,12 @@ public struct dataSaveLevel : IDataInsurance {
 }
 #endregion save
 
+#region upgrade
+
+// ★ 업그레이드 트리 개선과 함께 SO화 진행, 자유도를 높일 수 있도록
 // each array of tree contains only the root nodes, leaves will be contained in each leaf
 public struct dataUpgradeTree : IDataInsurance {
-    public dataUpgradeLeaf[] ArrUpgradeTreeZero;
+    public dataUpgradeLeaf[] ArrUpgradeTreeZero { get; set; }
     public dataUpgradeLeaf[] ArrUpgradeTreeOne;
     public dataUpgradeLeaf[] ArrUpgradeTreeTwo;
     public dataUpgradeTreeEdge[] ArrUpgradeTreeEdgeZero;
@@ -331,6 +257,7 @@ public struct dataUpgradeLeaf : IDataInsurance {
         Parameters = new int[7] { 1, 0, 0, 0, 1, 3, 1 };
     }
 }
+#endregion upgrade
 
 public struct dataOption : IDataInsurance {
     public float MasterVolume;
@@ -338,15 +265,15 @@ public struct dataOption : IDataInsurance {
     public float SeVolume;
     public FullScreenMode ScreenMode;
     public int ResolutionIndex;
-    public enumTranslation Translation;
+    public int Localization;
 
-    public dataOption(float parMasterVolume, float parBgmVolume, float parSeVolume, FullScreenMode parScreenMode, int parResolutionIndex, enumTranslation parTranslation) {
+    public dataOption(float parMasterVolume, float parBgmVolume, float parSeVolume, FullScreenMode parScreenMode, int parResolutionIndex, int parLocalization) {
         MasterVolume = parMasterVolume;
         BgmVolume = parBgmVolume;
         SeVolume = parSeVolume;
         ScreenMode = parScreenMode;
         ResolutionIndex = parResolutionIndex;
-        Translation = parTranslation;
+        Localization = parLocalization;
     }
 
     public void emergencyInit() {
@@ -355,7 +282,7 @@ public struct dataOption : IDataInsurance {
         SeVolume = 0.7f;
         ScreenMode = FullScreenMode.ExclusiveFullScreen;
         ResolutionIndex = Screen.resolutions.Length - 1;
-        Translation = enumTranslation.English;
+        Localization = 0;
     }
     public void testDataOption() {
         StringBuilder tempSB = new StringBuilder("testDataOption\nMasterVolume : ");
@@ -368,15 +295,14 @@ public struct dataOption : IDataInsurance {
         tempSB.Append(ScreenMode);
         tempSB.Append("\nResolutionIndex : ");
         tempSB.Append(ResolutionIndex);
-        tempSB.Append("\nTranslation : ");
-        tempSB.Append(Translation);
+        tempSB.Append("\nLocalization : ");
+        tempSB.Append(Localization);
         Debug.Log(tempSB.ToString());
     }
 }
 
 #region test
 public struct dataEnumTest : IDataInsurance {
-    [JsonConverter(typeof(StringEnumConverter))]
     public enumSide test { get; set; }
 
     public void emergencyInit() {

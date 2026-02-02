@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cases;
 using System.Text;
+using Unity.VisualScripting;
 
 public class upgradeComponent {
     private List<upgradeAbst> listUpgradeDoneTrue;
@@ -23,11 +24,12 @@ public class upgradeComponent {
             mapManager.MM.MUC.CU.setTextStarCounter(starTemporary_);
         }
     }
-    private Dictionary<int, upgradeAbst> dictUpgradeDoneTemporary;
+    // key = LeafCode, value = done upgrade itself
+    private SortedList<int, upgradeAbst> slUpgradeDoneTemporary;
 
     public upgradeComponent() {
         listUpgradeDoneTrue = new List<upgradeAbst>();
-        dictUpgradeDoneTemporary = new Dictionary<int, upgradeAbst>();
+        slUpgradeDoneTemporary = new SortedList<int, upgradeAbst>();
     }
 
     // draw total upgrade tree and set all upgrades
@@ -53,25 +55,28 @@ public class upgradeComponent {
             mapManager.MM.MUC.CU.getBoxUpgradeTree(i).frontlineFirstUpgrade();
         }
 
-        // actual restore upgrade tree
-        dictUpgradeDoneTemporary.Clear();
+        // actual restore upgrade
+        slUpgradeDoneTemporary.Clear();
         foreach (int codeDone in parDSBM.getUpgradeDone()) {
             mapManager.MM.MUC.CU.getButtonUpgradeLeaf(codeDone).systemDoUpgradeTemporary();
         }
+        confirmUpgrade();
 
         // update stars
         starTemporary = parDSBM.stars;
         starTemporary = 99;     // ★ 테스트용 왕창 별 주기, 추후 이 코드 삭제하기
     }
 
-    // save all upgrades in listUpgradeDoneTemporary in listUpgradeDoneTrue and dataSaveBasic~, also save starTemporary in dataSaveBasic~
+    // store all upgrades from listUpgradeDoneTemporary into listUpgradeDoneTrue
     public void confirmUpgrade() {
-        // listUpgradeDoneTrue에는 실제 업그레이드가 저장되어야 하고, dataSaveBasicMap에는 LeafCode가 저장되어야 함
         listUpgradeDoneTrue.Clear();
-        listUpgradeDoneTrue.AddRange(dictUpgradeDoneTemporary.Values);
+        listUpgradeDoneTrue.AddRange(slUpgradeDoneTemporary.Values);
+    }
 
+    // save current upgrade state
+    public void saveUpgrade() {
         gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).clearUpgradeDone();
-        gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).addUpgradeDoneRange(dictUpgradeDoneTemporary.Keys);
+        gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).addUpgradeDoneRange(slUpgradeDoneTemporary.Keys);
         gameManager.GM.SaveC.getDataSaveBasicMap(gameManager.GM.curMapType).setStars(starTemporary);
 
         gameManager.GM.SaveC.saveMap(gameManager.GM.curMapType);
@@ -91,23 +96,23 @@ public class upgradeComponent {
     // calling doUpgradeTemporary directly can cause UI missing, please call it via buttonUpgradeLeaf
     public void doUpgradeTemporay(int parLeafCode, upgradeAbst parUpgrade, bool parIsSystemic = false) {
         if (!parIsSystemic) {
-            if (starTemporary < parUpgrade.starRequired || dictUpgradeDoneTemporary.ContainsKey(parLeafCode)) {
+            if (starTemporary < parUpgrade.starRequired || slUpgradeDoneTemporary.ContainsKey(parLeafCode)) {
                 return;
             }
             starTemporary -= parUpgrade.starRequired;
         }
-        dictUpgradeDoneTemporary.Add(parLeafCode, parUpgrade);
+        slUpgradeDoneTemporary.Add(parLeafCode, parUpgrade);
     }
 
     // calling undoUpgradeTemporary directly can cause UI missing, please call it via buttonUpgradeLeaf
     public void undoUpgradeTemporary(int parLeafCode, bool parIsSystemic = false) {
         if (!parIsSystemic) {
-            if (!dictUpgradeDoneTemporary.ContainsKey(parLeafCode)) {
+            if (!slUpgradeDoneTemporary.ContainsKey(parLeafCode)) {
                 return;
             }
-            starTemporary += dictUpgradeDoneTemporary[parLeafCode].starRequired;
+            starTemporary += slUpgradeDoneTemporary[parLeafCode].starRequired;
         }
-        dictUpgradeDoneTemporary.Remove(parLeafCode);     
+        slUpgradeDoneTemporary.Remove(parLeafCode);     
     }
     #endregion temporary
 
@@ -123,11 +128,11 @@ public class upgradeComponent {
 
     public void testListUpgradeDoneTemporary() {
         StringBuilder tempResult = new StringBuilder("test listUpgradeDoneTemporary : ");
-        foreach (int leafcode in dictUpgradeDoneTemporary.Keys) {
+        foreach (int leafcode in slUpgradeDoneTemporary.Keys) {
             tempResult.Append("(");
             tempResult.Append(leafcode);
             tempResult.Append(",");
-            tempResult.Append(dictUpgradeDoneTemporary[leafcode]);
+            tempResult.Append(slUpgradeDoneTemporary[leafcode]);
             tempResult.Append("), ");
         }
         Debug.Log(tempResult);

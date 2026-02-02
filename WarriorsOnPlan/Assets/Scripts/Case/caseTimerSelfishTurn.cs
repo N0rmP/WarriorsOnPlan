@@ -19,7 +19,7 @@ namespace Cases {
 
         public void updateOnActionEnd(Thing source) {
             if (isActionStartPassed) {
-                combatManager.CM.executeProcess(new processByproductDelecate(
+                combatManager.CM.executeProcess(new processByproductDelegate(
                 () => {
                     updateTimer(source);
                 }));

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -96,12 +97,13 @@ namespace Processes {
             // animation
             if (isShowInstant) {
                 tempDelShow(target.transform.position);
-                target.animateDamaged();
+                target.thisOrganAnimation.animateDamaged();
             } else {
+                // ¡Ú animationTracker·Î º¯°æ
                 gameManager.GM.TC.addDelegate(
                     () => {
                         tempDelShow(target.transform.position);
-                        target.animateDamaged();
+                        target.thisOrganAnimation.animateDamaged();
                     },
                     combatManager.CM.getBodyAnimationDuration()
                 );
@@ -115,5 +117,15 @@ namespace Processes {
                 }
             }
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(arrDInfo.Length);
+            parSB.Append(" DInfo dealt to ");
+            parSB.Append(target?.ToString());
+            parSB.Append(", total damage ");
+            parSB.Append(damageTotal.ToString());
+        }
+        #endregion test
     }
 }

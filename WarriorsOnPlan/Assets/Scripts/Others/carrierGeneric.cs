@@ -28,7 +28,6 @@ public class carrierGeneric<T> {
         tempT = (hangerAvailable.Count == 0) ? delCreate() : hangerAvailable.Pop();
         spaceOperating.Add(tempT);
 
-        // if tempT is GameObject, activate it because it might be deactivated for optimizing
         if (tempT is GameObject tempObj) {
             tempObj.SetActive(true);
         }
@@ -37,7 +36,6 @@ public class carrierGeneric<T> {
     }
 
     public void returnSingle(T parInterceptor) {
-        // if spaceOperating doesn't contain parInterceptor, it might not be the intended T object (think of GameObject)
         if (!spaceOperating.Contains(parInterceptor)) {
             return;
         }
@@ -46,7 +44,6 @@ public class carrierGeneric<T> {
             delReturn(parInterceptor);
         }
 
-        // if parInterceptor is GameObject, deactivate it
         if (parInterceptor is GameObject tempObj) {
             tempObj.SetActive(false);
         }

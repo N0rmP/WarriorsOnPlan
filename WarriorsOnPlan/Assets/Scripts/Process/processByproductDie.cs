@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -58,7 +59,7 @@ namespace Processes {
             }
 
             gameManager.GM.TC.addDelegate(
-                () => dead.animateDead(),
+                () => dead.thisOrganAnimation.animateDead(),
                 combatManager.CM.getBodyAnimationDuration()
             );
             gameManager.GM.TC.addDelegate(
@@ -70,5 +71,13 @@ namespace Processes {
                 combatManager.CM.getBodyAnimationDuration() + 2f
             );
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(destroyer?.ToString());
+            parSB.Append(" killed ");
+            parSB.Append(dead?.ToString());
+        }
+        #endregion test
     }
 }

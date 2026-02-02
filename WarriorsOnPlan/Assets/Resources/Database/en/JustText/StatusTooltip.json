@@ -1,0 +1,9 @@
+{
+    "SwissArmyStringArray" : [
+        "Weapon Amplifier", "Increase Damage of Weapons. Addition Precedes Multiplication. Low Weapon Amplifier can Weaken Weapons, but can't Heal the Attack Target.",
+        "Skill Amplifier", "Incrase Damage / Shield / Heal of Skill. Addition Precedes Multiplication. Low Skill Amplifier can Weaken Skill, but can't Reverse the Skill Result.",
+        "Defense", "Decrease Damage toward this Warrior. Multiplication Precedes Addition. Low Armor can Increase Damage towraed this Warrior.",
+        "Damage Dealt", "Damage this Warrior Has Dealt in this Combat.",
+        "Damage Taken", "Damage this Warrior Has Taken in this Combat."
+    ]
+}

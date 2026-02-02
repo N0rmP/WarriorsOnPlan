@@ -9,6 +9,8 @@ using Cases;
 public class showerCase : hoveredShowerAbst {
     protected static GameObject objCaseShown;
 
+    protected bool isNullAllowed = false;
+
     public caseBase thisCase { get; protected set; }
 
     /*
@@ -25,7 +27,7 @@ public class showerCase : hoveredShowerAbst {
     protected override GameObject makeGut() {
         // make similar-Singleton canvasCaseShown
         if (objCaseShown == null) {
-            objCaseShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Gut/canvasCaseShown"));
+            objCaseShown = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UI/Gut/boxCaseShown"));
             objCaseShown.SetActive(false);
         }
 
@@ -45,7 +47,9 @@ public class showerCase : hoveredShowerAbst {
         // showerCase ignores parCase if it's not the type to be shown on this shower
         if (parCase == null || (caseTypeShown | (int)parCase.caseType) == 0) {
             thisCase = null;
-            return;
+            if (!isNullAllowed) {
+                return;
+            }
         } else { 
             thisCase = parCase;
         }

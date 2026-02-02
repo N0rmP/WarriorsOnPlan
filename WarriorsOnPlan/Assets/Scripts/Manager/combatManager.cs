@@ -12,6 +12,7 @@ using UnityEngine.UIElements;
 using Cases;
 using Processes;
 using System.Text;
+using Placablers;
 
 public enum enumCombatState {
     initiating = -1,
@@ -38,6 +39,8 @@ public class combatManager : MonoBehaviour {
     public houseComponent HouC { get; private set; }
     public historyComponent HisC { get; private set; }
     public combatUIComponent CUM { get; private set; }    // it's not that, you lewd animal
+    public differentiaterComponent DC { get; private set; }
+    public placablerComponent PC { get; private set; }
 
     public dataLevel curDataLevel { get; private set; }
 
@@ -111,7 +114,9 @@ public class combatManager : MonoBehaviour {
         GC = new graphComponent(7, 7);
         FC = new fxComponent();
         HouC = new houseComponent();
-        HisC = new historyComponent();        
+        HisC = new historyComponent();
+        DC = gameObject.AddComponent<differentiaterComponent>();
+        PC = new placablerComponent();
 
         combatState = enumCombatState.preparing;
 
@@ -126,7 +131,7 @@ public class combatManager : MonoBehaviour {
     public void BEPREPARED(bool parIsInitiation = false) {
         combatState = enumCombatState.preparing;
 
-        restoreCombat(parIsInitiation ? HisC.mementoInitial : HisC[0]);
+        restoreCombat(parIsInitiation ? HisC.mementoInitial : HisC.mementoPrepareDone);
         CUM.doWhenPreparingStart();
         foreach (Thing thingFriendly in HouC.getArrTotal(enumSide.player)) {
             thingFriendly.updatePanelDragableReleasable();
@@ -158,7 +163,8 @@ public class combatManager : MonoBehaviour {
             return;
         }
 
-        if (parProcess is processByproductDelecate tempParProcess && processLast is processByproductDelecate tempProcessLast) {
+        // merge subsequent processByproductDelegate
+        if (parProcess is processByproductDelegate tempParProcess && processLast is processByproductDelegate tempProcessLast) {
             tempProcessLast.addDel(tempParProcess);
             return;
         }
@@ -169,15 +175,17 @@ public class combatManager : MonoBehaviour {
             mementoLast = null;
         }
 
+        // DO
         processAbst tempBefore = processLast;
         try {
             parProcess.DO(ref processLast, ref delSetNext);
         } catch (Exception e) {
-            Debug.Log("error occured in " + countAction + " process " + parProcess.GetType().Name);
+            Debug.Log("error occured in " + countAction + " process " + parProcess.GetType().Name + "\n" + e.ToString());
             parProcess.testChainAfterAll();
         }
 
-        if (parProcess is processAction) {
+        // save memento after each action done
+        if (parProcess is processAction or processSystemCombatStart) {
             mementoCombat tempMementoCombat = makeMementoCombat(parProcess);
             mementoLast = tempMementoCombat;
             HisC.addMemento(tempMementoCombat);
@@ -185,9 +193,9 @@ public class combatManager : MonoBehaviour {
 
         // check if this combat is over after each execution
         if (checkCombatEnd() && processLast is not processSystemCombatEnd) {
-            combatState = enumCombatState.combatDone;
             processSystemCombatEnd tempProcessSCE = new processSystemCombatEnd();
             tempProcessSCE.DO(ref processLast, ref delSetNext);
+            combatState = enumCombatState.combatDone;
             delSetNext(null);
             HisC.addMemento(makeMementoCombat(tempProcessSCE));
             countActionMax = countAction;
@@ -205,8 +213,8 @@ public class combatManager : MonoBehaviour {
         curCombatResult = null;
 
         HisC.resetHistory();
-        HisC.addMemento(makeMementoCombat(null));
-        mementoLast = HisC[0];
+        HisC.mementoPrepareDone = makeMementoCombat(null);
+        mementoLast = HisC.mementoPrepareDone;
         executeProcess(new processSystemCombatStart());
         countActionMax = int.MaxValue;
 
@@ -214,7 +222,6 @@ public class combatManager : MonoBehaviour {
             tempArrActors = HouC.getArrActionOrder(sideTurn);
 
             // turn start
-            Debug.Log(sideTurn + " T U R N   S T A R T " + countAction);
             executeProcess(new processSystemTurnStart(tempArrActors));
 
             foreach (Thing th in tempArrActors) {
@@ -255,14 +262,15 @@ public class combatManager : MonoBehaviour {
             // ★ 무한루프 방지용 긴급탈출버튼
             if (countAction > 999) {
                 Debug.Log("Ejection : 999 action passed, COMBAT method escape");
-                return;
+                break;
             }
         }        
 
         // ★ 테스트용 프로세스 싹 출력하기
         Debug.Log("combat end (( countAction : " + countAction);
-        HisC[0].processNext.testChainAfterAll();   
+        HisC[0].processLast.testChainAfterAll();   
     }
+
     private IEnumerator REENACT() {
         while (processReenactedNext != null) {
             Debug.Log("incoming next to-be-reenacted process : " + processReenactedNext);
@@ -290,12 +298,12 @@ public class combatManager : MonoBehaviour {
 
     public void startREENACT() {
         // first process should be always processCombatStart
-        if (HisC[0].processNext is not processSystemCombatStart) {
+        if (HisC[0].processLast is not processSystemCombatStart) {
             Debug.Log("first process is not processSystemCombatStart, it was " + HisC[0].processLast);
             return;
         }
 
-        restoreCombat(HisC[0]);
+        restoreCombat(HisC.mementoPrepareDone);
 
         combatState = enumCombatState.reenact;
         StartCoroutine(REENACT());
@@ -315,18 +323,6 @@ public class combatManager : MonoBehaviour {
     private bool checkCombatEnd() {
         return curCombatEnder.checkIsCombatEnd();
     }
-
-    // ★ 이거 그냥 combatResult 제출하게 만들자
-    /*
-    public bool checkIsPlayerWin() {
-        // if 
-        if (combatState < enumCombatState.combatDone) {
-            return false;
-        }
-
-        return curCombatResult != null ? curCombatResult.isPlayerWin : curCombatEnder.checkIsPlayerWin();
-    }
-    */
 
     private void resetInterval() {
         combatSpeed = 1;
@@ -486,6 +482,9 @@ public class combatManager : MonoBehaviour {
 
         systemLevelInitiate(parDataLevel);
         BEPREPARED(true);
+
+        CUM.CStatus.updateNULL();
+        DC.initDifferentiater();
     }
 
     // systemLevelInitiate focus on making combat-preparing state from json-level-data, it has no need to graphic it
@@ -497,7 +496,7 @@ public class combatManager : MonoBehaviour {
         foreach (dataNotFriendlyThing et in parDataLevel.EnemyWarriors) {
             tempThing = systemSpawn(et.NameThing, enumSide.enemy, et.HP, (et.Coordinate0, et.Coordinate1), et.SkillParameters);
             foreach (dataIParametable dt in et.ToolList) {
-                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters, null));
+                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.getParametersEnumerator(), null));
             }
             tempThing.setCircuit(
                 et.CodeNavigatorIdle, et.Parameter2,
@@ -513,7 +512,7 @@ public class combatManager : MonoBehaviour {
         foreach (dataNotFriendlyThing nt in parDataLevel.NeutralThings) {
             tempThing = systemSpawn(nt.NameThing, enumSide.neutral, nt.HP, (nt.Coordinate0, nt.Coordinate1), nt.SkillParameters);
             foreach (dataIParametable dt in nt.ToolList) {
-                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters, null));
+                tempThing.addCase(gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.getParametersEnumerator(), null));
             }
             tempThing.setCircuit(
                 nt.CodeNavigatorIdle, nt.Parameter2,
@@ -533,7 +532,7 @@ public class combatManager : MonoBehaviour {
         toolsProvided.Clear();
         foreach (dataIParametable dt in parDataLevel.ToolsProvided) {
             toolsProvided.Add(
-                gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.Parameters, null)
+                gameManager.GM.MC.makeCodableObject<caseBase>(dt.CodeIParametable, dt.getParametersEnumerator(), null)
                 );
         }
 
@@ -551,7 +550,15 @@ public class combatManager : MonoBehaviour {
             cb.caseFunc();
         }
 
-        HisC.setMementoInitial(makeMementoCombat(null));
+        // make initial memento
+        HisC.mementoInitial = makeMementoCombat(null);
+
+        // differentiater
+        DC.setDifferentiater(parDataLevel.Differentiater);
+
+        // plcabler
+        PC.setPlacabler(parDataLevel.Placabler, parDataLevel.PlacablerParameter);
+        GC.setPlacableNode(PC.curPlacabler);
     }
     
     public void systemAddToolsProvided(caseBase parTool) {
@@ -584,7 +591,7 @@ public class combatManager : MonoBehaviour {
 
             return tempThing;
         } catch (Exception e) {
-            Debug.Log("combatManager.systemSpawn error : instanciated GameObjec = " + tempW + "\n" + e.Message);
+            Debug.Log("combatManager.systemSpawn error : instantiated GameObject = " + tempW + "\n" + e.ToString());
             return null;
         }
     }
@@ -592,21 +599,21 @@ public class combatManager : MonoBehaviour {
     public void systemPlace(Thing parThing, (int c0, int c1) parCoor) {
         node tempNode = GC[parCoor.c0, parCoor.c1];
 
-        if (tempNode == null || tempNode.thingHere != null) {
-            Debug.Log("systemPlace failed : node (" + parCoor.c0 + " , " + parCoor.c1 + ") / " + tempNode.thingHere + " on it / " + parThing + " to be placed");
+        if (tempNode == null || tempNode.occupierHere != null) {
+            Debug.Log("systemPlace failed : node (" + parCoor.c0 + " , " + parCoor.c1 + ") / " + tempNode.occupierHere + " on it / " + parThing + " to be placed");
             return;
         }
 
-        tempNode.placeThing(parThing, true);
+        tempNode.placeHere(parThing, true);
     }
 
     // caution : systemDestroyLevel destories or initiates almost all objects in combat-scene, it's recommended to be called only during loading
     public void systemDestroyLevel() {
-        CUM.CStatus.updateNULL();
         HouC.clearTotal(true);
         HisC.resetHistoryTotal();
         CUM.SAO.clearLineTotal();
         GC.vacateGraph();
+        DC.makeDifferentiaterLeave();
     }
     #endregion system_methods
 

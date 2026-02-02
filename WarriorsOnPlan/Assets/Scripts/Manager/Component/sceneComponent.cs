@@ -11,6 +11,7 @@ public class sceneComponent {
     private Scene sceneCombat;
 
     public event Action<Scene> eventAfterActiveSceneChanged;
+    // delSetCurMapType can set gameManager.curMapType, this allows sceneComponent to change gameManager.curMapType while remaining it private
     private Action<enumMapType> delSetCurMapType;
 
     public sceneComponent(Action<enumMapType> parDelSetCurMapType) {

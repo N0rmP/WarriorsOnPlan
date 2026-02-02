@@ -58,11 +58,7 @@ public class releasableInventory : releasableObjectAbst {
         combatManager.CM.systemRemoveToolsProvided((caseBase)parParameters[0]);
 
         // show
-        gameManager.GM.AC.playSE(
-            SwissArmyStaticMethod.selectRandom<AudioClip>(
-                gameManager.GM.AHouC.arrClipToolEquip
-            )
-        );
+        gameManager.GM.AC.playSE(gameManager.GM.AHouC.arrClipToolEquip.selectRandom());
 
         // ★ inventory 이미지 갱신, 기능 대부분을 구현한 뒤 필요한지 재고
         return true;
@@ -70,7 +66,7 @@ public class releasableInventory : releasableObjectAbst {
 
     public void openInventory(Thing parThing) {
         clear();
-        addTool(parThing.getCaseList(enumCaseType.tool).ToArray());
+        addTool(parThing.getCaseList(enumCaseType.tool));
     }
 
     public void setInteractivity(bool parIsControllable) {
@@ -93,7 +89,7 @@ public class releasableInventory : releasableObjectAbst {
         tempBubble.transform.localScale = Vector3.one;
     }
 
-    public void addTool(caseBase[] parArr) {
+    public void addTool(IEnumerable<caseBase> parArr) {
         foreach (caseBase cb in parArr) {
             addTool(cb);
         }

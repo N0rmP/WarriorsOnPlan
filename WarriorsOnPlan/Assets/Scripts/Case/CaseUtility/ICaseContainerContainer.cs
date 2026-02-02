@@ -9,9 +9,12 @@ public interface ICaseContainerContainer {
 
     public void removeCase(caseBase parCase);
 
-    public List<T> getCaseList<T>();
+    public IEnumerable<T> getCaseList<T>();
 
-    public List<caseBase> getCaseList(enumCaseType parCaseType);
+    public IEnumerable<caseBase> getCaseList(enumCaseType parCaseType);
+    public int getCaseCount<T>();
+
+    public int getCaseCount(enumCaseType parCaseType);
 
     public bool checkContainCaseType(caseBase parCase);
 

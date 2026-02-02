@@ -14,7 +14,7 @@ public class popupComponent {
 
     private carrierGeneric<GameObject> carrierPopupText;
     private carrierGeneric<GameObject> carrierPopupConfirm;
-    private carrierGeneric<GameObject> carrierPopupFloating;
+    private carrierGeneric<GameObject> carrierPopupNumber;
     private carrierGeneric<GameObject> carrierPopupCaseBase;
 
     private GameObject popupConfirm;
@@ -35,7 +35,7 @@ public class popupComponent {
         }
         carrierPopupText = makeCarrier("boxPopupText");
         carrierPopupConfirm = makeCarrier("boxPopupConfirm");
-        carrierPopupFloating = makeCarrier("boxPopupFloating");
+        carrierPopupNumber = makeCarrier("boxPopupNumber");
 
         // carrierPopupCaseBase doesn't use unique prefab, it creates its intercepter with imgRoundRectangle
         GameObject tempIRR = Resources.Load<GameObject>("Prefab/UI/imgRoundRectangle");
@@ -78,8 +78,8 @@ public class popupComponent {
     }
 
 
-    public void showPopupFloating(Vector3 parPosition, Color parTextColor, Color parBackgroundColor, string parString, float parDuration = -1f) {
-        GameObject tempPopupText = carrierPopupFloating.getInterceptor();
+    public void showPopupNumber(Vector3 parPosition, Color parTextColor, Color parBackgroundColor, string parString, float parDuration = -1f) {
+        GameObject tempPopupText = carrierPopupNumber.getInterceptor();
         tempPopupText.GetComponent<popupOutline>().setPopupOutline(parTextColor, parBackgroundColor, parString, parDuration);
         tempPopupText.GetComponent<RectTransform>().localPosition = parPosition;
     }
@@ -111,20 +111,21 @@ public class popupComponent {
     #endregion show
 
     #region Ready_to_Popup
+    // Ready_to_Popup methods provides already-maden implements for certain situations
     public void popupBasicAlert(Vector3 parPosition, string parString, int parFontSize = defaultFontSize, float parDuration = -1f) {
         showPopupText(parPosition, Color.white, new Color(0f, 0f, 0f, 0.7f), parString, parFontSize, parDuration);
     }
 
     public void popupDamage(Vector3 parPosition, string parString) {
-        showPopupFloating(parPosition, Color.red, new Color(0f, 0f, 0f, 0.1f), parString, structInterValsAndDurations.fltInterval / combatManager.CM.combatSpeed);
+        showPopupNumber(parPosition, Color.red, new Color(0f, 0f, 0f, 0.1f), parString, structInterValsAndDurations.fltInterval);
     }
 
     public void popupDamageMagic(Vector3 parPosition, string parString) {
-        showPopupFloating(parPosition, Color.white, new Color(0f, 0f, 0f, 0.1f), parString, structInterValsAndDurations.fltInterval / combatManager.CM.combatSpeed);
+        showPopupNumber(parPosition, Color.white, new Color(0f, 0f, 0f, 0.1f), parString, structInterValsAndDurations.fltInterval);
     }
 
     public void popupHeal(Vector3 parPosition, string parString) {
-        showPopupFloating(parPosition, Color.green, new Color(0f, 0f, 0f, 0.1f), parString, structInterValsAndDurations.fltInterval / combatManager.CM.combatSpeed);
+        showPopupNumber(parPosition, Color.green, new Color(0f, 0f, 0f, 0.1f), parString, structInterValsAndDurations.fltInterval);
     }
 
     public void popupAddCaseBase(Vector3 parPosition, Sprite parSpriteCaseBase) {
@@ -163,8 +164,8 @@ public class popupComponent {
         carrierPopupConfirm.returnSingle(parPopupConfirm.gameObject);
     }
 
-    public void returnFloatingSingle(popupOutline parPopupFloating) {
-        carrierPopupFloating.returnSingle(parPopupFloating.gameObject);
+    public void returnNumberSingle(popupOutline parPopupFloating) {
+        carrierPopupNumber.returnSingle(parPopupFloating.gameObject);
     }
 
     public void returnCaseBaseSingle(popupCaseBase parPopupCaseBase) {
@@ -174,7 +175,7 @@ public class popupComponent {
     public void returnTotal() {
         carrierPopupText.returnTotal();
         carrierPopupConfirm.returnTotal();
-        carrierPopupFloating.returnTotal();
+        carrierPopupNumber.returnTotal();
         carrierPopupCaseBase.returnTotal();
     }
     #endregion carrier_control

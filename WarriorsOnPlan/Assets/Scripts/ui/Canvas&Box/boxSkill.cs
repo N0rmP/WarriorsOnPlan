@@ -9,6 +9,8 @@ public class boxSkill : showerCase {
 
     protected override void init() {
         base.init();
+
+        isNullAllowed = true;
         setCaseTypeShown((int)Cases.enumCaseType.skill);
     }
 

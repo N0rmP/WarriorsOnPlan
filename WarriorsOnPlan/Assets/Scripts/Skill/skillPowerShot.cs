@@ -9,14 +9,16 @@ namespace Cases {
     public class skillPowerShot : skillAbst {
         private int damage;
 
+        private GameObject objBow = null;
+
         #region InfoImplementation
         public override object[] getDescriptionArgument() {
             return new object[1] { damage };
         }
         #endregion InfoImplementation
 
-        public skillPowerShot() : base("Image/Case/Skill/image_skillPowerShot") {
-            code = 92001;
+        public skillPowerShot() : base("Image/Case/Skill/Image_skillPowerShot") {
+            code = 2003;
         }
 
         public override Dictionary<string, int[]> getParameters() {
@@ -40,7 +42,6 @@ namespace Cases {
         }
 
         protected override void actualUseSkill(Thing source, Thing target) {
-            Debug.Log("!!!!!!!!! POW!!!!!!!!!!!!! WER!!!!!!!! SHOOOOOOOOOOOOOOOTTTTTTT!!!!!!!!!!");
             combatManager.CM.executeProcess(
                 new processByproductDealDamage(
                     new damageInfo[1] { new damageInfo(source, this, damage) },
@@ -52,10 +53,10 @@ namespace Cases {
         public override void SHOW(Thing source, Thing target) {
             source.Look(target.transform.position);
 
-            source.clearAttackAnimation();
-            source.addAttackAnimation(enumAttackAnimation.trigAttackCast);
-            source.animateAttack(false);
+            source.thisOrganAnimation.addAttackAnimation(enumAttackAnimation.trigAttackPunch);
+            source.thisOrganAnimation.animateAttack(false);
 
+            // animationTracker 쓰도록 변경
             gameManager.GM.TC.addDelegate(
                 () => {
                     combatManager.CM.FC.callVFX(
@@ -64,18 +65,13 @@ namespace Cases {
                         source.transform.position,
                         target.transform.position,
                         enumMoveType.linear,
-                        Color.red,
+                        Color.gray,
                         0.5f
                     );
-                    gameManager.GM.AC.playSE(
-                        SwissArmyStaticMethod.selectRandom<AudioClip>(
-                            gameManager.GM.AHouC.arrClipSwing
-                        )
-                    );
+                    gameManager.GM.AC.playSE(gameManager.GM.AHouC.arrClipSwing.selectRandom());
                 },
                 combatManager.CM.getBodyAnimationDuration() / 2f
-            );
-            
+            );            
         }
     }
 }

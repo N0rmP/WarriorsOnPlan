@@ -12,7 +12,7 @@ namespace Cases {
         public caseTimerHostileTurn(string parImagePath, enumCaseType parEnumCaseType = enumCaseType.effect, bool parIsVisible = false) : base(parImagePath, parEnumCaseType, parIsVisible) { }
 
         public void updateOnTurnStart(Thing source) {
-            combatManager.CM.executeProcess(new processByproductDelecate(() => updateTimer(source)));
+            combatManager.CM.executeProcess(new processByproductDelegate(() => updateTimer(source)));
         }
     }
 }

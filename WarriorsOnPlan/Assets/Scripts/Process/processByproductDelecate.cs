@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace Processes {
-    public class processByproductDelecate : processByproductAbst {
+    public class processByproductDelegate : processByproductAbst {
         private Action del;
 
-        public processByproductDelecate(Action parDel) {
+        public processByproductDelegate(Action parDel) {
             del = parDel;
         }
 
@@ -21,7 +22,7 @@ namespace Processes {
             del += parDel;
         }
 
-        public void addDel(processByproductDelecate parPBD) {
+        public void addDel(processByproductDelegate parPBD) {
             parPBD.del();
             del += parPBD.del;
         }
@@ -29,5 +30,12 @@ namespace Processes {
         protected override void actualDO() {
             del();
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append("delegate count ");
+            parSB.Append(del.GetInvocationList().Length);
+        }
+        #endregion test
     }
 }

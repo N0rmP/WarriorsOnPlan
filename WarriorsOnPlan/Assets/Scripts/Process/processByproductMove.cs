@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 using static UnityEngine.GraphicsBuffer;
@@ -47,7 +48,7 @@ namespace Processes {
         }
 
         protected override void actualDO() {
-            source.curPosition.sendThing(destination);
+            source.curPosition.sendThere(destination);
         }
 
         protected override void actualSHOW() {
@@ -60,14 +61,20 @@ namespace Processes {
                 );
             }
 
-            Vector3 tempDestinationVector = source.curPosition.getVector3() ;
-
-            if (isWillingly) {
-                source.transform.rotation = Quaternion.LookRotation(tempDestinationVector - source.transform.position);
-                source.animateMove();
-            }
-
+            // processByproductMove only moves the source, walking or jumping animation is on processByproductActionMove or caseBase
+            Vector3 tempDestinationVector = destination.getVector3();
             source.moveLinear(tempDestinationVector);
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append(" moves from");
+            parSB.Append(departure?.ToString());
+            parSB.Append(" to ");
+            parSB.Append(destination?.ToString());
+            parSB.Append(isWillingly ? " willingly" : " forcefully");
+        }
+        #endregion test
     }
 }

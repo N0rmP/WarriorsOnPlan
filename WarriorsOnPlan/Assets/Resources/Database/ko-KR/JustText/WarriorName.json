@@ -1,0 +1,8 @@
+{
+    "dictWarriorName" : {
+        "tester" : "테스터",
+        "testerBleeder" : "테스터 출혈자",
+        "testerFocusser" : "테스터 집중자",
+        "testerFreeDeployee" : "테스터 자유 배치자"
+    }
+}

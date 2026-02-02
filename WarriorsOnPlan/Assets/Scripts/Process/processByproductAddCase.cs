@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cases;
+using System.Text;
 
 namespace Processes {
     public class processByproductAddCase : processByproductAbst {
@@ -72,12 +73,16 @@ namespace Processes {
 
             if (caseAddedPrimitive.caseType == enumCaseType.tool && tempIsSourceThing) {
                 gameManager.GM.PC.popupAddCaseBase(tempSource.gameObject.getCanvasMainLocalPosition() + new Vector2(0f, gameManager.GM.option.stickDegreed), caseAddedPrimitive.caseImage);
-                gameManager.GM.AC.playSE(
-                    SwissArmyStaticMethod.selectRandom<AudioClip>(
-                        gameManager.GM.AHouC.arrClipToolEquip
-                    )
-                );
+                gameManager.GM.AC.playSE(gameManager.GM.AHouC.arrClipToolEquip.selectRandom());
             }
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(caseAddedPrimitive?.ToString());
+            parSB.Append(" removed from ");
+            parSB.Append(source?.ToString());
+        }
+        #endregion test
     }
 }

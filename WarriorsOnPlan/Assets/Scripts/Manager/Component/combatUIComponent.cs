@@ -8,12 +8,13 @@ public class combatUIComponent{
 
     public GameObject actionCounter { get; private set; }
     private GameObject curtainOutsideBI;
-    private GameObject curtainDownBar;
+    private GameObject curtainToolStorage;
+    private GameObject curtainActionOrder;
 
     public toolStorage TS { get; private set; }
     public scrollActionOrder SAO { get; private set; }
     public canvasStatus CStatus { get; private set; }
-    public canvasStatistics CStatistics { get; private set; }
+    // public canvasStatistics CStatistics { get; private set; }
     public canvasCircuitSetter CCS { get; private set; }
     public boxCombatResult BCR { get; private set; }
     public boxUpgrade CUA { get; private set; }
@@ -26,15 +27,18 @@ public class combatUIComponent{
         TS = GameObject.Find("scrollToolStorage").GetComponent<toolStorage>();
         SAO = GameObject.Find("scrollActionOrder").GetComponent<scrollActionOrder>();
         CStatus = GameObject.Find("canvasStatus").GetComponent<canvasStatus>();
-        CStatistics = GameObject.Find("canvasStatistics").GetComponent<canvasStatistics>();
         CCS = GameObject.Find("canvasCircuitSetter").GetComponent<canvasCircuitSetter>();
         BCR = GameObject.Find("boxCombatResult").GetComponent<boxCombatResult>();
         CUA = GameObject.Find("contentUpgradeActive").GetComponent<boxUpgrade>();
 
         curtainOutsideBI = GameObject.Find("curtainOutsideBI");
+        curtainToolStorage = GameObject.Find("curtainToolStorage");
+        curtainActionOrder = GameObject.Find("curtainActionOrder");
         curtainOutsideBI.SetActive(false);
-        curtainDownBar = GameObject.Find("curtainDownBar");
-        curtainDownBar.SetActive(false);
+        curtainToolStorage.SetActive(false);
+        curtainActionOrder.SetActive(false);
+
+
     }
 
     // if parIsStrict is false change numbers proceeds softly by ascending/descending gradually, if true just set the text once
@@ -75,11 +79,13 @@ public class combatUIComponent{
     }
 
     public void openCurtainDownBar() {
-        curtainDownBar.SetActive(false);
+        curtainToolStorage.SetActive(false);
+        curtainActionOrder.SetActive(false);
     }
 
     public void closeCurtainDownBar() {
-        curtainDownBar.SetActive(true);
+        curtainToolStorage.SetActive(true);
+        curtainActionOrder.SetActive(true);
     }
     #endregion curtain
 

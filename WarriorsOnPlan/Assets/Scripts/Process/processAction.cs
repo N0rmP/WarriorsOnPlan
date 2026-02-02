@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Cases;
+using System.Text;
 
 namespace Processes {
     // processAction doesn't have the concrete Action itself
@@ -21,7 +22,7 @@ namespace Processes {
 
             // countAction++, it should precede all other scripts because it's expected
             combatManager.CM.executeProcess(
-                new processByproductDelecate(
+                new processByproductDelegate(
                     () => combatManager.CM.incrementCountAction()
                 )
             );
@@ -74,5 +75,13 @@ namespace Processes {
 
             combatManager.CM.CUM.setActionCounter(thisCountAction);
         }
+
+        #region test
+        protected override void testAnythingSay(StringBuilder parSB) {
+            parSB.Append(source?.ToString());
+            parSB.Append(" action, action count ");
+            parSB.Append(thisCountAction);
+        }
+        #endregion test
     }
 }

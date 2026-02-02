@@ -5,7 +5,7 @@ using System.Collections;
 
 // RESTARTER lives in SceneInn, its only mission is to unload & reload all other scenes (in other words, restarting the game totally)
 public class RESTARTER : MonoBehaviour {
-    // RestaRteR
+    // RRR stabds for RestaRteR
     public static RESTARTER RRR { get; private set; } = null;
 
     public void Awake() {

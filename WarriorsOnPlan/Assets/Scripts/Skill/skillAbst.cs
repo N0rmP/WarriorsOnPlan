@@ -14,7 +14,6 @@ namespace Cases {
         public int targetGroupDefault { get; protected set; } = 0b0010;
         #endregion creator_customable
 
-
         private int rangeMin_ = 1;
         private int rangeMax_ = 1;
         public int rangeMin {
@@ -34,11 +33,8 @@ namespace Cases {
             }
         }
 
-        public virtual bool isReady {
-            get {
-                return timerCur <= 0;
-            }
-        }
+        // isReady returns if timer is alarmed by default, please implement this in concrete skill class for another ready-condition
+        public virtual bool isReady => timerCur <= 0;
 
         public skillAbst(string parImagePath) : base(parImagePath, enumCaseType.skill, parIsVisible: true) { }
 

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3a9d7c99e72d04cab9d5c3fb56474e, type: 3}
+  m_Name: ThingName
+  m_EditorClassIdentifier: 
+  arrPairCodeName:
+  - codeThing: 901
+    nameThing: Tester
+  - codeThing: 902
+    nameThing: Tester Bleeder
+  - codeThing: 903
+    nameThing: Tester Foccuser
+  - codeThing: 904
+    nameThing: Tester Free-Deployee
+  - codeThing: 1
+    nameThing: Reckless Rookie
+  - codeThing: 2
+    nameThing: Archer

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class canvasOption : MonoBehaviour {
     [SerializeField]
@@ -24,7 +25,7 @@ public class canvasOption : MonoBehaviour {
     #region callback
     void Start() {
         // set text of each option title
-        dataArbitraryStringArray tempData = gameManager.GM.FC.importResourcesJson<dataArbitraryStringArray>("JustText/Option", true);
+        soArbitraryStringArray tempData = gameManager.GM.FC.importResourcesJson<soArbitraryStringArray>("JustText/Option", true);
         for (int i = 0; i < arrTextOption.Length; i++) {
             // SwissArmyStringArray Lack, technically it's (i-1) but last 3 indice have FullScreenMode strings
             if (tempData.SwissArmyStringArray.Length < i - 4) {
@@ -41,7 +42,8 @@ public class canvasOption : MonoBehaviour {
         // set dropdownResolution
         dropdownResolution.ClearOptions();
         dropdownResolution.AddOptions(
-            (from res in Screen.resolutions select (res.width + " * " + res.height)).ToList()
+            (from res in gameManager.GM.option.listResolution 
+             select (res.width + " * " + res.height)).ToList()
         );
         // dropdownLangauge might be set by editor
     }
@@ -54,7 +56,7 @@ public class canvasOption : MonoBehaviour {
 
         dropdownScreenMode.value = (int)(parDO.ScreenMode);
         dropdownResolution.value = parDO.ResolutionIndex;
-        dropdownLanguage.value = (int)(parDO.Translation);
+        dropdownLanguage.value = parDO.Localization;
     }
 
     public void activateCO(dataOption parDO) {
@@ -77,7 +79,7 @@ public class canvasOption : MonoBehaviour {
             sliderSeVolume.value, 
             (FullScreenMode)(dropdownScreenMode.value > 0 ? dropdownScreenMode.value + 1 : dropdownScreenMode.value),
             dropdownResolution.value, 
-            (enumTranslation)(dropdownLanguage.value)
+            dropdownLanguage.value
         );
     }
 }

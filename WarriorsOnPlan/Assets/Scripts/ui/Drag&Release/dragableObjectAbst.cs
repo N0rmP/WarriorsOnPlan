@@ -27,7 +27,7 @@ public abstract class dragableObjectAbst : MonoBehaviour, IDragHandler, IBeginDr
     }
 
     // parIsAllDone is true when dragableObject did its job completely and it's time for it to be gone, it's different from returning
-    public void doAfterReleased(bool parIsAllDone) {
+    private void doAfterReleased(bool parIsAllDone) {
         if (parIsAllDone) {
             leave();
         }else{

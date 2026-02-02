@@ -6,13 +6,15 @@ using UnityEngine;
 
 [CustomEditor(typeof(buttonCustom))]
 public class editorButtonCustom : ButtonEditor {
-    private SerializedProperty spTargetImages;
+    // private SerializedProperty spTargetImages;
         
 
+    /*
     protected override void OnEnable() {
         base.OnEnable();
-        //spTargetImages = serializedObject.FindProperty("thisImage");
+        spTargetImages = serializedObject.FindProperty("thisImage");
     }
+    */
 
     public override void OnInspectorGUI() {
         serializedObject.Update();

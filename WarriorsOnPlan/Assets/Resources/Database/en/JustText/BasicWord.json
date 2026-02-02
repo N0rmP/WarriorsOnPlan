@@ -1,0 +1,28 @@
+{
+    "strMelee" : "Melee",
+    "strNumber" : "(Number)",
+    "strReady" : "Ready",
+    "strVictory" : "Victory",
+    "strDefeated" : "Defeated",
+
+    "strTool" : "Tool",
+    "strEffect" : "Effect",
+    "strSkill" : "Skill",
+    "strUpgrade" : "Upgrade",
+
+    "strInterfere" : "Interfered",
+    "strAction" : "Action",
+    "strAdd" : "Adding", 
+    "strAttack" : "Attack",
+    "strConrolled" : "Controlled",
+    "strFocussing" : "Focussing",
+    "strForcedMove" : "Forced Move",
+    "strDealDamage" : "Dealing Damage",
+    "strDamaged" : "Taking Damage",
+    "strDeath" : "Death",
+    "strHpIncrease" : "Hp Increase",
+    "strHpDecrease" : "Hp Decrease",
+    "strMove" : "Move",
+    "strRemoving" : "Removing"
+    
+}
